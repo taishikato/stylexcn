@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator)
 
-- Passed: 174/174
+- Passed: 178/178
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -290,3 +290,15 @@
 | `badge__dark__ghost` | PASS | 0/4644 |
 | `badge__dark__link` | PASS | 0/4644 |
 | `badge__dark__focus-visible` | PASS | 0/4644 |
+
+## Separator
+
+- Horizontal crops `[data-slot="separator"]` with 16px pad inside a 16rem-wide parent (`w-full`).
+- Vertical uses a 3rem×6rem parent so `h-full` has a defined height; crops that parent with 16px pad. Same parent on both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `separator__light__horizontal` | PASS | 0/9504 |
+| `separator__light__vertical` | PASS | 0/10240 |
+| `separator__dark__horizontal` | PASS | 0/9504 |
+| `separator__dark__vertical` | PASS | 0/10240 |

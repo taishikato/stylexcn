@@ -66,6 +66,7 @@ const BADGE_VARIANTS = [
   "ghost",
   "link",
 ];
+const SEPARATOR_STATES = ["horizontal", "vertical"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -346,6 +347,20 @@ function badgeCases() {
   return list;
 }
 
+function separatorCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SEPARATOR_STATES) {
+      list.push({
+        component: "separator",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -365,6 +380,7 @@ function cases() {
     ...popoverCases(),
     ...tooltipCases(),
     ...badgeCases(),
+    ...separatorCases(),
   ];
 }
 
@@ -418,6 +434,9 @@ function slug(c) {
     const key = c.state === "focus-visible" ? "focus-visible" : c.variant;
     return `badge__${c.theme}__${key}`;
   }
+  if (c.component === "separator") {
+    return `separator__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -445,7 +464,9 @@ function urlFor(kit, c) {
     c.component !== "sheet" &&
     c.component !== "tabs" &&
     c.component !== "popover" &&
-    c.component !== "tooltip"
+    c.component !== "tooltip" &&
+    c.component !== "badge" &&
+    c.component !== "separator"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -542,6 +563,12 @@ function controlLocator(page, c) {
   }
   if (c.component === "badge") {
     return page.locator('[data-slot="badge"]');
+  }
+  if (c.component === "separator") {
+    if (c.state === "vertical") {
+      return page.locator("[data-separator-well]");
+    }
+    return page.locator('[data-slot="separator"]');
   }
   return page.getByRole("button");
 }
@@ -765,7 +792,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -793,7 +820,8 @@ async function main() {
           r.component !== "tabs" &&
           r.component !== "popover" &&
           r.component !== "tooltip" &&
-          r.component !== "badge",
+          r.component !== "badge" &&
+          r.component !== "separator",
       )
       .map(
         (r) =>
@@ -999,6 +1027,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "badge")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Separator",
+    "",
+    "- Horizontal crops `[data-slot=\"separator\"]` with 16px pad inside a 16rem-wide parent (`w-full`).",
+    "- Vertical uses a 3rem×6rem parent so `h-full` has a defined height; crops that parent with 16px pad. Same parent on both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "separator")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

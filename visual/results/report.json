@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T17:15:37.328Z",
-  "total": 174,
+  "generatedAt": "2026-08-25T17:27:56.354Z",
+  "total": 178,
   "failed": 0,
-  "passed": 174,
+  "passed": 178,
   "threshold": 0,
   "cases": [
     {
@@ -2586,6 +2586,62 @@
       "shadcn": "visual/results/shadcn/badge__dark__focus-visible.png",
       "stylex": "visual/results/stylex/badge__dark__focus-visible.png",
       "diff": "visual/results/diff/badge__dark__focus-visible.png"
+    },
+    {
+      "name": "separator__light__horizontal",
+      "component": "separator",
+      "state": "horizontal",
+      "theme": "light",
+      "width": 288,
+      "height": 33,
+      "mismatched": 0,
+      "pixels": 9504,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/separator__light__horizontal.png",
+      "stylex": "visual/results/stylex/separator__light__horizontal.png",
+      "diff": "visual/results/diff/separator__light__horizontal.png"
+    },
+    {
+      "name": "separator__light__vertical",
+      "component": "separator",
+      "state": "vertical",
+      "theme": "light",
+      "width": 80,
+      "height": 128,
+      "mismatched": 0,
+      "pixels": 10240,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/separator__light__vertical.png",
+      "stylex": "visual/results/stylex/separator__light__vertical.png",
+      "diff": "visual/results/diff/separator__light__vertical.png"
+    },
+    {
+      "name": "separator__dark__horizontal",
+      "component": "separator",
+      "state": "horizontal",
+      "theme": "dark",
+      "width": 288,
+      "height": 33,
+      "mismatched": 0,
+      "pixels": 9504,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/separator__dark__horizontal.png",
+      "stylex": "visual/results/stylex/separator__dark__horizontal.png",
+      "diff": "visual/results/diff/separator__dark__horizontal.png"
+    },
+    {
+      "name": "separator__dark__vertical",
+      "component": "separator",
+      "state": "vertical",
+      "theme": "dark",
+      "width": 80,
+      "height": 128,
+      "mismatched": 0,
+      "pixels": 10240,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/separator__dark__vertical.png",
+      "stylex": "visual/results/stylex/separator__dark__vertical.png",
+      "diff": "visual/results/diff/separator__dark__vertical.png"
     }
   ]
 }
