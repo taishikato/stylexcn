@@ -2,7 +2,7 @@
 
 shadcn/ui-compatible components styled with [StyleX](https://stylexjs.com), not Tailwind. Visual target: official shadcn/ui **New York**. Primitives: [Base UI](https://base-ui.com).
 
-This repo is a foundation plus **Button**, **Input**, **Label**, **Textarea**, and **Checkbox**. Distribution (copy-into-repo / registry) comes later.
+This repo is a foundation plus **Button**, **Input**, **Label**, **Textarea**, **Checkbox**, and **Switch**. Distribution (copy-into-repo / registry) comes later.
 
 ## Tokens
 
@@ -23,13 +23,13 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open the root URL for the Button + Input + Label + Textarea + Checkbox playground. Isolated capture frames use query params, for example `/?kit=stylex&component=button&variant=default&size=default&state=default&theme=light`, `/?kit=stylex&component=input&state=default&theme=light`, `/?kit=stylex&component=label&state=default&theme=light`, `/?kit=stylex&component=textarea&state=default&theme=light`, or `/?kit=stylex&component=checkbox&state=default&theme=light`.
+Open the root URL for the Button + Input + Label + Textarea + Checkbox + Switch playground. Isolated capture frames use query params, for example `/?kit=stylex&component=button&variant=default&size=default&state=default&theme=light`, `/?kit=stylex&component=input&state=default&theme=light`, `/?kit=stylex&component=label&state=default&theme=light`, `/?kit=stylex&component=textarea&state=default&theme=light`, `/?kit=stylex&component=checkbox&state=default&theme=light`, or `/?kit=stylex&component=switch&state=default&theme=light`.
 
 ## Visual regression
 
 Harness: `src/visual/harness.tsx` (query params `kit`, `component`, `state`, `theme`; Button also uses `variant` and `size`).
 
-Official baselines: `src/visual/official-button.tsx`, `src/visual/official-input.tsx`, `src/visual/official-label.tsx`, `src/visual/official-textarea.tsx`, `src/visual/official-checkbox.tsx`. Candidates: `src/components/button.tsx`, `src/components/input.tsx`, `src/components/label.tsx`, `src/components/textarea.tsx`, `src/components/checkbox.tsx`.
+Official baselines: `src/visual/official-button.tsx`, `src/visual/official-input.tsx`, `src/visual/official-label.tsx`, `src/visual/official-textarea.tsx`, `src/visual/official-checkbox.tsx`, `src/visual/official-switch.tsx`. Candidates: `src/components/button.tsx`, `src/components/input.tsx`, `src/components/label.tsx`, `src/components/textarea.tsx`, `src/components/checkbox.tsx`, `src/components/switch.tsx`.
 
 ```bash
 npm run build
@@ -38,6 +38,6 @@ npm run visual:diff
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
 
-Latest local run: **96/96 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox, threshold 0).
+Latest local run: **104/104 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch, threshold 0).
 
 Do not edit the harness or official baseline to hide a delta.

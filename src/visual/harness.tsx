@@ -3,12 +3,14 @@ import { Button, type ButtonSize, type ButtonVariant } from "../components/butto
 import { Checkbox } from "../components/checkbox";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
+import { Switch } from "../components/switch";
 import { Textarea } from "../components/textarea";
 import { darkTheme } from "../theme";
 import { OfficialButton } from "./official-button";
 import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
 import { OfficialLabel } from "./official-label";
+import { OfficialSwitch } from "./official-switch";
 import { OfficialTextarea } from "./official-textarea";
 
 export const VARIANTS = [
@@ -32,7 +34,8 @@ export type CaptureComponent =
   | "input"
   | "label"
   | "textarea"
-  | "checkbox";
+  | "checkbox"
+  | "switch";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -80,12 +83,20 @@ export type CheckboxCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SwitchCaptureParams = {
+  component: "switch";
+  kit: CaptureKit;
+  state: "default" | "checked" | "focus-visible" | "disabled";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
   | LabelCaptureParams
   | TextareaCaptureParams
-  | CheckboxCaptureParams;
+  | CheckboxCaptureParams
+  | SwitchCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -241,6 +252,32 @@ function CheckboxHarness({ kit, state, theme }: CheckboxCaptureParams) {
   );
 }
 
+function SwitchHarness({ kit, state, theme }: SwitchCaptureParams) {
+  const disabled = state === "disabled";
+  const checked = state === "checked";
+  const isDark = theme === "dark";
+
+  const control =
+    kit === "shadcn" ? (
+      <OfficialSwitch checked={checked} disabled={disabled} />
+    ) : (
+      <Switch checked={checked} disabled={disabled} />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="switch"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {control}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -283,6 +320,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "checkbox") {
     return <CheckboxHarness {...params} />;
+  }
+  if (params.component === "switch") {
+    return <SwitchHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -338,6 +378,18 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "checkbox", kit, state, theme };
+  }
+
+  if (component === "switch") {
+    if (
+      state !== "default" &&
+      state !== "checked" &&
+      state !== "focus-visible" &&
+      state !== "disabled"
+    ) {
+      return null;
+    }
+    return { component: "switch", kit, state, theme };
   }
 
   if (component !== "button") return null;
