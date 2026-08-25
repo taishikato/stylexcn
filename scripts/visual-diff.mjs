@@ -55,6 +55,7 @@ const SELECT_STATES = [
 const DROPDOWN_MENU_STATES = ["closed", "open"];
 const SHEET_STATES = ["default", "left", "top", "bottom"];
 const TABS_STATES = ["default", "second", "disabled"];
+const POPOVER_STATES = ["default"];
 const THEMES = ["light", "dark"];
 /* Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg / text-left / footer row. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -64,6 +65,9 @@ const SHEET_VIEWPORT = { width: 800, height: 600 };
 const SELECT_OPEN_VIEWPORT = { width: 640, height: 560 };
 /* Dropdown Menu: trigger near top-left so portaled content stays on-screen. */
 const DROPDOWN_MENU_OPEN_VIEWPORT = { width: 640, height: 560 };
+/* Popover: trigger near top, horizontally centered so w-72 content (align=center)
+   stays on-screen and the popper does not flip. */
+const POPOVER_VIEWPORT = { width: 640, height: 480 };
 const CARD_VIEWPORT = { width: 400, height: 480 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
@@ -267,6 +271,20 @@ function tabsCases() {
   return list;
 }
 
+function popoverCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of POPOVER_STATES) {
+      list.push({
+        component: "popover",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -282,6 +300,7 @@ function cases() {
     ...dropdownMenuCases(),
     ...sheetCases(),
     ...tabsCases(),
+    ...popoverCases(),
   ];
 }
 
@@ -322,6 +341,9 @@ function slug(c) {
   if (c.component === "tabs") {
     return `tabs__${c.theme}__${c.state}`;
   }
+  if (c.component === "popover") {
+    return `popover__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -344,7 +366,8 @@ function urlFor(kit, c) {
     c.component !== "select" &&
     c.component !== "dropdown-menu" &&
     c.component !== "sheet" &&
-    c.component !== "tabs"
+    c.component !== "tabs" &&
+    c.component !== "popover"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -430,6 +453,9 @@ function controlLocator(page, c) {
   if (c.component === "tabs") {
     return page.locator('[data-slot="tabs"]');
   }
+  if (c.component === "popover") {
+    return page.locator('[data-slot="popover-trigger"]');
+  }
   return page.getByRole("button");
 }
 
@@ -454,6 +480,11 @@ async function prepareControl(page, c) {
   if (c.component === "sheet") {
     await page.locator('[data-slot="sheet-overlay"][data-state="open"]').waitFor();
     await page.locator('[data-slot="sheet-content"][data-state="open"]').waitFor();
+    return;
+  }
+  if (c.component === "popover") {
+    await page.locator('[data-slot="popover-trigger"]').waitFor();
+    await page.locator('[data-slot="popover-content"][data-state="open"]').waitFor();
     return;
   }
   const locator = controlLocator(page, c);
@@ -490,6 +521,12 @@ async function screenshotControl(page, c, dest) {
   if (c.component === "sheet") {
     await page.locator('[data-slot="sheet-overlay"][data-state="open"]').waitFor();
     await page.locator('[data-slot="sheet-content"][data-state="open"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "popover") {
+    await page.locator('[data-slot="popover-trigger"]').waitFor();
+    await page.locator('[data-slot="popover-content"][data-state="open"]').waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -563,9 +600,11 @@ async function main() {
             ? SELECT_OPEN_VIEWPORT
             : c.component === "dropdown-menu" && c.state === "open"
               ? DROPDOWN_MENU_OPEN_VIEWPORT
-              : c.component === "card"
-                ? CARD_VIEWPORT
-                : DEFAULT_VIEWPORT,
+              : c.component === "popover"
+                ? POPOVER_VIEWPORT
+                : c.component === "card"
+                  ? CARD_VIEWPORT
+                  : DEFAULT_VIEWPORT,
     );
 
     await page.goto(urlFor("shadcn", c), { waitUntil: "networkidle" });
@@ -614,7 +653,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -638,7 +677,8 @@ async function main() {
           r.component !== "select" &&
           r.component !== "dropdown-menu" &&
           r.component !== "sheet" &&
-          r.component !== "tabs",
+          r.component !== "tabs" &&
+          r.component !== "popover",
       )
       .map(
         (r) =>
@@ -788,6 +828,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "tabs")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Popover",
+    "",
+    "- Viewport: 640×480. Trigger is pinned near the top and centered so `w-72` content (`align=\"center\"`, `side=\"bottom\"`) stays on-screen and the popper does not flip.",
+    "- Controlled `open={true}` on both kits. Screenshots are full-viewport (trigger + content). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "popover")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
