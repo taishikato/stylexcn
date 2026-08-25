@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T21:57:04.068Z",
-  "total": 268,
+  "generatedAt": "2026-08-25T22:18:22.093Z",
+  "total": 272,
   "failed": 0,
-  "passed": 268,
+  "passed": 272,
   "threshold": 0,
   "cases": [
     {
@@ -3902,6 +3902,62 @@
       "shadcn": "visual/results/shadcn/aspect-ratio__dark__default.png",
       "stylex": "visual/results/stylex/aspect-ratio__dark__default.png",
       "diff": "visual/results/diff/aspect-ratio__dark__default.png"
+    },
+    {
+      "name": "table__light__default",
+      "component": "table",
+      "state": "default",
+      "theme": "light",
+      "width": 544,
+      "height": 182,
+      "mismatched": 0,
+      "pixels": 99008,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/table__light__default.png",
+      "stylex": "visual/results/stylex/table__light__default.png",
+      "diff": "visual/results/diff/table__light__default.png"
+    },
+    {
+      "name": "table__light__with-footer",
+      "component": "table",
+      "state": "with-footer",
+      "theme": "light",
+      "width": 544,
+      "height": 255,
+      "mismatched": 0,
+      "pixels": 138720,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/table__light__with-footer.png",
+      "stylex": "visual/results/stylex/table__light__with-footer.png",
+      "diff": "visual/results/diff/table__light__with-footer.png"
+    },
+    {
+      "name": "table__dark__default",
+      "component": "table",
+      "state": "default",
+      "theme": "dark",
+      "width": 544,
+      "height": 182,
+      "mismatched": 0,
+      "pixels": 99008,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/table__dark__default.png",
+      "stylex": "visual/results/stylex/table__dark__default.png",
+      "diff": "visual/results/diff/table__dark__default.png"
+    },
+    {
+      "name": "table__dark__with-footer",
+      "component": "table",
+      "state": "with-footer",
+      "theme": "dark",
+      "width": 544,
+      "height": 255,
+      "mismatched": 0,
+      "pixels": 138720,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/table__dark__with-footer.png",
+      "stylex": "visual/results/stylex/table__dark__with-footer.png",
+      "diff": "visual/results/diff/table__dark__with-footer.png"
     }
   ]
 }

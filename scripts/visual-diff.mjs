@@ -91,6 +91,7 @@ const ALERT_STATES = ["default", "with-icon", "destructive"];
 const TOGGLE_GROUP_STATES = ["default", "outline", "sm", "lg"];
 const MENUBAR_STATES = ["closed", "open"];
 const ASPECT_RATIO_STATES = ["default"];
+const TABLE_STATES = ["default", "with-footer"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -121,6 +122,8 @@ const BREADCRUMB_VIEWPORT = { width: 480, height: 200 };
 const ALERT_VIEWPORT = { width: 480, height: 240 };
 /* 20rem well + 16/9 box (180px) + 16px crop pad must stay inside the viewport. */
 const ASPECT_RATIO_VIEWPORT = { width: 400, height: 280 };
+/* 32rem well + 16px crop pad on each side must stay inside the viewport. */
+const TABLE_VIEWPORT = { width: 640, height: 400 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -624,6 +627,20 @@ function aspectRatioCases() {
   return list;
 }
 
+function tableCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of TABLE_STATES) {
+      list.push({
+        component: "table",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -660,6 +677,7 @@ function cases() {
     ...toggleGroupCases(),
     ...menubarCases(),
     ...aspectRatioCases(),
+    ...tableCases(),
   ];
 }
 
@@ -764,6 +782,9 @@ function slug(c) {
   if (c.component === "aspect-ratio") {
     return `aspect-ratio__${c.theme}__${c.state}`;
   }
+  if (c.component === "table") {
+    return `table__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -809,7 +830,8 @@ function urlFor(kit, c) {
     c.component !== "alert" &&
     c.component !== "toggle-group" &&
     c.component !== "menubar" &&
-    c.component !== "aspect-ratio"
+    c.component !== "aspect-ratio" &&
+    c.component !== "table"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -963,6 +985,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "aspect-ratio") {
     return page.locator('[data-slot="aspect-ratio"]');
+  }
+  if (c.component === "table") {
+    return page.locator('[data-slot="table-container"]');
   }
   return page.getByRole("button");
 }
@@ -1217,6 +1242,8 @@ async function main() {
                     ? ALERT_VIEWPORT
                   : c.component === "aspect-ratio"
                     ? ASPECT_RATIO_VIEWPORT
+                  : c.component === "table"
+                    ? TABLE_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1266,7 +1293,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1311,7 +1338,8 @@ async function main() {
           r.component !== "alert" &&
           r.component !== "toggle-group" &&
           r.component !== "menubar" &&
-          r.component !== "aspect-ratio",
+          r.component !== "aspect-ratio" &&
+          r.component !== "table",
       )
       .map(
         (r) =>
@@ -1769,6 +1797,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "aspect-ratio")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Table",
+    "",
+    "- Crops `[data-slot=\"table-container\"]` with 16px pad inside an identical 32rem-wide parent on both kits so `w-full` matches.",
+    "- Identical invoice copy on both kits: Invoice / Status / Method / Amount. `default` is header + 3 body rows (INV001 Paid Credit Card $250.00, INV002 Pending PayPal $150.00, INV003 Unpaid Bank Transfer $350.00). `with-footer` adds TableFooter total `$750.00` and TableCaption `A list of your recent invoices.`.",
+    "- Do not add hover cases (TableRow has `hover:bg-muted/50`; Playwright must not hover). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "table")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

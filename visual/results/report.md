@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table)
 
-- Passed: 268/268
+- Passed: 272/272
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -534,3 +534,16 @@
 | --- | --- | ---: |
 | `aspect-ratio__light__default` | PASS | 0/74624 |
 | `aspect-ratio__dark__default` | PASS | 0/74624 |
+
+## Table
+
+- Crops `[data-slot="table-container"]` with 16px pad inside an identical 32rem-wide parent on both kits so `w-full` matches.
+- Identical invoice copy on both kits: Invoice / Status / Method / Amount. `default` is header + 3 body rows (INV001 Paid Credit Card $250.00, INV002 Pending PayPal $150.00, INV003 Unpaid Bank Transfer $350.00). `with-footer` adds TableFooter total `$750.00` and TableCaption `A list of your recent invoices.`.
+- Do not add hover cases (TableRow has `hover:bg-muted/50`; Playwright must not hover). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `table__light__default` | PASS | 0/99008 |
+| `table__light__with-footer` | PASS | 0/138720 |
+| `table__dark__default` | PASS | 0/99008 |
+| `table__dark__with-footer` | PASS | 0/138720 |
