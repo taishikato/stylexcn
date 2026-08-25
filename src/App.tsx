@@ -39,6 +39,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./components/collapsible";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "./components/pagination";
 import { Separator } from "./components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
@@ -168,6 +177,15 @@ import {
   OfficialCollapsibleContent,
   OfficialCollapsibleTrigger,
 } from "./visual/official-collapsible";
+import {
+  OfficialPagination,
+  OfficialPaginationContent,
+  OfficialPaginationEllipsis,
+  OfficialPaginationItem,
+  OfficialPaginationLink,
+  OfficialPaginationNext,
+  OfficialPaginationPrevious,
+} from "./visual/official-pagination";
 import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialSkeleton } from "./visual/official-skeleton";
 import {
@@ -378,10 +396,9 @@ function Playground() {
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
-        Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible, and
-        Scroll Area vs
-        official shadcn New York baseline. Visual capture lives at query-param
-        harness URLs (see README).
+        Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
+        Scroll Area, and Pagination vs official shadcn New York baseline.
+        Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1213,6 +1230,24 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <PlaygroundScrollArea kit="shadcn" orientation="horizontal" />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Pagination
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundPagination kit="stylex" ellipsis={false} />
+        <span {...stylex.props(styles.label)}>ellipsis</span>
+        <PlaygroundPagination kit="stylex" ellipsis />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Pagination
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundPagination kit="shadcn" ellipsis={false} />
+        <span {...stylex.props(styles.label)}>ellipsis</span>
+        <PlaygroundPagination kit="shadcn" ellipsis />
+      </div>
     </div>
   );
 }
@@ -1553,6 +1588,112 @@ function PlaygroundDropdownMenu({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function PlaygroundPagination({
+  kit,
+  ellipsis,
+}: {
+  kit: "stylex" | "shadcn";
+  ellipsis: boolean;
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialPagination>
+        <OfficialPaginationContent>
+          <OfficialPaginationItem>
+            <OfficialPaginationPrevious href="#" />
+          </OfficialPaginationItem>
+          {ellipsis ? (
+            <>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">1</OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationEllipsis />
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">8</OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#" isActive>
+                  9
+                </OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">10</OfficialPaginationLink>
+              </OfficialPaginationItem>
+            </>
+          ) : (
+            <>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">1</OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#" isActive>
+                  2
+                </OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">3</OfficialPaginationLink>
+              </OfficialPaginationItem>
+            </>
+          )}
+          <OfficialPaginationItem>
+            <OfficialPaginationNext href="#" />
+          </OfficialPaginationItem>
+        </OfficialPaginationContent>
+      </OfficialPagination>
+    );
+  }
+
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious href="#" />
+        </PaginationItem>
+        {ellipsis ? (
+          <>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">8</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                9
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">10</PaginationLink>
+            </PaginationItem>
+          </>
+        ) : (
+          <>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+          </>
+        )}
+        <PaginationItem>
+          <PaginationNext href="#" />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 }
 

@@ -85,6 +85,7 @@ const TOGGLE_STATES = [
 const BREADCRUMB_STATES = ["default", "ellipsis"];
 const COLLAPSIBLE_STATES = ["open", "closed"];
 const SCROLL_AREA_STATES = ["vertical", "horizontal"];
+const PAGINATION_STATES = ["default", "ellipsis"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -526,6 +527,20 @@ function scrollAreaCases() {
   return list;
 }
 
+function paginationCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of PAGINATION_STATES) {
+      list.push({
+        component: "pagination",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -556,6 +571,7 @@ function cases() {
     ...breadcrumbCases(),
     ...collapsibleCases(),
     ...scrollAreaCases(),
+    ...paginationCases(),
   ];
 }
 
@@ -642,6 +658,9 @@ function slug(c) {
   if (c.component === "scroll-area") {
     return `scroll-area__${c.theme}__${c.state}`;
   }
+  if (c.component === "pagination") {
+    return `pagination__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -681,7 +700,8 @@ function urlFor(kit, c) {
     c.component !== "toggle" &&
     c.component !== "breadcrumb" &&
     c.component !== "collapsible" &&
-    c.component !== "scroll-area"
+    c.component !== "scroll-area" &&
+    c.component !== "pagination"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -817,6 +837,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "scroll-area") {
     return page.locator('[data-slot="scroll-area"]');
+  }
+  if (c.component === "pagination") {
+    return page.locator('[data-slot="pagination"]');
   }
   return page.getByRole("button");
 }
@@ -1082,7 +1105,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1121,7 +1144,8 @@ async function main() {
           r.component !== "toggle" &&
           r.component !== "breadcrumb" &&
           r.component !== "collapsible" &&
-          r.component !== "scroll-area",
+          r.component !== "scroll-area" &&
+          r.component !== "pagination",
       )
       .map(
         (r) =>
@@ -1488,6 +1512,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "scroll-area")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Pagination",
+    "",
+    "- Crops `[data-slot=\"pagination\"]` with 16px pad. `w-full` centers the row in the viewport on both kits.",
+    "- Identical copy: `default` is Previous / 1 / 2 (active) / 3 / Next; `ellipsis` is Previous / 1 / … / 8 / 9 (active) / 10 / Next.",
+    "- Official Previous/Next hide the word labels below Tailwind `sm` (640px). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "pagination")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

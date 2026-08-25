@@ -28,6 +28,15 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "../components/collapsible";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "../components/pagination";
 import { Separator } from "../components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
@@ -153,6 +162,15 @@ import {
   OfficialCollapsibleContent,
   OfficialCollapsibleTrigger,
 } from "./official-collapsible";
+import {
+  OfficialPagination,
+  OfficialPaginationContent,
+  OfficialPaginationEllipsis,
+  OfficialPaginationItem,
+  OfficialPaginationLink,
+  OfficialPaginationNext,
+  OfficialPaginationPrevious,
+} from "./official-pagination";
 import { OfficialSeparator } from "./official-separator";
 import { OfficialButton } from "./official-button";
 import {
@@ -309,7 +327,8 @@ export type CaptureComponent =
   | "toggle"
   | "breadcrumb"
   | "collapsible"
-  | "scroll-area";
+  | "scroll-area"
+  | "pagination";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -557,6 +576,13 @@ export type ScrollAreaCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type PaginationCaptureParams = {
+  component: "pagination";
+  kit: CaptureKit;
+  state: "default" | "ellipsis";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -585,7 +611,8 @@ export type CaptureParams =
   | ToggleCaptureParams
   | BreadcrumbCaptureParams
   | CollapsibleCaptureParams
-  | ScrollAreaCaptureParams;
+  | ScrollAreaCaptureParams
+  | PaginationCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -2154,6 +2181,129 @@ function CollapsibleHarness({ kit, state, theme }: CollapsibleCaptureParams) {
   );
 }
 
+function PaginationTrail({
+  kit,
+  ellipsis,
+}: {
+  kit: CaptureKit;
+  ellipsis: boolean;
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialPagination>
+        <OfficialPaginationContent>
+          <OfficialPaginationItem>
+            <OfficialPaginationPrevious href="#" />
+          </OfficialPaginationItem>
+          {ellipsis ? (
+            <>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">1</OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationEllipsis />
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">8</OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#" isActive>
+                  9
+                </OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">10</OfficialPaginationLink>
+              </OfficialPaginationItem>
+            </>
+          ) : (
+            <>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">1</OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#" isActive>
+                  2
+                </OfficialPaginationLink>
+              </OfficialPaginationItem>
+              <OfficialPaginationItem>
+                <OfficialPaginationLink href="#">3</OfficialPaginationLink>
+              </OfficialPaginationItem>
+            </>
+          )}
+          <OfficialPaginationItem>
+            <OfficialPaginationNext href="#" />
+          </OfficialPaginationItem>
+        </OfficialPaginationContent>
+      </OfficialPagination>
+    );
+  }
+
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious href="#" />
+        </PaginationItem>
+        {ellipsis ? (
+          <>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationEllipsis />
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">8</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                9
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">10</PaginationLink>
+            </PaginationItem>
+          </>
+        ) : (
+          <>
+            <PaginationItem>
+              <PaginationLink href="#">1</PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#" isActive>
+                2
+              </PaginationLink>
+            </PaginationItem>
+            <PaginationItem>
+              <PaginationLink href="#">3</PaginationLink>
+            </PaginationItem>
+          </>
+        )}
+        <PaginationItem>
+          <PaginationNext href="#" />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
+  );
+}
+
+function PaginationHarness({ kit, state, theme }: PaginationCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="pagination"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <PaginationTrail kit={kit} ellipsis={state === "ellipsis"} />
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -2265,6 +2415,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "scroll-area") {
     return <ScrollAreaHarness {...params} />;
+  }
+  if (params.component === "pagination") {
+    return <PaginationHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2532,6 +2685,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "scroll-area", kit, state, theme };
+  }
+
+  if (component === "pagination") {
+    if (state !== "default" && state !== "ellipsis") {
+      return null;
+    }
+    return { component: "pagination", kit, state, theme };
   }
 
   if (component !== "button") return null;
