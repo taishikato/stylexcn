@@ -25,6 +25,7 @@ const SIZES = ["default", "sm", "lg", "icon"];
 const BUTTON_STATES = ["default", "hover", "focus-visible", "disabled"];
 const INPUT_STATES = ["default", "focus-visible", "disabled", "invalid"];
 const LABEL_STATES = ["default", "disabled"];
+const TEXTAREA_STATES = ["default", "focus-visible", "disabled", "invalid"];
 const THEMES = ["light", "dark"];
 
 function buttonCases() {
@@ -87,8 +88,22 @@ function labelCases() {
   return list;
 }
 
+function textareaCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of TEXTAREA_STATES) {
+      list.push({
+        component: "textarea",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
-  return [...buttonCases(), ...inputCases(), ...labelCases()];
+  return [...buttonCases(), ...inputCases(), ...labelCases(), ...textareaCases()];
 }
 
 function slug(c) {
@@ -97,6 +112,9 @@ function slug(c) {
   }
   if (c.component === "label") {
     return `label__${c.theme}__${c.state}`;
+  }
+  if (c.component === "textarea") {
+    return `textarea__${c.theme}__${c.state}`;
   }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
@@ -108,7 +126,11 @@ function urlFor(kit, c) {
     state: c.state,
     theme: c.theme,
   });
-  if (c.component !== "input" && c.component !== "label") {
+  if (
+    c.component !== "input" &&
+    c.component !== "label" &&
+    c.component !== "textarea"
+  ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
   }
@@ -162,6 +184,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "label") {
     return page.locator('[data-slot="label"]');
+  }
+  if (c.component === "textarea") {
+    return page.locator('[data-slot="textarea"]');
   }
   return page.getByRole("button");
 }
@@ -285,7 +310,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label)",
+    "# Visual diff (Button + Input + Label + Textarea)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -296,7 +321,12 @@ async function main() {
     "| Case | Result | Mismatched pixels |",
     "| --- | --- | ---: |",
     ...rows
-      .filter((r) => r.component !== "input" && r.component !== "label")
+      .filter(
+        (r) =>
+          r.component !== "input" &&
+          r.component !== "label" &&
+          r.component !== "textarea",
+      )
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
@@ -319,6 +349,17 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "label")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Textarea",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "textarea")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
