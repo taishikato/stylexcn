@@ -52,11 +52,14 @@ const SELECT_STATES = [
   "sm",
   "open",
 ];
+const DROPDOWN_MENU_STATES = ["closed", "open"];
 const THEMES = ["light", "dark"];
 /* Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg / text-left / footer row. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
 /* Select popper: trigger near top-left so content stays on-screen and does not flip. */
 const SELECT_OPEN_VIEWPORT = { width: 640, height: 560 };
+/* Dropdown Menu: trigger near top-left so portaled content stays on-screen. */
+const DROPDOWN_MENU_OPEN_VIEWPORT = { width: 640, height: 560 };
 const CARD_VIEWPORT = { width: 400, height: 480 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
@@ -218,6 +221,20 @@ function selectCases() {
   return list;
 }
 
+function dropdownMenuCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of DROPDOWN_MENU_STATES) {
+      list.push({
+        component: "dropdown-menu",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -230,6 +247,7 @@ function cases() {
     ...cardCases(),
     ...dialogCases(),
     ...selectCases(),
+    ...dropdownMenuCases(),
   ];
 }
 
@@ -261,6 +279,9 @@ function slug(c) {
   if (c.component === "select") {
     return `select__${c.theme}__${c.state}`;
   }
+  if (c.component === "dropdown-menu") {
+    return `dropdown-menu__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -280,7 +301,8 @@ function urlFor(kit, c) {
     c.component !== "radio-group" &&
     c.component !== "card" &&
     c.component !== "dialog" &&
-    c.component !== "select"
+    c.component !== "select" &&
+    c.component !== "dropdown-menu"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -357,6 +379,9 @@ function controlLocator(page, c) {
   if (c.component === "select") {
     return page.locator('[data-slot="select-trigger"]');
   }
+  if (c.component === "dropdown-menu") {
+    return page.locator('[data-slot="dropdown-menu-trigger"]');
+  }
   return page.getByRole("button");
 }
 
@@ -369,6 +394,13 @@ async function prepareControl(page, c) {
   if (c.component === "select" && c.state === "open") {
     await page.locator('[data-slot="select-trigger"]').waitFor();
     await page.locator('[data-slot="select-content"][data-state="open"]').waitFor();
+    return;
+  }
+  if (c.component === "dropdown-menu" && c.state === "open") {
+    await page.locator('[data-slot="dropdown-menu-trigger"]').waitFor();
+    await page
+      .locator('[data-slot="dropdown-menu-content"][data-state="open"]')
+      .waitFor();
     return;
   }
   const locator = controlLocator(page, c);
@@ -391,6 +423,14 @@ async function screenshotControl(page, c, dest) {
   if (c.component === "select" && c.state === "open") {
     await page.locator('[data-slot="select-trigger"]').waitFor();
     await page.locator('[data-slot="select-content"][data-state="open"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "dropdown-menu" && c.state === "open") {
+    await page.locator('[data-slot="dropdown-menu-trigger"]').waitFor();
+    await page
+      .locator('[data-slot="dropdown-menu-content"][data-state="open"]')
+      .waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -460,6 +500,8 @@ async function main() {
         ? DIALOG_VIEWPORT
         : c.component === "select" && c.state === "open"
           ? SELECT_OPEN_VIEWPORT
+          : c.component === "dropdown-menu" && c.state === "open"
+            ? DROPDOWN_MENU_OPEN_VIEWPORT
           : c.component === "card"
             ? CARD_VIEWPORT
             : DEFAULT_VIEWPORT,
@@ -511,7 +553,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -532,7 +574,8 @@ async function main() {
           r.component !== "radio-group" &&
           r.component !== "card" &&
           r.component !== "dialog" &&
-          r.component !== "select",
+          r.component !== "select" &&
+          r.component !== "dropdown-menu",
       )
       .map(
         (r) =>
@@ -639,6 +682,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "select")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Dropdown Menu",
+    "",
+    "- Closed cases crop the trigger (16px pad). Open cases are full-viewport (640×560) so trigger + portaled content are captured together.",
+    "- Open uses controlled `open={true}` and `side=\"bottom\"` `align=\"start\"` on both kits. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "dropdown-menu")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
