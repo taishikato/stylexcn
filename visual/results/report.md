@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group)
 
-- Passed: 250/250
+- Passed: 258/258
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -481,3 +481,20 @@
 | `alert__dark__default` | PASS | 0/41600 |
 | `alert__dark__with-icon` | PASS | 0/41600 |
 | `alert__dark__destructive` | PASS | 0/41600 |
+
+## Toggle Group
+
+- Crops `[data-slot="toggle-group"]` with 16px pad. Identical copy on both kits: Bold / Italic / Underline.
+- `type="single"` with controlled `value` so the first item (Bold) is selected. Default `spacing={0}` (joined corners).
+- States: `default` / `outline` / `sm` / `lg`, each × light/dark. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `toggle-group__light__default` | PASS | 0/15640 |
+| `toggle-group__light__outline` | PASS | 0/15912 |
+| `toggle-group__light__sm` | PASS | 0/14720 |
+| `toggle-group__light__lg` | PASS | 0/16560 |
+| `toggle-group__dark__default` | PASS | 0/15640 |
+| `toggle-group__dark__outline` | PASS | 0/15912 |
+| `toggle-group__dark__sm` | PASS | 0/14720 |
+| `toggle-group__dark__lg` | PASS | 0/16560 |
