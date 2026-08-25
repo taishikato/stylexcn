@@ -53,6 +53,7 @@ import {
 } from "../components/dropdown-menu";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
+import { Progress } from "../components/progress";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
 import {
   Popover,
@@ -128,6 +129,7 @@ import {
 import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
 import { OfficialLabel } from "./official-label";
+import { OfficialProgress } from "./official-progress";
 import {
   OfficialRadioGroup,
   OfficialRadioGroupItem,
@@ -240,7 +242,8 @@ export type CaptureComponent =
   | "badge"
   | "separator"
   | "skeleton"
-  | "avatar";
+  | "avatar"
+  | "progress";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -264,7 +267,10 @@ export type CaptureState =
   | "bar"
   | "circle"
   | "badge"
-  | "group";
+  | "group"
+  | "empty"
+  | "halfway"
+  | "full";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -417,6 +423,13 @@ export type AvatarCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ProgressCaptureParams = {
+  component: "progress";
+  kit: CaptureKit;
+  state: "empty" | "halfway" | "full";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -437,7 +450,8 @@ export type CaptureParams =
   | BadgeCaptureParams
   | SeparatorCaptureParams
   | SkeletonCaptureParams
-  | AvatarCaptureParams;
+  | AvatarCaptureParams
+  | ProgressCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -506,6 +520,10 @@ const styles = stylex.create({
   skeletonCircle: {
     width: 40,
     height: 40,
+  },
+  /* Identical 16rem parent on both kits so w-full matches. */
+  progressWell: {
+    width: "16rem",
   },
 });
 
@@ -1491,6 +1509,37 @@ function AvatarHarness({ kit, state, theme }: AvatarCaptureParams) {
   );
 }
 
+function progressValueFor(state: ProgressCaptureParams["state"]): number {
+  if (state === "halfway") return 60;
+  if (state === "full") return 100;
+  return 0;
+}
+
+function ProgressHarness({ kit, state, theme }: ProgressCaptureParams) {
+  const isDark = theme === "dark";
+  const value = progressValueFor(state);
+
+  const progress =
+    kit === "shadcn" ? (
+      <OfficialProgress value={value} />
+    ) : (
+      <Progress value={value} />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="progress"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.progressWell)}>{progress}</div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1578,6 +1627,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "avatar") {
     return <AvatarHarness {...params} />;
+  }
+  if (params.component === "progress") {
+    return <ProgressHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1776,6 +1828,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "avatar", kit, state, theme };
+  }
+
+  if (component === "progress") {
+    if (state !== "empty" && state !== "halfway" && state !== "full") {
+      return null;
+    }
+    return { component: "progress", kit, state, theme };
   }
 
   if (component !== "button") return null;
