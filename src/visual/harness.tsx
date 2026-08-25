@@ -79,6 +79,12 @@ import {
   TabsTrigger,
 } from "../components/tabs";
 import { Textarea } from "../components/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../components/tooltip";
 import { darkTheme } from "../theme";
 import { OfficialButton } from "./official-button";
 import {
@@ -162,6 +168,12 @@ import {
   OfficialDropdownMenuShortcut,
   OfficialDropdownMenuTrigger,
 } from "./official-dropdown-menu";
+import {
+  OfficialTooltip,
+  OfficialTooltipContent,
+  OfficialTooltipProvider,
+  OfficialTooltipTrigger,
+} from "./official-tooltip";
 
 export const VARIANTS = [
   "default",
@@ -194,7 +206,8 @@ export type CaptureComponent =
   | "dropdown-menu"
   | "sheet"
   | "tabs"
-  | "popover";
+  | "popover"
+  | "tooltip";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -329,6 +342,13 @@ export type PopoverCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type TooltipCaptureParams = {
+  component: "tooltip";
+  kit: CaptureKit;
+  state: "default";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -344,7 +364,8 @@ export type CaptureParams =
   | DropdownMenuCaptureParams
   | SheetCaptureParams
   | TabsCaptureParams
-  | PopoverCaptureParams;
+  | PopoverCaptureParams
+  | TooltipCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -381,6 +402,17 @@ const styles = stylex.create({
     alignItems: "flex-start",
     justifyContent: "center",
     paddingTop: "4rem",
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
+  },
+  /* Trigger near the bottom so default side=top has room and does not flip. */
+  tooltipFrame: {
+    minHeight: "100vh",
+    margin: 0,
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    paddingBottom: "5rem",
     backgroundColor: "var(--background)",
     color: "var(--foreground)",
   },
@@ -1162,6 +1194,50 @@ function PopoverHarness({ kit, theme }: PopoverCaptureParams) {
   );
 }
 
+const TOOLTIP_TRIGGER = "Hover";
+const TOOLTIP_CONTENT = "Add to library";
+
+function TooltipHarness({ kit, theme }: TooltipCaptureParams) {
+  const isDark = theme === "dark";
+  usePortalDocumentTheme(isDark);
+
+  const tooltip =
+    kit === "shadcn" ? (
+      <OfficialTooltipProvider delayDuration={0}>
+        <OfficialTooltip open onOpenChange={() => {}}>
+          <OfficialTooltipTrigger asChild>
+            <OfficialButton variant="outline">{TOOLTIP_TRIGGER}</OfficialButton>
+          </OfficialTooltipTrigger>
+          <OfficialTooltipContent side="top">
+            {TOOLTIP_CONTENT}
+          </OfficialTooltipContent>
+        </OfficialTooltip>
+      </OfficialTooltipProvider>
+    ) : (
+      <TooltipProvider delayDuration={0}>
+        <Tooltip open onOpenChange={() => {}}>
+          <TooltipTrigger asChild>
+            <Button variant="outline">{TOOLTIP_TRIGGER}</Button>
+          </TooltipTrigger>
+          <TooltipContent side="top">{TOOLTIP_CONTENT}</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="tooltip"
+      data-state="default"
+      {...stylex.props(isDark && darkTheme, styles.tooltipFrame)}
+    >
+      {tooltip}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1234,6 +1310,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "popover") {
     return <PopoverHarness {...params} />;
+  }
+  if (params.component === "tooltip") {
+    return <TooltipHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1383,6 +1462,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "popover", kit, state, theme };
+  }
+
+  if (component === "tooltip") {
+    if (state !== "default") {
+      return null;
+    }
+    return { component: "tooltip", kit, state, theme };
   }
 
   if (component !== "button") return null;
