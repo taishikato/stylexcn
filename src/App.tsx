@@ -2,11 +2,13 @@ import * as stylex from "@stylexjs/stylex";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
+import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
 import { OfficialButton } from "./visual/official-button";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
+import { OfficialTextarea } from "./visual/official-textarea";
 
 const styles = stylex.create({
   page: {
@@ -51,8 +53,8 @@ function Playground() {
     <div {...stylex.props(styles.page)}>
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
-        StyleX Button, Input, and Label vs official shadcn New York baseline.
-        Visual capture lives at query-param harness URLs (see README).
+        StyleX Button, Input, Label, and Textarea vs official shadcn New York
+        baseline. Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -172,6 +174,36 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <div {...stylex.props(styles.inputWell)}>
           <OfficialInput className="peer" defaultValue="Email" disabled />
           <OfficialLabel>Peer disabled</OfficialLabel>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Textarea
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.inputWell)}>
+          <Textarea defaultValue="Email" />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <Textarea defaultValue="Email" disabled />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <Textarea defaultValue="Email" aria-invalid />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Textarea
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.inputWell)}>
+          <OfficialTextarea defaultValue="Email" />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <OfficialTextarea defaultValue="Email" disabled />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <OfficialTextarea defaultValue="Email" aria-invalid />
         </div>
       </div>
     </div>

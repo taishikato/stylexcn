@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label)
+# Visual diff (Button + Input + Label + Textarea)
 
-- Passed: 78/78
+- Passed: 86/86
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -96,3 +96,16 @@
 | `label__light__disabled` | PASS | 0/3082 |
 | `label__dark__default` | PASS | 0/3082 |
 | `label__dark__disabled` | PASS | 0/3082 |
+
+## Textarea
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `textarea__light__default` | PASS | 0/27648 |
+| `textarea__light__focus-visible` | PASS | 0/27648 |
+| `textarea__light__disabled` | PASS | 0/27648 |
+| `textarea__light__invalid` | PASS | 0/27648 |
+| `textarea__dark__default` | PASS | 0/27648 |
+| `textarea__dark__focus-visible` | PASS | 0/27648 |
+| `textarea__dark__disabled` | PASS | 0/27648 |
+| `textarea__dark__invalid` | PASS | 0/27648 |
