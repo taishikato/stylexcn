@@ -11,6 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./components/alert-dialog";
+import { Badge, type BadgeVariant } from "./components/badge";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
   Card,
@@ -89,7 +90,7 @@ import {
   TooltipTrigger,
 } from "./components/tooltip";
 import { darkTheme } from "./theme";
-import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
+import { Harness, parseCaptureParams, BADGE_VARIANTS, SIZES, VARIANTS } from "./visual/harness";
 import {
   OfficialAlertDialog,
   OfficialAlertDialogAction,
@@ -101,6 +102,7 @@ import {
   OfficialAlertDialogTitle,
   OfficialAlertDialogTrigger,
 } from "./visual/official-alert-dialog";
+import { OfficialBadge } from "./visual/official-badge";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -235,7 +237,7 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, and Tooltip vs official shadcn New York baseline. Visual
+        Popover, Tooltip, and Badge vs official shadcn New York baseline. Visual
         capture lives at
         query-param harness URLs (see README).
       </p>
@@ -730,6 +732,28 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundTooltip kit="shadcn" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Badge
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        {BADGE_VARIANTS.map((variant) => (
+          <Badge key={variant} variant={variant as BadgeVariant}>
+            {variant}
+          </Badge>
+        ))}
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Badge
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        {BADGE_VARIANTS.map((variant) => (
+          <OfficialBadge key={variant} variant={variant}>
+            {variant}
+          </OfficialBadge>
+        ))}
       </div>
     </div>
   );

@@ -58,6 +58,14 @@ const SHEET_STATES = ["default", "left", "top", "bottom"];
 const TABS_STATES = ["default", "second", "disabled"];
 const POPOVER_STATES = ["default"];
 const TOOLTIP_STATES = ["default"];
+const BADGE_VARIANTS = [
+  "default",
+  "secondary",
+  "destructive",
+  "outline",
+  "ghost",
+  "link",
+];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -317,6 +325,27 @@ function tooltipCases() {
   return list;
 }
 
+function badgeCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const variant of BADGE_VARIANTS) {
+      list.push({
+        component: "badge",
+        variant,
+        state: "default",
+        theme,
+      });
+    }
+    list.push({
+      component: "badge",
+      variant: "default",
+      state: "focus-visible",
+      theme,
+    });
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -335,6 +364,7 @@ function cases() {
     ...tabsCases(),
     ...popoverCases(),
     ...tooltipCases(),
+    ...badgeCases(),
   ];
 }
 
@@ -384,6 +414,10 @@ function slug(c) {
   if (c.component === "tooltip") {
     return `tooltip__${c.theme}__${c.state}`;
   }
+  if (c.component === "badge") {
+    const key = c.state === "focus-visible" ? "focus-visible" : c.variant;
+    return `badge__${c.theme}__${key}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -394,7 +428,9 @@ function urlFor(kit, c) {
     state: c.state,
     theme: c.theme,
   });
-  if (
+  if (c.component === "badge") {
+    q.set("variant", c.variant);
+  } else if (
     c.component !== "input" &&
     c.component !== "label" &&
     c.component !== "textarea" &&
@@ -503,6 +539,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "tooltip") {
     return page.locator('[data-slot="tooltip-content"]');
+  }
+  if (c.component === "badge") {
+    return page.locator('[data-slot="badge"]');
   }
   return page.getByRole("button");
 }
@@ -726,7 +765,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -753,7 +792,8 @@ async function main() {
           r.component !== "sheet" &&
           r.component !== "tabs" &&
           r.component !== "popover" &&
-          r.component !== "tooltip",
+          r.component !== "tooltip" &&
+          r.component !== "badge",
       )
       .map(
         (r) =>
@@ -945,6 +985,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "tooltip")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Badge",
+    "",
+    "- Official New York variants include ghost and link. Hover fills apply only to `[a&]` anchors; default cases are `<span>`.",
+    "- `focus-visible` uses the default variant with `tabIndex={0}` on both kits (span is not tabbable otherwise). Official has no disabled utilities.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "badge")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
