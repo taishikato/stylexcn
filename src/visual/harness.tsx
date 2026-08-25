@@ -1,10 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
+import { Checkbox } from "../components/checkbox";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
 import { Textarea } from "../components/textarea";
 import { darkTheme } from "../theme";
 import { OfficialButton } from "./official-button";
+import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
 import { OfficialLabel } from "./official-label";
 import { OfficialTextarea } from "./official-textarea";
@@ -25,14 +27,20 @@ export const SIZES = [
   "icon",
 ] as const satisfies readonly ButtonSize[];
 
-export type CaptureComponent = "button" | "input" | "label" | "textarea";
+export type CaptureComponent =
+  | "button"
+  | "input"
+  | "label"
+  | "textarea"
+  | "checkbox";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
   | "hover"
   | "focus-visible"
   | "disabled"
-  | "invalid";
+  | "invalid"
+  | "checked";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -47,7 +55,7 @@ export type ButtonCaptureParams = {
 export type InputCaptureParams = {
   component: "input";
   kit: CaptureKit;
-  state: Exclude<CaptureState, "hover">;
+  state: Exclude<CaptureState, "hover" | "checked">;
   theme: CaptureTheme;
 };
 
@@ -61,6 +69,13 @@ export type LabelCaptureParams = {
 export type TextareaCaptureParams = {
   component: "textarea";
   kit: CaptureKit;
+  state: Exclude<CaptureState, "hover" | "checked">;
+  theme: CaptureTheme;
+};
+
+export type CheckboxCaptureParams = {
+  component: "checkbox";
+  kit: CaptureKit;
   state: Exclude<CaptureState, "hover">;
   theme: CaptureTheme;
 };
@@ -69,7 +84,8 @@ export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
   | LabelCaptureParams
-  | TextareaCaptureParams;
+  | TextareaCaptureParams
+  | CheckboxCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -190,6 +206,41 @@ function TextareaHarness({ kit, state, theme }: TextareaCaptureParams) {
   );
 }
 
+function CheckboxHarness({ kit, state, theme }: CheckboxCaptureParams) {
+  const disabled = state === "disabled";
+  const invalid = state === "invalid";
+  const checked = state === "checked";
+  const isDark = theme === "dark";
+
+  const checkbox =
+    kit === "shadcn" ? (
+      <OfficialCheckbox
+        checked={checked}
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+      />
+    ) : (
+      <Checkbox
+        checked={checked}
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+      />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="checkbox"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {checkbox}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -229,6 +280,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "textarea") {
     return <TextareaHarness {...params} />;
+  }
+  if (params.component === "checkbox") {
+    return <CheckboxHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -271,6 +325,19 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "textarea", kit, state, theme };
+  }
+
+  if (component === "checkbox") {
+    if (
+      state !== "default" &&
+      state !== "checked" &&
+      state !== "focus-visible" &&
+      state !== "disabled" &&
+      state !== "invalid"
+    ) {
+      return null;
+    }
+    return { component: "checkbox", kit, state, theme };
   }
 
   if (component !== "button") return null;
