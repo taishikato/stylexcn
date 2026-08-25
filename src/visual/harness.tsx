@@ -54,6 +54,12 @@ import {
   SheetTitle,
 } from "../components/sheet";
 import { Switch } from "../components/switch";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "../components/tabs";
 import { Textarea } from "../components/textarea";
 import { darkTheme } from "../theme";
 import { OfficialButton } from "./official-button";
@@ -100,6 +106,12 @@ import {
   OfficialSheetTitle,
 } from "./official-sheet";
 import { OfficialSwitch } from "./official-switch";
+import {
+  OfficialTabs,
+  OfficialTabsContent,
+  OfficialTabsList,
+  OfficialTabsTrigger,
+} from "./official-tabs";
 import { OfficialTextarea } from "./official-textarea";
 import {
   OfficialDropdownMenu,
@@ -143,7 +155,8 @@ export type CaptureComponent =
   | "dialog"
   | "select"
   | "dropdown-menu"
-  | "sheet";
+  | "sheet"
+  | "tabs";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -160,7 +173,8 @@ export type CaptureState =
   | "closed"
   | "left"
   | "top"
-  | "bottom";
+  | "bottom"
+  | "second";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -256,6 +270,13 @@ export type SheetCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type TabsCaptureParams = {
+  component: "tabs";
+  kit: CaptureKit;
+  state: "default" | "second" | "disabled";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -268,7 +289,8 @@ export type CaptureParams =
   | DialogCaptureParams
   | SelectCaptureParams
   | DropdownMenuCaptureParams
-  | SheetCaptureParams;
+  | SheetCaptureParams
+  | TabsCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -909,6 +931,59 @@ function DropdownMenuHarness({
   );
 }
 
+const TABS_ACCOUNT = "Account";
+const TABS_PASSWORD = "Password";
+const TABS_ACCOUNT_BODY = "Make changes to your account here.";
+const TABS_PASSWORD_BODY = "Change your password here.";
+
+function TabsHarness({ kit, state, theme }: TabsCaptureParams) {
+  const isDark = theme === "dark";
+  const value = state === "second" ? "password" : "account";
+  const passwordDisabled = state === "disabled";
+
+  const tabs =
+    kit === "shadcn" ? (
+      <OfficialTabs defaultValue={value}>
+        <OfficialTabsList>
+          <OfficialTabsTrigger value="account">{TABS_ACCOUNT}</OfficialTabsTrigger>
+          <OfficialTabsTrigger value="password" disabled={passwordDisabled}>
+            {TABS_PASSWORD}
+          </OfficialTabsTrigger>
+        </OfficialTabsList>
+        <OfficialTabsContent value="account">
+          {TABS_ACCOUNT_BODY}
+        </OfficialTabsContent>
+        <OfficialTabsContent value="password">
+          {TABS_PASSWORD_BODY}
+        </OfficialTabsContent>
+      </OfficialTabs>
+    ) : (
+      <Tabs defaultValue={value}>
+        <TabsList>
+          <TabsTrigger value="account">{TABS_ACCOUNT}</TabsTrigger>
+          <TabsTrigger value="password" disabled={passwordDisabled}>
+            {TABS_PASSWORD}
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="account">{TABS_ACCOUNT_BODY}</TabsContent>
+        <TabsContent value="password">{TABS_PASSWORD_BODY}</TabsContent>
+      </Tabs>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="tabs"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {tabs}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -972,6 +1047,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "sheet") {
     return <SheetHarness {...params} />;
+  }
+  if (params.component === "tabs") {
+    return <TabsHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1100,6 +1178,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "sheet", kit, state, theme };
+  }
+
+  if (component === "tabs") {
+    if (state !== "default" && state !== "second" && state !== "disabled") {
+      return null;
+    }
+    return { component: "tabs", kit, state, theme };
   }
 
   if (component !== "button") return null;
