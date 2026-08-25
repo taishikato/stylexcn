@@ -905,7 +905,7 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Sheet
-      </h2
+      </h2>
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundSheet kit="stylex" dark={dark} />
