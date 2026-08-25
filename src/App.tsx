@@ -1,8 +1,10 @@
 import * as stylex from "@stylexjs/stylex";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
+import { Input } from "./components/input";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
 import { OfficialButton } from "./visual/official-button";
+import { OfficialInput } from "./visual/official-input";
 
 const styles = stylex.create({
   page: {
@@ -37,6 +39,9 @@ const styles = stylex.create({
     width: "6rem",
     color: "var(--muted-foreground)",
   },
+  inputWell: {
+    width: "12rem",
+  },
 });
 
 function Playground() {
@@ -44,7 +49,7 @@ function Playground() {
     <div {...stylex.props(styles.page)}>
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
-        StyleX Button (Base UI) vs official shadcn New York baseline. Visual
+        StyleX Button and Input vs official shadcn New York baseline. Visual
         capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
@@ -92,6 +97,36 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           </OfficialButton>
         </div>
       ))}
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Input
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.inputWell)}>
+          <Input defaultValue="Email" />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <Input defaultValue="Email" disabled />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <Input defaultValue="Email" aria-invalid />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Input
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.inputWell)}>
+          <OfficialInput defaultValue="Email" />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <OfficialInput defaultValue="Email" disabled />
+        </div>
+        <div {...stylex.props(styles.inputWell)}>
+          <OfficialInput defaultValue="Email" aria-invalid />
+        </div>
+      </div>
     </div>
   );
 }

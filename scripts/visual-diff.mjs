@@ -22,14 +22,16 @@ const VARIANTS = [
   "link",
 ];
 const SIZES = ["default", "sm", "lg", "icon"];
-const STATES = ["default", "hover", "focus-visible", "disabled"];
+const BUTTON_STATES = ["default", "hover", "focus-visible", "disabled"];
+const INPUT_STATES = ["default", "focus-visible", "disabled", "invalid"];
 const THEMES = ["light", "dark"];
 
-function cases() {
+function buttonCases() {
   const list = [];
   for (const variant of VARIANTS) {
     for (const size of SIZES) {
       list.push({
+        component: "button",
         variant,
         size,
         state: "default",
@@ -39,11 +41,12 @@ function cases() {
   }
   for (const theme of THEMES) {
     for (const variant of VARIANTS) {
-      for (const state of STATES) {
+      for (const state of BUTTON_STATES) {
         if (theme === "light" && state === "default") {
           continue;
         }
         list.push({
+          component: "button",
           variant,
           size: "default",
           state,
@@ -55,18 +58,42 @@ function cases() {
   return list;
 }
 
-function slug({ variant, size, state, theme }) {
-  return `${theme}__${variant}__${size}__${state}`;
+function inputCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of INPUT_STATES) {
+      list.push({
+        component: "input",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
+function cases() {
+  return [...buttonCases(), ...inputCases()];
+}
+
+function slug(c) {
+  if (c.component === "input") {
+    return `input__${c.theme}__${c.state}`;
+  }
+  return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
 function urlFor(kit, c) {
   const q = new URLSearchParams({
     kit,
-    variant: c.variant,
-    size: c.size,
+    component: c.component ?? "button",
     state: c.state,
     theme: c.theme,
   });
+  if (c.component !== "input") {
+    q.set("variant", c.variant);
+    q.set("size", c.size);
+  }
   return `${base}/?${q}`;
 }
 
@@ -111,20 +138,26 @@ async function startPreview() {
   return child;
 }
 
-async function prepareButton(page, state) {
-  const button = page.getByRole("button");
-  await button.waitFor();
-  if (state === "hover") {
-    await button.hover();
-  } else if (state === "focus-visible") {
+async function prepareControl(page, c) {
+  const locator =
+    c.component === "input"
+      ? page.locator('[data-slot="input"]')
+      : page.getByRole("button");
+  await locator.waitFor();
+  if (c.state === "hover") {
+    await locator.hover();
+  } else if (c.state === "focus-visible") {
     await page.locator("body").click({ position: { x: 1, y: 1 } });
     await page.keyboard.press("Tab");
   }
 }
 
-async function screenshotButton(page, dest) {
-  const button = page.getByRole("button");
-  const box = await button.boundingBox();
+async function screenshotControl(page, c, dest) {
+  const locator =
+    c.component === "input"
+      ? page.locator('[data-slot="input"]')
+      : page.getByRole("button");
+  const box = await locator.boundingBox();
   if (!box) throw new Error("no bounding box");
   const pad = 16;
   const clip = {
@@ -186,13 +219,13 @@ async function main() {
 
     await page.goto(urlFor("shadcn", c), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
-    await prepareButton(page, c.state);
-    await screenshotButton(page, shadcnPath);
+    await prepareControl(page, c);
+    await screenshotControl(page, c, shadcnPath);
 
     await page.goto(urlFor("stylex", c), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
-    await prepareButton(page, c.state);
-    await screenshotButton(page, stylexPath);
+    await prepareControl(page, c);
+    await screenshotControl(page, c, stylexPath);
 
     const a = await readFile(shadcnPath);
     const b = await readFile(stylexPath);
@@ -230,18 +263,33 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Button visual diff",
+    "# Visual diff (Button + Input)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
     `- pixelmatch threshold: 0 (any nonzero pixel is a fail)`,
     "",
+    "## Button",
+    "",
     "| Case | Result | Mismatched pixels |",
     "| --- | --- | ---: |",
-    ...rows.map(
-      (r) =>
-        `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
-    ),
+    ...rows
+      .filter((r) => r.component !== "input")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Input",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "input")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
     "",
   ].join("\n");
   await writeFile(path.join(outDir, "report.md"), md);

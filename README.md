@@ -2,7 +2,7 @@
 
 shadcn/ui-compatible components styled with [StyleX](https://stylexjs.com), not Tailwind. Visual target: official shadcn/ui **New York**. Primitives: [Base UI](https://base-ui.com).
 
-This repo is a foundation plus **Button**. Distribution (copy-into-repo / registry) comes later.
+This repo is a foundation plus **Button** and **Input**. Distribution (copy-into-repo / registry) comes later.
 
 ## Tokens
 
@@ -23,13 +23,13 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open the root URL for the Button playground. Isolated capture frames use query params, for example `/?kit=stylex&variant=default&size=default&state=default&theme=light`.
+Open the root URL for the Button + Input playground. Isolated capture frames use query params, for example `/?kit=stylex&component=button&variant=default&size=default&state=default&theme=light` or `/?kit=stylex&component=input&state=default&theme=light`.
 
 ## Visual regression
 
-Harness: `src/visual/harness.tsx` (query params `kit`, `variant`, `size`, `state`, `theme`).
+Harness: `src/visual/harness.tsx` (query params `kit`, `component`, `state`, `theme`; Button also uses `variant` and `size`).
 
-Official baseline is the New York v4 Button copied from shadcn (`src/visual/official-button.tsx`). Candidate is `src/components/button.tsx`.
+Official baselines: `src/visual/official-button.tsx`, `src/visual/official-input.tsx`. Candidates: `src/components/button.tsx`, `src/components/input.tsx`.
 
 ```bash
 npm run build
