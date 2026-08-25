@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { useLayoutEffect } from "react";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
   Card,
@@ -10,6 +11,14 @@ import {
   CardTitle,
 } from "../components/card";
 import { Checkbox } from "../components/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/dialog";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
@@ -33,6 +42,14 @@ import {
   OfficialRadioGroup,
   OfficialRadioGroupItem,
 } from "./official-radio-group";
+import {
+  OfficialDialog,
+  OfficialDialogContent,
+  OfficialDialogDescription,
+  OfficialDialogFooter,
+  OfficialDialogHeader,
+  OfficialDialogTitle,
+} from "./official-dialog";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialTextarea } from "./official-textarea";
 
@@ -60,7 +77,8 @@ export type CaptureComponent =
   | "checkbox"
   | "switch"
   | "radio-group"
-  | "card";
+  | "card"
+  | "dialog";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -69,7 +87,8 @@ export type CaptureState =
   | "disabled"
   | "invalid"
   | "checked"
-  | "with-action";
+  | "with-action"
+  | "no-close";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -130,6 +149,13 @@ export type CardCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type DialogCaptureParams = {
+  component: "dialog";
+  kit: CaptureKit;
+  state: "default" | "no-close";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -138,7 +164,8 @@ export type CaptureParams =
   | CheckboxCaptureParams
   | SwitchCaptureParams
   | RadioGroupCaptureParams
-  | CardCaptureParams;
+  | CardCaptureParams
+  | DialogCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -429,6 +456,87 @@ function CardHarness({ kit, state, theme }: CardCaptureParams) {
   );
 }
 
+const DIALOG_TITLE = "Edit profile";
+const DIALOG_DESCRIPTION =
+  "Make changes to your profile here. Click save when you are done.";
+const DIALOG_BODY = "This is the dialog body.";
+const DIALOG_SAVE = "Save changes";
+
+/**
+ * Portaled overlay/content mount on document.body. Dark Neutral tokens and
+ * `.dark` must live on <html> so both kits inherit the same theme.
+ */
+function usePortalDocumentTheme(isDark: boolean) {
+  useLayoutEffect(() => {
+    const html = document.documentElement;
+    const applied: string[] = [];
+    if (isDark) {
+      html.classList.add("dark");
+      applied.push("dark");
+      const sx = stylex.props(darkTheme);
+      for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+        html.classList.add(cls);
+        applied.push(cls);
+      }
+    }
+    return () => {
+      for (const cls of applied) {
+        html.classList.remove(cls);
+      }
+    };
+  }, [isDark]);
+}
+
+function DialogHarness({ kit, state, theme }: DialogCaptureParams) {
+  const isDark = theme === "dark";
+  const showCloseButton = state !== "no-close";
+  usePortalDocumentTheme(isDark);
+
+  const dialog =
+    kit === "shadcn" ? (
+      <OfficialDialog open onOpenChange={() => {}}>
+        <OfficialDialogContent showCloseButton={showCloseButton}>
+          <OfficialDialogHeader>
+            <OfficialDialogTitle>{DIALOG_TITLE}</OfficialDialogTitle>
+            <OfficialDialogDescription>
+              {DIALOG_DESCRIPTION}
+            </OfficialDialogDescription>
+          </OfficialDialogHeader>
+          <p>{DIALOG_BODY}</p>
+          <OfficialDialogFooter>
+            <OfficialButton>{DIALOG_SAVE}</OfficialButton>
+          </OfficialDialogFooter>
+        </OfficialDialogContent>
+      </OfficialDialog>
+    ) : (
+      <Dialog open onOpenChange={() => {}}>
+        <DialogContent showCloseButton={showCloseButton}>
+          <DialogHeader>
+            <DialogTitle>{DIALOG_TITLE}</DialogTitle>
+            <DialogDescription>{DIALOG_DESCRIPTION}</DialogDescription>
+          </DialogHeader>
+          <p>{DIALOG_BODY}</p>
+          <DialogFooter>
+            <Button>{DIALOG_SAVE}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="dialog"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {dialog}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -480,6 +588,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "card") {
     return <CardHarness {...params} />;
+  }
+  if (params.component === "dialog") {
+    return <DialogHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -567,6 +678,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "card", kit, state, theme };
+  }
+
+  if (component === "dialog") {
+    if (state !== "default" && state !== "no-close") {
+      return null;
+    }
+    return { component: "dialog", kit, state, theme };
   }
 
   if (component !== "button") return null;

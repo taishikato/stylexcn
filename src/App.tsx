@@ -1,4 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
+import { useLayoutEffect, useState } from "react";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
   Card,
@@ -10,6 +11,15 @@ import {
   CardTitle,
 } from "./components/card";
 import { Checkbox } from "./components/checkbox";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "./components/dialog";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
 import { RadioGroup, RadioGroupItem } from "./components/radio-group";
@@ -28,6 +38,15 @@ import {
   OfficialCardTitle,
 } from "./visual/official-card";
 import { OfficialCheckbox } from "./visual/official-checkbox";
+import {
+  OfficialDialog,
+  OfficialDialogContent,
+  OfficialDialogDescription,
+  OfficialDialogFooter,
+  OfficialDialogHeader,
+  OfficialDialogTitle,
+  OfficialDialogTrigger,
+} from "./visual/official-dialog";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
 import {
@@ -89,8 +108,8 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        and Card vs official shadcn New York baseline. Visual capture lives at
-        query-param harness URLs (see README).
+        Card, and Dialog vs official shadcn New York baseline. Visual capture
+        lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -470,7 +489,90 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           </OfficialCard>
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Dialog
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundDialog kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Dialog
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundDialog kit="shadcn" dark={dark} />
+      </div>
     </div>
+  );
+}
+
+function PlaygroundDialog({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialDialog open={open} onOpenChange={setOpen}>
+        <OfficialDialogTrigger asChild>
+          <OfficialButton variant="outline">Open dialog</OfficialButton>
+        </OfficialDialogTrigger>
+        <OfficialDialogContent>
+          <OfficialDialogHeader>
+            <OfficialDialogTitle>Edit profile</OfficialDialogTitle>
+            <OfficialDialogDescription>
+              Make changes to your profile here. Click save when you are done.
+            </OfficialDialogDescription>
+          </OfficialDialogHeader>
+          <p>This is the dialog body.</p>
+          <OfficialDialogFooter>
+            <OfficialButton onClick={() => setOpen(false)}>
+              Save changes
+            </OfficialButton>
+          </OfficialDialogFooter>
+        </OfficialDialogContent>
+      </OfficialDialog>
+    );
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline">Open dialog</Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Edit profile</DialogTitle>
+          <DialogDescription>
+            Make changes to your profile here. Click save when you are done.
+          </DialogDescription>
+        </DialogHeader>
+        <p>This is the dialog body.</p>
+        <DialogFooter>
+          <Button onClick={() => setOpen(false)}>Save changes</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 

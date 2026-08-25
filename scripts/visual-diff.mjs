@@ -42,7 +42,12 @@ const RADIO_GROUP_STATES = [
   "invalid",
 ];
 const CARD_STATES = ["default", "with-action"];
+const DIALOG_STATES = ["default", "no-close"];
 const THEMES = ["light", "dark"];
+/* Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg / text-left / footer row. */
+const DIALOG_VIEWPORT = { width: 800, height: 600 };
+const CARD_VIEWPORT = { width: 400, height: 480 };
+const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
   const list = [];
@@ -174,6 +179,20 @@ function cardCases() {
   return list;
 }
 
+function dialogCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of DIALOG_STATES) {
+      list.push({
+        component: "dialog",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -184,6 +203,7 @@ function cases() {
     ...switchCases(),
     ...radioGroupCases(),
     ...cardCases(),
+    ...dialogCases(),
   ];
 }
 
@@ -209,6 +229,9 @@ function slug(c) {
   if (c.component === "card") {
     return `card__${c.theme}__${c.state}`;
   }
+  if (c.component === "dialog") {
+    return `dialog__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -226,7 +249,8 @@ function urlFor(kit, c) {
     c.component !== "checkbox" &&
     c.component !== "switch" &&
     c.component !== "radio-group" &&
-    c.component !== "card"
+    c.component !== "card" &&
+    c.component !== "dialog"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -297,10 +321,18 @@ function controlLocator(page, c) {
   if (c.component === "card") {
     return page.locator('[data-slot="card"]');
   }
+  if (c.component === "dialog") {
+    return page.locator('[data-slot="dialog-content"][data-state="open"]');
+  }
   return page.getByRole("button");
 }
 
 async function prepareControl(page, c) {
+  if (c.component === "dialog") {
+    await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
+    return;
+  }
   const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
@@ -312,6 +344,12 @@ async function prepareControl(page, c) {
 }
 
 async function screenshotControl(page, c, dest) {
+  if (c.component === "dialog") {
+    await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
   const locator = controlLocator(page, c);
   const box = await locator.boundingBox();
   if (!box) throw new Error("no bounding box");
@@ -374,9 +412,11 @@ async function main() {
     const diffPath = path.join(outDir, "diff", `${name}.png`);
 
     await page.setViewportSize(
-      c.component === "card"
-        ? { width: 400, height: 480 }
-        : { width: 400, height: 200 },
+      c.component === "dialog"
+        ? DIALOG_VIEWPORT
+        : c.component === "card"
+          ? CARD_VIEWPORT
+          : DEFAULT_VIEWPORT,
     );
 
     await page.goto(urlFor("shadcn", c), { waitUntil: "networkidle" });
@@ -425,7 +465,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -444,7 +484,8 @@ async function main() {
           r.component !== "checkbox" &&
           r.component !== "switch" &&
           r.component !== "radio-group" &&
-          r.component !== "card",
+          r.component !== "card" &&
+          r.component !== "dialog",
       )
       .map(
         (r) =>
@@ -528,10 +569,25 @@ async function main() {
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
       ),
     "",
+    "## Dialog",
+    "",
+    "- Viewport: 800×600 (Tailwind `sm` / 40rem). Overlay + content are portaled to `document.body`.",
+    "- Screenshots are full-viewport (overlay + panel). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "dialog")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
   ].join("\n");
   await writeFile(path.join(outDir, "report.md"), md);
 
-  await browser.close();
+  // Open Dialog can hang Playwright close(). Tear down the preview first and
+  // force-exit so a passing run does not stall.
   preview.kill("SIGTERM");
   try {
     const { execSync } = await import("node:child_process");
@@ -539,10 +595,15 @@ async function main() {
   } catch {
     /* already gone */
   }
+  await Promise.race([
+    browser.close(),
+    new Promise((resolve) => setTimeout(resolve, 2000)),
+  ]);
   if (failed > 0) {
     console.error(`Visual diff failed: ${failed} case(s)`);
     process.exit(1);
   }
+  process.exit(0);
 }
 
 main().catch((err) => {
