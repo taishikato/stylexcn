@@ -225,5 +225,6 @@ export function Button({
   );
 }
 
+export const buttonBase = base;
 export const buttonVariants = variants;
 export const buttonSizes = sizes;
