@@ -133,6 +133,7 @@ import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
 import { CircleAlert } from "lucide-react";
+import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import {
   Tooltip,
   TooltipContent,
@@ -259,6 +260,10 @@ import { OfficialSlider } from "./official-slider";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialToggle } from "./official-toggle";
 import {
+  OfficialToggleGroup,
+  OfficialToggleGroupItem,
+} from "./official-toggle-group";
+import {
   OfficialTabs,
   OfficialTabsContent,
   OfficialTabsList,
@@ -340,7 +345,8 @@ export type CaptureComponent =
   | "collapsible"
   | "scroll-area"
   | "pagination"
-  | "alert";
+  | "alert"
+  | "toggle-group";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -603,6 +609,13 @@ export type AlertCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ToggleGroupCaptureParams = {
+  component: "toggle-group";
+  kit: CaptureKit;
+  state: "default" | "outline" | "sm" | "lg";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -633,7 +646,8 @@ export type CaptureParams =
   | CollapsibleCaptureParams
   | ScrollAreaCaptureParams
   | PaginationCaptureParams
-  | AlertCaptureParams;
+  | AlertCaptureParams
+  | ToggleGroupCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -2385,6 +2399,79 @@ function AlertHarness({ kit, state, theme }: AlertCaptureParams) {
   );
 }
 
+const TOGGLE_GROUP_BOLD = "Bold";
+const TOGGLE_GROUP_ITALIC = "Italic";
+const TOGGLE_GROUP_UNDERLINE = "Underline";
+
+function toggleGroupVariantFor(
+  state: ToggleGroupCaptureParams["state"],
+): ToggleVariant {
+  return state === "outline" ? "outline" : "default";
+}
+
+function toggleGroupSizeFor(
+  state: ToggleGroupCaptureParams["state"],
+): ToggleSize {
+  if (state === "sm" || state === "lg") return state;
+  return "default";
+}
+
+function ToggleGroupHarness({ kit, state, theme }: ToggleGroupCaptureParams) {
+  const isDark = theme === "dark";
+  const variant = toggleGroupVariantFor(state);
+  const size = toggleGroupSizeFor(state);
+
+  const group =
+    kit === "shadcn" ? (
+      <OfficialToggleGroup
+        type="single"
+        value="bold"
+        onValueChange={() => {}}
+        variant={variant}
+        size={size}
+        spacing={0}
+      >
+        <OfficialToggleGroupItem value="bold">
+          {TOGGLE_GROUP_BOLD}
+        </OfficialToggleGroupItem>
+        <OfficialToggleGroupItem value="italic">
+          {TOGGLE_GROUP_ITALIC}
+        </OfficialToggleGroupItem>
+        <OfficialToggleGroupItem value="underline">
+          {TOGGLE_GROUP_UNDERLINE}
+        </OfficialToggleGroupItem>
+      </OfficialToggleGroup>
+    ) : (
+      <ToggleGroup
+        type="single"
+        value="bold"
+        onValueChange={() => {}}
+        variant={variant}
+        size={size}
+        spacing={0}
+      >
+        <ToggleGroupItem value="bold">{TOGGLE_GROUP_BOLD}</ToggleGroupItem>
+        <ToggleGroupItem value="italic">{TOGGLE_GROUP_ITALIC}</ToggleGroupItem>
+        <ToggleGroupItem value="underline">
+          {TOGGLE_GROUP_UNDERLINE}
+        </ToggleGroupItem>
+      </ToggleGroup>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="toggle-group"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {group}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -2502,6 +2589,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "alert") {
     return <AlertHarness {...params} />;
+  }
+  if (params.component === "toggle-group") {
+    return <ToggleGroupHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2787,6 +2877,18 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "alert", kit, state, theme };
+  }
+
+  if (component === "toggle-group") {
+    if (
+      state !== "default" &&
+      state !== "outline" &&
+      state !== "sm" &&
+      state !== "lg"
+    ) {
+      return null;
+    }
+    return { component: "toggle-group", kit, state, theme };
   }
 
   if (component !== "button") return null;

@@ -128,6 +128,7 @@ import { ScrollArea, ScrollBar } from "./components/scroll-area";
 import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
 import { Toggle } from "./components/toggle";
+import { ToggleGroup, ToggleGroupItem } from "./components/toggle-group";
 import { CircleAlert } from "lucide-react";
 import {
   Tabs,
@@ -205,6 +206,10 @@ import {
 } from "./visual/official-scroll-area";
 import { OfficialSlider } from "./visual/official-slider";
 import { OfficialToggle } from "./visual/official-toggle";
+import {
+  OfficialToggleGroup,
+  OfficialToggleGroupItem,
+} from "./visual/official-toggle-group";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -411,8 +416,9 @@ function Playground() {
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
         Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
-        Scroll Area, Pagination, and Alert vs official shadcn New York baseline.
-        Visual capture lives at query-param harness URLs (see README).
+        Scroll Area, Pagination, Alert, and Toggle Group vs official shadcn
+        New York baseline. Visual capture lives at query-param harness URLs
+        (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1296,6 +1302,26 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <PlaygroundAlert kit="shadcn" state="destructive" />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Toggle Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundToggleGroup kit="stylex" variant="default" size="default" />
+        <PlaygroundToggleGroup kit="stylex" variant="outline" size="default" />
+        <PlaygroundToggleGroup kit="stylex" variant="default" size="sm" />
+        <PlaygroundToggleGroup kit="stylex" variant="default" size="lg" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Toggle Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundToggleGroup kit="shadcn" variant="default" size="default" />
+        <PlaygroundToggleGroup kit="shadcn" variant="outline" size="default" />
+        <PlaygroundToggleGroup kit="shadcn" variant="default" size="sm" />
+        <PlaygroundToggleGroup kit="shadcn" variant="default" size="lg" />
+      </div>
     </div>
   );
 }
@@ -1742,6 +1768,48 @@ function PlaygroundPagination({
         </PaginationItem>
       </PaginationContent>
     </Pagination>
+  );
+}
+
+function PlaygroundToggleGroup({
+  kit,
+  variant,
+  size,
+}: {
+  kit: "stylex" | "shadcn";
+  variant: "default" | "outline";
+  size: "default" | "sm" | "lg";
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialToggleGroup
+        type="single"
+        defaultValue="bold"
+        variant={variant}
+        size={size}
+        spacing={0}
+      >
+        <OfficialToggleGroupItem value="bold">Bold</OfficialToggleGroupItem>
+        <OfficialToggleGroupItem value="italic">Italic</OfficialToggleGroupItem>
+        <OfficialToggleGroupItem value="underline">
+          Underline
+        </OfficialToggleGroupItem>
+      </OfficialToggleGroup>
+    );
+  }
+
+  return (
+    <ToggleGroup
+      type="single"
+      defaultValue="bold"
+      variant={variant}
+      size={size}
+      spacing={0}
+    >
+      <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
+      <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
+      <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
+    </ToggleGroup>
   );
 }
 
