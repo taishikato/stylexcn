@@ -95,6 +95,7 @@ import {
   TabsTrigger,
 } from "../components/tabs";
 import { Skeleton, type SkeletonRadius } from "../components/skeleton";
+import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import {
   Tooltip,
@@ -181,6 +182,7 @@ import {
   OfficialSheetTitle,
 } from "./official-sheet";
 import { OfficialSkeleton } from "./official-skeleton";
+import { OfficialSlider } from "./official-slider";
 import { OfficialSwitch } from "./official-switch";
 import {
   OfficialTabs,
@@ -256,7 +258,8 @@ export type CaptureComponent =
   | "skeleton"
   | "avatar"
   | "progress"
-  | "accordion";
+  | "accordion"
+  | "slider";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -283,7 +286,8 @@ export type CaptureState =
   | "group"
   | "empty"
   | "halfway"
-  | "full";
+  | "full"
+  | "range";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -450,6 +454,13 @@ export type AccordionCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SliderCaptureParams = {
+  component: "slider";
+  kit: CaptureKit;
+  state: "default" | "disabled" | "focus-visible" | "range";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -472,7 +483,8 @@ export type CaptureParams =
   | SkeletonCaptureParams
   | AvatarCaptureParams
   | ProgressCaptureParams
-  | AccordionCaptureParams;
+  | AccordionCaptureParams
+  | SliderCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -548,6 +560,9 @@ const styles = stylex.create({
   },
   accordionWell: {
     width: "20rem",
+  },
+  sliderWell: {
+    width: "16rem",
   },
 });
 
@@ -1633,6 +1648,40 @@ function AccordionHarness({ kit, state, theme }: AccordionCaptureParams) {
   );
 }
 
+function SliderHarness({ kit, state, theme }: SliderCaptureParams) {
+  const isDark = theme === "dark";
+  const disabled = state === "disabled";
+  const value = state === "range" ? ([25, 75] as const) : ([50] as const);
+
+  const slider =
+    kit === "shadcn" ? (
+      <OfficialSlider
+        value={[...value]}
+        disabled={disabled}
+        onValueChange={() => {}}
+      />
+    ) : (
+      <Slider
+        value={[...value]}
+        disabled={disabled}
+        onValueChange={() => {}}
+      />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="slider"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.sliderWell)}>{slider}</div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1726,6 +1775,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "accordion") {
     return <AccordionHarness {...params} />;
+  }
+  if (params.component === "slider") {
+    return <SliderHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1938,6 +1990,18 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "accordion", kit, state, theme };
+  }
+
+  if (component === "slider") {
+    if (
+      state !== "default" &&
+      state !== "disabled" &&
+      state !== "focus-visible" &&
+      state !== "range"
+    ) {
+      return null;
+    }
+    return { component: "slider", kit, state, theme };
   }
 
   if (component !== "button") return null;

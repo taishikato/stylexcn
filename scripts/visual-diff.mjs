@@ -71,6 +71,7 @@ const SKELETON_STATES = ["bar", "circle"];
 const AVATAR_STATES = ["default", "sm", "lg", "badge", "group"];
 const PROGRESS_STATES = ["empty", "halfway", "full"];
 const ACCORDION_STATES = ["open", "second", "closed"];
+const SLIDER_STATES = ["default", "disabled", "focus-visible", "range"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -422,6 +423,20 @@ function accordionCases() {
   return list;
 }
 
+function sliderCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SLIDER_STATES) {
+      list.push({
+        component: "slider",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -446,6 +461,7 @@ function cases() {
     ...avatarCases(),
     ...progressCases(),
     ...accordionCases(),
+    ...sliderCases(),
   ];
 }
 
@@ -514,6 +530,9 @@ function slug(c) {
   if (c.component === "accordion") {
     return `accordion__${c.theme}__${c.state}`;
   }
+  if (c.component === "slider") {
+    return `slider__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -547,7 +566,8 @@ function urlFor(kit, c) {
     c.component !== "skeleton" &&
     c.component !== "avatar" &&
     c.component !== "progress" &&
-    c.component !== "accordion"
+    c.component !== "accordion" &&
+    c.component !== "slider"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -665,6 +685,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "accordion") {
     return page.locator('[data-slot="accordion"]');
+  }
+  if (c.component === "slider") {
+    return page.locator('[data-slot="slider"]');
   }
   return page.getByRole("button");
 }
@@ -899,7 +922,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -932,7 +955,8 @@ async function main() {
           r.component !== "skeleton" &&
           r.component !== "avatar" &&
           r.component !== "progress" &&
-          r.component !== "accordion",
+          r.component !== "accordion" &&
+          r.component !== "slider",
       )
       .map(
         (r) =>
@@ -1210,6 +1234,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "accordion")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Slider",
+    "",
+    "- Crops `[data-slot=\"slider\"]` with 16px pad (covers the 4px focus ring). Identical 16rem-wide parent on both kits so `w-full` matches.",
+    "- Controlled `value` on both kits (`[50]` single thumb; `range` is `[25, 75]`). Do not rely on the official `[min, max]` fallback.",
+    "- States: `default` / `disabled` / `focus-visible` (Tab onto the thumb) / `range`, each × light/dark. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "slider")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
