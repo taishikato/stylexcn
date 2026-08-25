@@ -87,6 +87,14 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "./components/dropdown-menu";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuTrigger,
+} from "./components/context-menu";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
 import { Progress } from "./components/progress";
@@ -259,6 +267,14 @@ import {
   OfficialDropdownMenuShortcut,
   OfficialDropdownMenuTrigger,
 } from "./visual/official-dropdown-menu";
+import {
+  OfficialContextMenu,
+  OfficialContextMenuContent,
+  OfficialContextMenuItem,
+  OfficialContextMenuSeparator,
+  OfficialContextMenuShortcut,
+  OfficialContextMenuTrigger,
+} from "./visual/official-context-menu";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
 import { OfficialProgress } from "./visual/official-progress";
@@ -429,10 +445,11 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
-        Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
-        Scroll Area, Pagination, Alert, Toggle Group, and Menubar vs official shadcn
+        Card, Dialog, Alert Dialog, Select, Dropdown Menu, Context Menu,
+        Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
+        Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
+        Scroll Area, Pagination, Alert, Toggle Group, and Menubar vs official
+        shadcn
         New York baseline. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -871,6 +888,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundDropdownMenu kit="shadcn" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Context Menu
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundContextMenu kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Context Menu
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundContextMenu kit="shadcn" dark={dark} />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Sheet
@@ -1692,6 +1723,73 @@ function PlaygroundDropdownMenu({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function PlaygroundContextMenu({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+  const triggerClass =
+    "flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm";
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialContextMenu open={open} onOpenChange={setOpen}>
+        <OfficialContextMenuTrigger className={triggerClass}>
+          Right click here
+        </OfficialContextMenuTrigger>
+        <OfficialContextMenuContent>
+          <OfficialContextMenuItem>Back</OfficialContextMenuItem>
+          <OfficialContextMenuItem>Forward</OfficialContextMenuItem>
+          <OfficialContextMenuItem>
+            Reload
+            <OfficialContextMenuShortcut>⌘R</OfficialContextMenuShortcut>
+          </OfficialContextMenuItem>
+          <OfficialContextMenuSeparator />
+          <OfficialContextMenuItem>Save Page As…</OfficialContextMenuItem>
+          <OfficialContextMenuItem>Print</OfficialContextMenuItem>
+        </OfficialContextMenuContent>
+      </OfficialContextMenu>
+    );
+  }
+
+  return (
+    <ContextMenu open={open} onOpenChange={setOpen}>
+      <ContextMenuTrigger className={triggerClass}>
+        Right click here
+      </ContextMenuTrigger>
+      <ContextMenuContent>
+        <ContextMenuItem>Back</ContextMenuItem>
+        <ContextMenuItem>Forward</ContextMenuItem>
+        <ContextMenuItem>
+          Reload
+          <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+        </ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem>Save Page As…</ContextMenuItem>
+        <ContextMenuItem>Print</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
   );
 }
 

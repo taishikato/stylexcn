@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)
 
-- Passed: 262/262
+- Passed: 266/266
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -217,6 +217,18 @@
 | `dropdown-menu__light__open` | PASS | 0/358400 |
 | `dropdown-menu__dark__closed` | PASS | 0/6936 |
 | `dropdown-menu__dark__open` | PASS | 0/358400 |
+
+## Context Menu
+
+- Closed cases crop the trigger (`[data-slot="context-menu-trigger"]`, 16px pad). Open cases are full-viewport (640×560) so trigger + portaled content are captured together.
+- Open uses controlled `open={true}` on both kits (do not rely on right-click). Identical copy: trigger `Right click here`; items Back, Forward, Reload (⌘R shortcut), separator, Save Page As…, Print. No submenu / checkbox / radio. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `context-menu__light__closed` | PASS | 0/60424 |
+| `context-menu__light__open` | PASS | 0/358400 |
+| `context-menu__dark__closed` | PASS | 0/60424 |
+| `context-menu__dark__open` | PASS | 0/358400 |
 
 ## Sheet
 
