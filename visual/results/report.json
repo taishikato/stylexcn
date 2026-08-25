@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T20:06:30.112Z",
-  "total": 236,
+  "generatedAt": "2026-08-25T20:32:14.122Z",
+  "total": 240,
   "failed": 0,
-  "passed": 236,
+  "passed": 240,
   "threshold": 0,
   "cases": [
     {
@@ -3454,6 +3454,62 @@
       "shadcn": "visual/results/shadcn/collapsible__dark__closed.png",
       "stylex": "visual/results/stylex/collapsible__dark__closed.png",
       "diff": "visual/results/diff/collapsible__dark__closed.png"
+    },
+    {
+      "name": "scroll-area__light__vertical",
+      "component": "scroll-area",
+      "state": "vertical",
+      "theme": "light",
+      "width": 224,
+      "height": 160,
+      "mismatched": 0,
+      "pixels": 35840,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/scroll-area__light__vertical.png",
+      "stylex": "visual/results/stylex/scroll-area__light__vertical.png",
+      "diff": "visual/results/diff/scroll-area__light__vertical.png"
+    },
+    {
+      "name": "scroll-area__light__horizontal",
+      "component": "scroll-area",
+      "state": "horizontal",
+      "theme": "light",
+      "width": 288,
+      "height": 128,
+      "mismatched": 0,
+      "pixels": 36864,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/scroll-area__light__horizontal.png",
+      "stylex": "visual/results/stylex/scroll-area__light__horizontal.png",
+      "diff": "visual/results/diff/scroll-area__light__horizontal.png"
+    },
+    {
+      "name": "scroll-area__dark__vertical",
+      "component": "scroll-area",
+      "state": "vertical",
+      "theme": "dark",
+      "width": 224,
+      "height": 160,
+      "mismatched": 0,
+      "pixels": 35840,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/scroll-area__dark__vertical.png",
+      "stylex": "visual/results/stylex/scroll-area__dark__vertical.png",
+      "diff": "visual/results/diff/scroll-area__dark__vertical.png"
+    },
+    {
+      "name": "scroll-area__dark__horizontal",
+      "component": "scroll-area",
+      "state": "horizontal",
+      "theme": "dark",
+      "width": 288,
+      "height": 128,
+      "mismatched": 0,
+      "pixels": 36864,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/scroll-area__dark__horizontal.png",
+      "stylex": "visual/results/stylex/scroll-area__dark__horizontal.png",
+      "diff": "visual/results/diff/scroll-area__dark__horizontal.png"
     }
   ]
 }

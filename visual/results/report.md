@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area)
 
-- Passed: 236/236
+- Passed: 240/240
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -438,3 +438,16 @@
 | `collapsible__light__closed` | PASS | 0/23936 |
 | `collapsible__dark__open` | PASS | 0/49280 |
 | `collapsible__dark__closed` | PASS | 0/23936 |
+
+## Scroll Area
+
+- Crops `[data-slot="scroll-area"]` with 16px pad. Identical overflow content and identical fixed boxes on both kits so thumb position matches.
+- `vertical`: 12rem × 8rem box with the same 20 tags. `horizontal`: 16rem × 6rem box with the same 20-block strip plus `ScrollBar orientation="horizontal"`.
+- Forced `type="always"` so the thumb is visible. Official Root gets `size-full`; StyleX fills the parent. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `scroll-area__light__vertical` | PASS | 0/35840 |
+| `scroll-area__light__horizontal` | PASS | 0/36864 |
+| `scroll-area__dark__vertical` | PASS | 0/35840 |
+| `scroll-area__dark__horizontal` | PASS | 0/36864 |

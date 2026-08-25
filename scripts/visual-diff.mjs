@@ -84,6 +84,7 @@ const TOGGLE_STATES = [
 ];
 const BREADCRUMB_STATES = ["default", "ellipsis"];
 const COLLAPSIBLE_STATES = ["open", "closed"];
+const SCROLL_AREA_STATES = ["vertical", "horizontal"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -511,6 +512,20 @@ function collapsibleCases() {
   return list;
 }
 
+function scrollAreaCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SCROLL_AREA_STATES) {
+      list.push({
+        component: "scroll-area",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -540,6 +555,7 @@ function cases() {
     ...toggleCases(),
     ...breadcrumbCases(),
     ...collapsibleCases(),
+    ...scrollAreaCases(),
   ];
 }
 
@@ -623,6 +639,9 @@ function slug(c) {
   if (c.component === "collapsible") {
     return `collapsible__${c.theme}__${c.state}`;
   }
+  if (c.component === "scroll-area") {
+    return `scroll-area__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -661,7 +680,8 @@ function urlFor(kit, c) {
     c.component !== "slider" &&
     c.component !== "toggle" &&
     c.component !== "breadcrumb" &&
-    c.component !== "collapsible"
+    c.component !== "collapsible" &&
+    c.component !== "scroll-area"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -795,6 +815,9 @@ function controlLocator(page, c) {
   if (c.component === "collapsible") {
     return page.locator('[data-slot="collapsible"]');
   }
+  if (c.component === "scroll-area") {
+    return page.locator('[data-slot="scroll-area"]');
+  }
   return page.getByRole("button");
 }
 
@@ -858,6 +881,11 @@ async function prepareControl(page, c) {
         .locator('[data-slot="collapsible-content"][data-state="open"]')
         .waitFor();
     }
+    return;
+  }
+  if (c.component === "scroll-area") {
+    await page.locator('[data-slot="scroll-area"]').waitFor();
+    await page.locator('[data-slot="scroll-area-thumb"]').waitFor();
     return;
   }
   const locator = controlLocator(page, c);
@@ -1054,7 +1082,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1092,7 +1120,8 @@ async function main() {
           r.component !== "slider" &&
           r.component !== "toggle" &&
           r.component !== "breadcrumb" &&
-          r.component !== "collapsible",
+          r.component !== "collapsible" &&
+          r.component !== "scroll-area",
       )
       .map(
         (r) =>
@@ -1444,6 +1473,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "collapsible")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Scroll Area",
+    "",
+    "- Crops `[data-slot=\"scroll-area\"]` with 16px pad. Identical overflow content and identical fixed boxes on both kits so thumb position matches.",
+    "- `vertical`: 12rem × 8rem box with the same 20 tags. `horizontal`: 16rem × 6rem box with the same 20-block strip plus `ScrollBar orientation=\"horizontal\"`.",
+    "- Forced `type=\"always\"` so the thumb is visible. Official Root gets `size-full`; StyleX fills the parent. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "scroll-area")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

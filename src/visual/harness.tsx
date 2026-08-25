@@ -114,6 +114,7 @@ import {
   TabsTrigger,
 } from "../components/tabs";
 import { Skeleton, type SkeletonRadius } from "../components/skeleton";
+import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
@@ -221,6 +222,10 @@ import {
   OfficialSheetTitle,
 } from "./official-sheet";
 import { OfficialSkeleton } from "./official-skeleton";
+import {
+  OfficialScrollArea,
+  OfficialScrollBar,
+} from "./official-scroll-area";
 import { OfficialSlider } from "./official-slider";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialToggle } from "./official-toggle";
@@ -303,7 +308,8 @@ export type CaptureComponent =
   | "slider"
   | "toggle"
   | "breadcrumb"
-  | "collapsible";
+  | "collapsible"
+  | "scroll-area";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -544,6 +550,13 @@ export type CollapsibleCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ScrollAreaCaptureParams = {
+  component: "scroll-area";
+  kit: CaptureKit;
+  state: "vertical" | "horizontal";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -571,7 +584,8 @@ export type CaptureParams =
   | SliderCaptureParams
   | ToggleCaptureParams
   | BreadcrumbCaptureParams
-  | CollapsibleCaptureParams;
+  | CollapsibleCaptureParams
+  | ScrollAreaCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -658,6 +672,36 @@ const styles = stylex.create({
   /* Identical width on both kits so trigger + open copy wrap the same. */
   collapsibleWell: {
     width: "20rem",
+  },
+  /* Identical fixed boxes on both kits so overflow and thumb position match. */
+  scrollAreaVerticalWell: {
+    width: "12rem",
+    height: "8rem",
+  },
+  scrollAreaHorizontalWell: {
+    width: "16rem",
+    height: "6rem",
+  },
+  scrollAreaList: {
+    padding: "1rem",
+  },
+  scrollAreaListItem: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    paddingBlock: "0.25rem",
+  },
+  scrollAreaStrip: {
+    display: "flex",
+    width: "max-content",
+    gap: "0.75rem",
+    padding: "1rem",
+  },
+  scrollAreaBlock: {
+    width: "5rem",
+    height: "3.5rem",
+    flexShrink: 0,
+    borderRadius: "0.375rem",
+    backgroundColor: "var(--muted)",
   },
 });
 
@@ -1947,6 +1991,109 @@ function BreadcrumbTrail({
   );
 }
 
+const SCROLL_AREA_TAGS = [
+  "Tag 01",
+  "Tag 02",
+  "Tag 03",
+  "Tag 04",
+  "Tag 05",
+  "Tag 06",
+  "Tag 07",
+  "Tag 08",
+  "Tag 09",
+  "Tag 10",
+  "Tag 11",
+  "Tag 12",
+  "Tag 13",
+  "Tag 14",
+  "Tag 15",
+  "Tag 16",
+  "Tag 17",
+  "Tag 18",
+  "Tag 19",
+  "Tag 20",
+] as const;
+
+function ScrollAreaVerticalContent() {
+  return (
+    <div {...stylex.props(styles.scrollAreaList)}>
+      {SCROLL_AREA_TAGS.map((tag) => (
+        <div key={tag} {...stylex.props(styles.scrollAreaListItem)}>
+          {tag}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function ScrollAreaHorizontalContent() {
+  return (
+    <div {...stylex.props(styles.scrollAreaStrip)}>
+      {SCROLL_AREA_TAGS.map((tag) => (
+        <div key={tag} {...stylex.props(styles.scrollAreaBlock)} />
+      ))}
+    </div>
+  );
+}
+
+function ScrollAreaDemo({
+  kit,
+  orientation,
+}: {
+  kit: CaptureKit;
+  orientation: "vertical" | "horizontal";
+}) {
+  const content =
+    orientation === "vertical" ? (
+      <ScrollAreaVerticalContent />
+    ) : (
+      <ScrollAreaHorizontalContent />
+    );
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialScrollArea type="always" className="size-full">
+        {content}
+        {orientation === "horizontal" ? (
+          <OfficialScrollBar orientation="horizontal" />
+        ) : null}
+      </OfficialScrollArea>
+    );
+  }
+
+  return (
+    <ScrollArea type="always">
+      {content}
+      {orientation === "horizontal" ? (
+        <ScrollBar orientation="horizontal" />
+      ) : null}
+    </ScrollArea>
+  );
+}
+
+function ScrollAreaHarness({ kit, state, theme }: ScrollAreaCaptureParams) {
+  const isDark = theme === "dark";
+  const well =
+    state === "horizontal"
+      ? styles.scrollAreaHorizontalWell
+      : styles.scrollAreaVerticalWell;
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="scroll-area"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(well)}>
+        <ScrollAreaDemo kit={kit} orientation={state} />
+      </div>
+    </div>
+  );
+}
+
 function BreadcrumbHarness({ kit, state, theme }: BreadcrumbCaptureParams) {
   const isDark = theme === "dark";
 
@@ -2115,6 +2262,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "collapsible") {
     return <CollapsibleHarness {...params} />;
+  }
+  if (params.component === "scroll-area") {
+    return <ScrollAreaHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2375,6 +2525,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "collapsible", kit, state, theme };
+  }
+
+  if (component === "scroll-area") {
+    if (state !== "vertical" && state !== "horizontal") {
+      return null;
+    }
+    return { component: "scroll-area", kit, state, theme };
   }
 
   if (component !== "button") return null;

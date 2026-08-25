@@ -110,6 +110,7 @@ import {
   SheetTrigger,
 } from "./components/sheet";
 import { Skeleton } from "./components/skeleton";
+import { ScrollArea, ScrollBar } from "./components/scroll-area";
 import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
 import { Toggle } from "./components/toggle";
@@ -169,6 +170,10 @@ import {
 } from "./visual/official-collapsible";
 import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialSkeleton } from "./visual/official-skeleton";
+import {
+  OfficialScrollArea,
+  OfficialScrollBar,
+} from "./visual/official-scroll-area";
 import { OfficialSlider } from "./visual/official-slider";
 import { OfficialToggle } from "./visual/official-toggle";
 import { OfficialButton } from "./visual/official-button";
@@ -334,6 +339,35 @@ const styles = stylex.create({
   collapsibleWell: {
     width: "20rem",
   },
+  scrollAreaVerticalWell: {
+    width: "12rem",
+    height: "8rem",
+  },
+  scrollAreaHorizontalWell: {
+    width: "16rem",
+    height: "6rem",
+  },
+  scrollAreaList: {
+    padding: "1rem",
+  },
+  scrollAreaListItem: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    paddingBlock: "0.25rem",
+  },
+  scrollAreaStrip: {
+    display: "flex",
+    width: "max-content",
+    gap: "0.75rem",
+    padding: "1rem",
+  },
+  scrollAreaBlock: {
+    width: "5rem",
+    height: "3.5rem",
+    flexShrink: 0,
+    borderRadius: "0.375rem",
+    backgroundColor: "var(--muted)",
+  },
 });
 
 function Playground() {
@@ -344,7 +378,8 @@ function Playground() {
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
-        Progress, Accordion, Slider, Toggle, Breadcrumb, and Collapsible vs
+        Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible, and
+        Scroll Area vs
         official shadcn New York baseline. Visual capture lives at query-param
         harness URLs (see README).
       </p>
@@ -1152,6 +1187,32 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <PlaygroundCollapsible kit="shadcn" />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Scroll Area
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.scrollAreaVerticalWell)}>
+          <PlaygroundScrollArea kit="stylex" orientation="vertical" />
+        </div>
+        <span {...stylex.props(styles.label)}>horizontal</span>
+        <div {...stylex.props(styles.scrollAreaHorizontalWell)}>
+          <PlaygroundScrollArea kit="stylex" orientation="horizontal" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Scroll Area
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.scrollAreaVerticalWell)}>
+          <PlaygroundScrollArea kit="shadcn" orientation="vertical" />
+        </div>
+        <span {...stylex.props(styles.label)}>horizontal</span>
+        <div {...stylex.props(styles.scrollAreaHorizontalWell)}>
+          <PlaygroundScrollArea kit="shadcn" orientation="horizontal" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -1584,6 +1645,74 @@ function PlaygroundCollapsible({ kit }: { kit: "stylex" | "shadcn" }) {
         required.
       </CollapsibleContent>
     </Collapsible>
+  );
+}
+
+const PLAYGROUND_SCROLL_TAGS = [
+  "Tag 01",
+  "Tag 02",
+  "Tag 03",
+  "Tag 04",
+  "Tag 05",
+  "Tag 06",
+  "Tag 07",
+  "Tag 08",
+  "Tag 09",
+  "Tag 10",
+  "Tag 11",
+  "Tag 12",
+  "Tag 13",
+  "Tag 14",
+  "Tag 15",
+  "Tag 16",
+  "Tag 17",
+  "Tag 18",
+  "Tag 19",
+  "Tag 20",
+] as const;
+
+function PlaygroundScrollArea({
+  kit,
+  orientation,
+}: {
+  kit: "stylex" | "shadcn";
+  orientation: "vertical" | "horizontal";
+}) {
+  const content =
+    orientation === "vertical" ? (
+      <div {...stylex.props(styles.scrollAreaList)}>
+        {PLAYGROUND_SCROLL_TAGS.map((tag) => (
+          <div key={tag} {...stylex.props(styles.scrollAreaListItem)}>
+            {tag}
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div {...stylex.props(styles.scrollAreaStrip)}>
+        {PLAYGROUND_SCROLL_TAGS.map((tag) => (
+          <div key={tag} {...stylex.props(styles.scrollAreaBlock)} />
+        ))}
+      </div>
+    );
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialScrollArea type="always" className="size-full">
+        {content}
+        {orientation === "horizontal" ? (
+          <OfficialScrollBar orientation="horizontal" />
+        ) : null}
+      </OfficialScrollArea>
+    );
+  }
+
+  return (
+    <ScrollArea type="always">
+      {content}
+      {orientation === "horizontal" ? (
+        <ScrollBar orientation="horizontal" />
+      ) : null}
+    </ScrollArea>
   );
 }
 
