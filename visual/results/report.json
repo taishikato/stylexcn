@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T17:27:56.354Z",
-  "total": 178,
+  "generatedAt": "2026-08-25T17:53:42.376Z",
+  "total": 182,
   "failed": 0,
-  "passed": 178,
+  "passed": 182,
   "threshold": 0,
   "cases": [
     {
@@ -2642,6 +2642,62 @@
       "shadcn": "visual/results/shadcn/separator__dark__vertical.png",
       "stylex": "visual/results/stylex/separator__dark__vertical.png",
       "diff": "visual/results/diff/separator__dark__vertical.png"
+    },
+    {
+      "name": "skeleton__light__bar",
+      "component": "skeleton",
+      "state": "bar",
+      "theme": "light",
+      "width": 282,
+      "height": 48,
+      "mismatched": 0,
+      "pixels": 13536,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/skeleton__light__bar.png",
+      "stylex": "visual/results/stylex/skeleton__light__bar.png",
+      "diff": "visual/results/diff/skeleton__light__bar.png"
+    },
+    {
+      "name": "skeleton__light__circle",
+      "component": "skeleton",
+      "state": "circle",
+      "theme": "light",
+      "width": 72,
+      "height": 72,
+      "mismatched": 0,
+      "pixels": 5184,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/skeleton__light__circle.png",
+      "stylex": "visual/results/stylex/skeleton__light__circle.png",
+      "diff": "visual/results/diff/skeleton__light__circle.png"
+    },
+    {
+      "name": "skeleton__dark__bar",
+      "component": "skeleton",
+      "state": "bar",
+      "theme": "dark",
+      "width": 282,
+      "height": 48,
+      "mismatched": 0,
+      "pixels": 13536,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/skeleton__dark__bar.png",
+      "stylex": "visual/results/stylex/skeleton__dark__bar.png",
+      "diff": "visual/results/diff/skeleton__dark__bar.png"
+    },
+    {
+      "name": "skeleton__dark__circle",
+      "component": "skeleton",
+      "state": "circle",
+      "theme": "dark",
+      "width": 72,
+      "height": 72,
+      "mismatched": 0,
+      "pixels": 5184,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/skeleton__dark__circle.png",
+      "stylex": "visual/results/stylex/skeleton__dark__circle.png",
+      "diff": "visual/results/diff/skeleton__dark__circle.png"
     }
   ]
 }

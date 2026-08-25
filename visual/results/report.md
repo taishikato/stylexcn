@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton)
 
-- Passed: 178/178
+- Passed: 182/182
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -302,3 +302,15 @@
 | `separator__light__vertical` | PASS | 0/10240 |
 | `separator__dark__horizontal` | PASS | 0/9504 |
 | `separator__dark__vertical` | PASS | 0/10240 |
+
+## Skeleton
+
+- Official has no built-in size; both kits fill an identical parent (`bar` 250×16, `circle` 40×40).
+- Circle uses official `rounded-full` vs StyleX `radius="full"`. `animate-pulse` stays on the official baseline; Playwright `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `skeleton__light__bar` | PASS | 0/13536 |
+| `skeleton__light__circle` | PASS | 0/5184 |
+| `skeleton__dark__bar` | PASS | 0/13536 |
+| `skeleton__dark__circle` | PASS | 0/5184 |
