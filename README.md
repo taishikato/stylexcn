@@ -2,7 +2,7 @@
 
 shadcn/ui-compatible components styled with [StyleX](https://stylexjs.com), not Tailwind. Visual target: official shadcn/ui **New York**. Primitives: [Base UI](https://base-ui.com).
 
-This repo is a foundation plus **Button** and **Input**. Distribution (copy-into-repo / registry) comes later.
+This repo is a foundation plus **Button**, **Input**, and **Label**. Distribution (copy-into-repo / registry) comes later.
 
 ## Tokens
 
@@ -23,13 +23,13 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open the root URL for the Button + Input playground. Isolated capture frames use query params, for example `/?kit=stylex&component=button&variant=default&size=default&state=default&theme=light` or `/?kit=stylex&component=input&state=default&theme=light`.
+Open the root URL for the Button + Input + Label playground. Isolated capture frames use query params, for example `/?kit=stylex&component=button&variant=default&size=default&state=default&theme=light`, `/?kit=stylex&component=input&state=default&theme=light`, or `/?kit=stylex&component=label&state=default&theme=light`.
 
 ## Visual regression
 
 Harness: `src/visual/harness.tsx` (query params `kit`, `component`, `state`, `theme`; Button also uses `variant` and `size`).
 
-Official baselines: `src/visual/official-button.tsx`, `src/visual/official-input.tsx`. Candidates: `src/components/button.tsx`, `src/components/input.tsx`.
+Official baselines: `src/visual/official-button.tsx`, `src/visual/official-input.tsx`, `src/visual/official-label.tsx`. Candidates: `src/components/button.tsx`, `src/components/input.tsx`, `src/components/label.tsx`.
 
 ```bash
 npm run build
@@ -38,6 +38,6 @@ npm run visual:diff
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
 
-Latest local run: **74/74 PASS** (66 Button + 8 Input, threshold 0).
+Latest local run: **74/74 PASS** on Button + Input (Label cases added; rerun `npm run visual:diff`).
 
 Do not edit the harness or official baseline to hide a delta.

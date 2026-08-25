@@ -1,9 +1,11 @@
 import * as stylex from "@stylexjs/stylex";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import { Input } from "../components/input";
+import { Label } from "../components/label";
 import { darkTheme } from "../theme";
 import { OfficialButton } from "./official-button";
 import { OfficialInput } from "./official-input";
+import { OfficialLabel } from "./official-label";
 
 export const VARIANTS = [
   "default",
@@ -21,7 +23,7 @@ export const SIZES = [
   "icon",
 ] as const satisfies readonly ButtonSize[];
 
-export type CaptureComponent = "button" | "input";
+export type CaptureComponent = "button" | "input" | "label";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -47,7 +49,17 @@ export type InputCaptureParams = {
   theme: CaptureTheme;
 };
 
-export type CaptureParams = ButtonCaptureParams | InputCaptureParams;
+export type LabelCaptureParams = {
+  component: "label";
+  kit: CaptureKit;
+  state: "default" | "disabled";
+  theme: CaptureTheme;
+};
+
+export type CaptureParams =
+  | ButtonCaptureParams
+  | InputCaptureParams
+  | LabelCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -134,9 +146,42 @@ function InputHarness({ kit, state, theme }: InputCaptureParams) {
   );
 }
 
+function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
+  const isDark = theme === "dark";
+  const groupDisabled = state === "disabled";
+
+  const label =
+    kit === "shadcn" ? (
+      <OfficialLabel>Email</OfficialLabel>
+    ) : (
+      <Label>Email</Label>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="label"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div
+        className="group"
+        data-disabled={groupDisabled ? "true" : undefined}
+      >
+        {label}
+      </div>
+    </div>
+  );
+}
+
 export function Harness(params: CaptureParams) {
   if (params.component === "input") {
     return <InputHarness {...params} />;
+  }
+  if (params.component === "label") {
+    return <LabelHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -160,6 +205,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "input", kit, state, theme };
+  }
+
+  if (component === "label") {
+    if (state !== "default" && state !== "disabled") {
+      return null;
+    }
+    return { component: "label", kit, state, theme };
   }
 
   if (component !== "button") return null;
