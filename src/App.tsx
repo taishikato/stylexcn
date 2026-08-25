@@ -91,6 +91,7 @@ import {
   SheetTrigger,
 } from "./components/sheet";
 import { Skeleton } from "./components/skeleton";
+import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
 import {
   Tabs,
@@ -134,6 +135,7 @@ import {
 import { OfficialBadge } from "./visual/official-badge";
 import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialSkeleton } from "./visual/official-skeleton";
+import { OfficialSlider } from "./visual/official-slider";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -283,6 +285,9 @@ const styles = stylex.create({
   accordionWell: {
     width: "20rem",
   },
+  sliderWell: {
+    width: "16rem",
+  },
 });
 
 function Playground() {
@@ -293,8 +298,8 @@ function Playground() {
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Tooltip, Badge, Separator, Skeleton, Avatar, Progress, and
-        Accordion vs official shadcn New York baseline. Visual capture lives at
-        query-param harness URLs (see README).
+        Accordion, and Slider vs official shadcn New York baseline. Visual
+        capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -966,6 +971,36 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <div {...stylex.props(styles.accordionWell)}>
           <PlaygroundAccordion kit="shadcn" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Slider
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.sliderWell)}>
+          <Slider value={[50]} onValueChange={() => {}} />
+        </div>
+        <div {...stylex.props(styles.sliderWell)}>
+          <Slider value={[50]} disabled onValueChange={() => {}} />
+        </div>
+        <div {...stylex.props(styles.sliderWell)}>
+          <Slider value={[25, 75]} onValueChange={() => {}} />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Slider
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.sliderWell)}>
+          <OfficialSlider value={[50]} onValueChange={() => {}} />
+        </div>
+        <div {...stylex.props(styles.sliderWell)}>
+          <OfficialSlider value={[50]} disabled onValueChange={() => {}} />
+        </div>
+        <div {...stylex.props(styles.sliderWell)}>
+          <OfficialSlider value={[25, 75]} onValueChange={() => {}} />
         </div>
       </div>
     </div>
