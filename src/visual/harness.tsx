@@ -1,6 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect } from "react";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../components/accordion";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -97,6 +103,12 @@ import {
   TooltipTrigger,
 } from "../components/tooltip";
 import { darkTheme } from "../theme";
+import {
+  OfficialAccordion,
+  OfficialAccordionContent,
+  OfficialAccordionItem,
+  OfficialAccordionTrigger,
+} from "./official-accordion";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -243,7 +255,8 @@ export type CaptureComponent =
   | "separator"
   | "skeleton"
   | "avatar"
-  | "progress";
+  | "progress"
+  | "accordion";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -430,6 +443,13 @@ export type ProgressCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type AccordionCaptureParams = {
+  component: "accordion";
+  kit: CaptureKit;
+  state: "open" | "second" | "closed";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -451,7 +471,8 @@ export type CaptureParams =
   | SeparatorCaptureParams
   | SkeletonCaptureParams
   | AvatarCaptureParams
-  | ProgressCaptureParams;
+  | ProgressCaptureParams
+  | AccordionCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -524,6 +545,9 @@ const styles = stylex.create({
   /* Identical 16rem parent on both kits so w-full matches. */
   progressWell: {
     width: "16rem",
+  },
+  accordionWell: {
+    width: "20rem",
   },
 });
 
@@ -1540,6 +1564,75 @@ function ProgressHarness({ kit, state, theme }: ProgressCaptureParams) {
   );
 }
 
+const ACCORDION_ITEM_1 = "item-1";
+const ACCORDION_ITEM_2 = "item-2";
+const ACCORDION_TITLE_1 = "Is it accessible?";
+const ACCORDION_TITLE_2 = "Is it styled?";
+const ACCORDION_BODY_1 = "Yes. It adheres to the WAI-ARIA design pattern.";
+const ACCORDION_BODY_2 =
+  "Yes. It comes with default styles that match the other components.";
+
+function accordionValueFor(
+  state: AccordionCaptureParams["state"],
+): string {
+  if (state === "open") return ACCORDION_ITEM_1;
+  if (state === "second") return ACCORDION_ITEM_2;
+  return "";
+}
+
+function AccordionHarness({ kit, state, theme }: AccordionCaptureParams) {
+  const isDark = theme === "dark";
+  const value = accordionValueFor(state);
+
+  const accordion =
+    kit === "shadcn" ? (
+      <OfficialAccordion
+        type="single"
+        collapsible
+        value={value}
+        onValueChange={() => {}}
+      >
+        <OfficialAccordionItem value={ACCORDION_ITEM_1}>
+          <OfficialAccordionTrigger>{ACCORDION_TITLE_1}</OfficialAccordionTrigger>
+          <OfficialAccordionContent>{ACCORDION_BODY_1}</OfficialAccordionContent>
+        </OfficialAccordionItem>
+        <OfficialAccordionItem value={ACCORDION_ITEM_2}>
+          <OfficialAccordionTrigger>{ACCORDION_TITLE_2}</OfficialAccordionTrigger>
+          <OfficialAccordionContent>{ACCORDION_BODY_2}</OfficialAccordionContent>
+        </OfficialAccordionItem>
+      </OfficialAccordion>
+    ) : (
+      <Accordion
+        type="single"
+        collapsible
+        value={value}
+        onValueChange={() => {}}
+      >
+        <AccordionItem value={ACCORDION_ITEM_1}>
+          <AccordionTrigger>{ACCORDION_TITLE_1}</AccordionTrigger>
+          <AccordionContent>{ACCORDION_BODY_1}</AccordionContent>
+        </AccordionItem>
+        <AccordionItem value={ACCORDION_ITEM_2}>
+          <AccordionTrigger>{ACCORDION_TITLE_2}</AccordionTrigger>
+          <AccordionContent>{ACCORDION_BODY_2}</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="accordion"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.accordionWell)}>{accordion}</div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1630,6 +1723,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "progress") {
     return <ProgressHarness {...params} />;
+  }
+  if (params.component === "accordion") {
+    return <AccordionHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1835,6 +1931,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "progress", kit, state, theme };
+  }
+
+  if (component === "accordion") {
+    if (state !== "open" && state !== "second" && state !== "closed") {
+      return null;
+    }
+    return { component: "accordion", kit, state, theme };
   }
 
   if (component !== "button") return null;

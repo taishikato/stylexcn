@@ -70,6 +70,7 @@ const SEPARATOR_STATES = ["horizontal", "vertical"];
 const SKELETON_STATES = ["bar", "circle"];
 const AVATAR_STATES = ["default", "sm", "lg", "badge", "group"];
 const PROGRESS_STATES = ["empty", "halfway", "full"];
+const ACCORDION_STATES = ["open", "second", "closed"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -85,6 +86,7 @@ const POPOVER_VIEWPORT = { width: 640, height: 480 };
 /* Tooltip: trigger near bottom; pin so side=top does not flip. */
 const TOOLTIP_VIEWPORT = { width: 480, height: 320 };
 const CARD_VIEWPORT = { width: 400, height: 480 };
+const ACCORDION_VIEWPORT = { width: 400, height: 480 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -406,6 +408,20 @@ function progressCases() {
   return list;
 }
 
+function accordionCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of ACCORDION_STATES) {
+      list.push({
+        component: "accordion",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -429,6 +445,7 @@ function cases() {
     ...skeletonCases(),
     ...avatarCases(),
     ...progressCases(),
+    ...accordionCases(),
   ];
 }
 
@@ -494,6 +511,9 @@ function slug(c) {
   if (c.component === "progress") {
     return `progress__${c.theme}__${c.state}`;
   }
+  if (c.component === "accordion") {
+    return `accordion__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -526,7 +546,8 @@ function urlFor(kit, c) {
     c.component !== "separator" &&
     c.component !== "skeleton" &&
     c.component !== "avatar" &&
-    c.component !== "progress"
+    c.component !== "progress" &&
+    c.component !== "accordion"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -642,6 +663,9 @@ function controlLocator(page, c) {
   if (c.component === "progress") {
     return page.locator('[data-slot="progress"]');
   }
+  if (c.component === "accordion") {
+    return page.locator('[data-slot="accordion"]');
+  }
   return page.getByRole("button");
 }
 
@@ -682,6 +706,15 @@ async function prepareControl(page, c) {
     await page.locator('[data-slot="tooltip-trigger"]').waitFor();
     /* Controlled open with delay 0 uses data-state="instant-open", not "open". */
     await page.locator('[data-slot="tooltip-content"]').waitFor();
+    return;
+  }
+  if (c.component === "accordion") {
+    await page.locator('[data-slot="accordion"]').waitFor();
+    if (c.state === "open" || c.state === "second") {
+      await page
+        .locator('[data-slot="accordion-content"][data-state="open"]')
+        .waitFor();
+    }
     return;
   }
   const locator = controlLocator(page, c);
@@ -815,6 +848,8 @@ async function main() {
                   ? TOOLTIP_VIEWPORT
                   : c.component === "card"
                   ? CARD_VIEWPORT
+                  : c.component === "accordion"
+                    ? ACCORDION_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -864,7 +899,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -896,7 +931,8 @@ async function main() {
           r.component !== "separator" &&
           r.component !== "skeleton" &&
           r.component !== "avatar" &&
-          r.component !== "progress",
+          r.component !== "progress" &&
+          r.component !== "accordion",
       )
       .map(
         (r) =>
@@ -1149,6 +1185,7 @@ async function main() {
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
       ),
     "",
+    "",
     "## Progress",
     "",
     "- Both kits use an identical 16rem-wide parent so `w-full` matches. Crops `[data-slot=\"progress\"]` with 16px pad.",
@@ -1159,6 +1196,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "progress")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Accordion",
+    "",
+    "- Crops `[data-slot=\"accordion\"]` with 16px pad inside a 20rem-wide parent. Two items, identical copy on both kits.",
+    "- `type=\"single\"` `collapsible`. Controlled `value` / `onValueChange`: `open` (first), `second` (second), `closed` (empty). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "accordion")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
