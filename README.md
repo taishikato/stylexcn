@@ -38,6 +38,6 @@ npm run visual:diff
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
 
-Latest local run: **174/174 PASS** on `main` (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch + 10 Radio Group + 4 Card + 4 Dialog + 2 Alert Dialog + 14 Select + 4 Dropdown Menu + 8 Sheet + 6 Tabs + 2 Popover + 2 Tooltip + 14 Badge, threshold 0). Separator adds 4 cases (`horizontal` / `vertical` × light/dark).
+Latest local run: **178/178 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch + 10 Radio Group + 4 Card + 4 Dialog + 2 Alert Dialog + 14 Select + 4 Dropdown Menu + 8 Sheet + 6 Tabs + 2 Popover + 2 Tooltip + 14 Badge + 4 Separator, threshold 0).
 
 Do not edit the harness or official baseline to hide a delta.
