@@ -31,6 +31,8 @@ const table = stylex.create({
 
 const header = stylex.create({
   root: {
+    // Inherit to th/td so Tailwind `text-right` on Amount still wins.
+    textAlign: "left",
     borderBottomWidth: {
       default: null,
       ":has(tr) tr": "1px",
@@ -67,7 +69,12 @@ const footer = stylex.create({
 
 const row = stylex.create({
   root: {
-    borderBottomWidth: "1px",
+    // Parent `tbody [&_tr:last-child]:border-0` loses to this element's
+    // own border-bottom in StyleX layers; keep the last-child override here.
+    borderBottomWidth: {
+      default: "1px",
+      ":is(tbody > *:last-child)": 0,
+    },
     borderBottomStyle: "solid",
     transitionProperty:
       "color, background-color, border-color, text-decoration-color, fill, stroke",
@@ -90,7 +97,6 @@ const head = stylex.create({
       default: "0.5rem",
       ':has([role="checkbox"])': 0,
     },
-    textAlign: "left",
     verticalAlign: "middle",
     fontWeight: 500,
     whiteSpace: "nowrap",
