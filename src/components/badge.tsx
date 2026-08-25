@@ -19,10 +19,26 @@ const RING = `0 0 0 3px ${MIX_RING_50}`;
 const RING_DESTRUCTIVE = `0 0 0 3px ${MIX_DESTRUCTIVE_20}`;
 const RING_DESTRUCTIVE_DARK = `0 0 0 3px ${MIX_DESTRUCTIVE_40}`;
 
+const TRANSPARENT_BORDER = {
+  default: "transparent",
+  ":focus-visible": tokens["--ring"],
+  '[aria-invalid="true"]': tokens["--destructive"],
+  '[aria-invalid="true"]:focus-visible': tokens["--destructive"],
+} as const;
+
+const DEFAULT_RING = {
+  default: "none",
+  ":focus-visible": RING,
+  '[aria-invalid="true"]:focus-visible': RING_DESTRUCTIVE,
+  ':is(.dark *)[aria-invalid="true"]:focus-visible': RING_DESTRUCTIVE_DARK,
+} as const;
+
 /**
  * Variant styles as StyleX tables. Keys are the only legal values;
  * a mistyped variant fails at typecheck and StyleX compile time.
  * Hover fills match official `[a&]:hover` (anchor only).
+ * Border/ring maps live on each variant so a later table cannot drop
+ * `border-transparent` (global `* { border-border }` would otherwise win).
  */
 const variants = stylex.create({
   default: {
@@ -31,14 +47,8 @@ const variants = stylex.create({
       ":is(a):hover": MIX_PRIMARY_90,
     },
     color: tokens["--primary-foreground"],
-    borderColor: {
-      default: "transparent",
-      ":focus-visible": tokens["--ring"],
-    },
-    boxShadow: {
-      default: "none",
-      ":focus-visible": RING,
-    },
+    borderColor: TRANSPARENT_BORDER,
+    boxShadow: DEFAULT_RING,
   },
   secondary: {
     backgroundColor: {
@@ -46,14 +56,8 @@ const variants = stylex.create({
       ":is(a):hover": MIX_SECONDARY_90,
     },
     color: tokens["--secondary-foreground"],
-    borderColor: {
-      default: "transparent",
-      ":focus-visible": tokens["--ring"],
-    },
-    boxShadow: {
-      default: "none",
-      ":focus-visible": RING,
-    },
+    borderColor: TRANSPARENT_BORDER,
+    boxShadow: DEFAULT_RING,
   },
   destructive: {
     backgroundColor: {
@@ -63,14 +67,13 @@ const variants = stylex.create({
       ":is(.dark *):is(a):hover": MIX_DESTRUCTIVE_90,
     },
     color: "white",
-    borderColor: {
-      default: "transparent",
-      ":focus-visible": tokens["--ring"],
-    },
+    borderColor: TRANSPARENT_BORDER,
     boxShadow: {
       default: "none",
       ":focus-visible": RING_DESTRUCTIVE,
       ":is(.dark *):focus-visible": RING_DESTRUCTIVE_DARK,
+      '[aria-invalid="true"]:focus-visible': RING_DESTRUCTIVE,
+      ':is(.dark *)[aria-invalid="true"]:focus-visible': RING_DESTRUCTIVE_DARK,
     },
   },
   outline: {
@@ -85,11 +88,10 @@ const variants = stylex.create({
     borderColor: {
       default: tokens["--border"],
       ":focus-visible": tokens["--ring"],
+      '[aria-invalid="true"]': tokens["--destructive"],
+      '[aria-invalid="true"]:focus-visible': tokens["--destructive"],
     },
-    boxShadow: {
-      default: "none",
-      ":focus-visible": RING,
-    },
+    boxShadow: DEFAULT_RING,
   },
   ghost: {
     backgroundColor: {
@@ -97,17 +99,11 @@ const variants = stylex.create({
       ":is(a):hover": tokens["--accent"],
     },
     color: {
-      default: null,
+      default: "inherit",
       ":is(a):hover": tokens["--accent-foreground"],
     },
-    borderColor: {
-      default: "transparent",
-      ":focus-visible": tokens["--ring"],
-    },
-    boxShadow: {
-      default: "none",
-      ":focus-visible": RING,
-    },
+    borderColor: TRANSPARENT_BORDER,
+    boxShadow: DEFAULT_RING,
   },
   link: {
     backgroundColor: "transparent",
@@ -117,30 +113,8 @@ const variants = stylex.create({
       default: "none",
       ":is(a):hover": "underline",
     },
-    borderColor: {
-      default: "transparent",
-      ":focus-visible": tokens["--ring"],
-    },
-    boxShadow: {
-      default: "none",
-      ":focus-visible": RING,
-    },
-  },
-});
-
-const invalid = stylex.create({
-  on: {
-    borderColor: {
-      default: null,
-      '[aria-invalid="true"]': tokens["--destructive"],
-      '[aria-invalid="true"]:focus-visible': tokens["--destructive"],
-    },
-    boxShadow: {
-      default: null,
-      '[aria-invalid="true"]:focus-visible': RING_DESTRUCTIVE,
-      ':is(.dark *)[aria-invalid="true"]:focus-visible':
-        RING_DESTRUCTIVE_DARK,
-    },
+    borderColor: TRANSPARENT_BORDER,
+    boxShadow: DEFAULT_RING,
   },
 });
 
@@ -189,10 +163,9 @@ export function Badge({
       data-slot="badge"
       data-variant={variant}
       {...props}
-      {...stylex.props(base.root, variants[variant], invalid.on)}
+      {...stylex.props(base.root, variants[variant])}
     />
   );
 }
 
 export const badgeVariants = variants;
-export const badgeInvalid = invalid;
