@@ -1,6 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useState } from "react";
 import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "./components/accordion";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -101,6 +107,12 @@ import {
 } from "./components/tooltip";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, BADGE_VARIANTS, SIZES, VARIANTS } from "./visual/harness";
+import {
+  OfficialAccordion,
+  OfficialAccordionContent,
+  OfficialAccordionItem,
+  OfficialAccordionTrigger,
+} from "./visual/official-accordion";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -268,6 +280,9 @@ const styles = stylex.create({
   progressWell: {
     width: "16rem",
   },
+  accordionWell: {
+    width: "20rem",
+  },
 });
 
 function Playground() {
@@ -277,9 +292,9 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, Tooltip, Badge, Separator, Skeleton, Avatar, and Progress vs
-        official shadcn New York baseline. Visual capture lives at query-param
-        harness URLs (see README).
+        Popover, Tooltip, Badge, Separator, Skeleton, Avatar, Progress, and
+        Accordion vs official shadcn New York baseline. Visual capture lives at
+        query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -935,6 +950,24 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <OfficialProgress value={100} />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Accordion
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.accordionWell)}>
+          <PlaygroundAccordion kit="stylex" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Accordion
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.accordionWell)}>
+          <PlaygroundAccordion kit="shadcn" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -1224,6 +1257,44 @@ function PlaygroundDropdownMenu({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function PlaygroundAccordion({ kit }: { kit: "stylex" | "shadcn" }) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialAccordion type="single" collapsible defaultValue="item-1">
+        <OfficialAccordionItem value="item-1">
+          <OfficialAccordionTrigger>Is it accessible?</OfficialAccordionTrigger>
+          <OfficialAccordionContent>
+            Yes. It adheres to the WAI-ARIA design pattern.
+          </OfficialAccordionContent>
+        </OfficialAccordionItem>
+        <OfficialAccordionItem value="item-2">
+          <OfficialAccordionTrigger>Is it styled?</OfficialAccordionTrigger>
+          <OfficialAccordionContent>
+            Yes. It comes with default styles that match the other components.
+          </OfficialAccordionContent>
+        </OfficialAccordionItem>
+      </OfficialAccordion>
+    );
+  }
+
+  return (
+    <Accordion type="single" collapsible defaultValue="item-1">
+      <AccordionItem value="item-1">
+        <AccordionTrigger>Is it accessible?</AccordionTrigger>
+        <AccordionContent>
+          Yes. It adheres to the WAI-ARIA design pattern.
+        </AccordionContent>
+      </AccordionItem>
+      <AccordionItem value="item-2">
+        <AccordionTrigger>Is it styled?</AccordionTrigger>
+        <AccordionContent>
+          Yes. It comes with default styles that match the other components.
+        </AccordionContent>
+      </AccordionItem>
+    </Accordion>
   );
 }
 
