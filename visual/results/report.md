@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea)
+# Visual diff (Button + Input + Label + Textarea + Checkbox)
 
-- Passed: 86/86
+- Passed: 96/96
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -109,3 +109,18 @@
 | `textarea__dark__focus-visible` | PASS | 0/27648 |
 | `textarea__dark__disabled` | PASS | 0/27648 |
 | `textarea__dark__invalid` | PASS | 0/27648 |
+
+## Checkbox
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `checkbox__light__default` | PASS | 0/2304 |
+| `checkbox__light__checked` | PASS | 0/2304 |
+| `checkbox__light__focus-visible` | PASS | 0/2304 |
+| `checkbox__light__disabled` | PASS | 0/2304 |
+| `checkbox__light__invalid` | PASS | 0/2304 |
+| `checkbox__dark__default` | PASS | 0/2304 |
+| `checkbox__dark__checked` | PASS | 0/2304 |
+| `checkbox__dark__focus-visible` | PASS | 0/2304 |
+| `checkbox__dark__disabled` | PASS | 0/2304 |
+| `checkbox__dark__invalid` | PASS | 0/2304 |
