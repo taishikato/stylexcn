@@ -23,7 +23,7 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open the root URL for the Button playground.
+Open the root URL for the Button playground. Isolated capture frames use query params, for example `/?kit=stylex&variant=default&size=default&state=default&theme=light`.
 
 ## Visual regression
 
@@ -37,5 +37,7 @@ npm run visual:diff
 ```
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
+
+Latest local run: **66/66 PASS** (threshold 0).
 
 Do not edit the harness or official baseline to hide a delta.

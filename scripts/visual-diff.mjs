@@ -94,6 +94,12 @@ function waitForServer() {
 }
 
 async function startPreview() {
+  try {
+    const { execSync } = await import("node:child_process");
+    execSync("fuser -k 4173/tcp", { stdio: "ignore" });
+  } catch {
+    /* port was free */
+  }
   const child = spawn("npm", ["run", "preview", "--", "--strictPort"], {
     cwd: root,
     stdio: "pipe",
@@ -242,6 +248,12 @@ async function main() {
 
   await browser.close();
   preview.kill("SIGTERM");
+  try {
+    const { execSync } = await import("node:child_process");
+    execSync("fuser -k 4173/tcp", { stdio: "ignore" });
+  } catch {
+    /* already gone */
+  }
   if (failed > 0) {
     console.error(`Visual diff failed: ${failed} case(s)`);
     process.exit(1);

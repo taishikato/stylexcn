@@ -21,7 +21,8 @@ const SHADOW_XS = "0 1px 2px 0 rgb(0 0 0 / 0.05)";
 const RING = `0 0 0 3px ${MIX_RING_50}`;
 const RING_DESTRUCTIVE = `0 0 0 3px ${MIX_DESTRUCTIVE_20}`;
 const RING_DESTRUCTIVE_DARK = `0 0 0 3px ${MIX_DESTRUCTIVE_40}`;
-const RING_AND_SHADOW = `${SHADOW_XS}, ${RING}`;
+/* Tailwind v4 paints ring before --tw-shadow (first layer is on top). */
+const RING_AND_SHADOW = `${RING}, ${SHADOW_XS}`;
 
 /**
  * Variant × size styles as StyleX tables. Keys are the only legal values;
