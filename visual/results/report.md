@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider)
 
-- Passed: 212/212
+- Passed: 214/214
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -258,6 +258,16 @@
 | --- | --- | ---: |
 | `popover__light__default` | PASS | 0/307200 |
 | `popover__dark__default` | PASS | 0/307200 |
+
+## Hover Card
+
+- Viewport: 640×480. Trigger is pinned near the top and centered so `w-64` content (`align="center"`, `side="bottom"`, `sideOffset={4}`) stays on-screen and the popper does not flip.
+- Controlled `open={true}` on both kits (do not rely on hover). Screenshots are full-viewport (trigger + content). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `hover-card__light__default` | PASS | 0/307200 |
+| `hover-card__dark__default` | PASS | 0/307200 |
 
 ## Tooltip
 
