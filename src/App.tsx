@@ -156,6 +156,11 @@ import {
   TableHeader,
   TableRow,
 } from "./components/table";
+import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "./components/resizable";
 import { CircleAlert } from "lucide-react";
 import {
   Tabs,
@@ -256,6 +261,11 @@ import {
   OfficialTableHeader,
   OfficialTableRow,
 } from "./visual/official-table";
+import {
+  OfficialResizableHandle,
+  OfficialResizablePanel,
+  OfficialResizablePanelGroup,
+} from "./visual/official-resizable";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -470,6 +480,28 @@ const styles = stylex.create({
   tableWell: {
     width: "32rem",
   },
+  resizableHorizontalWell: {
+    width: "24rem",
+    height: "8rem",
+  },
+  resizableVerticalWell: {
+    width: "16rem",
+    height: "12rem",
+  },
+  resizablePanelFill: {
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxSizing: "border-box",
+    backgroundColor: "var(--muted)",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "var(--border)",
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+  },
 });
 
 function Playground() {
@@ -483,8 +515,8 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
         Scroll Area, Pagination, Alert, Toggle Group, Menubar, Aspect Ratio,
-        and Table vs official shadcn New York baseline. Visual capture lives at
-        query-param harness URLs (see README).
+        Table, and Resizable vs official shadcn New York baseline. Visual
+        capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1460,6 +1492,32 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <PlaygroundTable kit="shadcn" withFooter />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Resizable
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>horizontal</span>
+        <div {...stylex.props(styles.resizableHorizontalWell)}>
+          <PlaygroundResizable kit="stylex" orientation="horizontal" />
+        </div>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.resizableVerticalWell)}>
+          <PlaygroundResizable kit="stylex" orientation="vertical" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Resizable
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>horizontal</span>
+        <div {...stylex.props(styles.resizableHorizontalWell)}>
+          <PlaygroundResizable kit="shadcn" orientation="horizontal" />
+        </div>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.resizableVerticalWell)}>
+          <PlaygroundResizable kit="shadcn" orientation="vertical" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -2209,6 +2267,40 @@ function PlaygroundTable({
         </TableFooter>
       ) : null}
     </Table>
+  );
+}
+
+function PlaygroundResizable({
+  kit,
+  orientation,
+}: {
+  kit: "stylex" | "shadcn";
+  orientation: "horizontal" | "vertical";
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialResizablePanelGroup orientation={orientation}>
+        <OfficialResizablePanel defaultSize={50}>
+          <div {...stylex.props(styles.resizablePanelFill)}>One</div>
+        </OfficialResizablePanel>
+        <OfficialResizableHandle withHandle />
+        <OfficialResizablePanel defaultSize={50}>
+          <div {...stylex.props(styles.resizablePanelFill)}>Two</div>
+        </OfficialResizablePanel>
+      </OfficialResizablePanelGroup>
+    );
+  }
+
+  return (
+    <ResizablePanelGroup orientation={orientation}>
+      <ResizablePanel defaultSize={50}>
+        <div {...stylex.props(styles.resizablePanelFill)}>One</div>
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize={50}>
+        <div {...stylex.props(styles.resizablePanelFill)}>Two</div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
   );
 }
 

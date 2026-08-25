@@ -162,6 +162,11 @@ import {
   TableRow,
 } from "../components/table";
 import {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "../components/resizable";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -311,6 +316,11 @@ import {
   OfficialTableRow,
 } from "./official-table";
 import {
+  OfficialResizableHandle,
+  OfficialResizablePanel,
+  OfficialResizablePanelGroup,
+} from "./official-resizable";
+import {
   OfficialTabs,
   OfficialTabsContent,
   OfficialTabsList,
@@ -405,7 +415,8 @@ export type CaptureComponent =
   | "toggle-group"
   | "menubar"
   | "aspect-ratio"
-  | "table";
+  | "table"
+  | "resizable";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -704,6 +715,13 @@ export type TableCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ResizableCaptureParams = {
+  component: "resizable";
+  kit: CaptureKit;
+  state: "horizontal" | "vertical";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -739,7 +757,8 @@ export type CaptureParams =
   | ToggleGroupCaptureParams
   | MenubarCaptureParams
   | AspectRatioCaptureParams
-  | TableCaptureParams;
+  | TableCaptureParams
+  | ResizableCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -886,6 +905,29 @@ const styles = stylex.create({
   /* Identical 32rem parent on both kits so w-full matches. */
   tableWell: {
     width: "32rem",
+  },
+  /* Identical fixed boxes on both kits so defaultSize={50} panels match. */
+  resizableHorizontalWell: {
+    width: "24rem",
+    height: "8rem",
+  },
+  resizableVerticalWell: {
+    width: "16rem",
+    height: "12rem",
+  },
+  resizablePanelFill: {
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    boxSizing: "border-box",
+    backgroundColor: "var(--muted)",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "var(--border)",
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
   },
 });
 
@@ -2928,6 +2970,66 @@ function AspectRatioHarness({ kit, theme }: AspectRatioCaptureParams) {
   );
 }
 
+const RESIZABLE_ONE = "One";
+const RESIZABLE_TWO = "Two";
+
+function ResizableDemo({
+  kit,
+  orientation,
+}: {
+  kit: CaptureKit;
+  orientation: "horizontal" | "vertical";
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialResizablePanelGroup orientation={orientation}>
+        <OfficialResizablePanel defaultSize={50}>
+          <div {...stylex.props(styles.resizablePanelFill)}>{RESIZABLE_ONE}</div>
+        </OfficialResizablePanel>
+        <OfficialResizableHandle withHandle />
+        <OfficialResizablePanel defaultSize={50}>
+          <div {...stylex.props(styles.resizablePanelFill)}>{RESIZABLE_TWO}</div>
+        </OfficialResizablePanel>
+      </OfficialResizablePanelGroup>
+    );
+  }
+
+  return (
+    <ResizablePanelGroup orientation={orientation}>
+      <ResizablePanel defaultSize={50}>
+        <div {...stylex.props(styles.resizablePanelFill)}>{RESIZABLE_ONE}</div>
+      </ResizablePanel>
+      <ResizableHandle withHandle />
+      <ResizablePanel defaultSize={50}>
+        <div {...stylex.props(styles.resizablePanelFill)}>{RESIZABLE_TWO}</div>
+      </ResizablePanel>
+    </ResizablePanelGroup>
+  );
+}
+
+function ResizableHarness({ kit, state, theme }: ResizableCaptureParams) {
+  const isDark = theme === "dark";
+  const well =
+    state === "vertical"
+      ? styles.resizableVerticalWell
+      : styles.resizableHorizontalWell;
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="resizable"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(well)}>
+        <ResizableDemo kit={kit} orientation={state} />
+      </div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -3060,6 +3162,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "table") {
     return <TableHarness {...params} />;
+  }
+  if (params.component === "resizable") {
+    return <ResizableHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -3385,6 +3490,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "table", kit, state, theme };
+  }
+
+  if (component === "resizable") {
+    if (state !== "horizontal" && state !== "vertical") {
+      return null;
+    }
+    return { component: "resizable", kit, state, theme };
   }
 
   if (component !== "button") return null;

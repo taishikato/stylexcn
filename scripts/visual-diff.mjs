@@ -92,6 +92,7 @@ const TOGGLE_GROUP_STATES = ["default", "outline", "sm", "lg"];
 const MENUBAR_STATES = ["closed", "open"];
 const ASPECT_RATIO_STATES = ["default"];
 const TABLE_STATES = ["default", "with-footer"];
+const RESIZABLE_STATES = ["horizontal", "vertical"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -124,6 +125,8 @@ const ALERT_VIEWPORT = { width: 480, height: 240 };
 const ASPECT_RATIO_VIEWPORT = { width: 400, height: 280 };
 /* 32rem well + 16px crop pad on each side must stay inside the viewport. */
 const TABLE_VIEWPORT = { width: 640, height: 400 };
+/* Horizontal 24rem×8rem + pad; vertical 16rem×12rem + pad. */
+const RESIZABLE_VIEWPORT = { width: 480, height: 280 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -641,6 +644,20 @@ function tableCases() {
   return list;
 }
 
+function resizableCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of RESIZABLE_STATES) {
+      list.push({
+        component: "resizable",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -678,6 +695,7 @@ function cases() {
     ...menubarCases(),
     ...aspectRatioCases(),
     ...tableCases(),
+    ...resizableCases(),
   ];
 }
 
@@ -785,6 +803,9 @@ function slug(c) {
   if (c.component === "table") {
     return `table__${c.theme}__${c.state}`;
   }
+  if (c.component === "resizable") {
+    return `resizable__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -831,7 +852,8 @@ function urlFor(kit, c) {
     c.component !== "toggle-group" &&
     c.component !== "menubar" &&
     c.component !== "aspect-ratio" &&
-    c.component !== "table"
+    c.component !== "table" &&
+    c.component !== "resizable"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -988,6 +1010,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "table") {
     return page.locator('[data-slot="table-container"]');
+  }
+  if (c.component === "resizable") {
+    return page.locator('[data-slot="resizable-panel-group"]');
   }
   return page.getByRole("button");
 }
@@ -1244,6 +1269,8 @@ async function main() {
                     ? ASPECT_RATIO_VIEWPORT
                   : c.component === "table"
                     ? TABLE_VIEWPORT
+                  : c.component === "resizable"
+                    ? RESIZABLE_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1293,7 +1320,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1339,7 +1366,8 @@ async function main() {
           r.component !== "toggle-group" &&
           r.component !== "menubar" &&
           r.component !== "aspect-ratio" &&
-          r.component !== "table",
+          r.component !== "table" &&
+          r.component !== "resizable",
       )
       .map(
         (r) =>
@@ -1812,6 +1840,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "table")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Resizable",
+    "",
+    "- Crops `[data-slot=\"resizable-panel-group\"]` with 16px pad. Identical fixed parents on both kits so panel sizes match.",
+    "- `horizontal`: 24rem × 8rem. `vertical`: 16rem × 12rem. Two panels, controlled `defaultSize={50}` / `defaultSize={50}`, `withHandle` so the grip is visible.",
+    "- Identical copy: left/top `One`, right/bottom `Two`. Muted/bordered fill on both kits. Playwright `animations: \"disabled\"`. No focus-visible drag case in this slice.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "resizable")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable)
 
-- Passed: 272/272
+- Passed: 276/276
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -547,3 +547,16 @@
 | `table__light__with-footer` | PASS | 0/138720 |
 | `table__dark__default` | PASS | 0/99008 |
 | `table__dark__with-footer` | PASS | 0/138720 |
+
+## Resizable
+
+- Crops `[data-slot="resizable-panel-group"]` with 16px pad. Identical fixed parents on both kits so panel sizes match.
+- `horizontal`: 24rem × 8rem. `vertical`: 16rem × 12rem. Two panels, controlled `defaultSize={50}` / `defaultSize={50}`, `withHandle` so the grip is visible.
+- Identical copy: left/top `One`, right/bottom `Two`. Muted/bordered fill on both kits. Playwright `animations: "disabled"`. No focus-visible drag case in this slice.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `resizable__light__horizontal` | PASS | 0/66560 |
+| `resizable__light__vertical` | PASS | 0/64512 |
+| `resizable__dark__horizontal` | PASS | 0/66560 |
+| `resizable__dark__vertical` | PASS | 0/64512 |
