@@ -138,9 +138,11 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <Label htmlFor={`${dark ? "d" : "l"}-stylex-email`}>Email</Label>
           <Input id={`${dark ? "d" : "l"}-stylex-email`} defaultValue="Email" />
         </div>
-        <div className="group" data-disabled="true" {...stylex.props(styles.inputWell)}>
-          <Label>Disabled group</Label>
-          <Input defaultValue="Email" disabled />
+        <div className="group" data-disabled="true">
+          <div {...stylex.props(styles.inputWell)}>
+            <Label>Disabled group</Label>
+            <Input defaultValue="Email" disabled />
+          </div>
         </div>
         <div {...stylex.props(styles.inputWell)}>
           <input className="peer" defaultValue="Email" disabled />
@@ -161,9 +163,11 @@ function ThemeBlock({ dark }: { dark: boolean }) {
             defaultValue="Email"
           />
         </div>
-        <div className="group" data-disabled="true" {...stylex.props(styles.inputWell)}>
-          <OfficialLabel>Disabled group</OfficialLabel>
-          <OfficialInput defaultValue="Email" disabled />
+        <div className="group" data-disabled="true">
+          <div {...stylex.props(styles.inputWell)}>
+            <OfficialLabel>Disabled group</OfficialLabel>
+            <OfficialInput defaultValue="Email" disabled />
+          </div>
         </div>
         <div {...stylex.props(styles.inputWell)}>
           <OfficialInput className="peer" defaultValue="Email" disabled />

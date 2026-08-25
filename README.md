@@ -38,6 +38,6 @@ npm run visual:diff
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
 
-Latest local run: **74/74 PASS** on Button + Input (Label cases added; rerun `npm run visual:diff`).
+Latest local run: **78/78 PASS** (66 Button + 8 Input + 4 Label, threshold 0).
 
 Do not edit the harness or official baseline to hide a delta.
