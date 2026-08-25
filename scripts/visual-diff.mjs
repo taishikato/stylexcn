@@ -456,7 +456,6 @@ function slug(c) {
   if (c.component === "skeleton") {
     return `skeleton__${c.theme}__${c.state}`;
   }
-  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -593,7 +592,6 @@ function controlLocator(page, c) {
   }
   if (c.component === "skeleton") {
     return page.locator('[data-slot="skeleton"]');
-  }
   }
   return page.getByRole("button");
 }

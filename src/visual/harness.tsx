@@ -1481,7 +1481,6 @@ export function Harness(params: CaptureParams) {
   if (params.component === "skeleton") {
     return <SkeletonHarness {...params} />;
   }
-  }
   return <ButtonHarness {...params} />;
 }
 
@@ -1666,7 +1665,6 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "skeleton", kit, state, theme };
-  }
   }
 
   if (component !== "button") return null;
