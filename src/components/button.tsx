@@ -78,6 +78,8 @@ const variants = stylex.create({
       default: tokens["--border"],
       ":focus-visible": tokens["--ring"],
       ":is(.dark *)": tokens["--input"],
+      /* Official `dark:border-input` wins over base `focus-visible:border-ring`. */
+      ":is(.dark *):focus-visible": tokens["--input"],
     },
     boxShadow: {
       default: SHADOW_XS,
