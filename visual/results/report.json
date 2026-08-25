@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T20:43:20.410Z",
-  "total": 244,
+  "generatedAt": "2026-08-25T20:56:29.583Z",
+  "total": 250,
   "failed": 0,
-  "passed": 244,
+  "passed": 250,
   "threshold": 0,
   "cases": [
     {
@@ -3566,6 +3566,90 @@
       "shadcn": "visual/results/shadcn/pagination__dark__ellipsis.png",
       "stylex": "visual/results/stylex/pagination__dark__ellipsis.png",
       "diff": "visual/results/diff/pagination__dark__ellipsis.png"
+    },
+    {
+      "name": "alert__light__default",
+      "component": "alert",
+      "state": "default",
+      "theme": "light",
+      "width": 416,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 41600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/alert__light__default.png",
+      "stylex": "visual/results/stylex/alert__light__default.png",
+      "diff": "visual/results/diff/alert__light__default.png"
+    },
+    {
+      "name": "alert__light__with-icon",
+      "component": "alert",
+      "state": "with-icon",
+      "theme": "light",
+      "width": 416,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 41600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/alert__light__with-icon.png",
+      "stylex": "visual/results/stylex/alert__light__with-icon.png",
+      "diff": "visual/results/diff/alert__light__with-icon.png"
+    },
+    {
+      "name": "alert__light__destructive",
+      "component": "alert",
+      "state": "destructive",
+      "theme": "light",
+      "width": 416,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 41600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/alert__light__destructive.png",
+      "stylex": "visual/results/stylex/alert__light__destructive.png",
+      "diff": "visual/results/diff/alert__light__destructive.png"
+    },
+    {
+      "name": "alert__dark__default",
+      "component": "alert",
+      "state": "default",
+      "theme": "dark",
+      "width": 416,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 41600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/alert__dark__default.png",
+      "stylex": "visual/results/stylex/alert__dark__default.png",
+      "diff": "visual/results/diff/alert__dark__default.png"
+    },
+    {
+      "name": "alert__dark__with-icon",
+      "component": "alert",
+      "state": "with-icon",
+      "theme": "dark",
+      "width": 416,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 41600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/alert__dark__with-icon.png",
+      "stylex": "visual/results/stylex/alert__dark__with-icon.png",
+      "diff": "visual/results/diff/alert__dark__with-icon.png"
+    },
+    {
+      "name": "alert__dark__destructive",
+      "component": "alert",
+      "state": "destructive",
+      "theme": "dark",
+      "width": 416,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 41600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/alert__dark__destructive.png",
+      "stylex": "visual/results/stylex/alert__dark__destructive.png",
+      "diff": "visual/results/diff/alert__dark__destructive.png"
     }
   ]
 }
