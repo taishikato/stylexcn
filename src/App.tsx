@@ -818,7 +818,6 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         </div>
       </div>
       <h2 {...stylex.props(styles.heading)}>
-      <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Skeleton
       </h2>
       <div {...stylex.props(styles.row)}>
