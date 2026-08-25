@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert)
 
-- Passed: 244/244
+- Passed: 250/250
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -426,6 +426,7 @@
 | `breadcrumb__dark__default` | PASS | 0/21632 |
 | `breadcrumb__dark__ellipsis` | PASS | 0/28288 |
 
+
 ## Collapsible
 
 - Crops `[data-slot="collapsible"]` with 16px pad inside an identical 20rem-wide parent on both kits.
@@ -438,6 +439,7 @@
 | `collapsible__light__closed` | PASS | 0/23936 |
 | `collapsible__dark__open` | PASS | 0/49280 |
 | `collapsible__dark__closed` | PASS | 0/23936 |
+
 
 ## Scroll Area
 
@@ -464,3 +466,18 @@
 | `pagination__light__ellipsis` | PASS | 0/27200 |
 | `pagination__dark__default` | PASS | 0/27200 |
 | `pagination__dark__ellipsis` | PASS | 0/27200 |
+
+## Alert
+
+- Crops `[data-slot="alert"]` with 16px pad inside an identical 24rem-wide parent on both kits so `w-full` matches.
+- Identical copy: `default` is title `Heads up` + description `You can add components to your app.` (no icon); `with-icon` adds lucide `CircleAlert`; `destructive` is lucide `CircleAlert` + title `Error` + description `Your session has expired.`.
+- Viewport: 480×240 so the 24rem well plus pad stays on-screen. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `alert__light__default` | PASS | 0/41600 |
+| `alert__light__with-icon` | PASS | 0/41600 |
+| `alert__light__destructive` | PASS | 0/41600 |
+| `alert__dark__default` | PASS | 0/41600 |
+| `alert__dark__with-icon` | PASS | 0/41600 |
+| `alert__dark__destructive` | PASS | 0/41600 |

@@ -86,6 +86,7 @@ const BREADCRUMB_STATES = ["default", "ellipsis"];
 const COLLAPSIBLE_STATES = ["open", "closed"];
 const SCROLL_AREA_STATES = ["vertical", "horizontal"];
 const PAGINATION_STATES = ["default", "ellipsis"];
+const ALERT_STATES = ["default", "with-icon", "destructive"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -108,6 +109,8 @@ const ACCORDION_VIEWPORT = { width: 400, height: 480 };
 const COLLAPSIBLE_VIEWPORT = { width: 400, height: 480 };
 /* 24rem well + 16px crop pad on each side must stay inside the viewport. */
 const BREADCRUMB_VIEWPORT = { width: 480, height: 200 };
+/* 24rem well + 16px crop pad on each side must stay inside the viewport. */
+const ALERT_VIEWPORT = { width: 480, height: 240 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -541,6 +544,20 @@ function paginationCases() {
   return list;
 }
 
+function alertCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of ALERT_STATES) {
+      list.push({
+        component: "alert",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -572,6 +589,7 @@ function cases() {
     ...collapsibleCases(),
     ...scrollAreaCases(),
     ...paginationCases(),
+    ...alertCases(),
   ];
 }
 
@@ -661,6 +679,9 @@ function slug(c) {
   if (c.component === "pagination") {
     return `pagination__${c.theme}__${c.state}`;
   }
+  if (c.component === "alert") {
+    return `alert__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -701,7 +722,8 @@ function urlFor(kit, c) {
     c.component !== "breadcrumb" &&
     c.component !== "collapsible" &&
     c.component !== "scroll-area" &&
-    c.component !== "pagination"
+    c.component !== "pagination" &&
+    c.component !== "alert"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -840,6 +862,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "pagination") {
     return page.locator('[data-slot="pagination"]');
+  }
+  if (c.component === "alert") {
+    return page.locator('[data-slot="alert"]');
   }
   return page.getByRole("button");
 }
@@ -1056,6 +1081,8 @@ async function main() {
                     ? COLLAPSIBLE_VIEWPORT
                   : c.component === "breadcrumb"
                     ? BREADCRUMB_VIEWPORT
+                  : c.component === "alert"
+                    ? ALERT_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1105,7 +1132,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1145,7 +1172,8 @@ async function main() {
           r.component !== "breadcrumb" &&
           r.component !== "collapsible" &&
           r.component !== "scroll-area" &&
-          r.component !== "pagination",
+          r.component !== "pagination" &&
+          r.component !== "alert",
       )
       .map(
         (r) =>
@@ -1487,6 +1515,7 @@ async function main() {
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
       ),
     "",
+    "",
     "## Collapsible",
     "",
     "- Crops `[data-slot=\"collapsible\"]` with 16px pad inside an identical 20rem-wide parent on both kits.",
@@ -1501,6 +1530,7 @@ async function main() {
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
       ),
+    "",
     "",
     "## Scroll Area",
     "",
@@ -1527,6 +1557,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "pagination")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Alert",
+    "",
+    "- Crops `[data-slot=\"alert\"]` with 16px pad inside an identical 24rem-wide parent on both kits so `w-full` matches.",
+    "- Identical copy: `default` is title `Heads up` + description `You can add components to your app.` (no icon); `with-icon` adds lucide `CircleAlert`; `destructive` is lucide `CircleAlert` + title `Error` + description `Your session has expired.`.",
+    "- Viewport: 480×240 so the 24rem well plus pad stays on-screen. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "alert")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
