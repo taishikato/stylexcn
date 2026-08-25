@@ -777,7 +777,6 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         ))}
       </div>
       <h2 {...stylex.props(styles.heading)}>
-      <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Separator
       </h2>
       <div {...stylex.props(styles.row)}>
