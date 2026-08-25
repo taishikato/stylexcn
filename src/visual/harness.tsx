@@ -7,6 +7,11 @@ import {
   AccordionTrigger,
 } from "../components/accordion";
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "../components/alert";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -127,6 +132,7 @@ import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
+import { CircleAlert } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
@@ -140,6 +146,11 @@ import {
   OfficialAccordionItem,
   OfficialAccordionTrigger,
 } from "./official-accordion";
+import {
+  OfficialAlert,
+  OfficialAlertDescription,
+  OfficialAlertTitle,
+} from "./official-alert";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -328,7 +339,8 @@ export type CaptureComponent =
   | "breadcrumb"
   | "collapsible"
   | "scroll-area"
-  | "pagination";
+  | "pagination"
+  | "alert";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -360,7 +372,8 @@ export type CaptureState =
   | "on"
   | "outline"
   | "lg"
-  | "ellipsis";
+  | "ellipsis"
+  | "with-icon";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -583,6 +596,13 @@ export type PaginationCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type AlertCaptureParams = {
+  component: "alert";
+  kit: CaptureKit;
+  state: "default" | "with-icon" | "destructive";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -612,7 +632,8 @@ export type CaptureParams =
   | BreadcrumbCaptureParams
   | CollapsibleCaptureParams
   | ScrollAreaCaptureParams
-  | PaginationCaptureParams;
+  | PaginationCaptureParams
+  | AlertCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -729,6 +750,10 @@ const styles = stylex.create({
     flexShrink: 0,
     borderRadius: "0.375rem",
     backgroundColor: "var(--muted)",
+  },
+  /* Identical 24rem parent on both kits so w-full matches. */
+  alertWell: {
+    width: "24rem",
   },
 });
 
@@ -2304,6 +2329,62 @@ function PaginationHarness({ kit, state, theme }: PaginationCaptureParams) {
   );
 }
 
+const ALERT_TITLE_DEFAULT = "Heads up";
+const ALERT_DESC_DEFAULT = "You can add components to your app.";
+const ALERT_TITLE_ERROR = "Error";
+const ALERT_DESC_ERROR = "Your session has expired.";
+
+function AlertBody({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: AlertCaptureParams["state"];
+}) {
+  const withIcon = state === "with-icon" || state === "destructive";
+  const variant = state === "destructive" ? "destructive" : "default";
+  const title = state === "destructive" ? ALERT_TITLE_ERROR : ALERT_TITLE_DEFAULT;
+  const description =
+    state === "destructive" ? ALERT_DESC_ERROR : ALERT_DESC_DEFAULT;
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialAlert variant={variant}>
+        {withIcon ? <CircleAlert /> : null}
+        <OfficialAlertTitle>{title}</OfficialAlertTitle>
+        <OfficialAlertDescription>{description}</OfficialAlertDescription>
+      </OfficialAlert>
+    );
+  }
+
+  return (
+    <Alert variant={variant}>
+      {withIcon ? <CircleAlert /> : null}
+      <AlertTitle>{title}</AlertTitle>
+      <AlertDescription>{description}</AlertDescription>
+    </Alert>
+  );
+}
+
+function AlertHarness({ kit, state, theme }: AlertCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="alert"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.alertWell)}>
+        <AlertBody kit={kit} state={state} />
+      </div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -2418,6 +2499,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "pagination") {
     return <PaginationHarness {...params} />;
+  }
+  if (params.component === "alert") {
+    return <AlertHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2692,6 +2776,17 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "pagination", kit, state, theme };
+  }
+
+  if (component === "alert") {
+    if (
+      state !== "default" &&
+      state !== "with-icon" &&
+      state !== "destructive"
+    ) {
+      return null;
+    }
+    return { component: "alert", kit, state, theme };
   }
 
   if (component !== "button") return null;

@@ -7,6 +7,11 @@ import {
   AccordionTrigger,
 } from "./components/accordion";
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+} from "./components/alert";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -123,6 +128,7 @@ import { ScrollArea, ScrollBar } from "./components/scroll-area";
 import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
 import { Toggle } from "./components/toggle";
+import { CircleAlert } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -144,6 +150,11 @@ import {
   OfficialAccordionItem,
   OfficialAccordionTrigger,
 } from "./visual/official-accordion";
+import {
+  OfficialAlert,
+  OfficialAlertDescription,
+  OfficialAlertTitle,
+} from "./visual/official-alert";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -386,6 +397,9 @@ const styles = stylex.create({
     borderRadius: "0.375rem",
     backgroundColor: "var(--muted)",
   },
+  alertWell: {
+    width: "24rem",
+  },
 });
 
 function Playground() {
@@ -397,7 +411,7 @@ function Playground() {
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
         Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
-        Scroll Area, and Pagination vs official shadcn New York baseline.
+        Scroll Area, Pagination, and Alert vs official shadcn New York baseline.
         Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
@@ -1248,6 +1262,40 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>ellipsis</span>
         <PlaygroundPagination kit="shadcn" ellipsis />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Alert
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.alertWell)}>
+          <PlaygroundAlert kit="stylex" state="default" />
+        </div>
+        <span {...stylex.props(styles.label)}>with-icon</span>
+        <div {...stylex.props(styles.alertWell)}>
+          <PlaygroundAlert kit="stylex" state="with-icon" />
+        </div>
+        <span {...stylex.props(styles.label)}>destructive</span>
+        <div {...stylex.props(styles.alertWell)}>
+          <PlaygroundAlert kit="stylex" state="destructive" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Alert
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.alertWell)}>
+          <PlaygroundAlert kit="shadcn" state="default" />
+        </div>
+        <span {...stylex.props(styles.label)}>with-icon</span>
+        <div {...stylex.props(styles.alertWell)}>
+          <PlaygroundAlert kit="shadcn" state="with-icon" />
+        </div>
+        <span {...stylex.props(styles.label)}>destructive</span>
+        <div {...stylex.props(styles.alertWell)}>
+          <PlaygroundAlert kit="shadcn" state="destructive" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -1854,6 +1902,40 @@ function PlaygroundScrollArea({
         <ScrollBar orientation="horizontal" />
       ) : null}
     </ScrollArea>
+  );
+}
+
+function PlaygroundAlert({
+  kit,
+  state,
+}: {
+  kit: "stylex" | "shadcn";
+  state: "default" | "with-icon" | "destructive";
+}) {
+  const withIcon = state === "with-icon" || state === "destructive";
+  const variant = state === "destructive" ? "destructive" : "default";
+  const title = state === "destructive" ? "Error" : "Heads up";
+  const description =
+    state === "destructive"
+      ? "Your session has expired."
+      : "You can add components to your app.";
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialAlert variant={variant}>
+        {withIcon ? <CircleAlert /> : null}
+        <OfficialAlertTitle>{title}</OfficialAlertTitle>
+        <OfficialAlertDescription>{description}</OfficialAlertDescription>
+      </OfficialAlert>
+    );
+  }
+
+  return (
+    <Alert variant={variant}>
+      {withIcon ? <CircleAlert /> : null}
+      <AlertTitle>{title}</AlertTitle>
+      <AlertDescription>{description}</AlertDescription>
+    </Alert>
   );
 }
 
