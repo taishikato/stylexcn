@@ -135,6 +135,14 @@ import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggl
 import { CircleAlert } from "lucide-react";
 import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "../components/menubar";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -264,6 +272,14 @@ import {
   OfficialToggleGroupItem,
 } from "./official-toggle-group";
 import {
+  OfficialMenubar,
+  OfficialMenubarContent,
+  OfficialMenubarItem,
+  OfficialMenubarMenu,
+  OfficialMenubarSeparator,
+  OfficialMenubarTrigger,
+} from "./official-menubar";
+import {
   OfficialTabs,
   OfficialTabsContent,
   OfficialTabsList,
@@ -346,7 +362,8 @@ export type CaptureComponent =
   | "scroll-area"
   | "pagination"
   | "alert"
-  | "toggle-group";
+  | "toggle-group"
+  | "menubar";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -616,6 +633,13 @@ export type ToggleGroupCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type MenubarCaptureParams = {
+  component: "menubar";
+  kit: CaptureKit;
+  state: "closed" | "open";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -647,7 +671,8 @@ export type CaptureParams =
   | ScrollAreaCaptureParams
   | PaginationCaptureParams
   | AlertCaptureParams
-  | ToggleGroupCaptureParams;
+  | ToggleGroupCaptureParams
+  | MenubarCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -768,6 +793,18 @@ const styles = stylex.create({
   /* Identical 24rem parent on both kits so w-full matches. */
   alertWell: {
     width: "24rem",
+  },
+  /* Menubar pinned near the top so the portaled File menu stays on-screen. */
+  menubarOpenFrame: {
+    minHeight: "100vh",
+    margin: 0,
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    paddingTop: "2rem",
+    paddingLeft: "2rem",
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
   },
 });
 
@@ -2472,6 +2509,103 @@ function ToggleGroupHarness({ kit, state, theme }: ToggleGroupCaptureParams) {
   );
 }
 
+const MENUBAR_FILE = "File";
+const MENUBAR_EDIT = "Edit";
+const MENUBAR_VIEW = "View";
+const MENUBAR_PROFILES = "Profiles";
+const MENUBAR_FILE_VALUE = "file";
+const MENUBAR_NEW_TAB = "New Tab";
+const MENUBAR_NEW_WINDOW = "New Window";
+const MENUBAR_SHARE = "Share";
+const MENUBAR_PRINT = "Print";
+
+function MenubarFileItems({ kit }: { kit: CaptureKit }) {
+  if (kit === "shadcn") {
+    return (
+      <>
+        <OfficialMenubarItem>{MENUBAR_NEW_TAB}</OfficialMenubarItem>
+        <OfficialMenubarItem>{MENUBAR_NEW_WINDOW}</OfficialMenubarItem>
+        <OfficialMenubarSeparator />
+        <OfficialMenubarItem>{MENUBAR_SHARE}</OfficialMenubarItem>
+        <OfficialMenubarSeparator />
+        <OfficialMenubarItem>{MENUBAR_PRINT}</OfficialMenubarItem>
+      </>
+    );
+  }
+  return (
+    <>
+      <MenubarItem>{MENUBAR_NEW_TAB}</MenubarItem>
+      <MenubarItem>{MENUBAR_NEW_WINDOW}</MenubarItem>
+      <MenubarSeparator />
+      <MenubarItem>{MENUBAR_SHARE}</MenubarItem>
+      <MenubarSeparator />
+      <MenubarItem>{MENUBAR_PRINT}</MenubarItem>
+    </>
+  );
+}
+
+function MenubarHarness({ kit, state, theme }: MenubarCaptureParams) {
+  const isDark = theme === "dark";
+  const isOpen = state === "open";
+  const value = isOpen ? MENUBAR_FILE_VALUE : "";
+  usePortalDocumentTheme(isDark);
+
+  const menubar =
+    kit === "shadcn" ? (
+      <OfficialMenubar value={value} onValueChange={() => {}}>
+        <OfficialMenubarMenu value={MENUBAR_FILE_VALUE}>
+          <OfficialMenubarTrigger>{MENUBAR_FILE}</OfficialMenubarTrigger>
+          <OfficialMenubarContent>
+            <MenubarFileItems kit={kit} />
+          </OfficialMenubarContent>
+        </OfficialMenubarMenu>
+        <OfficialMenubarMenu value="edit">
+          <OfficialMenubarTrigger>{MENUBAR_EDIT}</OfficialMenubarTrigger>
+        </OfficialMenubarMenu>
+        <OfficialMenubarMenu value="view">
+          <OfficialMenubarTrigger>{MENUBAR_VIEW}</OfficialMenubarTrigger>
+        </OfficialMenubarMenu>
+        <OfficialMenubarMenu value="profiles">
+          <OfficialMenubarTrigger>{MENUBAR_PROFILES}</OfficialMenubarTrigger>
+        </OfficialMenubarMenu>
+      </OfficialMenubar>
+    ) : (
+      <Menubar value={value} onValueChange={() => {}}>
+        <MenubarMenu value={MENUBAR_FILE_VALUE}>
+          <MenubarTrigger>{MENUBAR_FILE}</MenubarTrigger>
+          <MenubarContent>
+            <MenubarFileItems kit={kit} />
+          </MenubarContent>
+        </MenubarMenu>
+        <MenubarMenu value="edit">
+          <MenubarTrigger>{MENUBAR_EDIT}</MenubarTrigger>
+        </MenubarMenu>
+        <MenubarMenu value="view">
+          <MenubarTrigger>{MENUBAR_VIEW}</MenubarTrigger>
+        </MenubarMenu>
+        <MenubarMenu value="profiles">
+          <MenubarTrigger>{MENUBAR_PROFILES}</MenubarTrigger>
+        </MenubarMenu>
+      </Menubar>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="menubar"
+      data-state={state}
+      {...stylex.props(
+        isDark && darkTheme,
+        isOpen ? styles.menubarOpenFrame : styles.frame,
+      )}
+    >
+      {menubar}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -2592,6 +2726,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "toggle-group") {
     return <ToggleGroupHarness {...params} />;
+  }
+  if (params.component === "menubar") {
+    return <MenubarHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2889,6 +3026,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "toggle-group", kit, state, theme };
+  }
+
+  if (component === "menubar") {
+    if (state !== "closed" && state !== "open") {
+      return null;
+    }
+    return { component: "menubar", kit, state, theme };
   }
 
   if (component !== "button") return null;
