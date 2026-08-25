@@ -57,6 +57,7 @@ const DROPDOWN_MENU_STATES = ["closed", "open"];
 const SHEET_STATES = ["default", "left", "top", "bottom"];
 const TABS_STATES = ["default", "second", "disabled"];
 const POPOVER_STATES = ["default"];
+const TOOLTIP_STATES = ["default"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -69,6 +70,8 @@ const DROPDOWN_MENU_OPEN_VIEWPORT = { width: 640, height: 560 };
 /* Popover: trigger near top, horizontally centered so w-72 content (align=center)
    stays on-screen and the popper does not flip. */
 const POPOVER_VIEWPORT = { width: 640, height: 480 };
+/* Tooltip: trigger near bottom; pin so side=top does not flip. */
+const TOOLTIP_VIEWPORT = { width: 480, height: 320 };
 const CARD_VIEWPORT = { width: 400, height: 480 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
@@ -300,6 +303,20 @@ function popoverCases() {
   return list;
 }
 
+function tooltipCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of TOOLTIP_STATES) {
+      list.push({
+        component: "tooltip",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -317,6 +334,7 @@ function cases() {
     ...sheetCases(),
     ...tabsCases(),
     ...popoverCases(),
+    ...tooltipCases(),
   ];
 }
 
@@ -363,6 +381,9 @@ function slug(c) {
   if (c.component === "popover") {
     return `popover__${c.theme}__${c.state}`;
   }
+  if (c.component === "tooltip") {
+    return `tooltip__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -387,7 +408,8 @@ function urlFor(kit, c) {
     c.component !== "dropdown-menu" &&
     c.component !== "sheet" &&
     c.component !== "tabs" &&
-    c.component !== "popover"
+    c.component !== "popover" &&
+    c.component !== "tooltip"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -479,6 +501,9 @@ function controlLocator(page, c) {
   if (c.component === "popover") {
     return page.locator('[data-slot="popover-trigger"]');
   }
+  if (c.component === "tooltip") {
+    return page.locator('[data-slot="tooltip-content"]');
+  }
   return page.getByRole("button");
 }
 
@@ -513,6 +538,12 @@ async function prepareControl(page, c) {
   if (c.component === "popover") {
     await page.locator('[data-slot="popover-trigger"]').waitFor();
     await page.locator('[data-slot="popover-content"][data-state="open"]').waitFor();
+    return;
+  }
+  if (c.component === "tooltip") {
+    await page.locator('[data-slot="tooltip-trigger"]').waitFor();
+    /* Controlled open with delay 0 uses data-state="instant-open", not "open". */
+    await page.locator('[data-slot="tooltip-content"]').waitFor();
     return;
   }
   const locator = controlLocator(page, c);
@@ -561,6 +592,12 @@ async function screenshotControl(page, c, dest) {
   if (c.component === "popover") {
     await page.locator('[data-slot="popover-trigger"]').waitFor();
     await page.locator('[data-slot="popover-content"][data-state="open"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "tooltip") {
+    await page.locator('[data-slot="tooltip-trigger"]').waitFor();
+    await page.locator('[data-slot="tooltip-content"]').waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -636,7 +673,9 @@ async function main() {
               ? DROPDOWN_MENU_OPEN_VIEWPORT
               : c.component === "popover"
                 ? POPOVER_VIEWPORT
-                : c.component === "card"
+                : c.component === "tooltip"
+                  ? TOOLTIP_VIEWPORT
+                  : c.component === "card"
                   ? CARD_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
@@ -687,7 +726,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -713,7 +752,8 @@ async function main() {
           r.component !== "dropdown-menu" &&
           r.component !== "sheet" &&
           r.component !== "tabs" &&
-          r.component !== "popover",
+          r.component !== "popover" &&
+          r.component !== "tooltip",
       )
       .map(
         (r) =>
@@ -891,6 +931,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "popover")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Tooltip",
+    "",
+    "- Viewport: 480×320. Trigger is pinned near the bottom so `side=\"top\"` does not flip.",
+    "- Forced open (`open={true}`) with `delayDuration={0}` on both kits. Full-viewport screenshot (trigger + content + arrow). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "tooltip")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

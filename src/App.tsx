@@ -82,6 +82,12 @@ import {
   TabsTrigger,
 } from "./components/tabs";
 import { Textarea } from "./components/textarea";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "./components/tooltip";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
 import {
@@ -169,6 +175,12 @@ import {
   OfficialTabsTrigger,
 } from "./visual/official-tabs";
 import { OfficialTextarea } from "./visual/official-textarea";
+import {
+  OfficialTooltip,
+  OfficialTooltipContent,
+  OfficialTooltipProvider,
+  OfficialTooltipTrigger,
+} from "./visual/official-tooltip";
 
 const styles = stylex.create({
   page: {
@@ -222,8 +234,9 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs, and
-        Popover vs official shadcn New York baseline. Visual capture lives at
+        Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
+        Popover, and Tooltip vs official shadcn New York baseline. Visual
+        capture lives at
         query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
@@ -704,6 +717,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundPopover kit="shadcn" dark={dark} />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Tooltip
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundTooltip kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Tooltip
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundTooltip kit="shadcn" dark={dark} />
+      </div>
     </div>
   );
 }
@@ -1025,6 +1052,55 @@ function PlaygroundTabs({ kit }: { kit: "stylex" | "shadcn" }) {
       </TabsContent>
       <TabsContent value="password">Change your password here.</TabsContent>
     </Tabs>
+  );
+}
+
+function PlaygroundTooltip({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialTooltipProvider delayDuration={0}>
+        <OfficialTooltip open={open} onOpenChange={setOpen}>
+          <OfficialTooltipTrigger asChild>
+            <OfficialButton variant="outline">Hover</OfficialButton>
+          </OfficialTooltipTrigger>
+          <OfficialTooltipContent>Add to library</OfficialTooltipContent>
+        </OfficialTooltip>
+      </OfficialTooltipProvider>
+    );
+  }
+
+  return (
+    <TooltipProvider delayDuration={0}>
+      <Tooltip open={open} onOpenChange={setOpen}>
+        <TooltipTrigger asChild>
+          <Button variant="outline">Hover</Button>
+        </TooltipTrigger>
+        <TooltipContent>Add to library</TooltipContent>
+      </Tooltip>
+    </TooltipProvider>
   );
 }
 

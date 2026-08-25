@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T16:49:53.327Z",
-  "total": 158,
+  "generatedAt": "2026-08-25T17:04:46.727Z",
+  "total": 160,
   "failed": 0,
-  "passed": 158,
+  "passed": 160,
   "threshold": 0,
   "cases": [
     {
@@ -2348,6 +2348,34 @@
       "shadcn": "visual/results/shadcn/popover__dark__default.png",
       "stylex": "visual/results/stylex/popover__dark__default.png",
       "diff": "visual/results/diff/popover__dark__default.png"
+    },
+    {
+      "name": "tooltip__light__default",
+      "component": "tooltip",
+      "state": "default",
+      "theme": "light",
+      "width": 480,
+      "height": 320,
+      "mismatched": 0,
+      "pixels": 153600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tooltip__light__default.png",
+      "stylex": "visual/results/stylex/tooltip__light__default.png",
+      "diff": "visual/results/diff/tooltip__light__default.png"
+    },
+    {
+      "name": "tooltip__dark__default",
+      "component": "tooltip",
+      "state": "default",
+      "theme": "dark",
+      "width": 480,
+      "height": 320,
+      "mismatched": 0,
+      "pixels": 153600,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tooltip__dark__default.png",
+      "stylex": "visual/results/stylex/tooltip__dark__default.png",
+      "diff": "visual/results/diff/tooltip__dark__default.png"
     }
   ]
 }
