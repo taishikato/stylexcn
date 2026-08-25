@@ -3,6 +3,7 @@ import { Button, type ButtonSize, type ButtonVariant } from "./components/button
 import { Checkbox } from "./components/checkbox";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
+import { Switch } from "./components/switch";
 import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
@@ -10,6 +11,7 @@ import { OfficialButton } from "./visual/official-button";
 import { OfficialCheckbox } from "./visual/official-checkbox";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
+import { OfficialSwitch } from "./visual/official-switch";
 import { OfficialTextarea } from "./visual/official-textarea";
 
 const styles = stylex.create({
@@ -60,9 +62,9 @@ function Playground() {
     <div {...stylex.props(styles.page)}>
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
-        StyleX Button, Input, Label, Textarea, and Checkbox vs official shadcn
-        New York baseline. Visual capture lives at query-param harness URLs
-        (see README).
+        StyleX Button, Input, Label, Textarea, Checkbox, and Switch vs official
+        shadcn New York baseline. Visual capture lives at query-param harness
+        URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -258,6 +260,52 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <div {...stylex.props(styles.checkRow)}>
           <OfficialCheckbox aria-invalid />
           <OfficialLabel>Invalid</OfficialLabel>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Switch
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.checkRow)}>
+          <Switch id={`${dark ? "d" : "l"}-stylex-sw`} />
+          <Label htmlFor={`${dark ? "d" : "l"}-stylex-sw`}>Airplane mode</Label>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <Switch defaultChecked />
+          <Label>Checked</Label>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <Switch disabled />
+          <Label>Disabled</Label>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <Switch defaultChecked disabled />
+          <Label>Checked disabled</Label>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Switch
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.checkRow)}>
+          <OfficialSwitch id={`${dark ? "d" : "l"}-shadcn-sw`} />
+          <OfficialLabel htmlFor={`${dark ? "d" : "l"}-shadcn-sw`}>
+            Airplane mode
+          </OfficialLabel>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <OfficialSwitch defaultChecked />
+          <OfficialLabel>Checked</OfficialLabel>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <OfficialSwitch disabled />
+          <OfficialLabel>Disabled</OfficialLabel>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <OfficialSwitch defaultChecked disabled />
+          <OfficialLabel>Checked disabled</OfficialLabel>
         </div>
       </div>
     </div>

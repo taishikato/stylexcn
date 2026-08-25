@@ -33,6 +33,7 @@ const CHECKBOX_STATES = [
   "disabled",
   "invalid",
 ];
+const SWITCH_STATES = ["default", "checked", "focus-visible", "disabled"];
 const THEMES = ["light", "dark"];
 
 function buttonCases() {
@@ -123,6 +124,20 @@ function checkboxCases() {
   return list;
 }
 
+function switchCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SWITCH_STATES) {
+      list.push({
+        component: "switch",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -130,6 +145,7 @@ function cases() {
     ...labelCases(),
     ...textareaCases(),
     ...checkboxCases(),
+    ...switchCases(),
   ];
 }
 
@@ -146,6 +162,9 @@ function slug(c) {
   if (c.component === "checkbox") {
     return `checkbox__${c.theme}__${c.state}`;
   }
+  if (c.component === "switch") {
+    return `switch__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -160,7 +179,8 @@ function urlFor(kit, c) {
     c.component !== "input" &&
     c.component !== "label" &&
     c.component !== "textarea" &&
-    c.component !== "checkbox"
+    c.component !== "checkbox" &&
+    c.component !== "switch"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -221,6 +241,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "checkbox") {
     return page.locator('[data-slot="checkbox"]');
+  }
+  if (c.component === "switch") {
+    return page.locator('[data-slot="switch"]');
   }
   return page.getByRole("button");
 }
@@ -344,7 +367,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -360,7 +383,8 @@ async function main() {
           r.component !== "input" &&
           r.component !== "label" &&
           r.component !== "textarea" &&
-          r.component !== "checkbox",
+          r.component !== "checkbox" &&
+          r.component !== "switch",
       )
       .map(
         (r) =>
@@ -406,6 +430,17 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "checkbox")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Switch",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "switch")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
