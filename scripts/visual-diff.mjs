@@ -73,6 +73,15 @@ const AVATAR_STATES = ["default", "sm", "lg", "badge", "group"];
 const PROGRESS_STATES = ["empty", "halfway", "full"];
 const ACCORDION_STATES = ["open", "second", "closed"];
 const SLIDER_STATES = ["default", "disabled", "focus-visible", "range"];
+const TOGGLE_STATES = [
+  "default",
+  "on",
+  "outline",
+  "sm",
+  "lg",
+  "disabled",
+  "focus-visible",
+];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -454,6 +463,20 @@ function sliderCases() {
   return list;
 }
 
+function toggleCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of TOGGLE_STATES) {
+      list.push({
+        component: "toggle",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -480,6 +503,7 @@ function cases() {
     ...progressCases(),
     ...accordionCases(),
     ...sliderCases(),
+    ...toggleCases(),
   ];
 }
 
@@ -554,6 +578,9 @@ function slug(c) {
   if (c.component === "slider") {
     return `slider__${c.theme}__${c.state}`;
   }
+  if (c.component === "toggle") {
+    return `toggle__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -589,7 +616,8 @@ function urlFor(kit, c) {
     c.component !== "avatar" &&
     c.component !== "progress" &&
     c.component !== "accordion" &&
-    c.component !== "slider"
+    c.component !== "slider" &&
+    c.component !== "toggle"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -713,6 +741,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "slider") {
     return page.locator('[data-slot="slider"]');
+  }
+  if (c.component === "toggle") {
+    return page.locator('[data-slot="toggle"]');
   }
   return page.getByRole("button");
 }
@@ -960,7 +991,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -995,7 +1026,8 @@ async function main() {
           r.component !== "avatar" &&
           r.component !== "progress" &&
           r.component !== "accordion" &&
-          r.component !== "slider",
+          r.component !== "slider" &&
+          r.component !== "toggle",
       )
       .map(
         (r) =>
@@ -1302,6 +1334,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "slider")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Toggle",
+    "",
+    "- Crops `[data-slot=\"toggle\"]` with 16px pad (covers the 3px focus ring).",
+    "- Identical copy (`Italic`) on both kits. `on` uses controlled `pressed={true}`. `outline` / `sm` / `lg` are variant and size, not extra copy.",
+    "- States: `default` / `on` / `outline` / `sm` / `lg` / `disabled` / `focus-visible` (Tab onto the control), each × light/dark. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "toggle")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

@@ -102,6 +102,7 @@ import {
 import { Skeleton, type SkeletonRadius } from "../components/skeleton";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
+import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
 import {
   Tooltip,
   TooltipContent,
@@ -194,6 +195,7 @@ import {
 import { OfficialSkeleton } from "./official-skeleton";
 import { OfficialSlider } from "./official-slider";
 import { OfficialSwitch } from "./official-switch";
+import { OfficialToggle } from "./official-toggle";
 import {
   OfficialTabs,
   OfficialTabsContent,
@@ -270,7 +272,8 @@ export type CaptureComponent =
   | "avatar"
   | "progress"
   | "accordion"
-  | "slider";
+  | "slider"
+  | "toggle";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -298,7 +301,10 @@ export type CaptureState =
   | "empty"
   | "halfway"
   | "full"
-  | "range";
+  | "range"
+  | "on"
+  | "outline"
+  | "lg";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -479,6 +485,20 @@ export type SliderCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ToggleCaptureParams = {
+  component: "toggle";
+  kit: CaptureKit;
+  state:
+    | "default"
+    | "on"
+    | "outline"
+    | "sm"
+    | "lg"
+    | "disabled"
+    | "focus-visible";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -503,7 +523,8 @@ export type CaptureParams =
   | AvatarCaptureParams
   | ProgressCaptureParams
   | AccordionCaptureParams
-  | SliderCaptureParams;
+  | SliderCaptureParams
+  | ToggleCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1712,6 +1733,63 @@ function AccordionHarness({ kit, state, theme }: AccordionCaptureParams) {
   );
 }
 
+const TOGGLE_LABEL = "Italic";
+
+function toggleVariantFor(
+  state: ToggleCaptureParams["state"],
+): ToggleVariant {
+  return state === "outline" ? "outline" : "default";
+}
+
+function toggleSizeFor(state: ToggleCaptureParams["state"]): ToggleSize {
+  if (state === "sm" || state === "lg") return state;
+  return "default";
+}
+
+function ToggleHarness({ kit, state, theme }: ToggleCaptureParams) {
+  const isDark = theme === "dark";
+  const disabled = state === "disabled";
+  const pressed = state === "on";
+  const variant = toggleVariantFor(state);
+  const size = toggleSizeFor(state);
+
+  const toggle =
+    kit === "shadcn" ? (
+      <OfficialToggle
+        variant={variant}
+        size={size}
+        pressed={pressed}
+        disabled={disabled}
+        onPressedChange={() => {}}
+      >
+        {TOGGLE_LABEL}
+      </OfficialToggle>
+    ) : (
+      <Toggle
+        variant={variant}
+        size={size}
+        pressed={pressed}
+        disabled={disabled}
+        onPressedChange={() => {}}
+      >
+        {TOGGLE_LABEL}
+      </Toggle>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="toggle"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {toggle}
+    </div>
+  );
+}
+
 function SliderHarness({ kit, state, theme }: SliderCaptureParams) {
   const isDark = theme === "dark";
   const disabled = state === "disabled";
@@ -1845,6 +1923,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "slider") {
     return <SliderHarness {...params} />;
+  }
+  if (params.component === "toggle") {
+    return <ToggleHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2076,6 +2157,21 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "slider", kit, state, theme };
+  }
+
+  if (component === "toggle") {
+    if (
+      state !== "default" &&
+      state !== "on" &&
+      state !== "outline" &&
+      state !== "sm" &&
+      state !== "lg" &&
+      state !== "disabled" &&
+      state !== "focus-visible"
+    ) {
+      return null;
+    }
+    return { component: "toggle", kit, state, theme };
   }
 
   if (component !== "button") return null;

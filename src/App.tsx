@@ -98,6 +98,7 @@ import {
 import { Skeleton } from "./components/skeleton";
 import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
+import { Toggle } from "./components/toggle";
 import {
   Tabs,
   TabsContent,
@@ -141,6 +142,7 @@ import { OfficialBadge } from "./visual/official-badge";
 import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialSkeleton } from "./visual/official-skeleton";
 import { OfficialSlider } from "./visual/official-slider";
+import { OfficialToggle } from "./visual/official-toggle";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -308,8 +310,8 @@ function Playground() {
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
-        Progress, Accordion, and Slider vs official shadcn New York baseline.
-        Visual capture lives at query-param harness URLs (see README).
+        Progress, Accordion, Slider, and Toggle vs official shadcn New York
+        baseline. Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1026,6 +1028,50 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <div {...stylex.props(styles.sliderWell)}>
           <OfficialSlider value={[25, 75]} onValueChange={() => {}} />
         </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Toggle
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <Toggle onPressedChange={() => {}}>Italic</Toggle>
+        <Toggle pressed onPressedChange={() => {}}>
+          Italic
+        </Toggle>
+        <Toggle variant="outline" onPressedChange={() => {}}>
+          Italic
+        </Toggle>
+        <Toggle size="sm" onPressedChange={() => {}}>
+          Italic
+        </Toggle>
+        <Toggle size="lg" onPressedChange={() => {}}>
+          Italic
+        </Toggle>
+        <Toggle disabled onPressedChange={() => {}}>
+          Italic
+        </Toggle>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Toggle
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <OfficialToggle onPressedChange={() => {}}>Italic</OfficialToggle>
+        <OfficialToggle pressed onPressedChange={() => {}}>
+          Italic
+        </OfficialToggle>
+        <OfficialToggle variant="outline" onPressedChange={() => {}}>
+          Italic
+        </OfficialToggle>
+        <OfficialToggle size="sm" onPressedChange={() => {}}>
+          Italic
+        </OfficialToggle>
+        <OfficialToggle size="lg" onPressedChange={() => {}}>
+          Italic
+        </OfficialToggle>
+        <OfficialToggle disabled onPressedChange={() => {}}>
+          Italic
+        </OfficialToggle>
       </div>
     </div>
   );
