@@ -24,6 +24,7 @@ const VARIANTS = [
 const SIZES = ["default", "sm", "lg", "icon"];
 const BUTTON_STATES = ["default", "hover", "focus-visible", "disabled"];
 const INPUT_STATES = ["default", "focus-visible", "disabled", "invalid"];
+const LABEL_STATES = ["default", "disabled"];
 const THEMES = ["light", "dark"];
 
 function buttonCases() {
@@ -72,13 +73,30 @@ function inputCases() {
   return list;
 }
 
+function labelCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of LABEL_STATES) {
+      list.push({
+        component: "label",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
-  return [...buttonCases(), ...inputCases()];
+  return [...buttonCases(), ...inputCases(), ...labelCases()];
 }
 
 function slug(c) {
   if (c.component === "input") {
     return `input__${c.theme}__${c.state}`;
+  }
+  if (c.component === "label") {
+    return `label__${c.theme}__${c.state}`;
   }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
@@ -90,7 +108,7 @@ function urlFor(kit, c) {
     state: c.state,
     theme: c.theme,
   });
-  if (c.component !== "input") {
+  if (c.component !== "input" && c.component !== "label") {
     q.set("variant", c.variant);
     q.set("size", c.size);
   }
@@ -138,11 +156,18 @@ async function startPreview() {
   return child;
 }
 
+function controlLocator(page, c) {
+  if (c.component === "input") {
+    return page.locator('[data-slot="input"]');
+  }
+  if (c.component === "label") {
+    return page.locator('[data-slot="label"]');
+  }
+  return page.getByRole("button");
+}
+
 async function prepareControl(page, c) {
-  const locator =
-    c.component === "input"
-      ? page.locator('[data-slot="input"]')
-      : page.getByRole("button");
+  const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
     await locator.hover();
@@ -153,10 +178,7 @@ async function prepareControl(page, c) {
 }
 
 async function screenshotControl(page, c, dest) {
-  const locator =
-    c.component === "input"
-      ? page.locator('[data-slot="input"]')
-      : page.getByRole("button");
+  const locator = controlLocator(page, c);
   const box = await locator.boundingBox();
   if (!box) throw new Error("no bounding box");
   const pad = 16;
@@ -263,7 +285,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input)",
+    "# Visual diff (Button + Input + Label)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -274,7 +296,7 @@ async function main() {
     "| Case | Result | Mismatched pixels |",
     "| --- | --- | ---: |",
     ...rows
-      .filter((r) => r.component !== "input")
+      .filter((r) => r.component !== "input" && r.component !== "label")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
@@ -286,6 +308,17 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "input")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Label",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "label")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

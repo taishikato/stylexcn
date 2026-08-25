@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T04:11:24.442Z",
-  "total": 74,
+  "generatedAt": "2026-08-25T04:20:11.734Z",
+  "total": 78,
   "failed": 0,
-  "passed": 74,
+  "passed": 78,
   "threshold": 0,
   "cases": [
     {
@@ -1172,6 +1172,62 @@
       "shadcn": "visual/results/shadcn/input__dark__invalid.png",
       "stylex": "visual/results/stylex/input__dark__invalid.png",
       "diff": "visual/results/diff/input__dark__invalid.png"
+    },
+    {
+      "name": "label__light__default",
+      "component": "label",
+      "state": "default",
+      "theme": "light",
+      "width": 67,
+      "height": 46,
+      "mismatched": 0,
+      "pixels": 3082,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/label__light__default.png",
+      "stylex": "visual/results/stylex/label__light__default.png",
+      "diff": "visual/results/diff/label__light__default.png"
+    },
+    {
+      "name": "label__light__disabled",
+      "component": "label",
+      "state": "disabled",
+      "theme": "light",
+      "width": 67,
+      "height": 46,
+      "mismatched": 0,
+      "pixels": 3082,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/label__light__disabled.png",
+      "stylex": "visual/results/stylex/label__light__disabled.png",
+      "diff": "visual/results/diff/label__light__disabled.png"
+    },
+    {
+      "name": "label__dark__default",
+      "component": "label",
+      "state": "default",
+      "theme": "dark",
+      "width": 67,
+      "height": 46,
+      "mismatched": 0,
+      "pixels": 3082,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/label__dark__default.png",
+      "stylex": "visual/results/stylex/label__dark__default.png",
+      "diff": "visual/results/diff/label__dark__default.png"
+    },
+    {
+      "name": "label__dark__disabled",
+      "component": "label",
+      "state": "disabled",
+      "theme": "dark",
+      "width": 67,
+      "height": 46,
+      "mismatched": 0,
+      "pixels": 3082,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/label__dark__disabled.png",
+      "stylex": "visual/results/stylex/label__dark__disabled.png",
+      "diff": "visual/results/diff/label__dark__disabled.png"
     }
   ]
 }

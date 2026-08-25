@@ -1,6 +1,6 @@
-# Visual diff (Button + Input)
+# Visual diff (Button + Input + Label)
 
-- Passed: 74/74
+- Passed: 78/78
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -87,3 +87,12 @@
 | `input__dark__focus-visible` | PASS | 0/19584 |
 | `input__dark__disabled` | PASS | 0/19584 |
 | `input__dark__invalid` | PASS | 0/19584 |
+
+## Label
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `label__light__default` | PASS | 0/3082 |
+| `label__light__disabled` | PASS | 0/3082 |
+| `label__dark__default` | PASS | 0/3082 |
+| `label__dark__disabled` | PASS | 0/3082 |
