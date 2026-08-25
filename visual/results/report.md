@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider)
 
-- Passed: 204/204
+- Passed: 212/212
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -362,3 +362,20 @@
 | `accordion__dark__open` | PASS | 0/60896 |
 | `accordion__dark__second` | PASS | 0/67936 |
 | `accordion__dark__closed` | PASS | 0/48224 |
+
+## Slider
+
+- Crops `[data-slot="slider"]` with 16px pad (covers the 4px focus ring). Identical 16rem-wide parent on both kits so `w-full` matches.
+- Controlled `value` on both kits (`[50]` single thumb; `range` is `[25, 75]`). Do not rely on the official `[min, max]` fallback.
+- States: `default` / `disabled` / `focus-visible` (Tab onto the thumb) / `range`, each × light/dark. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `slider__light__default` | PASS | 0/10944 |
+| `slider__light__disabled` | PASS | 0/10944 |
+| `slider__light__focus-visible` | PASS | 0/10944 |
+| `slider__light__range` | PASS | 0/10944 |
+| `slider__dark__default` | PASS | 0/10944 |
+| `slider__dark__disabled` | PASS | 0/10944 |
+| `slider__dark__focus-visible` | PASS | 0/10944 |
+| `slider__dark__range` | PASS | 0/10944 |
