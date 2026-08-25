@@ -62,6 +62,11 @@ import { Label } from "../components/label";
 import { Progress } from "../components/progress";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "../components/hover-card";
+import {
   Popover,
   PopoverContent,
   PopoverDescription,
@@ -155,6 +160,11 @@ import {
   OfficialDialogHeader,
   OfficialDialogTitle,
 } from "./official-dialog";
+import {
+  OfficialHoverCard,
+  OfficialHoverCardContent,
+  OfficialHoverCardTrigger,
+} from "./official-hover-card";
 import {
   OfficialPopover,
   OfficialPopoverContent,
@@ -252,6 +262,7 @@ export type CaptureComponent =
   | "sheet"
   | "tabs"
   | "popover"
+  | "hover-card"
   | "tooltip"
   | "badge"
   | "separator"
@@ -404,6 +415,13 @@ export type PopoverCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type HoverCardCaptureParams = {
+  component: "hover-card";
+  kit: CaptureKit;
+  state: "default";
+  theme: CaptureTheme;
+};
+
 export type TooltipCaptureParams = {
   component: "tooltip";
   kit: CaptureKit;
@@ -477,6 +495,7 @@ export type CaptureParams =
   | SheetCaptureParams
   | TabsCaptureParams
   | PopoverCaptureParams
+  | HoverCardCaptureParams
   | TooltipCaptureParams
   | BadgeCaptureParams
   | SeparatorCaptureParams
@@ -512,8 +531,8 @@ const styles = stylex.create({
     backgroundColor: "var(--background)",
     color: "var(--foreground)",
   },
-  /* Trigger near the top, horizontally centered so w-72 content (align=center)
-     stays on-screen and the popper does not flip to another side. */
+  /* Trigger near the top, horizontally centered so w-72 / w-64 content
+     (align=center) stays on-screen and the popper does not flip. */
   popoverOpenFrame: {
     minHeight: "100vh",
     margin: 0,
@@ -1342,6 +1361,51 @@ function PopoverHarness({ kit, theme }: PopoverCaptureParams) {
   );
 }
 
+const HOVER_CARD_TRIGGER = "@ada";
+const HOVER_CARD_TITLE = "Ada Lovelace";
+const HOVER_CARD_HANDLE = "@ada";
+
+function HoverCardHarness({ kit, theme }: HoverCardCaptureParams) {
+  const isDark = theme === "dark";
+  usePortalDocumentTheme(isDark);
+
+  const hoverCard =
+    kit === "shadcn" ? (
+      <OfficialHoverCard open onOpenChange={() => {}}>
+        <OfficialHoverCardTrigger asChild>
+          <OfficialButton variant="outline">{HOVER_CARD_TRIGGER}</OfficialButton>
+        </OfficialHoverCardTrigger>
+        <OfficialHoverCardContent side="bottom" align="center">
+          <div>{HOVER_CARD_TITLE}</div>
+          <div>{HOVER_CARD_HANDLE}</div>
+        </OfficialHoverCardContent>
+      </OfficialHoverCard>
+    ) : (
+      <HoverCard open onOpenChange={() => {}}>
+        <HoverCardTrigger asChild>
+          <Button variant="outline">{HOVER_CARD_TRIGGER}</Button>
+        </HoverCardTrigger>
+        <HoverCardContent side="bottom" align="center">
+          <div>{HOVER_CARD_TITLE}</div>
+          <div>{HOVER_CARD_HANDLE}</div>
+        </HoverCardContent>
+      </HoverCard>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="hover-card"
+      data-state="default"
+      {...stylex.props(isDark && darkTheme, styles.popoverOpenFrame)}
+    >
+      {hoverCard}
+    </div>
+  );
+}
+
 const TOOLTIP_TRIGGER = "Hover";
 const TOOLTIP_CONTENT = "Add to library";
 
@@ -1755,6 +1819,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "popover") {
     return <PopoverHarness {...params} />;
   }
+  if (params.component === "hover-card") {
+    return <HoverCardHarness {...params} />;
+  }
   if (params.component === "tooltip") {
     return <TooltipHarness {...params} />;
   }
@@ -1927,6 +1994,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "popover", kit, state, theme };
+  }
+
+  if (component === "hover-card") {
+    if (state !== "default") {
+      return null;
+    }
+    return { component: "hover-card", kit, state, theme };
   }
 
   if (component === "tooltip") {

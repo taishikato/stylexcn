@@ -63,6 +63,11 @@ import { Input } from "./components/input";
 import { Label } from "./components/label";
 import { Progress } from "./components/progress";
 import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "./components/hover-card";
+import {
   Popover,
   PopoverContent,
   PopoverDescription,
@@ -172,6 +177,11 @@ import {
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
 import { OfficialProgress } from "./visual/official-progress";
+import {
+  OfficialHoverCard,
+  OfficialHoverCardContent,
+  OfficialHoverCardTrigger,
+} from "./visual/official-hover-card";
 import {
   OfficialPopover,
   OfficialPopoverContent,
@@ -297,9 +307,9 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, Tooltip, Badge, Separator, Skeleton, Avatar, Progress, and
-        Accordion, and Slider vs official shadcn New York baseline. Visual
-        capture lives at query-param harness URLs (see README).
+        Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
+        Progress, Accordion, and Slider vs official shadcn New York baseline.
+        Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -780,6 +790,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <PlaygroundPopover kit="shadcn" dark={dark} />
       </div>
       <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Hover Card
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundHoverCard kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Hover Card
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundHoverCard kit="shadcn" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Tooltip
       </h2>
       <div {...stylex.props(styles.row)}>
@@ -1132,6 +1156,57 @@ function PlaygroundPopover({
         </PopoverHeader>
       </PopoverContent>
     </Popover>
+  );
+}
+
+function PlaygroundHoverCard({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialHoverCard open={open} onOpenChange={setOpen}>
+        <OfficialHoverCardTrigger asChild>
+          <OfficialButton variant="outline">@ada</OfficialButton>
+        </OfficialHoverCardTrigger>
+        <OfficialHoverCardContent>
+          <div>Ada Lovelace</div>
+          <div>@ada</div>
+        </OfficialHoverCardContent>
+      </OfficialHoverCard>
+    );
+  }
+
+  return (
+    <HoverCard open={open} onOpenChange={setOpen}>
+      <HoverCardTrigger asChild>
+        <Button variant="outline">@ada</Button>
+      </HoverCardTrigger>
+      <HoverCardContent>
+        <div>Ada Lovelace</div>
+        <div>@ada</div>
+      </HoverCardContent>
+    </HoverCard>
   );
 }
 

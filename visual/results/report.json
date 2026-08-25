@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T18:51:42.454Z",
-  "total": 212,
+  "generatedAt": "2026-08-25T19:05:46.754Z",
+  "total": 214,
   "failed": 0,
-  "passed": 212,
+  "passed": 214,
   "threshold": 0,
   "cases": [
     {
@@ -2348,6 +2348,34 @@
       "shadcn": "visual/results/shadcn/popover__dark__default.png",
       "stylex": "visual/results/stylex/popover__dark__default.png",
       "diff": "visual/results/diff/popover__dark__default.png"
+    },
+    {
+      "name": "hover-card__light__default",
+      "component": "hover-card",
+      "state": "default",
+      "theme": "light",
+      "width": 640,
+      "height": 480,
+      "mismatched": 0,
+      "pixels": 307200,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/hover-card__light__default.png",
+      "stylex": "visual/results/stylex/hover-card__light__default.png",
+      "diff": "visual/results/diff/hover-card__light__default.png"
+    },
+    {
+      "name": "hover-card__dark__default",
+      "component": "hover-card",
+      "state": "default",
+      "theme": "dark",
+      "width": 640,
+      "height": 480,
+      "mismatched": 0,
+      "pixels": 307200,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/hover-card__dark__default.png",
+      "stylex": "visual/results/stylex/hover-card__dark__default.png",
+      "diff": "visual/results/diff/hover-card__dark__default.png"
     },
     {
       "name": "tooltip__light__default",
