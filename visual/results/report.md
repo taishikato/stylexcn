@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)
 
-- Passed: 156/156
+- Passed: 158/158
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -173,6 +173,16 @@
 | `dialog__light__no-close` | PASS | 0/480000 |
 | `dialog__dark__default` | PASS | 0/480000 |
 | `dialog__dark__no-close` | PASS | 0/480000 |
+
+## Alert Dialog
+
+- Viewport: 800×600 (Tailwind `sm` / 40rem). Overlay + content are portaled to `document.body`.
+- Forced `open={true}`. Screenshots are full-viewport (overlay + panel). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `alert-dialog__light__default` | PASS | 0/480000 |
+| `alert-dialog__dark__default` | PASS | 0/480000 |
 
 ## Select
 
