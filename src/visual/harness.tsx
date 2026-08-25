@@ -1,6 +1,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect } from "react";
 import { Badge, type BadgeVariant } from "../components/badge";
+import { Separator } from "../components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
   Card,
@@ -88,6 +89,7 @@ import {
 } from "../components/tooltip";
 import { darkTheme } from "../theme";
 import { OfficialBadge } from "./official-badge";
+import { OfficialSeparator } from "./official-separator";
 import { OfficialButton } from "./official-button";
 import {
   OfficialCard,
@@ -219,7 +221,8 @@ export type CaptureComponent =
   | "tabs"
   | "popover"
   | "tooltip"
-  | "badge";
+  | "badge"
+  | "separator";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -237,7 +240,9 @@ export type CaptureState =
   | "left"
   | "top"
   | "bottom"
-  | "second";
+  | "second"
+  | "horizontal"
+  | "vertical";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -369,6 +374,13 @@ export type BadgeCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SeparatorCaptureParams = {
+  component: "separator";
+  kit: CaptureKit;
+  state: "horizontal" | "vertical";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -386,7 +398,8 @@ export type CaptureParams =
   | TabsCaptureParams
   | PopoverCaptureParams
   | TooltipCaptureParams
-  | BadgeCaptureParams;
+  | BadgeCaptureParams
+  | SeparatorCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -436,6 +449,15 @@ const styles = stylex.create({
     paddingBottom: "5rem",
     backgroundColor: "var(--background)",
     color: "var(--foreground)",
+  },
+  separatorHorizontalWell: {
+    width: "16rem",
+  },
+  separatorVerticalWell: {
+    height: "6rem",
+    width: "3rem",
+    display: "flex",
+    justifyContent: "center",
   },
 });
 
@@ -1292,6 +1314,37 @@ function BadgeHarness({ kit, variant, state, theme }: BadgeCaptureParams) {
   );
 }
 
+function SeparatorHarness({ kit, state, theme }: SeparatorCaptureParams) {
+  const isDark = theme === "dark";
+  const orientation = state;
+  const wellStyle =
+    orientation === "vertical"
+      ? styles.separatorVerticalWell
+      : styles.separatorHorizontalWell;
+
+  const separator =
+    kit === "shadcn" ? (
+      <OfficialSeparator orientation={orientation} />
+    ) : (
+      <Separator orientation={orientation} />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="separator"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div data-separator-well="" {...stylex.props(wellStyle)}>
+        {separator}
+      </div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1370,6 +1423,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "badge") {
     return <BadgeHarness {...params} />;
+  }
+  if (params.component === "separator") {
+    return <SeparatorHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1541,6 +1597,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       state,
       theme,
     };
+  }
+
+  if (component === "separator") {
+    if (state !== "horizontal" && state !== "vertical") {
+      return null;
+    }
+    return { component: "separator", kit, state, theme };
   }
 
   if (component !== "button") return null;

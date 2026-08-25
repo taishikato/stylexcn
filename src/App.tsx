@@ -12,6 +12,7 @@ import {
   AlertDialogTrigger,
 } from "./components/alert-dialog";
 import { Badge, type BadgeVariant } from "./components/badge";
+import { Separator } from "./components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
   Card,
@@ -103,6 +104,7 @@ import {
   OfficialAlertDialogTrigger,
 } from "./visual/official-alert-dialog";
 import { OfficialBadge } from "./visual/official-badge";
+import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -220,6 +222,15 @@ const styles = stylex.create({
   inputWell: {
     width: "12rem",
   },
+  separatorHorizontalWell: {
+    width: "16rem",
+  },
+  separatorVerticalWell: {
+    height: "6rem",
+    width: "3rem",
+    display: "flex",
+    justifyContent: "center",
+  },
   checkRow: {
     display: "flex",
     alignItems: "center",
@@ -237,9 +248,8 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, Tooltip, and Badge vs official shadcn New York baseline. Visual
-        capture lives at
-        query-param harness URLs (see README).
+        Popover, Tooltip, Badge, and Separator vs official shadcn New York
+        baseline. Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -754,6 +764,32 @@ function ThemeBlock({ dark }: { dark: boolean }) {
             {variant}
           </OfficialBadge>
         ))}
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Separator
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>horizontal</span>
+        <div {...stylex.props(styles.separatorHorizontalWell)}>
+          <Separator />
+        </div>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.separatorVerticalWell)}>
+          <Separator orientation="vertical" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Separator
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>horizontal</span>
+        <div {...stylex.props(styles.separatorHorizontalWell)}>
+          <OfficialSeparator />
+        </div>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.separatorVerticalWell)}>
+          <OfficialSeparator orientation="vertical" />
+        </div>
       </div>
     </div>
   );
