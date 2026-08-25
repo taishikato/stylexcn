@@ -129,6 +129,14 @@ import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
 import { Toggle } from "./components/toggle";
 import { ToggleGroup, ToggleGroupItem } from "./components/toggle-group";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarTrigger,
+} from "./components/menubar";
 import { CircleAlert } from "lucide-react";
 import {
   Tabs,
@@ -210,6 +218,14 @@ import {
   OfficialToggleGroup,
   OfficialToggleGroupItem,
 } from "./visual/official-toggle-group";
+import {
+  OfficialMenubar,
+  OfficialMenubarContent,
+  OfficialMenubarItem,
+  OfficialMenubarMenu,
+  OfficialMenubarSeparator,
+  OfficialMenubarTrigger,
+} from "./visual/official-menubar";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -416,7 +432,7 @@ function Playground() {
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
         Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
-        Scroll Area, Pagination, Alert, and Toggle Group vs official shadcn
+        Scroll Area, Pagination, Alert, Toggle Group, and Menubar vs official shadcn
         New York baseline. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1322,6 +1338,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <PlaygroundToggleGroup kit="shadcn" variant="default" size="sm" />
         <PlaygroundToggleGroup kit="shadcn" variant="default" size="lg" />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Menubar
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundMenubar kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Menubar
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundMenubar kit="shadcn" dark={dark} />
+      </div>
     </div>
   );
 }
@@ -1810,6 +1840,83 @@ function PlaygroundToggleGroup({
       <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
       <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
     </ToggleGroup>
+  );
+}
+
+function PlaygroundMenubar({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [value, setValue] = useState("");
+
+  useLayoutEffect(() => {
+    if (!value || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [value, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialMenubar value={value} onValueChange={setValue}>
+        <OfficialMenubarMenu value="file">
+          <OfficialMenubarTrigger>File</OfficialMenubarTrigger>
+          <OfficialMenubarContent>
+            <OfficialMenubarItem>New Tab</OfficialMenubarItem>
+            <OfficialMenubarItem>New Window</OfficialMenubarItem>
+            <OfficialMenubarSeparator />
+            <OfficialMenubarItem>Share</OfficialMenubarItem>
+            <OfficialMenubarSeparator />
+            <OfficialMenubarItem>Print</OfficialMenubarItem>
+          </OfficialMenubarContent>
+        </OfficialMenubarMenu>
+        <OfficialMenubarMenu value="edit">
+          <OfficialMenubarTrigger>Edit</OfficialMenubarTrigger>
+        </OfficialMenubarMenu>
+        <OfficialMenubarMenu value="view">
+          <OfficialMenubarTrigger>View</OfficialMenubarTrigger>
+        </OfficialMenubarMenu>
+        <OfficialMenubarMenu value="profiles">
+          <OfficialMenubarTrigger>Profiles</OfficialMenubarTrigger>
+        </OfficialMenubarMenu>
+      </OfficialMenubar>
+    );
+  }
+
+  return (
+    <Menubar value={value} onValueChange={setValue}>
+      <MenubarMenu value="file">
+        <MenubarTrigger>File</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>New Tab</MenubarItem>
+          <MenubarItem>New Window</MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>Share</MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>Print</MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu value="edit">
+        <MenubarTrigger>Edit</MenubarTrigger>
+      </MenubarMenu>
+      <MenubarMenu value="view">
+        <MenubarTrigger>View</MenubarTrigger>
+      </MenubarMenu>
+      <MenubarMenu value="profiles">
+        <MenubarTrigger>Profiles</MenubarTrigger>
+      </MenubarMenu>
+    </Menubar>
   );
 }
 

@@ -88,6 +88,7 @@ const SCROLL_AREA_STATES = ["vertical", "horizontal"];
 const PAGINATION_STATES = ["default", "ellipsis"];
 const ALERT_STATES = ["default", "with-icon", "destructive"];
 const TOGGLE_GROUP_STATES = ["default", "outline", "sm", "lg"];
+const MENUBAR_STATES = ["closed", "open"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -97,6 +98,8 @@ const SHEET_VIEWPORT = { width: 800, height: 600 };
 const SELECT_OPEN_VIEWPORT = { width: 640, height: 560 };
 /* Dropdown Menu: trigger near top-left so portaled content stays on-screen. */
 const DROPDOWN_MENU_OPEN_VIEWPORT = { width: 640, height: 560 };
+/* Menubar: pin near the top so the portaled File menu stays on-screen. */
+const MENUBAR_OPEN_VIEWPORT = { width: 640, height: 480 };
 /* Popover: trigger near top, horizontally centered so w-72 content (align=center)
    stays on-screen and the popper does not flip. */
 const POPOVER_VIEWPORT = { width: 640, height: 480 };
@@ -573,6 +576,20 @@ function toggleGroupCases() {
   return list;
 }
 
+function menubarCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of MENUBAR_STATES) {
+      list.push({
+        component: "menubar",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -606,6 +623,7 @@ function cases() {
     ...paginationCases(),
     ...alertCases(),
     ...toggleGroupCases(),
+    ...menubarCases(),
   ];
 }
 
@@ -701,6 +719,9 @@ function slug(c) {
   if (c.component === "toggle-group") {
     return `toggle-group__${c.theme}__${c.state}`;
   }
+  if (c.component === "menubar") {
+    return `menubar__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -743,7 +764,8 @@ function urlFor(kit, c) {
     c.component !== "scroll-area" &&
     c.component !== "pagination" &&
     c.component !== "alert" &&
-    c.component !== "toggle-group"
+    c.component !== "toggle-group" &&
+    c.component !== "menubar"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -889,6 +911,9 @@ function controlLocator(page, c) {
   if (c.component === "toggle-group") {
     return page.locator('[data-slot="toggle-group"]');
   }
+  if (c.component === "menubar") {
+    return page.locator('[data-slot="menubar"]');
+  }
   return page.getByRole("button");
 }
 
@@ -912,6 +937,13 @@ async function prepareControl(page, c) {
     await page.locator('[data-slot="dropdown-menu-trigger"]').waitFor();
     await page
       .locator('[data-slot="dropdown-menu-content"][data-state="open"]')
+      .waitFor();
+    return;
+  }
+  if (c.component === "menubar" && c.state === "open") {
+    await page.locator('[data-slot="menubar"]').waitFor();
+    await page
+      .locator('[data-slot="menubar-content"][data-state="open"]')
       .waitFor();
     return;
   }
@@ -992,6 +1024,14 @@ async function screenshotControl(page, c, dest) {
     await page.locator('[data-slot="dropdown-menu-trigger"]').waitFor();
     await page
       .locator('[data-slot="dropdown-menu-content"][data-state="open"]')
+      .waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "menubar" && c.state === "open") {
+    await page.locator('[data-slot="menubar"]').waitFor();
+    await page
+      .locator('[data-slot="menubar-content"][data-state="open"]')
       .waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
@@ -1090,6 +1130,8 @@ async function main() {
             ? SELECT_OPEN_VIEWPORT
             : c.component === "dropdown-menu" && c.state === "open"
               ? DROPDOWN_MENU_OPEN_VIEWPORT
+              : c.component === "menubar" && c.state === "open"
+                ? MENUBAR_OPEN_VIEWPORT
               : c.component === "popover"
                 ? POPOVER_VIEWPORT
                 : c.component === "hover-card"
@@ -1155,7 +1197,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1197,7 +1239,8 @@ async function main() {
           r.component !== "scroll-area" &&
           r.component !== "pagination" &&
           r.component !== "alert" &&
-          r.component !== "toggle-group",
+          r.component !== "toggle-group" &&
+          r.component !== "menubar",
       )
       .map(
         (r) =>
@@ -1611,6 +1654,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "toggle-group")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Menubar",
+    "",
+    "- Closed cases crop `[data-slot=\"menubar\"]` with 16px pad (the bar only). Open cases are full-viewport (640×480) so the bar + portaled File menu are captured together.",
+    "- Open uses controlled `value=\"file\"` / `onValueChange` on both kits. Menubar is pinned near the top. Playwright `animations: \"disabled\"`.",
+    "- Identical copy: File / Edit / View / Profiles. File items: New Tab, New Window, a separator, Share, a separator, Print. No submenu, checkbox, or radio.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "menubar")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
