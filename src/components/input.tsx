@@ -43,12 +43,14 @@ const invalid = stylex.create({
       default: tokens["--input"],
       ":focus-visible": tokens["--ring"],
       '[aria-invalid="true"]': tokens["--destructive"],
+      '[aria-invalid="true"]:focus-visible': tokens["--destructive"],
     },
     boxShadow: {
       default: SHADOW_XS,
       ":focus-visible": RING_AND_SHADOW,
-      '[aria-invalid="true"]': RING_DESTRUCTIVE_AND_SHADOW,
-      ':is(.dark *)[aria-invalid="true"]': RING_DESTRUCTIVE_DARK_AND_SHADOW,
+      /* Official `aria-invalid:ring-*` only sets ring color; width is
+         `focus-visible:ring-[3px]`. Resting invalid is border + shadow-xs. */
+      '[aria-invalid="true"]': SHADOW_XS,
       '[aria-invalid="true"]:focus-visible': RING_DESTRUCTIVE_AND_SHADOW,
       ':is(.dark *)[aria-invalid="true"]:focus-visible':
         RING_DESTRUCTIVE_DARK_AND_SHADOW,

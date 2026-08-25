@@ -1,12 +1,13 @@
 {
-  "generatedAt": "2026-08-25T03:57:42.082Z",
-  "total": 66,
+  "generatedAt": "2026-08-25T04:11:24.442Z",
+  "total": 74,
   "failed": 0,
-  "passed": 66,
+  "passed": 74,
   "threshold": 0,
   "cases": [
     {
       "name": "light__default__default__default",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "default",
@@ -22,6 +23,7 @@
     },
     {
       "name": "light__default__sm__default",
+      "component": "button",
       "variant": "default",
       "size": "sm",
       "state": "default",
@@ -37,6 +39,7 @@
     },
     {
       "name": "light__default__lg__default",
+      "component": "button",
       "variant": "default",
       "size": "lg",
       "state": "default",
@@ -52,6 +55,7 @@
     },
     {
       "name": "light__default__icon__default",
+      "component": "button",
       "variant": "default",
       "size": "icon",
       "state": "default",
@@ -67,6 +71,7 @@
     },
     {
       "name": "light__destructive__default__default",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "default",
@@ -82,6 +87,7 @@
     },
     {
       "name": "light__destructive__sm__default",
+      "component": "button",
       "variant": "destructive",
       "size": "sm",
       "state": "default",
@@ -97,6 +103,7 @@
     },
     {
       "name": "light__destructive__lg__default",
+      "component": "button",
       "variant": "destructive",
       "size": "lg",
       "state": "default",
@@ -112,6 +119,7 @@
     },
     {
       "name": "light__destructive__icon__default",
+      "component": "button",
       "variant": "destructive",
       "size": "icon",
       "state": "default",
@@ -127,6 +135,7 @@
     },
     {
       "name": "light__outline__default__default",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "default",
@@ -142,6 +151,7 @@
     },
     {
       "name": "light__outline__sm__default",
+      "component": "button",
       "variant": "outline",
       "size": "sm",
       "state": "default",
@@ -157,6 +167,7 @@
     },
     {
       "name": "light__outline__lg__default",
+      "component": "button",
       "variant": "outline",
       "size": "lg",
       "state": "default",
@@ -172,6 +183,7 @@
     },
     {
       "name": "light__outline__icon__default",
+      "component": "button",
       "variant": "outline",
       "size": "icon",
       "state": "default",
@@ -187,6 +199,7 @@
     },
     {
       "name": "light__secondary__default__default",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "default",
@@ -202,6 +215,7 @@
     },
     {
       "name": "light__secondary__sm__default",
+      "component": "button",
       "variant": "secondary",
       "size": "sm",
       "state": "default",
@@ -217,6 +231,7 @@
     },
     {
       "name": "light__secondary__lg__default",
+      "component": "button",
       "variant": "secondary",
       "size": "lg",
       "state": "default",
@@ -232,6 +247,7 @@
     },
     {
       "name": "light__secondary__icon__default",
+      "component": "button",
       "variant": "secondary",
       "size": "icon",
       "state": "default",
@@ -247,6 +263,7 @@
     },
     {
       "name": "light__ghost__default__default",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "default",
@@ -262,6 +279,7 @@
     },
     {
       "name": "light__ghost__sm__default",
+      "component": "button",
       "variant": "ghost",
       "size": "sm",
       "state": "default",
@@ -277,6 +295,7 @@
     },
     {
       "name": "light__ghost__lg__default",
+      "component": "button",
       "variant": "ghost",
       "size": "lg",
       "state": "default",
@@ -292,6 +311,7 @@
     },
     {
       "name": "light__ghost__icon__default",
+      "component": "button",
       "variant": "ghost",
       "size": "icon",
       "state": "default",
@@ -307,6 +327,7 @@
     },
     {
       "name": "light__link__default__default",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "default",
@@ -322,6 +343,7 @@
     },
     {
       "name": "light__link__sm__default",
+      "component": "button",
       "variant": "link",
       "size": "sm",
       "state": "default",
@@ -337,6 +359,7 @@
     },
     {
       "name": "light__link__lg__default",
+      "component": "button",
       "variant": "link",
       "size": "lg",
       "state": "default",
@@ -352,6 +375,7 @@
     },
     {
       "name": "light__link__icon__default",
+      "component": "button",
       "variant": "link",
       "size": "icon",
       "state": "default",
@@ -367,6 +391,7 @@
     },
     {
       "name": "light__default__default__hover",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "hover",
@@ -382,6 +407,7 @@
     },
     {
       "name": "light__default__default__focus-visible",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "focus-visible",
@@ -397,6 +423,7 @@
     },
     {
       "name": "light__default__default__disabled",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "disabled",
@@ -412,6 +439,7 @@
     },
     {
       "name": "light__destructive__default__hover",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "hover",
@@ -427,6 +455,7 @@
     },
     {
       "name": "light__destructive__default__focus-visible",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "focus-visible",
@@ -442,6 +471,7 @@
     },
     {
       "name": "light__destructive__default__disabled",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "disabled",
@@ -457,6 +487,7 @@
     },
     {
       "name": "light__outline__default__hover",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "hover",
@@ -472,6 +503,7 @@
     },
     {
       "name": "light__outline__default__focus-visible",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "focus-visible",
@@ -487,6 +519,7 @@
     },
     {
       "name": "light__outline__default__disabled",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "disabled",
@@ -502,6 +535,7 @@
     },
     {
       "name": "light__secondary__default__hover",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "hover",
@@ -517,6 +551,7 @@
     },
     {
       "name": "light__secondary__default__focus-visible",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "focus-visible",
@@ -532,6 +567,7 @@
     },
     {
       "name": "light__secondary__default__disabled",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "disabled",
@@ -547,6 +583,7 @@
     },
     {
       "name": "light__ghost__default__hover",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "hover",
@@ -562,6 +599,7 @@
     },
     {
       "name": "light__ghost__default__focus-visible",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "focus-visible",
@@ -577,6 +615,7 @@
     },
     {
       "name": "light__ghost__default__disabled",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "disabled",
@@ -592,6 +631,7 @@
     },
     {
       "name": "light__link__default__hover",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "hover",
@@ -607,6 +647,7 @@
     },
     {
       "name": "light__link__default__focus-visible",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "focus-visible",
@@ -622,6 +663,7 @@
     },
     {
       "name": "light__link__default__disabled",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "disabled",
@@ -637,6 +679,7 @@
     },
     {
       "name": "dark__default__default__default",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "default",
@@ -652,6 +695,7 @@
     },
     {
       "name": "dark__default__default__hover",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "hover",
@@ -667,6 +711,7 @@
     },
     {
       "name": "dark__default__default__focus-visible",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "focus-visible",
@@ -682,6 +727,7 @@
     },
     {
       "name": "dark__default__default__disabled",
+      "component": "button",
       "variant": "default",
       "size": "default",
       "state": "disabled",
@@ -697,6 +743,7 @@
     },
     {
       "name": "dark__destructive__default__default",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "default",
@@ -712,6 +759,7 @@
     },
     {
       "name": "dark__destructive__default__hover",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "hover",
@@ -727,6 +775,7 @@
     },
     {
       "name": "dark__destructive__default__focus-visible",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "focus-visible",
@@ -742,6 +791,7 @@
     },
     {
       "name": "dark__destructive__default__disabled",
+      "component": "button",
       "variant": "destructive",
       "size": "default",
       "state": "disabled",
@@ -757,6 +807,7 @@
     },
     {
       "name": "dark__outline__default__default",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "default",
@@ -772,6 +823,7 @@
     },
     {
       "name": "dark__outline__default__hover",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "hover",
@@ -787,6 +839,7 @@
     },
     {
       "name": "dark__outline__default__focus-visible",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "focus-visible",
@@ -802,6 +855,7 @@
     },
     {
       "name": "dark__outline__default__disabled",
+      "component": "button",
       "variant": "outline",
       "size": "default",
       "state": "disabled",
@@ -817,6 +871,7 @@
     },
     {
       "name": "dark__secondary__default__default",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "default",
@@ -832,6 +887,7 @@
     },
     {
       "name": "dark__secondary__default__hover",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "hover",
@@ -847,6 +903,7 @@
     },
     {
       "name": "dark__secondary__default__focus-visible",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "focus-visible",
@@ -862,6 +919,7 @@
     },
     {
       "name": "dark__secondary__default__disabled",
+      "component": "button",
       "variant": "secondary",
       "size": "default",
       "state": "disabled",
@@ -877,6 +935,7 @@
     },
     {
       "name": "dark__ghost__default__default",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "default",
@@ -892,6 +951,7 @@
     },
     {
       "name": "dark__ghost__default__hover",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "hover",
@@ -907,6 +967,7 @@
     },
     {
       "name": "dark__ghost__default__focus-visible",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "focus-visible",
@@ -922,6 +983,7 @@
     },
     {
       "name": "dark__ghost__default__disabled",
+      "component": "button",
       "variant": "ghost",
       "size": "default",
       "state": "disabled",
@@ -937,6 +999,7 @@
     },
     {
       "name": "dark__link__default__default",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "default",
@@ -952,6 +1015,7 @@
     },
     {
       "name": "dark__link__default__hover",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "hover",
@@ -967,6 +1031,7 @@
     },
     {
       "name": "dark__link__default__focus-visible",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "focus-visible",
@@ -982,6 +1047,7 @@
     },
     {
       "name": "dark__link__default__disabled",
+      "component": "button",
       "variant": "link",
       "size": "default",
       "state": "disabled",
@@ -994,6 +1060,118 @@
       "shadcn": "visual/results/shadcn/dark__link__default__disabled.png",
       "stylex": "visual/results/stylex/dark__link__default__disabled.png",
       "diff": "visual/results/diff/dark__link__default__disabled.png"
+    },
+    {
+      "name": "input__light__default",
+      "component": "input",
+      "state": "default",
+      "theme": "light",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__light__default.png",
+      "stylex": "visual/results/stylex/input__light__default.png",
+      "diff": "visual/results/diff/input__light__default.png"
+    },
+    {
+      "name": "input__light__focus-visible",
+      "component": "input",
+      "state": "focus-visible",
+      "theme": "light",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__light__focus-visible.png",
+      "stylex": "visual/results/stylex/input__light__focus-visible.png",
+      "diff": "visual/results/diff/input__light__focus-visible.png"
+    },
+    {
+      "name": "input__light__disabled",
+      "component": "input",
+      "state": "disabled",
+      "theme": "light",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__light__disabled.png",
+      "stylex": "visual/results/stylex/input__light__disabled.png",
+      "diff": "visual/results/diff/input__light__disabled.png"
+    },
+    {
+      "name": "input__light__invalid",
+      "component": "input",
+      "state": "invalid",
+      "theme": "light",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__light__invalid.png",
+      "stylex": "visual/results/stylex/input__light__invalid.png",
+      "diff": "visual/results/diff/input__light__invalid.png"
+    },
+    {
+      "name": "input__dark__default",
+      "component": "input",
+      "state": "default",
+      "theme": "dark",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__dark__default.png",
+      "stylex": "visual/results/stylex/input__dark__default.png",
+      "diff": "visual/results/diff/input__dark__default.png"
+    },
+    {
+      "name": "input__dark__focus-visible",
+      "component": "input",
+      "state": "focus-visible",
+      "theme": "dark",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__dark__focus-visible.png",
+      "stylex": "visual/results/stylex/input__dark__focus-visible.png",
+      "diff": "visual/results/diff/input__dark__focus-visible.png"
+    },
+    {
+      "name": "input__dark__disabled",
+      "component": "input",
+      "state": "disabled",
+      "theme": "dark",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__dark__disabled.png",
+      "stylex": "visual/results/stylex/input__dark__disabled.png",
+      "diff": "visual/results/diff/input__dark__disabled.png"
+    },
+    {
+      "name": "input__dark__invalid",
+      "component": "input",
+      "state": "invalid",
+      "theme": "dark",
+      "width": 288,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 19584,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/input__dark__invalid.png",
+      "stylex": "visual/results/stylex/input__dark__invalid.png",
+      "diff": "visual/results/diff/input__dark__invalid.png"
     }
   ]
 }
