@@ -80,6 +80,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "../components/tabs";
+import { Skeleton, type SkeletonRadius } from "../components/skeleton";
 import { Textarea } from "../components/textarea";
 import {
   Tooltip,
@@ -151,6 +152,7 @@ import {
   OfficialSheetHeader,
   OfficialSheetTitle,
 } from "./official-sheet";
+import { OfficialSkeleton } from "./official-skeleton";
 import { OfficialSwitch } from "./official-switch";
 import {
   OfficialTabs,
@@ -222,7 +224,8 @@ export type CaptureComponent =
   | "popover"
   | "tooltip"
   | "badge"
-  | "separator";
+  | "separator"
+  | "skeleton";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -242,7 +245,9 @@ export type CaptureState =
   | "bottom"
   | "second"
   | "horizontal"
-  | "vertical";
+  | "vertical"
+  | "bar"
+  | "circle";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -381,6 +386,13 @@ export type SeparatorCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SkeletonCaptureParams = {
+  component: "skeleton";
+  kit: CaptureKit;
+  state: "bar" | "circle";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -399,7 +411,8 @@ export type CaptureParams =
   | PopoverCaptureParams
   | TooltipCaptureParams
   | BadgeCaptureParams
-  | SeparatorCaptureParams;
+  | SeparatorCaptureParams
+  | SkeletonCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -458,6 +471,16 @@ const styles = stylex.create({
     width: "3rem",
     display: "flex",
     justifyContent: "center",
+  },
+  /* Identical boxes on both kits. Size is not a Skeleton API; official uses
+     caller className and StyleX fills the parent. */
+  skeletonBar: {
+    width: 250,
+    height: 16,
+  },
+  skeletonCircle: {
+    width: 40,
+    height: 40,
   },
 });
 
@@ -1345,6 +1368,34 @@ function SeparatorHarness({ kit, state, theme }: SeparatorCaptureParams) {
   );
 }
 
+function SkeletonHarness({ kit, state, theme }: SkeletonCaptureParams) {
+  const isDark = theme === "dark";
+  const isCircle = state === "circle";
+  const radius: SkeletonRadius = isCircle ? "full" : "md";
+  const box = isCircle ? styles.skeletonCircle : styles.skeletonBar;
+  const officialClassName = isCircle ? "size-full rounded-full" : "size-full";
+
+  const skeleton =
+    kit === "shadcn" ? (
+      <OfficialSkeleton className={officialClassName} />
+    ) : (
+      <Skeleton radius={radius} />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="skeleton"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(box)}>{skeleton}</div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1426,6 +1477,10 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "separator") {
     return <SeparatorHarness {...params} />;
+  }
+  if (params.component === "skeleton") {
+    return <SkeletonHarness {...params} />;
+  }
   }
   return <ButtonHarness {...params} />;
 }
@@ -1604,6 +1659,14 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "separator", kit, state, theme };
+  }
+
+  if (component === "skeleton") {
+    if (state !== "bar" && state !== "circle") {
+      return null;
+    }
+    return { component: "skeleton", kit, state, theme };
+  }
   }
 
   if (component !== "button") return null;

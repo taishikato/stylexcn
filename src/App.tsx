@@ -76,6 +76,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "./components/sheet";
+import { Skeleton } from "./components/skeleton";
 import { Switch } from "./components/switch";
 import {
   Tabs,
@@ -105,6 +106,7 @@ import {
 } from "./visual/official-alert-dialog";
 import { OfficialBadge } from "./visual/official-badge";
 import { OfficialSeparator } from "./visual/official-separator";
+import { OfficialSkeleton } from "./visual/official-skeleton";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -239,6 +241,14 @@ const styles = stylex.create({
   cardWell: {
     width: "20rem",
   },
+  skeletonBar: {
+    width: 250,
+    height: 16,
+  },
+  skeletonCircle: {
+    width: 40,
+    height: 40,
+  },
 });
 
 function Playground() {
@@ -248,8 +258,9 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, Tooltip, Badge, and Separator vs official shadcn New York
-        baseline. Visual capture lives at query-param harness URLs (see README).
+        Popover, Tooltip, Badge, Separator, and Skeleton vs official shadcn New
+        York baseline. Visual capture lives at query-param harness URLs (see
+        README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -766,6 +777,7 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         ))}
       </div>
       <h2 {...stylex.props(styles.heading)}>
+      <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Separator
       </h2>
       <div {...stylex.props(styles.row)}>
@@ -789,6 +801,30 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>vertical</span>
         <div {...stylex.props(styles.separatorVerticalWell)}>
           <OfficialSeparator orientation="vertical" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Skeleton
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.skeletonBar)}>
+          <Skeleton />
+        </div>
+        <div {...stylex.props(styles.skeletonCircle)}>
+          <Skeleton radius="full" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Skeleton
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.skeletonBar)}>
+          <OfficialSkeleton className="size-full" />
+        </div>
+        <div {...stylex.props(styles.skeletonCircle)}>
+          <OfficialSkeleton className="size-full rounded-full" />
         </div>
       </div>
     </div>

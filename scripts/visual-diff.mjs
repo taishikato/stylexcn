@@ -67,6 +67,7 @@ const BADGE_VARIANTS = [
   "link",
 ];
 const SEPARATOR_STATES = ["horizontal", "vertical"];
+const SKELETON_STATES = ["bar", "circle"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -361,6 +362,20 @@ function separatorCases() {
   return list;
 }
 
+function skeletonCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SKELETON_STATES) {
+      list.push({
+        component: "skeleton",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -381,6 +396,7 @@ function cases() {
     ...tooltipCases(),
     ...badgeCases(),
     ...separatorCases(),
+    ...skeletonCases(),
   ];
 }
 
@@ -437,6 +453,10 @@ function slug(c) {
   if (c.component === "separator") {
     return `separator__${c.theme}__${c.state}`;
   }
+  if (c.component === "skeleton") {
+    return `skeleton__${c.theme}__${c.state}`;
+  }
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -466,7 +486,8 @@ function urlFor(kit, c) {
     c.component !== "popover" &&
     c.component !== "tooltip" &&
     c.component !== "badge" &&
-    c.component !== "separator"
+    c.component !== "separator" &&
+    c.component !== "skeleton"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -569,6 +590,10 @@ function controlLocator(page, c) {
       return page.locator("[data-separator-well]");
     }
     return page.locator('[data-slot="separator"]');
+  }
+  if (c.component === "skeleton") {
+    return page.locator('[data-slot="skeleton"]');
+  }
   }
   return page.getByRole("button");
 }
@@ -792,7 +817,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -821,7 +846,8 @@ async function main() {
           r.component !== "popover" &&
           r.component !== "tooltip" &&
           r.component !== "badge" &&
-          r.component !== "separator",
+          r.component !== "separator" &&
+          r.component !== "skeleton",
       )
       .map(
         (r) =>
@@ -1041,6 +1067,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "separator")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Skeleton",
+    "",
+    "- Official has no built-in size; both kits fill an identical parent (`bar` 250×16, `circle` 40×40).",
+    "- Circle uses official `rounded-full` vs StyleX `radius=\"full\"`. `animate-pulse` stays on the official baseline; Playwright `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "skeleton")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
