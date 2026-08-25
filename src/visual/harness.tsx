@@ -1,5 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect } from "react";
+import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+} from "../components/avatar";
 import { Badge, type BadgeVariant } from "../components/badge";
 import { Separator } from "../components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
@@ -89,6 +96,13 @@ import {
   TooltipTrigger,
 } from "../components/tooltip";
 import { darkTheme } from "../theme";
+import {
+  OfficialAvatar,
+  OfficialAvatarBadge,
+  OfficialAvatarFallback,
+  OfficialAvatarGroup,
+  OfficialAvatarGroupCount,
+} from "./official-avatar";
 import { OfficialBadge } from "./official-badge";
 import { OfficialSeparator } from "./official-separator";
 import { OfficialButton } from "./official-button";
@@ -225,7 +239,8 @@ export type CaptureComponent =
   | "tooltip"
   | "badge"
   | "separator"
-  | "skeleton";
+  | "skeleton"
+  | "avatar";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -247,7 +262,9 @@ export type CaptureState =
   | "horizontal"
   | "vertical"
   | "bar"
-  | "circle";
+  | "circle"
+  | "badge"
+  | "group";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -393,6 +410,13 @@ export type SkeletonCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type AvatarCaptureParams = {
+  component: "avatar";
+  kit: CaptureKit;
+  state: "default" | "sm" | "lg" | "badge" | "group";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -412,7 +436,8 @@ export type CaptureParams =
   | TooltipCaptureParams
   | BadgeCaptureParams
   | SeparatorCaptureParams
-  | SkeletonCaptureParams;
+  | SkeletonCaptureParams
+  | AvatarCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1396,6 +1421,76 @@ function SkeletonHarness({ kit, state, theme }: SkeletonCaptureParams) {
   );
 }
 
+const AVATAR_INITIALS = "CN";
+const AVATAR_INITIALS_B = "LR";
+const AVATAR_GROUP_COUNT = "2";
+
+function avatarSizeFor(
+  state: AvatarCaptureParams["state"],
+): "default" | "sm" | "lg" {
+  if (state === "sm" || state === "lg") return state;
+  return "default";
+}
+
+function AvatarHarness({ kit, state, theme }: AvatarCaptureParams) {
+  const isDark = theme === "dark";
+  const size = avatarSizeFor(state);
+  const showBadge = state === "badge";
+  const showGroup = state === "group";
+
+  let body;
+  if (showGroup) {
+    body =
+      kit === "shadcn" ? (
+        <OfficialAvatarGroup>
+          <OfficialAvatar>
+            <OfficialAvatarFallback>{AVATAR_INITIALS}</OfficialAvatarFallback>
+          </OfficialAvatar>
+          <OfficialAvatar>
+            <OfficialAvatarFallback>{AVATAR_INITIALS_B}</OfficialAvatarFallback>
+          </OfficialAvatar>
+          <OfficialAvatarGroupCount>{AVATAR_GROUP_COUNT}</OfficialAvatarGroupCount>
+        </OfficialAvatarGroup>
+      ) : (
+        <AvatarGroup>
+          <Avatar>
+            <AvatarFallback>{AVATAR_INITIALS}</AvatarFallback>
+          </Avatar>
+          <Avatar>
+            <AvatarFallback>{AVATAR_INITIALS_B}</AvatarFallback>
+          </Avatar>
+          <AvatarGroupCount>{AVATAR_GROUP_COUNT}</AvatarGroupCount>
+        </AvatarGroup>
+      );
+  } else {
+    body =
+      kit === "shadcn" ? (
+        <OfficialAvatar size={size}>
+          <OfficialAvatarFallback>{AVATAR_INITIALS}</OfficialAvatarFallback>
+          {showBadge ? <OfficialAvatarBadge /> : null}
+        </OfficialAvatar>
+      ) : (
+        <Avatar size={size}>
+          <AvatarFallback>{AVATAR_INITIALS}</AvatarFallback>
+          {showBadge ? <AvatarBadge /> : null}
+        </Avatar>
+      );
+  }
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="avatar"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {body}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1480,6 +1575,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "skeleton") {
     return <SkeletonHarness {...params} />;
+  }
+  if (params.component === "avatar") {
+    return <AvatarHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1665,6 +1763,19 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "skeleton", kit, state, theme };
+  }
+
+  if (component === "avatar") {
+    if (
+      state !== "default" &&
+      state !== "sm" &&
+      state !== "lg" &&
+      state !== "badge" &&
+      state !== "group"
+    ) {
+      return null;
+    }
+    return { component: "avatar", kit, state, theme };
   }
 
   if (component !== "button") return null;

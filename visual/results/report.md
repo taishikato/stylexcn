@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar)
 
-- Passed: 182/182
+- Passed: 192/192
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -314,3 +314,21 @@
 | `skeleton__light__circle` | PASS | 0/5184 |
 | `skeleton__dark__bar` | PASS | 0/13536 |
 | `skeleton__dark__circle` | PASS | 0/5184 |
+
+## Avatar
+
+- Crops `[data-slot="avatar"]` (or `[data-slot="avatar-group"]` for `group`) with 16px pad. Fallback initials only (no network images).
+- States: `default` / `sm` / `lg` fallbacks, `badge` (empty AvatarBadge on default), `group` (two fallbacks + count).
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `avatar__light__default` | PASS | 0/4096 |
+| `avatar__light__sm` | PASS | 0/3136 |
+| `avatar__light__lg` | PASS | 0/5184 |
+| `avatar__light__badge` | PASS | 0/4096 |
+| `avatar__light__group` | PASS | 0/7168 |
+| `avatar__dark__default` | PASS | 0/4096 |
+| `avatar__dark__sm` | PASS | 0/3136 |
+| `avatar__dark__lg` | PASS | 0/5184 |
+| `avatar__dark__badge` | PASS | 0/4096 |
+| `avatar__dark__group` | PASS | 0/7168 |

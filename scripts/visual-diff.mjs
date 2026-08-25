@@ -68,6 +68,7 @@ const BADGE_VARIANTS = [
 ];
 const SEPARATOR_STATES = ["horizontal", "vertical"];
 const SKELETON_STATES = ["bar", "circle"];
+const AVATAR_STATES = ["default", "sm", "lg", "badge", "group"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -376,6 +377,20 @@ function skeletonCases() {
   return list;
 }
 
+function avatarCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of AVATAR_STATES) {
+      list.push({
+        component: "avatar",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -397,6 +412,7 @@ function cases() {
     ...badgeCases(),
     ...separatorCases(),
     ...skeletonCases(),
+    ...avatarCases(),
   ];
 }
 
@@ -456,6 +472,9 @@ function slug(c) {
   if (c.component === "skeleton") {
     return `skeleton__${c.theme}__${c.state}`;
   }
+  if (c.component === "avatar") {
+    return `avatar__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -486,7 +505,8 @@ function urlFor(kit, c) {
     c.component !== "tooltip" &&
     c.component !== "badge" &&
     c.component !== "separator" &&
-    c.component !== "skeleton"
+    c.component !== "skeleton" &&
+    c.component !== "avatar"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -592,6 +612,12 @@ function controlLocator(page, c) {
   }
   if (c.component === "skeleton") {
     return page.locator('[data-slot="skeleton"]');
+  }
+  if (c.component === "avatar") {
+    if (c.state === "group") {
+      return page.locator('[data-slot="avatar-group"]');
+    }
+    return page.locator('[data-slot="avatar"]');
   }
   return page.getByRole("button");
 }
@@ -815,7 +841,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -845,7 +871,8 @@ async function main() {
           r.component !== "tooltip" &&
           r.component !== "badge" &&
           r.component !== "separator" &&
-          r.component !== "skeleton",
+          r.component !== "skeleton" &&
+          r.component !== "avatar",
       )
       .map(
         (r) =>
@@ -1079,6 +1106,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "skeleton")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Avatar",
+    "",
+    "- Crops `[data-slot=\"avatar\"]` (or `[data-slot=\"avatar-group\"]` for `group`) with 16px pad. Fallback initials only (no network images).",
+    "- States: `default` / `sm` / `lg` fallbacks, `badge` (empty AvatarBadge on default), `group` (two fallbacks + count).",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "avatar")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

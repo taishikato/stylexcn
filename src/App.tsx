@@ -1,6 +1,13 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useState } from "react";
 import {
+  Avatar,
+  AvatarBadge,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+} from "./components/avatar";
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -93,6 +100,13 @@ import {
 } from "./components/tooltip";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, BADGE_VARIANTS, SIZES, VARIANTS } from "./visual/harness";
+import {
+  OfficialAvatar,
+  OfficialAvatarBadge,
+  OfficialAvatarFallback,
+  OfficialAvatarGroup,
+  OfficialAvatarGroupCount,
+} from "./visual/official-avatar";
 import {
   OfficialAlertDialog,
   OfficialAlertDialogAction,
@@ -258,7 +272,8 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, Tooltip, Badge, Separator, and Skeleton vs official shadcn New
+        Popover, Tooltip, Badge, Separator, Skeleton, and Avatar vs official
+        shadcn New
         York baseline. Visual capture lives at query-param harness URLs (see
         README).
       </p>
@@ -825,6 +840,62 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <div {...stylex.props(styles.skeletonCircle)}>
           <OfficialSkeleton className="size-full rounded-full" />
         </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Avatar
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <Avatar>
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <Avatar size="sm">
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <Avatar size="lg">
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+        <Avatar>
+          <AvatarFallback>CN</AvatarFallback>
+          <AvatarBadge />
+        </Avatar>
+        <AvatarGroup>
+          <Avatar>
+            <AvatarFallback>CN</AvatarFallback>
+          </Avatar>
+          <Avatar>
+            <AvatarFallback>LR</AvatarFallback>
+          </Avatar>
+          <AvatarGroupCount>2</AvatarGroupCount>
+        </AvatarGroup>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Avatar
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <OfficialAvatar>
+          <OfficialAvatarFallback>CN</OfficialAvatarFallback>
+        </OfficialAvatar>
+        <OfficialAvatar size="sm">
+          <OfficialAvatarFallback>CN</OfficialAvatarFallback>
+        </OfficialAvatar>
+        <OfficialAvatar size="lg">
+          <OfficialAvatarFallback>CN</OfficialAvatarFallback>
+        </OfficialAvatar>
+        <OfficialAvatar>
+          <OfficialAvatarFallback>CN</OfficialAvatarFallback>
+          <OfficialAvatarBadge />
+        </OfficialAvatar>
+        <OfficialAvatarGroup>
+          <OfficialAvatar>
+            <OfficialAvatarFallback>CN</OfficialAvatarFallback>
+          </OfficialAvatar>
+          <OfficialAvatar>
+            <OfficialAvatarFallback>LR</OfficialAvatarFallback>
+          </OfficialAvatar>
+          <OfficialAvatarGroupCount>2</OfficialAvatarGroupCount>
+        </OfficialAvatarGroup>
       </div>
     </div>
   );
