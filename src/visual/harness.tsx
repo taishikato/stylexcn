@@ -23,6 +23,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "../components/breadcrumb";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../components/collapsible";
 import { Separator } from "../components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
@@ -142,6 +147,11 @@ import {
   OfficialBreadcrumbPage,
   OfficialBreadcrumbSeparator,
 } from "./official-breadcrumb";
+import {
+  OfficialCollapsible,
+  OfficialCollapsibleContent,
+  OfficialCollapsibleTrigger,
+} from "./official-collapsible";
 import { OfficialSeparator } from "./official-separator";
 import { OfficialButton } from "./official-button";
 import {
@@ -292,7 +302,8 @@ export type CaptureComponent =
   | "accordion"
   | "slider"
   | "toggle"
-  | "breadcrumb";
+  | "breadcrumb"
+  | "collapsible";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -526,6 +537,13 @@ export type BreadcrumbCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type CollapsibleCaptureParams = {
+  component: "collapsible";
+  kit: CaptureKit;
+  state: "open" | "closed";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -552,7 +570,8 @@ export type CaptureParams =
   | AccordionCaptureParams
   | SliderCaptureParams
   | ToggleCaptureParams
-  | BreadcrumbCaptureParams;
+  | BreadcrumbCaptureParams
+  | CollapsibleCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -635,6 +654,10 @@ const styles = stylex.create({
   /* Wide enough that flex-wrap does not split the trail differently. */
   breadcrumbWell: {
     width: "24rem",
+  },
+  /* Identical width on both kits so trigger + open copy wrap the same. */
+  collapsibleWell: {
+    width: "20rem",
   },
 });
 
@@ -1943,6 +1966,47 @@ function BreadcrumbHarness({ kit, state, theme }: BreadcrumbCaptureParams) {
   );
 }
 
+const COLLAPSIBLE_TRIGGER = "Can I use this?";
+const COLLAPSIBLE_BODY =
+  "Yes. Free to use for personal and commercial projects. No attribution required.";
+
+function CollapsibleHarness({ kit, state, theme }: CollapsibleCaptureParams) {
+  const isDark = theme === "dark";
+  const open = state === "open";
+
+  const collapsible =
+    kit === "shadcn" ? (
+      <OfficialCollapsible open={open} onOpenChange={() => {}}>
+        <OfficialCollapsibleTrigger asChild>
+          <OfficialButton variant="outline">{COLLAPSIBLE_TRIGGER}</OfficialButton>
+        </OfficialCollapsibleTrigger>
+        <OfficialCollapsibleContent>
+          {COLLAPSIBLE_BODY}
+        </OfficialCollapsibleContent>
+      </OfficialCollapsible>
+    ) : (
+      <Collapsible open={open} onOpenChange={() => {}}>
+        <CollapsibleTrigger asChild>
+          <Button variant="outline">{COLLAPSIBLE_TRIGGER}</Button>
+        </CollapsibleTrigger>
+        <CollapsibleContent>{COLLAPSIBLE_BODY}</CollapsibleContent>
+      </Collapsible>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="collapsible"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.collapsibleWell)}>{collapsible}</div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -2048,6 +2112,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "breadcrumb") {
     return <BreadcrumbHarness {...params} />;
+  }
+  if (params.component === "collapsible") {
+    return <CollapsibleHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2301,6 +2368,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "breadcrumb", kit, state, theme };
+  }
+
+  if (component === "collapsible") {
+    if (state !== "open" && state !== "closed") {
+      return null;
+    }
+    return { component: "collapsible", kit, state, theme };
   }
 
   if (component !== "button") return null;
