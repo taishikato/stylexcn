@@ -152,6 +152,16 @@ import {
   MenubarTrigger,
 } from "../components/menubar";
 import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/table";
+import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -291,6 +301,16 @@ import {
   OfficialMenubarTrigger,
 } from "./official-menubar";
 import {
+  OfficialTable,
+  OfficialTableBody,
+  OfficialTableCaption,
+  OfficialTableCell,
+  OfficialTableFooter,
+  OfficialTableHead,
+  OfficialTableHeader,
+  OfficialTableRow,
+} from "./official-table";
+import {
   OfficialTabs,
   OfficialTabsContent,
   OfficialTabsList,
@@ -384,7 +404,8 @@ export type CaptureComponent =
   | "alert"
   | "toggle-group"
   | "menubar"
-  | "aspect-ratio";
+  | "aspect-ratio"
+  | "table";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -417,7 +438,8 @@ export type CaptureState =
   | "outline"
   | "lg"
   | "ellipsis"
-  | "with-icon";
+  | "with-icon"
+  | "with-footer";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -675,6 +697,13 @@ export type AspectRatioCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type TableCaptureParams = {
+  component: "table";
+  kit: CaptureKit;
+  state: "default" | "with-footer";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -709,7 +738,8 @@ export type CaptureParams =
   | AlertCaptureParams
   | ToggleGroupCaptureParams
   | MenubarCaptureParams
-  | AspectRatioCaptureParams;
+  | AspectRatioCaptureParams
+  | TableCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -852,6 +882,10 @@ const styles = stylex.create({
     width: "100%",
     height: "100%",
     backgroundColor: tokens["--muted"],
+  },
+  /* Identical 32rem parent on both kits so w-full matches. */
+  tableWell: {
+    width: "32rem",
   },
 });
 
@@ -2585,6 +2619,130 @@ function toggleGroupSizeFor(
   return "default";
 }
 
+const TABLE_INVOICES = [
+  {
+    invoice: "INV001",
+    status: "Paid",
+    method: "Credit Card",
+    amount: "$250.00",
+  },
+  {
+    invoice: "INV002",
+    status: "Pending",
+    method: "PayPal",
+    amount: "$150.00",
+  },
+  {
+    invoice: "INV003",
+    status: "Unpaid",
+    method: "Bank Transfer",
+    amount: "$350.00",
+  },
+] as const;
+const TABLE_CAPTION = "A list of your recent invoices.";
+const TABLE_TOTAL = "$750.00";
+
+function InvoiceTable({
+  kit,
+  withFooter,
+}: {
+  kit: CaptureKit;
+  withFooter: boolean;
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialTable>
+        {withFooter ? (
+          <OfficialTableCaption>{TABLE_CAPTION}</OfficialTableCaption>
+        ) : null}
+        <OfficialTableHeader>
+          <OfficialTableRow>
+            <OfficialTableHead>Invoice</OfficialTableHead>
+            <OfficialTableHead>Status</OfficialTableHead>
+            <OfficialTableHead>Method</OfficialTableHead>
+            <OfficialTableHead className="text-right">Amount</OfficialTableHead>
+          </OfficialTableRow>
+        </OfficialTableHeader>
+        <OfficialTableBody>
+          {TABLE_INVOICES.map((row) => (
+            <OfficialTableRow key={row.invoice}>
+              <OfficialTableCell className="font-medium">
+                {row.invoice}
+              </OfficialTableCell>
+              <OfficialTableCell>{row.status}</OfficialTableCell>
+              <OfficialTableCell>{row.method}</OfficialTableCell>
+              <OfficialTableCell className="text-right">
+                {row.amount}
+              </OfficialTableCell>
+            </OfficialTableRow>
+          ))}
+        </OfficialTableBody>
+        {withFooter ? (
+          <OfficialTableFooter>
+            <OfficialTableRow>
+              <OfficialTableCell colSpan={3}>Total</OfficialTableCell>
+              <OfficialTableCell className="text-right">
+                {TABLE_TOTAL}
+              </OfficialTableCell>
+            </OfficialTableRow>
+          </OfficialTableFooter>
+        ) : null}
+      </OfficialTable>
+    );
+  }
+
+  return (
+    <Table>
+      {withFooter ? <TableCaption>{TABLE_CAPTION}</TableCaption> : null}
+      <TableHeader>
+        <TableRow>
+          <TableHead>Invoice</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Method</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {TABLE_INVOICES.map((row) => (
+          <TableRow key={row.invoice}>
+            <TableCell className="font-medium">{row.invoice}</TableCell>
+            <TableCell>{row.status}</TableCell>
+            <TableCell>{row.method}</TableCell>
+            <TableCell className="text-right">{row.amount}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+      {withFooter ? (
+        <TableFooter>
+          <TableRow>
+            <TableCell colSpan={3}>Total</TableCell>
+            <TableCell className="text-right">{TABLE_TOTAL}</TableCell>
+          </TableRow>
+        </TableFooter>
+      ) : null}
+    </Table>
+  );
+}
+
+function TableHarness({ kit, state, theme }: TableCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="table"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.tableWell)}>
+        <InvoiceTable kit={kit} withFooter={state === "with-footer"} />
+      </div>
+    </div>
+  );
+}
+
 function ToggleGroupHarness({ kit, state, theme }: ToggleGroupCaptureParams) {
   const isDark = theme === "dark";
   const variant = toggleGroupVariantFor(state);
@@ -2899,6 +3057,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "aspect-ratio") {
     return <AspectRatioHarness {...params} />;
+  }
+  if (params.component === "table") {
+    return <TableHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -3217,6 +3378,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "aspect-ratio", kit, state, theme };
+  }
+
+  if (component === "table") {
+    if (state !== "default" && state !== "with-footer") {
+      return null;
+    }
+    return { component: "table", kit, state, theme };
   }
 
   if (component !== "button") return null;
