@@ -25,6 +25,15 @@ import {
   AlertDialogTrigger,
 } from "./components/alert-dialog";
 import { Badge, type BadgeVariant } from "./components/badge";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "./components/breadcrumb";
 import { Separator } from "./components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
@@ -139,6 +148,15 @@ import {
   OfficialAlertDialogTrigger,
 } from "./visual/official-alert-dialog";
 import { OfficialBadge } from "./visual/official-badge";
+import {
+  OfficialBreadcrumb,
+  OfficialBreadcrumbEllipsis,
+  OfficialBreadcrumbItem,
+  OfficialBreadcrumbLink,
+  OfficialBreadcrumbList,
+  OfficialBreadcrumbPage,
+  OfficialBreadcrumbSeparator,
+} from "./visual/official-breadcrumb";
 import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialSkeleton } from "./visual/official-skeleton";
 import { OfficialSlider } from "./visual/official-slider";
@@ -300,6 +318,9 @@ const styles = stylex.create({
   sliderWell: {
     width: "16rem",
   },
+  breadcrumbWell: {
+    width: "24rem",
+  },
 });
 
 function Playground() {
@@ -310,8 +331,9 @@ function Playground() {
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
-        Progress, Accordion, Slider, and Toggle vs official shadcn New York
-        baseline. Visual capture lives at query-param harness URLs (see README).
+        Progress, Accordion, Slider, Toggle, and Breadcrumb vs official
+        shadcn New York baseline. Visual capture lives at query-param
+        harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1073,6 +1095,32 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           Italic
         </OfficialToggle>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Breadcrumb
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.breadcrumbWell)}>
+          <PlaygroundBreadcrumb kit="stylex" ellipsis={false} />
+        </div>
+        <span {...stylex.props(styles.label)}>ellipsis</span>
+        <div {...stylex.props(styles.breadcrumbWell)}>
+          <PlaygroundBreadcrumb kit="stylex" ellipsis />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Breadcrumb
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.breadcrumbWell)}>
+          <PlaygroundBreadcrumb kit="shadcn" ellipsis={false} />
+        </div>
+        <span {...stylex.props(styles.label)}>ellipsis</span>
+        <div {...stylex.props(styles.breadcrumbWell)}>
+          <PlaygroundBreadcrumb kit="shadcn" ellipsis />
+        </div>
+      </div>
     </div>
   );
 }
@@ -1413,6 +1461,68 @@ function PlaygroundDropdownMenu({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function PlaygroundBreadcrumb({
+  kit,
+  ellipsis,
+}: {
+  kit: "stylex" | "shadcn";
+  ellipsis: boolean;
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialBreadcrumb>
+        <OfficialBreadcrumbList>
+          <OfficialBreadcrumbItem>
+            <OfficialBreadcrumbLink href="#">Home</OfficialBreadcrumbLink>
+          </OfficialBreadcrumbItem>
+          <OfficialBreadcrumbSeparator />
+          {ellipsis ? (
+            <>
+              <OfficialBreadcrumbItem>
+                <OfficialBreadcrumbEllipsis />
+              </OfficialBreadcrumbItem>
+              <OfficialBreadcrumbSeparator />
+            </>
+          ) : null}
+          <OfficialBreadcrumbItem>
+            <OfficialBreadcrumbLink href="#">Components</OfficialBreadcrumbLink>
+          </OfficialBreadcrumbItem>
+          <OfficialBreadcrumbSeparator />
+          <OfficialBreadcrumbItem>
+            <OfficialBreadcrumbPage>Breadcrumb</OfficialBreadcrumbPage>
+          </OfficialBreadcrumbItem>
+        </OfficialBreadcrumbList>
+      </OfficialBreadcrumb>
+    );
+  }
+
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">Home</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        {ellipsis ? (
+          <>
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+          </>
+        ) : null}
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">Components</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>Breadcrumb</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
   );
 }
 

@@ -82,6 +82,7 @@ const TOGGLE_STATES = [
   "disabled",
   "focus-visible",
 ];
+const BREADCRUMB_STATES = ["default", "ellipsis"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -100,6 +101,8 @@ const HOVER_CARD_VIEWPORT = { width: 640, height: 480 };
 const TOOLTIP_VIEWPORT = { width: 480, height: 320 };
 const CARD_VIEWPORT = { width: 400, height: 480 };
 const ACCORDION_VIEWPORT = { width: 400, height: 480 };
+/* 24rem well + 16px crop pad on each side must stay inside the viewport. */
+const BREADCRUMB_VIEWPORT = { width: 480, height: 200 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -477,6 +480,20 @@ function toggleCases() {
   return list;
 }
 
+function breadcrumbCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of BREADCRUMB_STATES) {
+      list.push({
+        component: "breadcrumb",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -504,6 +521,7 @@ function cases() {
     ...accordionCases(),
     ...sliderCases(),
     ...toggleCases(),
+    ...breadcrumbCases(),
   ];
 }
 
@@ -581,6 +599,9 @@ function slug(c) {
   if (c.component === "toggle") {
     return `toggle__${c.theme}__${c.state}`;
   }
+  if (c.component === "breadcrumb") {
+    return `breadcrumb__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -617,7 +638,8 @@ function urlFor(kit, c) {
     c.component !== "progress" &&
     c.component !== "accordion" &&
     c.component !== "slider" &&
-    c.component !== "toggle"
+    c.component !== "toggle" &&
+    c.component !== "breadcrumb"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -744,6 +766,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "toggle") {
     return page.locator('[data-slot="toggle"]');
+  }
+  if (c.component === "breadcrumb") {
+    return page.locator('[data-slot="breadcrumb"]');
   }
   return page.getByRole("button");
 }
@@ -942,6 +967,8 @@ async function main() {
                   ? CARD_VIEWPORT
                   : c.component === "accordion"
                     ? ACCORDION_VIEWPORT
+                  : c.component === "breadcrumb"
+                    ? BREADCRUMB_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -991,7 +1018,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1027,7 +1054,8 @@ async function main() {
           r.component !== "progress" &&
           r.component !== "accordion" &&
           r.component !== "slider" &&
-          r.component !== "toggle",
+          r.component !== "toggle" &&
+          r.component !== "breadcrumb",
       )
       .map(
         (r) =>
@@ -1349,6 +1377,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "toggle")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Breadcrumb",
+    "",
+    "- Crops `[data-slot=\"breadcrumb\"]` with 16px pad inside a 24rem-wide parent so `flex-wrap` does not split the trail differently on the two kits.",
+    "- Identical copy: `default` is Home / Components / Breadcrumb (last is BreadcrumbPage); `ellipsis` inserts BreadcrumbEllipsis between Home and Components.",
+    "- Viewport: 480×200 so the 24rem well plus pad stays on-screen. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "breadcrumb")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
