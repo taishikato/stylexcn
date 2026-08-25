@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T18:20:02.062Z",
-  "total": 198,
+  "generatedAt": "2026-08-25T18:38:09.597Z",
+  "total": 204,
   "failed": 0,
-  "passed": 198,
+  "passed": 204,
   "threshold": 0,
   "cases": [
     {
@@ -2922,6 +2922,90 @@
       "shadcn": "visual/results/shadcn/progress__dark__full.png",
       "stylex": "visual/results/stylex/progress__dark__full.png",
       "diff": "visual/results/diff/progress__dark__full.png"
+    },
+    {
+      "name": "accordion__light__open",
+      "component": "accordion",
+      "state": "open",
+      "theme": "light",
+      "width": 352,
+      "height": 173,
+      "mismatched": 0,
+      "pixels": 60896,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/accordion__light__open.png",
+      "stylex": "visual/results/stylex/accordion__light__open.png",
+      "diff": "visual/results/diff/accordion__light__open.png"
+    },
+    {
+      "name": "accordion__light__second",
+      "component": "accordion",
+      "state": "second",
+      "theme": "light",
+      "width": 352,
+      "height": 193,
+      "mismatched": 0,
+      "pixels": 67936,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/accordion__light__second.png",
+      "stylex": "visual/results/stylex/accordion__light__second.png",
+      "diff": "visual/results/diff/accordion__light__second.png"
+    },
+    {
+      "name": "accordion__light__closed",
+      "component": "accordion",
+      "state": "closed",
+      "theme": "light",
+      "width": 352,
+      "height": 137,
+      "mismatched": 0,
+      "pixels": 48224,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/accordion__light__closed.png",
+      "stylex": "visual/results/stylex/accordion__light__closed.png",
+      "diff": "visual/results/diff/accordion__light__closed.png"
+    },
+    {
+      "name": "accordion__dark__open",
+      "component": "accordion",
+      "state": "open",
+      "theme": "dark",
+      "width": 352,
+      "height": 173,
+      "mismatched": 0,
+      "pixels": 60896,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/accordion__dark__open.png",
+      "stylex": "visual/results/stylex/accordion__dark__open.png",
+      "diff": "visual/results/diff/accordion__dark__open.png"
+    },
+    {
+      "name": "accordion__dark__second",
+      "component": "accordion",
+      "state": "second",
+      "theme": "dark",
+      "width": 352,
+      "height": 193,
+      "mismatched": 0,
+      "pixels": 67936,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/accordion__dark__second.png",
+      "stylex": "visual/results/stylex/accordion__dark__second.png",
+      "diff": "visual/results/diff/accordion__dark__second.png"
+    },
+    {
+      "name": "accordion__dark__closed",
+      "component": "accordion",
+      "state": "closed",
+      "theme": "dark",
+      "width": 352,
+      "height": 137,
+      "mismatched": 0,
+      "pixels": 48224,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/accordion__dark__closed.png",
+      "stylex": "visual/results/stylex/accordion__dark__closed.png",
+      "diff": "visual/results/diff/accordion__dark__closed.png"
     }
   ]
 }

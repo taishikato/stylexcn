@@ -1,6 +1,6 @@
 # Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion)
 
-- Passed: 198/198
+- Passed: 204/204
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -333,7 +333,7 @@
 | `avatar__dark__badge` | PASS | 0/4096 |
 | `avatar__dark__group` | PASS | 0/7168 |
 
-<<<<<<< HEAD
+
 ## Progress
 
 - Both kits use an identical 16rem-wide parent so `w-full` matches. Crops `[data-slot="progress"]` with 16px pad.
@@ -348,7 +348,7 @@
 | `progress__dark__empty` | PASS | 0/11520 |
 | `progress__dark__halfway` | PASS | 0/11520 |
 | `progress__dark__full` | PASS | 0/11520 |
-=======
+
 ## Accordion
 
 - Crops `[data-slot="accordion"]` with 16px pad inside a 20rem-wide parent. Two items, identical copy on both kits.
@@ -362,4 +362,3 @@
 | `accordion__dark__open` | PASS | 0/60896 |
 | `accordion__dark__second` | PASS | 0/67936 |
 | `accordion__dark__closed` | PASS | 0/48224 |
->>>>>>> 59d0a8b (Record Accordion visual-diff artifacts (198/198 PASS at threshold 0))
