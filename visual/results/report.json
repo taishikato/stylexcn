@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T19:34:24.398Z",
-  "total": 228,
+  "generatedAt": "2026-08-25T19:50:56.993Z",
+  "total": 232,
   "failed": 0,
-  "passed": 228,
+  "passed": 232,
   "threshold": 0,
   "cases": [
     {
@@ -3342,6 +3342,62 @@
       "shadcn": "visual/results/shadcn/toggle__dark__focus-visible.png",
       "stylex": "visual/results/stylex/toggle__dark__focus-visible.png",
       "diff": "visual/results/diff/toggle__dark__focus-visible.png"
+    },
+    {
+      "name": "breadcrumb__light__default",
+      "component": "breadcrumb",
+      "state": "default",
+      "theme": "light",
+      "width": 416,
+      "height": 52,
+      "mismatched": 0,
+      "pixels": 21632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/breadcrumb__light__default.png",
+      "stylex": "visual/results/stylex/breadcrumb__light__default.png",
+      "diff": "visual/results/diff/breadcrumb__light__default.png"
+    },
+    {
+      "name": "breadcrumb__light__ellipsis",
+      "component": "breadcrumb",
+      "state": "ellipsis",
+      "theme": "light",
+      "width": 416,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 28288,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/breadcrumb__light__ellipsis.png",
+      "stylex": "visual/results/stylex/breadcrumb__light__ellipsis.png",
+      "diff": "visual/results/diff/breadcrumb__light__ellipsis.png"
+    },
+    {
+      "name": "breadcrumb__dark__default",
+      "component": "breadcrumb",
+      "state": "default",
+      "theme": "dark",
+      "width": 416,
+      "height": 52,
+      "mismatched": 0,
+      "pixels": 21632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/breadcrumb__dark__default.png",
+      "stylex": "visual/results/stylex/breadcrumb__dark__default.png",
+      "diff": "visual/results/diff/breadcrumb__dark__default.png"
+    },
+    {
+      "name": "breadcrumb__dark__ellipsis",
+      "component": "breadcrumb",
+      "state": "ellipsis",
+      "theme": "dark",
+      "width": 416,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 28288,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/breadcrumb__dark__ellipsis.png",
+      "stylex": "visual/results/stylex/breadcrumb__dark__ellipsis.png",
+      "diff": "visual/results/diff/breadcrumb__dark__ellipsis.png"
     }
   ]
 }

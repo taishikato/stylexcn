@@ -14,6 +14,15 @@ import {
   AvatarGroupCount,
 } from "../components/avatar";
 import { Badge, type BadgeVariant } from "../components/badge";
+import {
+  Breadcrumb,
+  BreadcrumbEllipsis,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "../components/breadcrumb";
 import { Separator } from "../components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
@@ -124,6 +133,15 @@ import {
   OfficialAvatarGroupCount,
 } from "./official-avatar";
 import { OfficialBadge } from "./official-badge";
+import {
+  OfficialBreadcrumb,
+  OfficialBreadcrumbEllipsis,
+  OfficialBreadcrumbItem,
+  OfficialBreadcrumbLink,
+  OfficialBreadcrumbList,
+  OfficialBreadcrumbPage,
+  OfficialBreadcrumbSeparator,
+} from "./official-breadcrumb";
 import { OfficialSeparator } from "./official-separator";
 import { OfficialButton } from "./official-button";
 import {
@@ -273,7 +291,8 @@ export type CaptureComponent =
   | "progress"
   | "accordion"
   | "slider"
-  | "toggle";
+  | "toggle"
+  | "breadcrumb";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -304,7 +323,8 @@ export type CaptureState =
   | "range"
   | "on"
   | "outline"
-  | "lg";
+  | "lg"
+  | "ellipsis";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -499,6 +519,13 @@ export type ToggleCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type BreadcrumbCaptureParams = {
+  component: "breadcrumb";
+  kit: CaptureKit;
+  state: "default" | "ellipsis";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -524,7 +551,8 @@ export type CaptureParams =
   | ProgressCaptureParams
   | AccordionCaptureParams
   | SliderCaptureParams
-  | ToggleCaptureParams;
+  | ToggleCaptureParams
+  | BreadcrumbCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -603,6 +631,10 @@ const styles = stylex.create({
   },
   sliderWell: {
     width: "16rem",
+  },
+  /* Wide enough that flex-wrap does not split the trail differently. */
+  breadcrumbWell: {
+    width: "24rem",
   },
 });
 
@@ -1824,6 +1856,93 @@ function SliderHarness({ kit, state, theme }: SliderCaptureParams) {
   );
 }
 
+const BREADCRUMB_HOME = "Home";
+const BREADCRUMB_COMPONENTS = "Components";
+const BREADCRUMB_PAGE = "Breadcrumb";
+
+function BreadcrumbTrail({
+  kit,
+  ellipsis,
+}: {
+  kit: CaptureKit;
+  ellipsis: boolean;
+}) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialBreadcrumb>
+        <OfficialBreadcrumbList>
+          <OfficialBreadcrumbItem>
+            <OfficialBreadcrumbLink href="#">{BREADCRUMB_HOME}</OfficialBreadcrumbLink>
+          </OfficialBreadcrumbItem>
+          <OfficialBreadcrumbSeparator />
+          {ellipsis ? (
+            <>
+              <OfficialBreadcrumbItem>
+                <OfficialBreadcrumbEllipsis />
+              </OfficialBreadcrumbItem>
+              <OfficialBreadcrumbSeparator />
+            </>
+          ) : null}
+          <OfficialBreadcrumbItem>
+            <OfficialBreadcrumbLink href="#">
+              {BREADCRUMB_COMPONENTS}
+            </OfficialBreadcrumbLink>
+          </OfficialBreadcrumbItem>
+          <OfficialBreadcrumbSeparator />
+          <OfficialBreadcrumbItem>
+            <OfficialBreadcrumbPage>{BREADCRUMB_PAGE}</OfficialBreadcrumbPage>
+          </OfficialBreadcrumbItem>
+        </OfficialBreadcrumbList>
+      </OfficialBreadcrumb>
+    );
+  }
+
+  return (
+    <Breadcrumb>
+      <BreadcrumbList>
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">{BREADCRUMB_HOME}</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        {ellipsis ? (
+          <>
+            <BreadcrumbItem>
+              <BreadcrumbEllipsis />
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+          </>
+        ) : null}
+        <BreadcrumbItem>
+          <BreadcrumbLink href="#">{BREADCRUMB_COMPONENTS}</BreadcrumbLink>
+        </BreadcrumbItem>
+        <BreadcrumbSeparator />
+        <BreadcrumbItem>
+          <BreadcrumbPage>{BREADCRUMB_PAGE}</BreadcrumbPage>
+        </BreadcrumbItem>
+      </BreadcrumbList>
+    </Breadcrumb>
+  );
+}
+
+function BreadcrumbHarness({ kit, state, theme }: BreadcrumbCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="breadcrumb"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.breadcrumbWell)}>
+        <BreadcrumbTrail kit={kit} ellipsis={state === "ellipsis"} />
+      </div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1926,6 +2045,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "toggle") {
     return <ToggleHarness {...params} />;
+  }
+  if (params.component === "breadcrumb") {
+    return <BreadcrumbHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -2172,6 +2294,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "toggle", kit, state, theme };
+  }
+
+  if (component === "breadcrumb") {
+    if (state !== "default" && state !== "ellipsis") {
+      return null;
+    }
+    return { component: "breadcrumb", kit, state, theme };
   }
 
   if (component !== "button") return null;

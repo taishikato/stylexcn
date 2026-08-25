@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb)
 
-- Passed: 228/228
+- Passed: 232/232
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -412,3 +412,16 @@
 | `toggle__dark__lg` | PASS | 0/5976 |
 | `toggle__dark__disabled` | PASS | 0/5372 |
 | `toggle__dark__focus-visible` | PASS | 0/5372 |
+
+## Breadcrumb
+
+- Crops `[data-slot="breadcrumb"]` with 16px pad inside a 24rem-wide parent so `flex-wrap` does not split the trail differently on the two kits.
+- Identical copy: `default` is Home / Components / Breadcrumb (last is BreadcrumbPage); `ellipsis` inserts BreadcrumbEllipsis between Home and Components.
+- Viewport: 480×200 so the 24rem well plus pad stays on-screen. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `breadcrumb__light__default` | PASS | 0/21632 |
+| `breadcrumb__light__ellipsis` | PASS | 0/28288 |
+| `breadcrumb__dark__default` | PASS | 0/21632 |
+| `breadcrumb__dark__ellipsis` | PASS | 0/28288 |
