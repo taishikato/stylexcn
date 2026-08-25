@@ -38,6 +38,6 @@ npm run visual:diff
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
 
-Latest local run: **104/104 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch, threshold 0). Radio Group cases are captured by `npm run visual:diff`.
+Latest local run: **114/114 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch + 10 Radio Group, threshold 0).
 
 Do not edit the harness or official baseline to hide a delta.
