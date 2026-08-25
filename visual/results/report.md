@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip)
 
-- Passed: 158/158
+- Passed: 160/160
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -258,3 +258,13 @@
 | --- | --- | ---: |
 | `popover__light__default` | PASS | 0/307200 |
 | `popover__dark__default` | PASS | 0/307200 |
+
+## Tooltip
+
+- Viewport: 480×320. Trigger is pinned near the bottom so `side="top"` does not flip.
+- Forced open (`open={true}`) with `delayDuration={0}` on both kits. Full-viewport screenshot (trigger + content + arrow). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `tooltip__light__default` | PASS | 0/153600 |
+| `tooltip__dark__default` | PASS | 0/153600 |
