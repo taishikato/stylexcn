@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T21:46:22.576Z",
-  "total": 266,
+  "generatedAt": "2026-08-25T21:57:04.068Z",
+  "total": 268,
   "failed": 0,
-  "passed": 266,
+  "passed": 268,
   "threshold": 0,
   "cases": [
     {
@@ -3874,6 +3874,34 @@
       "shadcn": "visual/results/shadcn/menubar__dark__open.png",
       "stylex": "visual/results/stylex/menubar__dark__open.png",
       "diff": "visual/results/diff/menubar__dark__open.png"
+    },
+    {
+      "name": "aspect-ratio__light__default",
+      "component": "aspect-ratio",
+      "state": "default",
+      "theme": "light",
+      "width": 352,
+      "height": 212,
+      "mismatched": 0,
+      "pixels": 74624,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/aspect-ratio__light__default.png",
+      "stylex": "visual/results/stylex/aspect-ratio__light__default.png",
+      "diff": "visual/results/diff/aspect-ratio__light__default.png"
+    },
+    {
+      "name": "aspect-ratio__dark__default",
+      "component": "aspect-ratio",
+      "state": "default",
+      "theme": "dark",
+      "width": 352,
+      "height": 212,
+      "mismatched": 0,
+      "pixels": 74624,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/aspect-ratio__dark__default.png",
+      "stylex": "visual/results/stylex/aspect-ratio__dark__default.png",
+      "diff": "visual/results/diff/aspect-ratio__dark__default.png"
     }
   ]
 }

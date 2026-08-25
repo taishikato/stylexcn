@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio)
 
-- Passed: 266/266
+- Passed: 268/268
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -523,3 +523,14 @@
 | `menubar__light__open` | PASS | 0/307200 |
 | `menubar__dark__closed` | PASS | 0/16660 |
 | `menubar__dark__open` | PASS | 0/307200 |
+
+## Aspect Ratio
+
+- Crops `[data-slot="aspect-ratio"]` with 16px pad inside an identical 20rem-wide parent on both kits so the box size matches.
+- `ratio={16 / 9}` on both kits. Fill is a local muted solid (`tokens["--muted"]`); no network image and no extra chrome.
+- States: `default` × light/dark. Viewport: 400×280 so the 16/9 box plus pad stays on-screen. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `aspect-ratio__light__default` | PASS | 0/74624 |
+| `aspect-ratio__dark__default` | PASS | 0/74624 |
