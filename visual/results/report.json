@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T16:15:30.056Z",
-  "total": 148,
+  "generatedAt": "2026-08-25T16:26:18.287Z",
+  "total": 154,
   "failed": 0,
-  "passed": 148,
+  "passed": 154,
   "threshold": 0,
   "cases": [
     {
@@ -2208,6 +2208,90 @@
       "shadcn": "visual/results/shadcn/sheet__dark__bottom.png",
       "stylex": "visual/results/stylex/sheet__dark__bottom.png",
       "diff": "visual/results/diff/sheet__dark__bottom.png"
+    },
+    {
+      "name": "tabs__light__default",
+      "component": "tabs",
+      "state": "default",
+      "theme": "light",
+      "width": 304,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 30400,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tabs__light__default.png",
+      "stylex": "visual/results/stylex/tabs__light__default.png",
+      "diff": "visual/results/diff/tabs__light__default.png"
+    },
+    {
+      "name": "tabs__light__second",
+      "component": "tabs",
+      "state": "second",
+      "theme": "light",
+      "width": 247,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 24700,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tabs__light__second.png",
+      "stylex": "visual/results/stylex/tabs__light__second.png",
+      "diff": "visual/results/diff/tabs__light__second.png"
+    },
+    {
+      "name": "tabs__light__disabled",
+      "component": "tabs",
+      "state": "disabled",
+      "theme": "light",
+      "width": 304,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 30400,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tabs__light__disabled.png",
+      "stylex": "visual/results/stylex/tabs__light__disabled.png",
+      "diff": "visual/results/diff/tabs__light__disabled.png"
+    },
+    {
+      "name": "tabs__dark__default",
+      "component": "tabs",
+      "state": "default",
+      "theme": "dark",
+      "width": 304,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 30400,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tabs__dark__default.png",
+      "stylex": "visual/results/stylex/tabs__dark__default.png",
+      "diff": "visual/results/diff/tabs__dark__default.png"
+    },
+    {
+      "name": "tabs__dark__second",
+      "component": "tabs",
+      "state": "second",
+      "theme": "dark",
+      "width": 247,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 24700,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tabs__dark__second.png",
+      "stylex": "visual/results/stylex/tabs__dark__second.png",
+      "diff": "visual/results/diff/tabs__dark__second.png"
+    },
+    {
+      "name": "tabs__dark__disabled",
+      "component": "tabs",
+      "state": "disabled",
+      "theme": "dark",
+      "width": 304,
+      "height": 100,
+      "mismatched": 0,
+      "pixels": 30400,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/tabs__dark__disabled.png",
+      "stylex": "visual/results/stylex/tabs__dark__disabled.png",
+      "diff": "visual/results/diff/tabs__dark__disabled.png"
     }
   ]
 }

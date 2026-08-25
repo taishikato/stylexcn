@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs)
 
-- Passed: 148/148
+- Passed: 154/154
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -224,3 +224,17 @@
 | `sheet__dark__left` | PASS | 0/480000 |
 | `sheet__dark__top` | PASS | 0/480000 |
 | `sheet__dark__bottom` | PASS | 0/480000 |
+
+## Tabs
+
+- Crops `[data-slot="tabs"]` (list + content) with 16px pad. Labels/content are identical on both kits.
+- States: `default` (first selected), `second` (second selected), `disabled` (second trigger disabled).
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `tabs__light__default` | PASS | 0/30400 |
+| `tabs__light__second` | PASS | 0/24700 |
+| `tabs__light__disabled` | PASS | 0/30400 |
+| `tabs__dark__default` | PASS | 0/30400 |
+| `tabs__dark__second` | PASS | 0/24700 |
+| `tabs__dark__disabled` | PASS | 0/30400 |
