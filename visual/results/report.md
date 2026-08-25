@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)
 
-- Passed: 154/154
+- Passed: 156/156
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -238,3 +238,13 @@
 | `tabs__dark__default` | PASS | 0/30400 |
 | `tabs__dark__second` | PASS | 0/24700 |
 | `tabs__dark__disabled` | PASS | 0/30400 |
+
+## Popover
+
+- Viewport: 640×480. Trigger is pinned near the top and centered so `w-72` content (`align="center"`, `side="bottom"`) stays on-screen and the popper does not flip.
+- Controlled `open={true}` on both kits. Screenshots are full-viewport (trigger + content). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `popover__light__default` | PASS | 0/307200 |
+| `popover__dark__default` | PASS | 0/307200 |

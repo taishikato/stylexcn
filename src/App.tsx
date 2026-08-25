@@ -35,6 +35,14 @@ import {
 } from "./components/dropdown-menu";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "./components/popover";
 import { RadioGroup, RadioGroupItem } from "./components/radio-group";
 import {
   Select,
@@ -100,6 +108,14 @@ import {
 } from "./visual/official-dropdown-menu";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
+import {
+  OfficialPopover,
+  OfficialPopoverContent,
+  OfficialPopoverDescription,
+  OfficialPopoverHeader,
+  OfficialPopoverTitle,
+  OfficialPopoverTrigger,
+} from "./visual/official-popover";
 import {
   OfficialRadioGroup,
   OfficialRadioGroupItem,
@@ -184,8 +200,9 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, Select, Dropdown Menu, Sheet, and Tabs vs official shadcn
-        New York baseline. Visual capture lives at query-param harness URLs (see
+        Card, Dialog, Select, Dropdown Menu, Sheet, Tabs, and Popover vs
+        official shadcn New York baseline. Visual capture lives at query-param
+        harness URLs (see
         README).
       </p>
       {([false, true] as const).map((isDark) => (
@@ -638,6 +655,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundTabs kit="shadcn" />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Popover
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundPopover kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Popover
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundPopover kit="shadcn" dark={dark} />
+      </div>
     </div>
   );
 }
@@ -708,6 +739,65 @@ function PlaygroundSheet({
         </SheetFooter>
       </SheetContent>
     </Sheet>
+  );
+}
+
+function PlaygroundPopover({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialPopover open={open} onOpenChange={setOpen}>
+        <OfficialPopoverTrigger asChild>
+          <OfficialButton variant="outline">Open popover</OfficialButton>
+        </OfficialPopoverTrigger>
+        <OfficialPopoverContent>
+          <OfficialPopoverHeader>
+            <OfficialPopoverTitle>Dimensions</OfficialPopoverTitle>
+            <OfficialPopoverDescription>
+              Set the dimensions for the layer.
+            </OfficialPopoverDescription>
+          </OfficialPopoverHeader>
+        </OfficialPopoverContent>
+      </OfficialPopover>
+    );
+  }
+
+  return (
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button variant="outline">Open popover</Button>
+      </PopoverTrigger>
+      <PopoverContent>
+        <PopoverHeader>
+          <PopoverTitle>Dimensions</PopoverTitle>
+          <PopoverDescription>
+            Set the dimensions for the layer.
+          </PopoverDescription>
+        </PopoverHeader>
+      </PopoverContent>
+    </Popover>
   );
 }
 

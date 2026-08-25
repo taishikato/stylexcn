@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T16:26:18.287Z",
-  "total": 154,
+  "generatedAt": "2026-08-25T16:35:09.668Z",
+  "total": 156,
   "failed": 0,
-  "passed": 154,
+  "passed": 156,
   "threshold": 0,
   "cases": [
     {
@@ -2292,6 +2292,34 @@
       "shadcn": "visual/results/shadcn/tabs__dark__disabled.png",
       "stylex": "visual/results/stylex/tabs__dark__disabled.png",
       "diff": "visual/results/diff/tabs__dark__disabled.png"
+    },
+    {
+      "name": "popover__light__default",
+      "component": "popover",
+      "state": "default",
+      "theme": "light",
+      "width": 640,
+      "height": 480,
+      "mismatched": 0,
+      "pixels": 307200,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/popover__light__default.png",
+      "stylex": "visual/results/stylex/popover__light__default.png",
+      "diff": "visual/results/diff/popover__light__default.png"
+    },
+    {
+      "name": "popover__dark__default",
+      "component": "popover",
+      "state": "default",
+      "theme": "dark",
+      "width": 640,
+      "height": 480,
+      "mismatched": 0,
+      "pixels": 307200,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/popover__dark__default.png",
+      "stylex": "visual/results/stylex/popover__dark__default.png",
+      "diff": "visual/results/diff/popover__dark__default.png"
     }
   ]
 }

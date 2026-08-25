@@ -36,6 +36,14 @@ import { Input } from "../components/input";
 import { Label } from "../components/label";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
 import {
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "../components/popover";
+import {
   Select,
   SelectContent,
   SelectGroup,
@@ -87,6 +95,14 @@ import {
   OfficialDialogHeader,
   OfficialDialogTitle,
 } from "./official-dialog";
+import {
+  OfficialPopover,
+  OfficialPopoverContent,
+  OfficialPopoverDescription,
+  OfficialPopoverHeader,
+  OfficialPopoverTitle,
+  OfficialPopoverTrigger,
+} from "./official-popover";
 import {
   OfficialSelect,
   OfficialSelectContent,
@@ -156,7 +172,8 @@ export type CaptureComponent =
   | "select"
   | "dropdown-menu"
   | "sheet"
-  | "tabs";
+  | "tabs"
+  | "popover";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -277,6 +294,13 @@ export type TabsCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type PopoverCaptureParams = {
+  component: "popover";
+  kit: CaptureKit;
+  state: "default";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -290,7 +314,8 @@ export type CaptureParams =
   | SelectCaptureParams
   | DropdownMenuCaptureParams
   | SheetCaptureParams
-  | TabsCaptureParams;
+  | TabsCaptureParams
+  | PopoverCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -315,6 +340,18 @@ const styles = stylex.create({
     alignItems: "flex-start",
     justifyContent: "flex-start",
     padding: "3rem",
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
+  },
+  /* Trigger near the top, horizontally centered so w-72 content (align=center)
+     stays on-screen and the popper does not flip to another side. */
+  popoverOpenFrame: {
+    minHeight: "100vh",
+    margin: 0,
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "center",
+    paddingTop: "4rem",
     backgroundColor: "var(--background)",
     color: "var(--foreground)",
   },
@@ -590,6 +627,10 @@ function CardHarness({ kit, state, theme }: CardCaptureParams) {
     </div>
   );
 }
+
+const POPOVER_TRIGGER = "Open popover";
+const POPOVER_TITLE = "Dimensions";
+const POPOVER_DESCRIPTION = "Set the dimensions for the layer.";
 
 const DIALOG_TITLE = "Edit profile";
 const DIALOG_DESCRIPTION =
@@ -984,6 +1025,53 @@ function TabsHarness({ kit, state, theme }: TabsCaptureParams) {
   );
 }
 
+function PopoverHarness({ kit, theme }: PopoverCaptureParams) {
+  const isDark = theme === "dark";
+  usePortalDocumentTheme(isDark);
+
+  const popover =
+    kit === "shadcn" ? (
+      <OfficialPopover open onOpenChange={() => {}}>
+        <OfficialPopoverTrigger asChild>
+          <OfficialButton variant="outline">{POPOVER_TRIGGER}</OfficialButton>
+        </OfficialPopoverTrigger>
+        <OfficialPopoverContent side="bottom" align="center">
+          <OfficialPopoverHeader>
+            <OfficialPopoverTitle>{POPOVER_TITLE}</OfficialPopoverTitle>
+            <OfficialPopoverDescription>
+              {POPOVER_DESCRIPTION}
+            </OfficialPopoverDescription>
+          </OfficialPopoverHeader>
+        </OfficialPopoverContent>
+      </OfficialPopover>
+    ) : (
+      <Popover open onOpenChange={() => {}}>
+        <PopoverTrigger asChild>
+          <Button variant="outline">{POPOVER_TRIGGER}</Button>
+        </PopoverTrigger>
+        <PopoverContent side="bottom" align="center">
+          <PopoverHeader>
+            <PopoverTitle>{POPOVER_TITLE}</PopoverTitle>
+            <PopoverDescription>{POPOVER_DESCRIPTION}</PopoverDescription>
+          </PopoverHeader>
+        </PopoverContent>
+      </Popover>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="popover"
+      data-state="default"
+      {...stylex.props(isDark && darkTheme, styles.popoverOpenFrame)}
+    >
+      {popover}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1050,6 +1138,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "tabs") {
     return <TabsHarness {...params} />;
+  }
+  if (params.component === "popover") {
+    return <PopoverHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1185,6 +1276,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "tabs", kit, state, theme };
+  }
+
+  if (component === "popover") {
+    if (state !== "default") {
+      return null;
+    }
+    return { component: "popover", kit, state, theme };
   }
 
   if (component !== "button") return null;
