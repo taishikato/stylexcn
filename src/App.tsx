@@ -56,6 +56,12 @@ import {
   SheetTrigger,
 } from "./components/sheet";
 import { Switch } from "./components/switch";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "./components/tabs";
 import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
@@ -118,6 +124,12 @@ import {
   OfficialSheetTrigger,
 } from "./visual/official-sheet";
 import { OfficialSwitch } from "./visual/official-switch";
+import {
+  OfficialTabs,
+  OfficialTabsContent,
+  OfficialTabsList,
+  OfficialTabsTrigger,
+} from "./visual/official-tabs";
 import { OfficialTextarea } from "./visual/official-textarea";
 
 const styles = stylex.create({
@@ -172,8 +184,8 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, Select, Dropdown Menu, and Sheet vs official shadcn New
-        York baseline. Visual capture lives at query-param harness URLs (see
+        Card, Dialog, Select, Dropdown Menu, Sheet, and Tabs vs official shadcn
+        New York baseline. Visual capture lives at query-param harness URLs (see
         README).
       </p>
       {([false, true] as const).map((isDark) => (
@@ -612,6 +624,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundSheet kit="shadcn" dark={dark} />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Tabs
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundTabs kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Tabs
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundTabs kit="shadcn" />
+      </div>
     </div>
   );
 }
@@ -842,6 +868,38 @@ function PlaygroundDropdownMenu({
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function PlaygroundTabs({ kit }: { kit: "stylex" | "shadcn" }) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialTabs defaultValue="account">
+        <OfficialTabsList>
+          <OfficialTabsTrigger value="account">Account</OfficialTabsTrigger>
+          <OfficialTabsTrigger value="password">Password</OfficialTabsTrigger>
+        </OfficialTabsList>
+        <OfficialTabsContent value="account">
+          Make changes to your account here.
+        </OfficialTabsContent>
+        <OfficialTabsContent value="password">
+          Change your password here.
+        </OfficialTabsContent>
+      </OfficialTabs>
+    );
+  }
+
+  return (
+    <Tabs defaultValue="account">
+      <TabsList>
+        <TabsTrigger value="account">Account</TabsTrigger>
+        <TabsTrigger value="password">Password</TabsTrigger>
+      </TabsList>
+      <TabsContent value="account">
+        Make changes to your account here.
+      </TabsContent>
+      <TabsContent value="password">Change your password here.</TabsContent>
+    </Tabs>
   );
 }
 

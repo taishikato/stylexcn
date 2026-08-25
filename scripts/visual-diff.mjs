@@ -54,6 +54,7 @@ const SELECT_STATES = [
 ];
 const DROPDOWN_MENU_STATES = ["closed", "open"];
 const SHEET_STATES = ["default", "left", "top", "bottom"];
+const TABS_STATES = ["default", "second", "disabled"];
 const THEMES = ["light", "dark"];
 /* Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg / text-left / footer row. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -252,6 +253,20 @@ function sheetCases() {
   return list;
 }
 
+function tabsCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of TABS_STATES) {
+      list.push({
+        component: "tabs",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -266,6 +281,7 @@ function cases() {
     ...selectCases(),
     ...dropdownMenuCases(),
     ...sheetCases(),
+    ...tabsCases(),
   ];
 }
 
@@ -303,6 +319,9 @@ function slug(c) {
   if (c.component === "sheet") {
     return `sheet__${c.theme}__${c.state}`;
   }
+  if (c.component === "tabs") {
+    return `tabs__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -324,7 +343,8 @@ function urlFor(kit, c) {
     c.component !== "dialog" &&
     c.component !== "select" &&
     c.component !== "dropdown-menu" &&
-    c.component !== "sheet"
+    c.component !== "sheet" &&
+    c.component !== "tabs"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -406,6 +426,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "sheet") {
     return page.locator('[data-slot="sheet-content"][data-state="open"]');
+  }
+  if (c.component === "tabs") {
+    return page.locator('[data-slot="tabs"]');
   }
   return page.getByRole("button");
 }
@@ -591,7 +614,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -614,7 +637,8 @@ async function main() {
           r.component !== "dialog" &&
           r.component !== "select" &&
           r.component !== "dropdown-menu" &&
-          r.component !== "sheet",
+          r.component !== "sheet" &&
+          r.component !== "tabs",
       )
       .map(
         (r) =>
@@ -750,6 +774,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "sheet")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Tabs",
+    "",
+    "- Crops `[data-slot=\"tabs\"]` (list + content) with 16px pad. Labels/content are identical on both kits.",
+    "- States: `default` (first selected), `second` (second selected), `disabled` (second trigger disabled).",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "tabs")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
