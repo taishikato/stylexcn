@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet)
 
-- Passed: 140/140
+- Passed: 148/148
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -207,3 +207,20 @@
 | `dropdown-menu__light__open` | PASS | 0/358400 |
 | `dropdown-menu__dark__closed` | PASS | 0/6936 |
 | `dropdown-menu__dark__open` | PASS | 0/358400 |
+
+## Sheet
+
+- Viewport: 800×600 (Tailwind `sm` / 40rem). Overlay + content are portaled to `document.body`.
+- `default` is official `side="right"`. `left` / `top` / `bottom` cover the other official sides.
+- Screenshots are full-viewport (overlay + panel). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `sheet__light__default` | PASS | 0/480000 |
+| `sheet__light__left` | PASS | 0/480000 |
+| `sheet__light__top` | PASS | 0/480000 |
+| `sheet__light__bottom` | PASS | 0/480000 |
+| `sheet__dark__default` | PASS | 0/480000 |
+| `sheet__dark__left` | PASS | 0/480000 |
+| `sheet__dark__top` | PASS | 0/480000 |
+| `sheet__dark__bottom` | PASS | 0/480000 |
