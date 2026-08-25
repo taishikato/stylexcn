@@ -62,7 +62,8 @@ const title = stylex.create({
 const description = stylex.create({
   root: {
     fontSize: "0.875rem",
-    lineHeight: "calc(1.25 / 0.875)",
+    /* Tailwind v4 text-sm used line-height is 1.25rem ( --text-sm--line-height * 0.875rem ). */
+    lineHeight: "1.25rem",
     color: tokens["--muted-foreground"],
     fontFamily: "inherit",
   },
