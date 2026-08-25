@@ -141,6 +141,7 @@ import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
 import { CircleAlert } from "lucide-react";
+import { AspectRatio } from "../components/aspect-ratio";
 import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import {
   Menubar,
@@ -157,6 +158,7 @@ import {
   TooltipTrigger,
 } from "../components/tooltip";
 import { darkTheme } from "../theme";
+import { tokens } from "../tokens.stylex";
 import {
   OfficialAccordion,
   OfficialAccordionContent,
@@ -275,6 +277,7 @@ import {
 import { OfficialSlider } from "./official-slider";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialToggle } from "./official-toggle";
+import { OfficialAspectRatio } from "./official-aspect-ratio";
 import {
   OfficialToggleGroup,
   OfficialToggleGroupItem,
@@ -380,7 +383,8 @@ export type CaptureComponent =
   | "pagination"
   | "alert"
   | "toggle-group"
-  | "menubar";
+  | "menubar"
+  | "aspect-ratio";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -664,6 +668,13 @@ export type MenubarCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type AspectRatioCaptureParams = {
+  component: "aspect-ratio";
+  kit: CaptureKit;
+  state: "default";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -697,7 +708,8 @@ export type CaptureParams =
   | PaginationCaptureParams
   | AlertCaptureParams
   | ToggleGroupCaptureParams
-  | MenubarCaptureParams;
+  | MenubarCaptureParams
+  | AspectRatioCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -830,6 +842,16 @@ const styles = stylex.create({
     paddingLeft: "2rem",
     backgroundColor: "var(--background)",
     color: "var(--foreground)",
+  },
+  /* Identical 20rem parent on both kits so the 16/9 box size matches. */
+  aspectRatioWell: {
+    width: "20rem",
+  },
+  /* Local muted fill — no network image. Covers the ratio box on both kits. */
+  aspectRatioFill: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: tokens["--muted"],
   },
 });
 
@@ -2716,6 +2738,38 @@ function MenubarHarness({ kit, state, theme }: MenubarCaptureParams) {
   );
 }
 
+function AspectRatioFill() {
+  return <div {...stylex.props(styles.aspectRatioFill)} />;
+}
+
+function AspectRatioHarness({ kit, theme }: AspectRatioCaptureParams) {
+  const isDark = theme === "dark";
+
+  const box =
+    kit === "shadcn" ? (
+      <OfficialAspectRatio ratio={16 / 9}>
+        <AspectRatioFill />
+      </OfficialAspectRatio>
+    ) : (
+      <AspectRatio ratio={16 / 9}>
+        <AspectRatioFill />
+      </AspectRatio>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="aspect-ratio"
+      data-state="default"
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.aspectRatioWell)}>{box}</div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -2842,6 +2896,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "menubar") {
     return <MenubarHarness {...params} />;
+  }
+  if (params.component === "aspect-ratio") {
+    return <AspectRatioHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -3153,6 +3210,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "menubar", kit, state, theme };
+  }
+
+  if (component === "aspect-ratio") {
+    if (state !== "default") {
+      return null;
+    }
+    return { component: "aspect-ratio", kit, state, theme };
   }
 
   if (component !== "button") return null;

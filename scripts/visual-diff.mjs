@@ -90,6 +90,7 @@ const PAGINATION_STATES = ["default", "ellipsis"];
 const ALERT_STATES = ["default", "with-icon", "destructive"];
 const TOGGLE_GROUP_STATES = ["default", "outline", "sm", "lg"];
 const MENUBAR_STATES = ["closed", "open"];
+const ASPECT_RATIO_STATES = ["default"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -118,6 +119,8 @@ const COLLAPSIBLE_VIEWPORT = { width: 400, height: 480 };
 const BREADCRUMB_VIEWPORT = { width: 480, height: 200 };
 /* 24rem well + 16px crop pad on each side must stay inside the viewport. */
 const ALERT_VIEWPORT = { width: 480, height: 240 };
+/* 20rem well + 16/9 box (180px) + 16px crop pad must stay inside the viewport. */
+const ASPECT_RATIO_VIEWPORT = { width: 400, height: 280 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -607,6 +610,20 @@ function menubarCases() {
   return list;
 }
 
+function aspectRatioCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of ASPECT_RATIO_STATES) {
+      list.push({
+        component: "aspect-ratio",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -642,6 +659,7 @@ function cases() {
     ...alertCases(),
     ...toggleGroupCases(),
     ...menubarCases(),
+    ...aspectRatioCases(),
   ];
 }
 
@@ -743,6 +761,9 @@ function slug(c) {
   if (c.component === "menubar") {
     return `menubar__${c.theme}__${c.state}`;
   }
+  if (c.component === "aspect-ratio") {
+    return `aspect-ratio__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -787,7 +808,8 @@ function urlFor(kit, c) {
     c.component !== "pagination" &&
     c.component !== "alert" &&
     c.component !== "toggle-group" &&
-    c.component !== "menubar"
+    c.component !== "menubar" &&
+    c.component !== "aspect-ratio"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -938,6 +960,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "menubar") {
     return page.locator('[data-slot="menubar"]');
+  }
+  if (c.component === "aspect-ratio") {
+    return page.locator('[data-slot="aspect-ratio"]');
   }
   return page.getByRole("button");
 }
@@ -1190,6 +1215,8 @@ async function main() {
                     ? BREADCRUMB_VIEWPORT
                   : c.component === "alert"
                     ? ALERT_VIEWPORT
+                  : c.component === "aspect-ratio"
+                    ? ASPECT_RATIO_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1239,7 +1266,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1283,7 +1310,8 @@ async function main() {
           r.component !== "pagination" &&
           r.component !== "alert" &&
           r.component !== "toggle-group" &&
-          r.component !== "menubar",
+          r.component !== "menubar" &&
+          r.component !== "aspect-ratio",
       )
       .map(
         (r) =>
@@ -1726,6 +1754,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "menubar")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Aspect Ratio",
+    "",
+    "- Crops `[data-slot=\"aspect-ratio\"]` with 16px pad inside an identical 20rem-wide parent on both kits so the box size matches.",
+    "- `ratio={16 / 9}` on both kits. Fill is a local muted solid (`tokens[\"--muted\"]`); no network image and no extra chrome.",
+    "- States: `default` × light/dark. Viewport: 400×280 so the 16/9 box plus pad stays on-screen. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "aspect-ratio")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

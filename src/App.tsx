@@ -136,6 +136,7 @@ import { ScrollArea, ScrollBar } from "./components/scroll-area";
 import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
 import { Toggle } from "./components/toggle";
+import { AspectRatio } from "./components/aspect-ratio";
 import { ToggleGroup, ToggleGroupItem } from "./components/toggle-group";
 import {
   Menubar,
@@ -222,6 +223,7 @@ import {
 } from "./visual/official-scroll-area";
 import { OfficialSlider } from "./visual/official-slider";
 import { OfficialToggle } from "./visual/official-toggle";
+import { OfficialAspectRatio } from "./visual/official-aspect-ratio";
 import {
   OfficialToggleGroup,
   OfficialToggleGroupItem,
@@ -437,6 +439,14 @@ const styles = stylex.create({
   alertWell: {
     width: "24rem",
   },
+  aspectRatioWell: {
+    width: "20rem",
+  },
+  aspectRatioFill: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "var(--muted)",
+  },
 });
 
 function Playground() {
@@ -445,13 +455,13 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
+        StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Context Menu,
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
-        Scroll Area, Pagination, Alert, Toggle Group, and Menubar vs official
-        shadcn
-        New York baseline. Visual capture lives at query-param harness URLs
-        (see README).
+        Scroll Area, Pagination, Alert, Toggle Group, Menubar, and Aspect
+        Ratio vs official shadcn New York baseline. Visual capture lives at
+        query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1383,6 +1393,24 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundMenubar kit="shadcn" dark={dark} />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Aspect Ratio
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>16/9</span>
+        <div {...stylex.props(styles.aspectRatioWell)}>
+          <PlaygroundAspectRatio kit="stylex" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Aspect Ratio
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>16/9</span>
+        <div {...stylex.props(styles.aspectRatioWell)}>
+          <PlaygroundAspectRatio kit="shadcn" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -1897,6 +1925,16 @@ function PlaygroundPagination({
       </PaginationContent>
     </Pagination>
   );
+}
+
+function PlaygroundAspectRatio({ kit }: { kit: "stylex" | "shadcn" }) {
+  const fill = <div {...stylex.props(styles.aspectRatioFill)} />;
+  if (kit === "shadcn") {
+    return (
+      <OfficialAspectRatio ratio={16 / 9}>{fill}</OfficialAspectRatio>
+    );
+  }
+  return <AspectRatio ratio={16 / 9}>{fill}</AspectRatio>;
 }
 
 function PlaygroundToggleGroup({
