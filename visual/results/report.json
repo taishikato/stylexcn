@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T14:44:53.445Z",
-  "total": 118,
+  "generatedAt": "2026-08-25T15:22:13.599Z",
+  "total": 122,
   "failed": 0,
-  "passed": 118,
+  "passed": 122,
   "threshold": 0,
   "cases": [
     {
@@ -1788,6 +1788,62 @@
       "shadcn": "visual/results/shadcn/card__dark__with-action.png",
       "stylex": "visual/results/stylex/card__dark__with-action.png",
       "diff": "visual/results/diff/card__dark__with-action.png"
+    },
+    {
+      "name": "dialog__light__default",
+      "component": "dialog",
+      "state": "default",
+      "theme": "light",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dialog__light__default.png",
+      "stylex": "visual/results/stylex/dialog__light__default.png",
+      "diff": "visual/results/diff/dialog__light__default.png"
+    },
+    {
+      "name": "dialog__light__no-close",
+      "component": "dialog",
+      "state": "no-close",
+      "theme": "light",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dialog__light__no-close.png",
+      "stylex": "visual/results/stylex/dialog__light__no-close.png",
+      "diff": "visual/results/diff/dialog__light__no-close.png"
+    },
+    {
+      "name": "dialog__dark__default",
+      "component": "dialog",
+      "state": "default",
+      "theme": "dark",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dialog__dark__default.png",
+      "stylex": "visual/results/stylex/dialog__dark__default.png",
+      "diff": "visual/results/diff/dialog__dark__default.png"
+    },
+    {
+      "name": "dialog__dark__no-close",
+      "component": "dialog",
+      "state": "no-close",
+      "theme": "dark",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dialog__dark__no-close.png",
+      "stylex": "visual/results/stylex/dialog__dark__no-close.png",
+      "diff": "visual/results/diff/dialog__dark__no-close.png"
     }
   ]
 }

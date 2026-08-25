@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog)
 
-- Passed: 118/118
+- Passed: 122/122
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -161,3 +161,15 @@
 | `card__light__with-action` | PASS | 0/93632 |
 | `card__dark__default` | PASS | 0/93632 |
 | `card__dark__with-action` | PASS | 0/93632 |
+
+## Dialog
+
+- Viewport: 800×600 (Tailwind `sm` / 40rem). Overlay + content are portaled to `document.body`.
+- Screenshots are full-viewport (overlay + panel). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `dialog__light__default` | PASS | 0/480000 |
+| `dialog__light__no-close` | PASS | 0/480000 |
+| `dialog__dark__default` | PASS | 0/480000 |
+| `dialog__dark__no-close` | PASS | 0/480000 |

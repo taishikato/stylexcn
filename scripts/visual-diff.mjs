@@ -586,7 +586,8 @@ async function main() {
   ].join("\n");
   await writeFile(path.join(outDir, "report.md"), md);
 
-  await browser.close();
+  // Open Dialog can hang Playwright close(). Tear down the preview first and
+  // force-exit so a passing run does not stall.
   preview.kill("SIGTERM");
   try {
     const { execSync } = await import("node:child_process");
@@ -594,10 +595,15 @@ async function main() {
   } catch {
     /* already gone */
   }
+  await Promise.race([
+    browser.close(),
+    new Promise((resolve) => setTimeout(resolve, 2000)),
+  ]);
   if (failed > 0) {
     console.error(`Visual diff failed: ${failed} case(s)`);
     process.exit(1);
   }
+  process.exit(0);
 }
 
 main().catch((err) => {
