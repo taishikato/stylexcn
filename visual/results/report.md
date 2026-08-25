@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select)
 
-- Passed: 122/122
+- Passed: 136/136
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -173,3 +173,25 @@
 | `dialog__light__no-close` | PASS | 0/480000 |
 | `dialog__dark__default` | PASS | 0/480000 |
 | `dialog__dark__no-close` | PASS | 0/480000 |
+
+## Select
+
+- Closed cases crop the trigger (16px pad). Open cases are full-viewport (640×560) so trigger + popper content are captured together.
+- Open uses controlled `open={true}` and `position="popper"` on both kits. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `select__light__default` | PASS | 0/11084 |
+| `select__light__selected` | PASS | 0/8092 |
+| `select__light__focus-visible` | PASS | 0/11084 |
+| `select__light__disabled` | PASS | 0/11084 |
+| `select__light__invalid` | PASS | 0/11084 |
+| `select__light__sm` | PASS | 0/10432 |
+| `select__light__open` | PASS | 0/358400 |
+| `select__dark__default` | PASS | 0/11084 |
+| `select__dark__selected` | PASS | 0/8092 |
+| `select__dark__focus-visible` | PASS | 0/11084 |
+| `select__dark__disabled` | PASS | 0/11084 |
+| `select__dark__invalid` | PASS | 0/11084 |
+| `select__dark__sm` | PASS | 0/10432 |
+| `select__dark__open` | PASS | 0/358400 |
