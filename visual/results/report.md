@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible)
 
-- Passed: 232/232
+- Passed: 236/236
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -425,3 +425,16 @@
 | `breadcrumb__light__ellipsis` | PASS | 0/28288 |
 | `breadcrumb__dark__default` | PASS | 0/21632 |
 | `breadcrumb__dark__ellipsis` | PASS | 0/28288 |
+
+## Collapsible
+
+- Crops `[data-slot="collapsible"]` with 16px pad inside an identical 20rem-wide parent on both kits.
+- Identical demo: StyleX/official Button (`variant="outline"`) as the trigger (`asChild`) with copy `Can I use this?` plus the same body when open.
+- Controlled `open` / `onOpenChange`: `open` is `open={true}`, `closed` is `open={false}`. Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `collapsible__light__open` | PASS | 0/49280 |
+| `collapsible__light__closed` | PASS | 0/23936 |
+| `collapsible__dark__open` | PASS | 0/49280 |
+| `collapsible__dark__closed` | PASS | 0/23936 |

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T19:50:56.993Z",
-  "total": 232,
+  "generatedAt": "2026-08-25T20:06:30.112Z",
+  "total": 236,
   "failed": 0,
-  "passed": 232,
+  "passed": 236,
   "threshold": 0,
   "cases": [
     {
@@ -3398,6 +3398,62 @@
       "shadcn": "visual/results/shadcn/breadcrumb__dark__ellipsis.png",
       "stylex": "visual/results/stylex/breadcrumb__dark__ellipsis.png",
       "diff": "visual/results/diff/breadcrumb__dark__ellipsis.png"
+    },
+    {
+      "name": "collapsible__light__open",
+      "component": "collapsible",
+      "state": "open",
+      "theme": "light",
+      "width": 352,
+      "height": 140,
+      "mismatched": 0,
+      "pixels": 49280,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/collapsible__light__open.png",
+      "stylex": "visual/results/stylex/collapsible__light__open.png",
+      "diff": "visual/results/diff/collapsible__light__open.png"
+    },
+    {
+      "name": "collapsible__light__closed",
+      "component": "collapsible",
+      "state": "closed",
+      "theme": "light",
+      "width": 352,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 23936,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/collapsible__light__closed.png",
+      "stylex": "visual/results/stylex/collapsible__light__closed.png",
+      "diff": "visual/results/diff/collapsible__light__closed.png"
+    },
+    {
+      "name": "collapsible__dark__open",
+      "component": "collapsible",
+      "state": "open",
+      "theme": "dark",
+      "width": 352,
+      "height": 140,
+      "mismatched": 0,
+      "pixels": 49280,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/collapsible__dark__open.png",
+      "stylex": "visual/results/stylex/collapsible__dark__open.png",
+      "diff": "visual/results/diff/collapsible__dark__open.png"
+    },
+    {
+      "name": "collapsible__dark__closed",
+      "component": "collapsible",
+      "state": "closed",
+      "theme": "dark",
+      "width": 352,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 23936,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/collapsible__dark__closed.png",
+      "stylex": "visual/results/stylex/collapsible__dark__closed.png",
+      "diff": "visual/results/diff/collapsible__dark__closed.png"
     }
   ]
 }
