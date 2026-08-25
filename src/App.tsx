@@ -46,6 +46,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./components/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./components/sheet";
 import { Switch } from "./components/switch";
 import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
@@ -99,6 +108,15 @@ import {
   OfficialSelectTrigger,
   OfficialSelectValue,
 } from "./visual/official-select";
+import {
+  OfficialSheet,
+  OfficialSheetContent,
+  OfficialSheetDescription,
+  OfficialSheetFooter,
+  OfficialSheetHeader,
+  OfficialSheetTitle,
+  OfficialSheetTrigger,
+} from "./visual/official-sheet";
 import { OfficialSwitch } from "./visual/official-switch";
 import { OfficialTextarea } from "./visual/official-textarea";
 
@@ -154,8 +172,9 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, Select, and Dropdown Menu vs official shadcn New York
-        baseline. Visual capture lives at query-param harness URLs (see README).
+        Card, Dialog, Select, Dropdown Menu, and Sheet vs official shadcn New
+        York baseline. Visual capture lives at query-param harness URLs (see
+        README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -579,7 +598,90 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundDropdownMenu kit="shadcn" dark={dark} />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Sheet
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundSheet kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Sheet
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundSheet kit="shadcn" dark={dark} />
+      </div>
     </div>
+  );
+}
+
+function PlaygroundSheet({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialSheet open={open} onOpenChange={setOpen}>
+        <OfficialSheetTrigger asChild>
+          <OfficialButton variant="outline">Open sheet</OfficialButton>
+        </OfficialSheetTrigger>
+        <OfficialSheetContent>
+          <OfficialSheetHeader>
+            <OfficialSheetTitle>Edit profile</OfficialSheetTitle>
+            <OfficialSheetDescription>
+              Make changes to your profile here. Click save when you are done.
+            </OfficialSheetDescription>
+          </OfficialSheetHeader>
+          <p>This is the sheet body.</p>
+          <OfficialSheetFooter>
+            <OfficialButton onClick={() => setOpen(false)}>
+              Save changes
+            </OfficialButton>
+          </OfficialSheetFooter>
+        </OfficialSheetContent>
+      </OfficialSheet>
+    );
+  }
+
+  return (
+    <Sheet open={open} onOpenChange={setOpen}>
+      <SheetTrigger asChild>
+        <Button variant="outline">Open sheet</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <SheetHeader>
+          <SheetTitle>Edit profile</SheetTitle>
+          <SheetDescription>
+            Make changes to your profile here. Click save when you are done.
+          </SheetDescription>
+        </SheetHeader>
+        <p>This is the sheet body.</p>
+        <SheetFooter>
+          <Button onClick={() => setOpen(false)}>Save changes</Button>
+        </SheetFooter>
+      </SheetContent>
+    </Sheet>
   );
 }
 

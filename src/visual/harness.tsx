@@ -45,6 +45,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../components/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+} from "../components/sheet";
 import { Switch } from "../components/switch";
 import { Textarea } from "../components/textarea";
 import { darkTheme } from "../theme";
@@ -83,6 +91,14 @@ import {
   OfficialSelectTrigger,
   OfficialSelectValue,
 } from "./official-select";
+import {
+  OfficialSheet,
+  OfficialSheetContent,
+  OfficialSheetDescription,
+  OfficialSheetFooter,
+  OfficialSheetHeader,
+  OfficialSheetTitle,
+} from "./official-sheet";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialTextarea } from "./official-textarea";
 import {
@@ -126,7 +142,8 @@ export type CaptureComponent =
   | "card"
   | "dialog"
   | "select"
-  | "dropdown-menu";
+  | "dropdown-menu"
+  | "sheet";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -140,7 +157,10 @@ export type CaptureState =
   | "selected"
   | "sm"
   | "open"
-  | "closed";
+  | "closed"
+  | "left"
+  | "top"
+  | "bottom";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -229,6 +249,13 @@ export type DropdownMenuCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SheetCaptureParams = {
+  component: "sheet";
+  kit: CaptureKit;
+  state: "default" | "left" | "top" | "bottom";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -240,7 +267,8 @@ export type CaptureParams =
   | CardCaptureParams
   | DialogCaptureParams
   | SelectCaptureParams
-  | DropdownMenuCaptureParams;
+  | DropdownMenuCaptureParams
+  | SheetCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -662,6 +690,69 @@ function SelectOptions({ kit }: { kit: CaptureKit }) {
   );
 }
 
+const SHEET_TITLE = "Edit profile";
+const SHEET_DESCRIPTION =
+  "Make changes to your profile here. Click save when you are done.";
+const SHEET_BODY = "This is the sheet body.";
+const SHEET_SAVE = "Save changes";
+
+function sheetSideFor(
+  state: SheetCaptureParams["state"],
+): "right" | "left" | "top" | "bottom" | undefined {
+  if (state === "default") return undefined;
+  return state;
+}
+
+function SheetHarness({ kit, state, theme }: SheetCaptureParams) {
+  const isDark = theme === "dark";
+  const side = sheetSideFor(state);
+  usePortalDocumentTheme(isDark);
+
+  const sheet =
+    kit === "shadcn" ? (
+      <OfficialSheet open onOpenChange={() => {}}>
+        <OfficialSheetContent side={side}>
+          <OfficialSheetHeader>
+            <OfficialSheetTitle>{SHEET_TITLE}</OfficialSheetTitle>
+            <OfficialSheetDescription>
+              {SHEET_DESCRIPTION}
+            </OfficialSheetDescription>
+          </OfficialSheetHeader>
+          <p>{SHEET_BODY}</p>
+          <OfficialSheetFooter>
+            <OfficialButton>{SHEET_SAVE}</OfficialButton>
+          </OfficialSheetFooter>
+        </OfficialSheetContent>
+      </OfficialSheet>
+    ) : (
+      <Sheet open onOpenChange={() => {}}>
+        <SheetContent side={side}>
+          <SheetHeader>
+            <SheetTitle>{SHEET_TITLE}</SheetTitle>
+            <SheetDescription>{SHEET_DESCRIPTION}</SheetDescription>
+          </SheetHeader>
+          <p>{SHEET_BODY}</p>
+          <SheetFooter>
+            <Button>{SHEET_SAVE}</Button>
+          </SheetFooter>
+        </SheetContent>
+      </Sheet>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="sheet"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {sheet}
+    </div>
+  );
+}
+
 function SelectHarness({ kit, state, theme }: SelectCaptureParams) {
   const isDark = theme === "dark";
   const isOpen = state === "open";
@@ -879,6 +970,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "dropdown-menu") {
     return <DropdownMenuHarness {...params} />;
   }
+  if (params.component === "sheet") {
+    return <SheetHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -994,6 +1088,18 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "dropdown-menu", kit, state, theme };
+  }
+
+  if (component === "sheet") {
+    if (
+      state !== "default" &&
+      state !== "left" &&
+      state !== "top" &&
+      state !== "bottom"
+    ) {
+      return null;
+    }
+    return { component: "sheet", kit, state, theme };
   }
 
   if (component !== "button") return null;

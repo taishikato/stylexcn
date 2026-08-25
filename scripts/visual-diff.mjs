@@ -53,9 +53,12 @@ const SELECT_STATES = [
   "open",
 ];
 const DROPDOWN_MENU_STATES = ["closed", "open"];
+const SHEET_STATES = ["default", "left", "top", "bottom"];
 const THEMES = ["light", "dark"];
 /* Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg / text-left / footer row. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
+/* Sheet overlay+panel: sm is 40rem. 800px keeps sm:max-w-sm on left/right. */
+const SHEET_VIEWPORT = { width: 800, height: 600 };
 /* Select popper: trigger near top-left so content stays on-screen and does not flip. */
 const SELECT_OPEN_VIEWPORT = { width: 640, height: 560 };
 /* Dropdown Menu: trigger near top-left so portaled content stays on-screen. */
@@ -235,6 +238,20 @@ function dropdownMenuCases() {
   return list;
 }
 
+function sheetCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SHEET_STATES) {
+      list.push({
+        component: "sheet",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -248,6 +265,7 @@ function cases() {
     ...dialogCases(),
     ...selectCases(),
     ...dropdownMenuCases(),
+    ...sheetCases(),
   ];
 }
 
@@ -282,6 +300,9 @@ function slug(c) {
   if (c.component === "dropdown-menu") {
     return `dropdown-menu__${c.theme}__${c.state}`;
   }
+  if (c.component === "sheet") {
+    return `sheet__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -302,7 +323,8 @@ function urlFor(kit, c) {
     c.component !== "card" &&
     c.component !== "dialog" &&
     c.component !== "select" &&
-    c.component !== "dropdown-menu"
+    c.component !== "dropdown-menu" &&
+    c.component !== "sheet"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -382,6 +404,9 @@ function controlLocator(page, c) {
   if (c.component === "dropdown-menu") {
     return page.locator('[data-slot="dropdown-menu-trigger"]');
   }
+  if (c.component === "sheet") {
+    return page.locator('[data-slot="sheet-content"][data-state="open"]');
+  }
   return page.getByRole("button");
 }
 
@@ -401,6 +426,11 @@ async function prepareControl(page, c) {
     await page
       .locator('[data-slot="dropdown-menu-content"][data-state="open"]')
       .waitFor();
+    return;
+  }
+  if (c.component === "sheet") {
+    await page.locator('[data-slot="sheet-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="sheet-content"][data-state="open"]').waitFor();
     return;
   }
   const locator = controlLocator(page, c);
@@ -431,6 +461,12 @@ async function screenshotControl(page, c, dest) {
     await page
       .locator('[data-slot="dropdown-menu-content"][data-state="open"]')
       .waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "sheet") {
+    await page.locator('[data-slot="sheet-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="sheet-content"][data-state="open"]').waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -498,13 +534,15 @@ async function main() {
     await page.setViewportSize(
       c.component === "dialog"
         ? DIALOG_VIEWPORT
-        : c.component === "select" && c.state === "open"
-          ? SELECT_OPEN_VIEWPORT
-          : c.component === "dropdown-menu" && c.state === "open"
-            ? DROPDOWN_MENU_OPEN_VIEWPORT
-          : c.component === "card"
-            ? CARD_VIEWPORT
-            : DEFAULT_VIEWPORT,
+        : c.component === "sheet"
+          ? SHEET_VIEWPORT
+          : c.component === "select" && c.state === "open"
+            ? SELECT_OPEN_VIEWPORT
+            : c.component === "dropdown-menu" && c.state === "open"
+              ? DROPDOWN_MENU_OPEN_VIEWPORT
+              : c.component === "card"
+                ? CARD_VIEWPORT
+                : DEFAULT_VIEWPORT,
     );
 
     await page.goto(urlFor("shadcn", c), { waitUntil: "networkidle" });
@@ -553,7 +591,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -575,7 +613,8 @@ async function main() {
           r.component !== "card" &&
           r.component !== "dialog" &&
           r.component !== "select" &&
-          r.component !== "dropdown-menu",
+          r.component !== "dropdown-menu" &&
+          r.component !== "sheet",
       )
       .map(
         (r) =>
@@ -696,6 +735,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "dropdown-menu")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Sheet",
+    "",
+    "- Viewport: 800×600 (Tailwind `sm` / 40rem). Overlay + content are portaled to `document.body`.",
+    "- `default` is official `side=\"right\"`. `left` / `top` / `bottom` cover the other official sides.",
+    "- Screenshots are full-viewport (overlay + panel). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "sheet")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
