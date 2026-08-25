@@ -41,6 +41,7 @@ const RADIO_GROUP_STATES = [
   "disabled",
   "invalid",
 ];
+const CARD_STATES = ["default", "with-action"];
 const THEMES = ["light", "dark"];
 
 function buttonCases() {
@@ -159,6 +160,20 @@ function radioGroupCases() {
   return list;
 }
 
+function cardCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of CARD_STATES) {
+      list.push({
+        component: "card",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -168,6 +183,7 @@ function cases() {
     ...checkboxCases(),
     ...switchCases(),
     ...radioGroupCases(),
+    ...cardCases(),
   ];
 }
 
@@ -190,6 +206,9 @@ function slug(c) {
   if (c.component === "radio-group") {
     return `radio-group__${c.theme}__${c.state}`;
   }
+  if (c.component === "card") {
+    return `card__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -206,7 +225,8 @@ function urlFor(kit, c) {
     c.component !== "textarea" &&
     c.component !== "checkbox" &&
     c.component !== "switch" &&
-    c.component !== "radio-group"
+    c.component !== "radio-group" &&
+    c.component !== "card"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -273,6 +293,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "radio-group") {
     return page.locator('[data-slot="radio-group-item"]');
+  }
+  if (c.component === "card") {
+    return page.locator('[data-slot="card"]');
   }
   return page.getByRole("button");
 }
@@ -350,6 +373,12 @@ async function main() {
     const stylexPath = path.join(outDir, "stylex", `${name}.png`);
     const diffPath = path.join(outDir, "diff", `${name}.png`);
 
+    await page.setViewportSize(
+      c.component === "card"
+        ? { width: 400, height: 480 }
+        : { width: 400, height: 200 },
+    );
+
     await page.goto(urlFor("shadcn", c), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
     await prepareControl(page, c);
@@ -396,7 +425,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -414,7 +443,8 @@ async function main() {
           r.component !== "textarea" &&
           r.component !== "checkbox" &&
           r.component !== "switch" &&
-          r.component !== "radio-group",
+          r.component !== "radio-group" &&
+          r.component !== "card",
       )
       .map(
         (r) =>
@@ -482,6 +512,17 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "radio-group")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Card",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "card")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

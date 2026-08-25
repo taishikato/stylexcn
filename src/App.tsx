@@ -1,5 +1,14 @@
 import * as stylex from "@stylexjs/stylex";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./components/card";
 import { Checkbox } from "./components/checkbox";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
@@ -9,6 +18,15 @@ import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
 import { OfficialButton } from "./visual/official-button";
+import {
+  OfficialCard,
+  OfficialCardAction,
+  OfficialCardContent,
+  OfficialCardDescription,
+  OfficialCardFooter,
+  OfficialCardHeader,
+  OfficialCardTitle,
+} from "./visual/official-card";
 import { OfficialCheckbox } from "./visual/official-checkbox";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
@@ -60,6 +78,9 @@ const styles = stylex.create({
     alignItems: "center",
     gap: "0.5rem",
   },
+  cardWell: {
+    width: "20rem",
+  },
 });
 
 function Playground() {
@@ -67,9 +88,9 @@ function Playground() {
     <div {...stylex.props(styles.page)}>
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
-        StyleX Button, Input, Label, Textarea, Checkbox, Switch, and Radio Group
-        vs official shadcn New York baseline. Visual capture lives at query-param
-        harness URLs (see README).
+        StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
+        and Card vs official shadcn New York baseline. Visual capture lives at
+        query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -377,6 +398,76 @@ function ThemeBlock({ dark }: { dark: boolean }) {
             <OfficialRadioGroupItem value="bad" aria-invalid />
           </OfficialRadioGroup>
           <OfficialLabel>Invalid</OfficialLabel>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Card
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.cardWell)}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Login to your account</CardTitle>
+              <CardDescription>
+                Enter your email below to login to your account
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              A short body of copy that wraps at this width.
+            </CardContent>
+            <CardFooter>Need help?</CardFooter>
+          </Card>
+        </div>
+        <div {...stylex.props(styles.cardWell)}>
+          <Card>
+            <CardHeader>
+              <CardTitle>Login to your account</CardTitle>
+              <CardDescription>
+                Enter your email below to login to your account
+              </CardDescription>
+              <CardAction>Action</CardAction>
+            </CardHeader>
+            <CardContent>
+              A short body of copy that wraps at this width.
+            </CardContent>
+            <CardFooter>Need help?</CardFooter>
+          </Card>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Card
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.cardWell)}>
+          <OfficialCard>
+            <OfficialCardHeader>
+              <OfficialCardTitle>Login to your account</OfficialCardTitle>
+              <OfficialCardDescription>
+                Enter your email below to login to your account
+              </OfficialCardDescription>
+            </OfficialCardHeader>
+            <OfficialCardContent>
+              A short body of copy that wraps at this width.
+            </OfficialCardContent>
+            <OfficialCardFooter>Need help?</OfficialCardFooter>
+          </OfficialCard>
+        </div>
+        <div {...stylex.props(styles.cardWell)}>
+          <OfficialCard>
+            <OfficialCardHeader>
+              <OfficialCardTitle>Login to your account</OfficialCardTitle>
+              <OfficialCardDescription>
+                Enter your email below to login to your account
+              </OfficialCardDescription>
+              <OfficialCardAction>Action</OfficialCardAction>
+            </OfficialCardHeader>
+            <OfficialCardContent>
+              A short body of copy that wraps at this width.
+            </OfficialCardContent>
+            <OfficialCardFooter>Need help?</OfficialCardFooter>
+          </OfficialCard>
         </div>
       </div>
     </div>
