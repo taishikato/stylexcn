@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T21:11:09.010Z",
-  "total": 258,
+  "generatedAt": "2026-08-25T21:32:46.041Z",
+  "total": 262,
   "failed": 0,
-  "passed": 258,
+  "passed": 262,
   "threshold": 0,
   "cases": [
     {
@@ -3762,6 +3762,62 @@
       "shadcn": "visual/results/shadcn/toggle-group__dark__lg.png",
       "stylex": "visual/results/stylex/toggle-group__dark__lg.png",
       "diff": "visual/results/diff/toggle-group__dark__lg.png"
+    },
+    {
+      "name": "menubar__light__closed",
+      "component": "menubar",
+      "state": "closed",
+      "theme": "light",
+      "width": 245,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 16660,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/menubar__light__closed.png",
+      "stylex": "visual/results/stylex/menubar__light__closed.png",
+      "diff": "visual/results/diff/menubar__light__closed.png"
+    },
+    {
+      "name": "menubar__light__open",
+      "component": "menubar",
+      "state": "open",
+      "theme": "light",
+      "width": 640,
+      "height": 480,
+      "mismatched": 0,
+      "pixels": 307200,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/menubar__light__open.png",
+      "stylex": "visual/results/stylex/menubar__light__open.png",
+      "diff": "visual/results/diff/menubar__light__open.png"
+    },
+    {
+      "name": "menubar__dark__closed",
+      "component": "menubar",
+      "state": "closed",
+      "theme": "dark",
+      "width": 245,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 16660,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/menubar__dark__closed.png",
+      "stylex": "visual/results/stylex/menubar__dark__closed.png",
+      "diff": "visual/results/diff/menubar__dark__closed.png"
+    },
+    {
+      "name": "menubar__dark__open",
+      "component": "menubar",
+      "state": "open",
+      "theme": "dark",
+      "width": 640,
+      "height": 480,
+      "mismatched": 0,
+      "pixels": 307200,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/menubar__dark__open.png",
+      "stylex": "visual/results/stylex/menubar__dark__open.png",
+      "diff": "visual/results/diff/menubar__dark__open.png"
     }
   ]
 }

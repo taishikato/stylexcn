@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)
 
-- Passed: 258/258
+- Passed: 262/262
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -498,3 +498,16 @@
 | `toggle-group__dark__outline` | PASS | 0/15912 |
 | `toggle-group__dark__sm` | PASS | 0/14720 |
 | `toggle-group__dark__lg` | PASS | 0/16560 |
+
+## Menubar
+
+- Closed cases crop `[data-slot="menubar"]` with 16px pad (the bar only). Open cases are full-viewport (640×480) so the bar + portaled File menu are captured together.
+- Open uses controlled `value="file"` / `onValueChange` on both kits. Menubar is pinned near the top. Playwright `animations: "disabled"`.
+- Identical copy: File / Edit / View / Profiles. File items: New Tab, New Window, a separator, Share, a separator, Print. No submenu, checkbox, or radio.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `menubar__light__closed` | PASS | 0/16660 |
+| `menubar__light__open` | PASS | 0/307200 |
+| `menubar__dark__closed` | PASS | 0/16660 |
+| `menubar__dark__open` | PASS | 0/307200 |
