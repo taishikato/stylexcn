@@ -3,6 +3,7 @@ import { Button, type ButtonSize, type ButtonVariant } from "./components/button
 import { Checkbox } from "./components/checkbox";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
+import { RadioGroup, RadioGroupItem } from "./components/radio-group";
 import { Switch } from "./components/switch";
 import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
@@ -11,6 +12,10 @@ import { OfficialButton } from "./visual/official-button";
 import { OfficialCheckbox } from "./visual/official-checkbox";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
+import {
+  OfficialRadioGroup,
+  OfficialRadioGroupItem,
+} from "./visual/official-radio-group";
 import { OfficialSwitch } from "./visual/official-switch";
 import { OfficialTextarea } from "./visual/official-textarea";
 
@@ -62,9 +67,9 @@ function Playground() {
     <div {...stylex.props(styles.page)}>
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
-        StyleX Button, Input, Label, Textarea, Checkbox, and Switch vs official
-        shadcn New York baseline. Visual capture lives at query-param harness
-        URLs (see README).
+        StyleX Button, Input, Label, Textarea, Checkbox, Switch, and Radio Group
+        vs official shadcn New York baseline. Visual capture lives at query-param
+        harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -306,6 +311,72 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <div {...stylex.props(styles.checkRow)}>
           <OfficialSwitch defaultChecked disabled />
           <OfficialLabel>Checked disabled</OfficialLabel>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Radio Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <RadioGroup defaultValue="one">
+          <div {...stylex.props(styles.checkRow)}>
+            <RadioGroupItem value="one" id={`${dark ? "d" : "l"}-stylex-rg-1`} />
+            <Label htmlFor={`${dark ? "d" : "l"}-stylex-rg-1`}>One</Label>
+          </div>
+          <div {...stylex.props(styles.checkRow)}>
+            <RadioGroupItem value="two" id={`${dark ? "d" : "l"}-stylex-rg-2`} />
+            <Label htmlFor={`${dark ? "d" : "l"}-stylex-rg-2`}>Two</Label>
+          </div>
+        </RadioGroup>
+        <div {...stylex.props(styles.checkRow)}>
+          <RadioGroup>
+            <RadioGroupItem value="off" disabled />
+          </RadioGroup>
+          <Label>Disabled</Label>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <RadioGroup>
+            <RadioGroupItem value="bad" aria-invalid />
+          </RadioGroup>
+          <Label>Invalid</Label>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Radio Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <OfficialRadioGroup defaultValue="one">
+          <div {...stylex.props(styles.checkRow)}>
+            <OfficialRadioGroupItem
+              value="one"
+              id={`${dark ? "d" : "l"}-shadcn-rg-1`}
+            />
+            <OfficialLabel htmlFor={`${dark ? "d" : "l"}-shadcn-rg-1`}>
+              One
+            </OfficialLabel>
+          </div>
+          <div {...stylex.props(styles.checkRow)}>
+            <OfficialRadioGroupItem
+              value="two"
+              id={`${dark ? "d" : "l"}-shadcn-rg-2`}
+            />
+            <OfficialLabel htmlFor={`${dark ? "d" : "l"}-shadcn-rg-2`}>
+              Two
+            </OfficialLabel>
+          </div>
+        </OfficialRadioGroup>
+        <div {...stylex.props(styles.checkRow)}>
+          <OfficialRadioGroup>
+            <OfficialRadioGroupItem value="off" disabled />
+          </OfficialRadioGroup>
+          <OfficialLabel>Disabled</OfficialLabel>
+        </div>
+        <div {...stylex.props(styles.checkRow)}>
+          <OfficialRadioGroup>
+            <OfficialRadioGroupItem value="bad" aria-invalid />
+          </OfficialRadioGroup>
+          <OfficialLabel>Invalid</OfficialLabel>
         </div>
       </div>
     </div>
