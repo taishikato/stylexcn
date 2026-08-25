@@ -69,6 +69,7 @@ const BADGE_VARIANTS = [
 const SEPARATOR_STATES = ["horizontal", "vertical"];
 const SKELETON_STATES = ["bar", "circle"];
 const AVATAR_STATES = ["default", "sm", "lg", "badge", "group"];
+const PROGRESS_STATES = ["empty", "halfway", "full"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -391,6 +392,20 @@ function avatarCases() {
   return list;
 }
 
+function progressCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of PROGRESS_STATES) {
+      list.push({
+        component: "progress",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -413,6 +428,7 @@ function cases() {
     ...separatorCases(),
     ...skeletonCases(),
     ...avatarCases(),
+    ...progressCases(),
   ];
 }
 
@@ -475,6 +491,9 @@ function slug(c) {
   if (c.component === "avatar") {
     return `avatar__${c.theme}__${c.state}`;
   }
+  if (c.component === "progress") {
+    return `progress__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -506,7 +525,8 @@ function urlFor(kit, c) {
     c.component !== "badge" &&
     c.component !== "separator" &&
     c.component !== "skeleton" &&
-    c.component !== "avatar"
+    c.component !== "avatar" &&
+    c.component !== "progress"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -618,6 +638,9 @@ function controlLocator(page, c) {
       return page.locator('[data-slot="avatar-group"]');
     }
     return page.locator('[data-slot="avatar"]');
+  }
+  if (c.component === "progress") {
+    return page.locator('[data-slot="progress"]');
   }
   return page.getByRole("button");
 }
@@ -841,7 +864,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge + Separator + Skeleton + Avatar + Progress)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -872,7 +895,8 @@ async function main() {
           r.component !== "badge" &&
           r.component !== "separator" &&
           r.component !== "skeleton" &&
-          r.component !== "avatar",
+          r.component !== "avatar" &&
+          r.component !== "progress",
       )
       .map(
         (r) =>
@@ -1120,6 +1144,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "avatar")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Progress",
+    "",
+    "- Both kits use an identical 16rem-wide parent so `w-full` matches. Crops `[data-slot=\"progress\"]` with 16px pad.",
+    "- States: `empty` (value 0), `halfway` (value 60), `full` (value 100), light and dark.",
+    "- Official Indicator has `transition-all`; Playwright `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "progress")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

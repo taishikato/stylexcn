@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T18:05:31.192Z",
-  "total": 192,
+  "generatedAt": "2026-08-25T18:20:02.062Z",
+  "total": 198,
   "failed": 0,
-  "passed": 192,
+  "passed": 198,
   "threshold": 0,
   "cases": [
     {
@@ -2838,6 +2838,90 @@
       "shadcn": "visual/results/shadcn/avatar__dark__group.png",
       "stylex": "visual/results/stylex/avatar__dark__group.png",
       "diff": "visual/results/diff/avatar__dark__group.png"
+    },
+    {
+      "name": "progress__light__empty",
+      "component": "progress",
+      "state": "empty",
+      "theme": "light",
+      "width": 288,
+      "height": 40,
+      "mismatched": 0,
+      "pixels": 11520,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/progress__light__empty.png",
+      "stylex": "visual/results/stylex/progress__light__empty.png",
+      "diff": "visual/results/diff/progress__light__empty.png"
+    },
+    {
+      "name": "progress__light__halfway",
+      "component": "progress",
+      "state": "halfway",
+      "theme": "light",
+      "width": 288,
+      "height": 40,
+      "mismatched": 0,
+      "pixels": 11520,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/progress__light__halfway.png",
+      "stylex": "visual/results/stylex/progress__light__halfway.png",
+      "diff": "visual/results/diff/progress__light__halfway.png"
+    },
+    {
+      "name": "progress__light__full",
+      "component": "progress",
+      "state": "full",
+      "theme": "light",
+      "width": 288,
+      "height": 40,
+      "mismatched": 0,
+      "pixels": 11520,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/progress__light__full.png",
+      "stylex": "visual/results/stylex/progress__light__full.png",
+      "diff": "visual/results/diff/progress__light__full.png"
+    },
+    {
+      "name": "progress__dark__empty",
+      "component": "progress",
+      "state": "empty",
+      "theme": "dark",
+      "width": 288,
+      "height": 40,
+      "mismatched": 0,
+      "pixels": 11520,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/progress__dark__empty.png",
+      "stylex": "visual/results/stylex/progress__dark__empty.png",
+      "diff": "visual/results/diff/progress__dark__empty.png"
+    },
+    {
+      "name": "progress__dark__halfway",
+      "component": "progress",
+      "state": "halfway",
+      "theme": "dark",
+      "width": 288,
+      "height": 40,
+      "mismatched": 0,
+      "pixels": 11520,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/progress__dark__halfway.png",
+      "stylex": "visual/results/stylex/progress__dark__halfway.png",
+      "diff": "visual/results/diff/progress__dark__halfway.png"
+    },
+    {
+      "name": "progress__dark__full",
+      "component": "progress",
+      "state": "full",
+      "theme": "dark",
+      "width": 288,
+      "height": 40,
+      "mismatched": 0,
+      "pixels": 11520,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/progress__dark__full.png",
+      "stylex": "visual/results/stylex/progress__dark__full.png",
+      "diff": "visual/results/diff/progress__dark__full.png"
     }
   ]
 }

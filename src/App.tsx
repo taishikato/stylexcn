@@ -55,6 +55,7 @@ import {
 } from "./components/dropdown-menu";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
+import { Progress } from "./components/progress";
 import {
   Popover,
   PopoverContent,
@@ -156,6 +157,7 @@ import {
 } from "./visual/official-dropdown-menu";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
+import { OfficialProgress } from "./visual/official-progress";
 import {
   OfficialPopover,
   OfficialPopoverContent,
@@ -263,6 +265,9 @@ const styles = stylex.create({
     width: 40,
     height: 40,
   },
+  progressWell: {
+    width: "16rem",
+  },
 });
 
 function Playground() {
@@ -272,10 +277,9 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
-        Popover, Tooltip, Badge, Separator, Skeleton, and Avatar vs official
-        shadcn New
-        York baseline. Visual capture lives at query-param harness URLs (see
-        README).
+        Popover, Tooltip, Badge, Separator, Skeleton, Avatar, and Progress vs
+        official shadcn New York baseline. Visual capture lives at query-param
+        harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -896,6 +900,40 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           </OfficialAvatar>
           <OfficialAvatarGroupCount>2</OfficialAvatarGroupCount>
         </OfficialAvatarGroup>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Progress
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>empty</span>
+        <div {...stylex.props(styles.progressWell)}>
+          <Progress value={0} />
+        </div>
+        <span {...stylex.props(styles.label)}>halfway</span>
+        <div {...stylex.props(styles.progressWell)}>
+          <Progress value={60} />
+        </div>
+        <span {...stylex.props(styles.label)}>full</span>
+        <div {...stylex.props(styles.progressWell)}>
+          <Progress value={100} />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Progress
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>empty</span>
+        <div {...stylex.props(styles.progressWell)}>
+          <OfficialProgress value={0} />
+        </div>
+        <span {...stylex.props(styles.label)}>halfway</span>
+        <div {...stylex.props(styles.progressWell)}>
+          <OfficialProgress value={60} />
+        </div>
+        <span {...stylex.props(styles.label)}>full</span>
+        <div {...stylex.props(styles.progressWell)}>
+          <OfficialProgress value={100} />
+        </div>
       </div>
     </div>
   );
