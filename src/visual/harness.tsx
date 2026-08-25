@@ -3,6 +3,7 @@ import { Button, type ButtonSize, type ButtonVariant } from "../components/butto
 import { Checkbox } from "../components/checkbox";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
+import { RadioGroup, RadioGroupItem } from "../components/radio-group";
 import { Switch } from "../components/switch";
 import { Textarea } from "../components/textarea";
 import { darkTheme } from "../theme";
@@ -10,6 +11,10 @@ import { OfficialButton } from "./official-button";
 import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
 import { OfficialLabel } from "./official-label";
+import {
+  OfficialRadioGroup,
+  OfficialRadioGroupItem,
+} from "./official-radio-group";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialTextarea } from "./official-textarea";
 
@@ -35,7 +40,8 @@ export type CaptureComponent =
   | "label"
   | "textarea"
   | "checkbox"
-  | "switch";
+  | "switch"
+  | "radio-group";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -90,13 +96,21 @@ export type SwitchCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type RadioGroupCaptureParams = {
+  component: "radio-group";
+  kit: CaptureKit;
+  state: Exclude<CaptureState, "hover">;
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
   | LabelCaptureParams
   | TextareaCaptureParams
   | CheckboxCaptureParams
-  | SwitchCaptureParams;
+  | SwitchCaptureParams
+  | RadioGroupCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -252,6 +266,45 @@ function CheckboxHarness({ kit, state, theme }: CheckboxCaptureParams) {
   );
 }
 
+function RadioGroupHarness({ kit, state, theme }: RadioGroupCaptureParams) {
+  const disabled = state === "disabled";
+  const invalid = state === "invalid";
+  const checked = state === "checked";
+  const isDark = theme === "dark";
+
+  const control =
+    kit === "shadcn" ? (
+      <OfficialRadioGroup value={checked ? "on" : ""}>
+        <OfficialRadioGroupItem
+          value="on"
+          disabled={disabled}
+          aria-invalid={invalid || undefined}
+        />
+      </OfficialRadioGroup>
+    ) : (
+      <RadioGroup value={checked ? "on" : ""}>
+        <RadioGroupItem
+          value="on"
+          disabled={disabled}
+          aria-invalid={invalid || undefined}
+        />
+      </RadioGroup>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="radio-group"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {control}
+    </div>
+  );
+}
+
 function SwitchHarness({ kit, state, theme }: SwitchCaptureParams) {
   const disabled = state === "disabled";
   const checked = state === "checked";
@@ -324,6 +377,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "switch") {
     return <SwitchHarness {...params} />;
   }
+  if (params.component === "radio-group") {
+    return <RadioGroupHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -390,6 +446,19 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "switch", kit, state, theme };
+  }
+
+  if (component === "radio-group") {
+    if (
+      state !== "default" &&
+      state !== "checked" &&
+      state !== "focus-visible" &&
+      state !== "disabled" &&
+      state !== "invalid"
+    ) {
+      return null;
+    }
+    return { component: "radio-group", kit, state, theme };
   }
 
   if (component !== "button") return null;

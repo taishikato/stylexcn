@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group)
 
-- Passed: 104/104
+- Passed: 114/114
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -137,3 +137,18 @@
 | `switch__dark__checked` | PASS | 0/3200 |
 | `switch__dark__focus-visible` | PASS | 0/3200 |
 | `switch__dark__disabled` | PASS | 0/3200 |
+
+## Radio Group
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `radio-group__light__default` | PASS | 0/2304 |
+| `radio-group__light__checked` | PASS | 0/2304 |
+| `radio-group__light__focus-visible` | PASS | 0/2304 |
+| `radio-group__light__disabled` | PASS | 0/2304 |
+| `radio-group__light__invalid` | PASS | 0/2304 |
+| `radio-group__dark__default` | PASS | 0/2304 |
+| `radio-group__dark__checked` | PASS | 0/2304 |
+| `radio-group__dark__focus-visible` | PASS | 0/2304 |
+| `radio-group__dark__disabled` | PASS | 0/2304 |
+| `radio-group__dark__invalid` | PASS | 0/2304 |

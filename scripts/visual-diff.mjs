@@ -34,6 +34,13 @@ const CHECKBOX_STATES = [
   "invalid",
 ];
 const SWITCH_STATES = ["default", "checked", "focus-visible", "disabled"];
+const RADIO_GROUP_STATES = [
+  "default",
+  "checked",
+  "focus-visible",
+  "disabled",
+  "invalid",
+];
 const THEMES = ["light", "dark"];
 
 function buttonCases() {
@@ -138,6 +145,20 @@ function switchCases() {
   return list;
 }
 
+function radioGroupCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of RADIO_GROUP_STATES) {
+      list.push({
+        component: "radio-group",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -146,6 +167,7 @@ function cases() {
     ...textareaCases(),
     ...checkboxCases(),
     ...switchCases(),
+    ...radioGroupCases(),
   ];
 }
 
@@ -165,6 +187,9 @@ function slug(c) {
   if (c.component === "switch") {
     return `switch__${c.theme}__${c.state}`;
   }
+  if (c.component === "radio-group") {
+    return `radio-group__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -180,7 +205,8 @@ function urlFor(kit, c) {
     c.component !== "label" &&
     c.component !== "textarea" &&
     c.component !== "checkbox" &&
-    c.component !== "switch"
+    c.component !== "switch" &&
+    c.component !== "radio-group"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -244,6 +270,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "switch") {
     return page.locator('[data-slot="switch"]');
+  }
+  if (c.component === "radio-group") {
+    return page.locator('[data-slot="radio-group-item"]');
   }
   return page.getByRole("button");
 }
@@ -367,7 +396,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -384,7 +413,8 @@ async function main() {
           r.component !== "label" &&
           r.component !== "textarea" &&
           r.component !== "checkbox" &&
-          r.component !== "switch",
+          r.component !== "switch" &&
+          r.component !== "radio-group",
       )
       .map(
         (r) =>
@@ -441,6 +471,17 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "switch")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Radio Group",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "radio-group")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
