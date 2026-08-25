@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu)
 
-- Passed: 136/136
+- Passed: 140/140
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -195,3 +195,15 @@
 | `select__dark__invalid` | PASS | 0/11084 |
 | `select__dark__sm` | PASS | 0/10432 |
 | `select__dark__open` | PASS | 0/358400 |
+
+## Dropdown Menu
+
+- Closed cases crop the trigger (16px pad). Open cases are full-viewport (640×560) so trigger + portaled content are captured together.
+- Open uses controlled `open={true}` and `side="bottom"` `align="start"` on both kits. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `dropdown-menu__light__closed` | PASS | 0/6936 |
+| `dropdown-menu__light__open` | PASS | 0/358400 |
+| `dropdown-menu__dark__closed` | PASS | 0/6936 |
+| `dropdown-menu__dark__open` | PASS | 0/358400 |

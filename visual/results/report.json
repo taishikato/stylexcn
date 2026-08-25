@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T15:41:39.622Z",
-  "total": 136,
+  "generatedAt": "2026-08-25T15:58:58.557Z",
+  "total": 140,
   "failed": 0,
-  "passed": 136,
+  "passed": 140,
   "threshold": 0,
   "cases": [
     {
@@ -2040,6 +2040,62 @@
       "shadcn": "visual/results/shadcn/select__dark__open.png",
       "stylex": "visual/results/stylex/select__dark__open.png",
       "diff": "visual/results/diff/select__dark__open.png"
+    },
+    {
+      "name": "dropdown-menu__light__closed",
+      "component": "dropdown-menu",
+      "state": "closed",
+      "theme": "light",
+      "width": 102,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 6936,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dropdown-menu__light__closed.png",
+      "stylex": "visual/results/stylex/dropdown-menu__light__closed.png",
+      "diff": "visual/results/diff/dropdown-menu__light__closed.png"
+    },
+    {
+      "name": "dropdown-menu__light__open",
+      "component": "dropdown-menu",
+      "state": "open",
+      "theme": "light",
+      "width": 640,
+      "height": 560,
+      "mismatched": 0,
+      "pixels": 358400,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dropdown-menu__light__open.png",
+      "stylex": "visual/results/stylex/dropdown-menu__light__open.png",
+      "diff": "visual/results/diff/dropdown-menu__light__open.png"
+    },
+    {
+      "name": "dropdown-menu__dark__closed",
+      "component": "dropdown-menu",
+      "state": "closed",
+      "theme": "dark",
+      "width": 102,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 6936,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dropdown-menu__dark__closed.png",
+      "stylex": "visual/results/stylex/dropdown-menu__dark__closed.png",
+      "diff": "visual/results/diff/dropdown-menu__dark__closed.png"
+    },
+    {
+      "name": "dropdown-menu__dark__open",
+      "component": "dropdown-menu",
+      "state": "open",
+      "theme": "dark",
+      "width": 640,
+      "height": 560,
+      "mismatched": 0,
+      "pixels": 358400,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/dropdown-menu__dark__open.png",
+      "stylex": "visual/results/stylex/dropdown-menu__dark__open.png",
+      "diff": "visual/results/diff/dropdown-menu__dark__open.png"
     }
   ]
 }

@@ -20,6 +20,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "./components/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "./components/dropdown-menu";
 import { Input } from "./components/input";
 import { Label } from "./components/label";
 import { RadioGroup, RadioGroupItem } from "./components/radio-group";
@@ -57,6 +70,19 @@ import {
   OfficialDialogTitle,
   OfficialDialogTrigger,
 } from "./visual/official-dialog";
+import {
+  OfficialDropdownMenu,
+  OfficialDropdownMenuCheckboxItem,
+  OfficialDropdownMenuContent,
+  OfficialDropdownMenuGroup,
+  OfficialDropdownMenuItem,
+  OfficialDropdownMenuLabel,
+  OfficialDropdownMenuRadioGroup,
+  OfficialDropdownMenuRadioItem,
+  OfficialDropdownMenuSeparator,
+  OfficialDropdownMenuShortcut,
+  OfficialDropdownMenuTrigger,
+} from "./visual/official-dropdown-menu";
 import { OfficialInput } from "./visual/official-input";
 import { OfficialLabel } from "./visual/official-label";
 import {
@@ -128,8 +154,8 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, and Select vs official shadcn New York baseline. Visual
-        capture lives at query-param harness URLs (see README).
+        Card, Dialog, Select, and Dropdown Menu vs official shadcn New York
+        baseline. Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -539,6 +565,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <PlaygroundSelect kit="shadcn" dark={dark} />
         <PlaygroundSelect kit="shadcn" dark={dark} size="sm" />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Dropdown Menu
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundDropdownMenu kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Dropdown Menu
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundDropdownMenu kit="shadcn" dark={dark} />
+      </div>
     </div>
   );
 }
@@ -623,6 +663,83 @@ function PlaygroundSelect({
       </SelectTrigger>
       <SelectContent position="popper">{fruits}</SelectContent>
     </Select>
+  );
+}
+
+function PlaygroundDropdownMenu({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialDropdownMenu open={open} onOpenChange={setOpen}>
+        <OfficialDropdownMenuTrigger asChild>
+          <OfficialButton variant="outline">Open</OfficialButton>
+        </OfficialDropdownMenuTrigger>
+        <OfficialDropdownMenuContent>
+          <OfficialDropdownMenuLabel>My Account</OfficialDropdownMenuLabel>
+          <OfficialDropdownMenuSeparator />
+          <OfficialDropdownMenuGroup>
+            <OfficialDropdownMenuItem>
+              Profile
+              <OfficialDropdownMenuShortcut>⇧⌘P</OfficialDropdownMenuShortcut>
+            </OfficialDropdownMenuItem>
+          </OfficialDropdownMenuGroup>
+          <OfficialDropdownMenuSeparator />
+          <OfficialDropdownMenuCheckboxItem checked>
+            Status Bar
+          </OfficialDropdownMenuCheckboxItem>
+          <OfficialDropdownMenuRadioGroup value="bottom">
+            <OfficialDropdownMenuRadioItem value="bottom">
+              Bottom
+            </OfficialDropdownMenuRadioItem>
+          </OfficialDropdownMenuRadioGroup>
+        </OfficialDropdownMenuContent>
+      </OfficialDropdownMenu>
+    );
+  }
+
+  return (
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline">Open</Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent>
+        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuSeparator />
+        <DropdownMenuGroup>
+          <DropdownMenuItem>
+            Profile
+            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+          </DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuCheckboxItem checked>Status Bar</DropdownMenuCheckboxItem>
+        <DropdownMenuRadioGroup value="bottom">
+          <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 

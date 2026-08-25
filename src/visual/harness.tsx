@@ -19,6 +19,19 @@ import {
   DialogHeader,
   DialogTitle,
 } from "../components/dialog";
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "../components/dropdown-menu";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
@@ -72,6 +85,19 @@ import {
 } from "./official-select";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialTextarea } from "./official-textarea";
+import {
+  OfficialDropdownMenu,
+  OfficialDropdownMenuCheckboxItem,
+  OfficialDropdownMenuContent,
+  OfficialDropdownMenuGroup,
+  OfficialDropdownMenuItem,
+  OfficialDropdownMenuLabel,
+  OfficialDropdownMenuRadioGroup,
+  OfficialDropdownMenuRadioItem,
+  OfficialDropdownMenuSeparator,
+  OfficialDropdownMenuShortcut,
+  OfficialDropdownMenuTrigger,
+} from "./official-dropdown-menu";
 
 export const VARIANTS = [
   "default",
@@ -99,7 +125,8 @@ export type CaptureComponent =
   | "radio-group"
   | "card"
   | "dialog"
-  | "select";
+  | "select"
+  | "dropdown-menu";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -112,7 +139,8 @@ export type CaptureState =
   | "no-close"
   | "selected"
   | "sm"
-  | "open";
+  | "open"
+  | "closed";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -194,6 +222,13 @@ export type SelectCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type DropdownMenuCaptureParams = {
+  component: "dropdown-menu";
+  kit: CaptureKit;
+  state: "closed" | "open";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -204,7 +239,8 @@ export type CaptureParams =
   | RadioGroupCaptureParams
   | CardCaptureParams
   | DialogCaptureParams
-  | SelectCaptureParams;
+  | SelectCaptureParams
+  | DropdownMenuCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -687,6 +723,101 @@ function SelectHarness({ kit, state, theme }: SelectCaptureParams) {
   );
 }
 
+const DROPDOWN_TRIGGER = "Open";
+
+function DropdownMenuBody({ kit }: { kit: CaptureKit }) {
+  if (kit === "shadcn") {
+    return (
+      <>
+        <OfficialDropdownMenuLabel>My Account</OfficialDropdownMenuLabel>
+        <OfficialDropdownMenuSeparator />
+        <OfficialDropdownMenuGroup>
+          <OfficialDropdownMenuItem>
+            Profile
+            <OfficialDropdownMenuShortcut>⇧⌘P</OfficialDropdownMenuShortcut>
+          </OfficialDropdownMenuItem>
+        </OfficialDropdownMenuGroup>
+        <OfficialDropdownMenuSeparator />
+        <OfficialDropdownMenuCheckboxItem checked>
+          Status Bar
+        </OfficialDropdownMenuCheckboxItem>
+        <OfficialDropdownMenuRadioGroup value="bottom">
+          <OfficialDropdownMenuRadioItem value="bottom">
+            Bottom
+          </OfficialDropdownMenuRadioItem>
+        </OfficialDropdownMenuRadioGroup>
+      </>
+    );
+  }
+  return (
+    <>
+      <DropdownMenuLabel>My Account</DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuGroup>
+        <DropdownMenuItem>
+          Profile
+          <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+      <DropdownMenuSeparator />
+      <DropdownMenuCheckboxItem checked>Status Bar</DropdownMenuCheckboxItem>
+      <DropdownMenuRadioGroup value="bottom">
+        <DropdownMenuRadioItem value="bottom">Bottom</DropdownMenuRadioItem>
+      </DropdownMenuRadioGroup>
+    </>
+  );
+}
+
+function DropdownMenuHarness({
+  kit,
+  state,
+  theme,
+}: DropdownMenuCaptureParams) {
+  const isDark = theme === "dark";
+  const isOpen = state === "open";
+  usePortalDocumentTheme(isDark);
+
+  const menu =
+    kit === "shadcn" ? (
+      <OfficialDropdownMenu
+        open={isOpen ? true : undefined}
+        onOpenChange={() => {}}
+      >
+        <OfficialDropdownMenuTrigger asChild>
+          <OfficialButton variant="outline">{DROPDOWN_TRIGGER}</OfficialButton>
+        </OfficialDropdownMenuTrigger>
+        <OfficialDropdownMenuContent side="bottom" align="start">
+          <DropdownMenuBody kit={kit} />
+        </OfficialDropdownMenuContent>
+      </OfficialDropdownMenu>
+    ) : (
+      <DropdownMenu open={isOpen ? true : undefined} onOpenChange={() => {}}>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">{DROPDOWN_TRIGGER}</Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent side="bottom" align="start">
+          <DropdownMenuBody kit={kit} />
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="dropdown-menu"
+      data-state={state}
+      {...stylex.props(
+        isDark && darkTheme,
+        isOpen ? styles.selectOpenFrame : styles.frame,
+      )}
+    >
+      {menu}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -744,6 +875,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "select") {
     return <SelectHarness {...params} />;
+  }
+  if (params.component === "dropdown-menu") {
+    return <DropdownMenuHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -853,6 +987,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "select", kit, state, theme };
+  }
+
+  if (component === "dropdown-menu") {
+    if (state !== "closed" && state !== "open") {
+      return null;
+    }
+    return { component: "dropdown-menu", kit, state, theme };
   }
 
   if (component !== "button") return null;
