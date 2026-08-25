@@ -12,6 +12,16 @@ import {
 } from "../components/card";
 import { Checkbox } from "../components/checkbox";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../components/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -80,6 +90,16 @@ import {
   OfficialCardHeader,
   OfficialCardTitle,
 } from "./official-card";
+import {
+  OfficialAlertDialog,
+  OfficialAlertDialogAction,
+  OfficialAlertDialogCancel,
+  OfficialAlertDialogContent,
+  OfficialAlertDialogDescription,
+  OfficialAlertDialogFooter,
+  OfficialAlertDialogHeader,
+  OfficialAlertDialogTitle,
+} from "./official-alert-dialog";
 import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
 import { OfficialLabel } from "./official-label";
@@ -170,6 +190,7 @@ export type CaptureComponent =
   | "card"
   | "dialog"
   | "select"
+  | "alert-dialog"
   | "dropdown-menu"
   | "sheet"
   | "tabs"
@@ -273,6 +294,13 @@ export type SelectCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type AlertDialogCaptureParams = {
+  component: "alert-dialog";
+  kit: CaptureKit;
+  state: "default";
+  theme: CaptureTheme;
+};
+
 export type DropdownMenuCaptureParams = {
   component: "dropdown-menu";
   kit: CaptureKit;
@@ -312,6 +340,7 @@ export type CaptureParams =
   | CardCaptureParams
   | DialogCaptureParams
   | SelectCaptureParams
+  | AlertDialogCaptureParams
   | DropdownMenuCaptureParams
   | SheetCaptureParams
   | TabsCaptureParams
@@ -709,6 +738,67 @@ function DialogHarness({ kit, state, theme }: DialogCaptureParams) {
       {...stylex.props(isDark && darkTheme, styles.frame)}
     >
       {dialog}
+    </div>
+  );
+}
+
+const ALERT_DIALOG_TITLE = "Are you absolutely sure?";
+const ALERT_DIALOG_DESCRIPTION =
+  "This action cannot be undone. This will permanently delete your account and remove your data from our servers.";
+const ALERT_DIALOG_CANCEL = "Cancel";
+const ALERT_DIALOG_CONTINUE = "Continue";
+
+function AlertDialogHarness({ kit, state, theme }: AlertDialogCaptureParams) {
+  const isDark = theme === "dark";
+  usePortalDocumentTheme(isDark);
+
+  const alertDialog =
+    kit === "shadcn" ? (
+      <OfficialAlertDialog open onOpenChange={() => {}}>
+        <OfficialAlertDialogContent>
+          <OfficialAlertDialogHeader>
+            <OfficialAlertDialogTitle>{ALERT_DIALOG_TITLE}</OfficialAlertDialogTitle>
+            <OfficialAlertDialogDescription>
+              {ALERT_DIALOG_DESCRIPTION}
+            </OfficialAlertDialogDescription>
+          </OfficialAlertDialogHeader>
+          <OfficialAlertDialogFooter>
+            <OfficialAlertDialogCancel>
+              {ALERT_DIALOG_CANCEL}
+            </OfficialAlertDialogCancel>
+            <OfficialAlertDialogAction>
+              {ALERT_DIALOG_CONTINUE}
+            </OfficialAlertDialogAction>
+          </OfficialAlertDialogFooter>
+        </OfficialAlertDialogContent>
+      </OfficialAlertDialog>
+    ) : (
+      <AlertDialog open onOpenChange={() => {}}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>{ALERT_DIALOG_TITLE}</AlertDialogTitle>
+            <AlertDialogDescription>
+              {ALERT_DIALOG_DESCRIPTION}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>{ALERT_DIALOG_CANCEL}</AlertDialogCancel>
+            <AlertDialogAction>{ALERT_DIALOG_CONTINUE}</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="alert-dialog"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {alertDialog}
     </div>
   );
 }
@@ -1127,6 +1217,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "dialog") {
     return <DialogHarness {...params} />;
   }
+  if (params.component === "alert-dialog") {
+    return <AlertDialogHarness {...params} />;
+  }
   if (params.component === "select") {
     return <SelectHarness {...params} />;
   }
@@ -1235,6 +1328,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "dialog", kit, state, theme };
+  }
+
+  if (component === "alert-dialog") {
+    if (state !== "default") {
+      return null;
+    }
+    return { component: "alert-dialog", kit, state, theme };
   }
 
   if (component === "select") {

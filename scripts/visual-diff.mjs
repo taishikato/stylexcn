@@ -43,6 +43,7 @@ const RADIO_GROUP_STATES = [
 ];
 const CARD_STATES = ["default", "with-action"];
 const DIALOG_STATES = ["default", "no-close"];
+const ALERT_DIALOG_STATES = ["default"];
 const SELECT_STATES = [
   "default",
   "selected",
@@ -57,7 +58,7 @@ const SHEET_STATES = ["default", "left", "top", "bottom"];
 const TABS_STATES = ["default", "second", "disabled"];
 const POPOVER_STATES = ["default"];
 const THEMES = ["light", "dark"];
-/* Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg / text-left / footer row. */
+/* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
 /* Sheet overlay+panel: sm is 40rem. 800px keeps sm:max-w-sm on left/right. */
 const SHEET_VIEWPORT = { width: 800, height: 600 };
@@ -215,6 +216,20 @@ function dialogCases() {
   return list;
 }
 
+function alertDialogCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of ALERT_DIALOG_STATES) {
+      list.push({
+        component: "alert-dialog",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function selectCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -296,6 +311,7 @@ function cases() {
     ...radioGroupCases(),
     ...cardCases(),
     ...dialogCases(),
+    ...alertDialogCases(),
     ...selectCases(),
     ...dropdownMenuCases(),
     ...sheetCases(),
@@ -328,6 +344,9 @@ function slug(c) {
   }
   if (c.component === "dialog") {
     return `dialog__${c.theme}__${c.state}`;
+  }
+  if (c.component === "alert-dialog") {
+    return `alert-dialog__${c.theme}__${c.state}`;
   }
   if (c.component === "select") {
     return `select__${c.theme}__${c.state}`;
@@ -363,6 +382,7 @@ function urlFor(kit, c) {
     c.component !== "radio-group" &&
     c.component !== "card" &&
     c.component !== "dialog" &&
+    c.component !== "alert-dialog" &&
     c.component !== "select" &&
     c.component !== "dropdown-menu" &&
     c.component !== "sheet" &&
@@ -441,6 +461,9 @@ function controlLocator(page, c) {
   if (c.component === "dialog") {
     return page.locator('[data-slot="dialog-content"][data-state="open"]');
   }
+  if (c.component === "alert-dialog") {
+    return page.locator('[data-slot="alert-dialog-content"][data-state="open"]');
+  }
   if (c.component === "select") {
     return page.locator('[data-slot="select-trigger"]');
   }
@@ -463,6 +486,11 @@ async function prepareControl(page, c) {
   if (c.component === "dialog") {
     await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
     await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
+    return;
+  }
+  if (c.component === "alert-dialog") {
+    await page.locator('[data-slot="alert-dialog-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="alert-dialog-content"][data-state="open"]').waitFor();
     return;
   }
   if (c.component === "select" && c.state === "open") {
@@ -501,6 +529,12 @@ async function screenshotControl(page, c, dest) {
   if (c.component === "dialog") {
     await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
     await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "alert-dialog") {
+    await page.locator('[data-slot="alert-dialog-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="alert-dialog-content"][data-state="open"]').waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -592,7 +626,7 @@ async function main() {
     const diffPath = path.join(outDir, "diff", `${name}.png`);
 
     await page.setViewportSize(
-      c.component === "dialog"
+      c.component === "dialog" || c.component === "alert-dialog"
         ? DIALOG_VIEWPORT
         : c.component === "sheet"
           ? SHEET_VIEWPORT
@@ -653,7 +687,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -674,6 +708,7 @@ async function main() {
           r.component !== "radio-group" &&
           r.component !== "card" &&
           r.component !== "dialog" &&
+          r.component !== "alert-dialog" &&
           r.component !== "select" &&
           r.component !== "dropdown-menu" &&
           r.component !== "sheet" &&
@@ -771,6 +806,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "dialog")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Alert Dialog",
+    "",
+    "- Viewport: 800×600 (Tailwind `sm` / 40rem). Overlay + content are portaled to `document.body`.",
+    "- Forced `open={true}`. Screenshots are full-viewport (overlay + panel). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "alert-dialog")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

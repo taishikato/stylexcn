@@ -1,5 +1,16 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "./components/alert-dialog";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
   Card,
@@ -73,6 +84,17 @@ import {
 import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
 import { Harness, parseCaptureParams, SIZES, VARIANTS } from "./visual/harness";
+import {
+  OfficialAlertDialog,
+  OfficialAlertDialogAction,
+  OfficialAlertDialogCancel,
+  OfficialAlertDialogContent,
+  OfficialAlertDialogDescription,
+  OfficialAlertDialogFooter,
+  OfficialAlertDialogHeader,
+  OfficialAlertDialogTitle,
+  OfficialAlertDialogTrigger,
+} from "./visual/official-alert-dialog";
 import { OfficialButton } from "./visual/official-button";
 import {
   OfficialCard,
@@ -200,10 +222,9 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, Select, Dropdown Menu, Sheet, Tabs, and Popover vs
-        official shadcn New York baseline. Visual capture lives at query-param
-        harness URLs (see
-        README).
+        Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs, and
+        Popover vs official shadcn New York baseline. Visual capture lives at
+        query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -596,6 +617,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundDialog kit="shadcn" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Alert Dialog
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundAlertDialog kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Alert Dialog
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundAlertDialog kit="shadcn" dark={dark} />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Select
@@ -1059,6 +1094,77 @@ function PlaygroundDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function PlaygroundAlertDialog({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialAlertDialog open={open} onOpenChange={setOpen}>
+        <OfficialAlertDialogTrigger asChild>
+          <OfficialButton variant="outline">Open alert dialog</OfficialButton>
+        </OfficialAlertDialogTrigger>
+        <OfficialAlertDialogContent>
+          <OfficialAlertDialogHeader>
+            <OfficialAlertDialogTitle>
+              Are you absolutely sure?
+            </OfficialAlertDialogTitle>
+            <OfficialAlertDialogDescription>
+              This action cannot be undone. This will permanently delete your
+              account and remove your data from our servers.
+            </OfficialAlertDialogDescription>
+          </OfficialAlertDialogHeader>
+          <OfficialAlertDialogFooter>
+            <OfficialAlertDialogCancel>Cancel</OfficialAlertDialogCancel>
+            <OfficialAlertDialogAction>Continue</OfficialAlertDialogAction>
+          </OfficialAlertDialogFooter>
+        </OfficialAlertDialogContent>
+      </OfficialAlertDialog>
+    );
+  }
+
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline">Open alert dialog</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete your
+            account and remove your data from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogAction>Continue</AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }
 
