@@ -1,0 +1,37 @@
+{
+  "name": "stylexcn",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.app.json && vite build",
+    "preview": "vite preview --host 127.0.0.1 --port 4173",
+    "visual:diff": "node scripts/visual-diff.mjs"
+  },
+  "dependencies": {
+    "@base-ui/react": "^1.0.0",
+    "@stylexjs/stylex": "^0.19.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.544.0",
+    "radix-ui": "^1.4.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "tailwind-merge": "^3.3.1"
+  },
+  "devDependencies": {
+    "@stylexjs/unplugin": "^0.19.0",
+    "@tailwindcss/vite": "^4.1.12",
+    "@types/node": "^24.3.0",
+    "@types/react": "^19.1.12",
+    "@types/react-dom": "^19.1.8",
+    "@vitejs/plugin-react": "^5.0.2",
+    "pixelmatch": "^7.1.0",
+    "playwright": "^1.55.0",
+    "pngjs": "^7.0.0",
+    "tailwindcss": "^4.1.12",
+    "typescript": "^5.9.2",
+    "vite": "^7.1.3"
+  }
+}
