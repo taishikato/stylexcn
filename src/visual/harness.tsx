@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect } from "react";
+import { Badge, type BadgeVariant } from "../components/badge";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
   Card,
@@ -86,6 +87,7 @@ import {
   TooltipTrigger,
 } from "../components/tooltip";
 import { darkTheme } from "../theme";
+import { OfficialBadge } from "./official-badge";
 import { OfficialButton } from "./official-button";
 import {
   OfficialCard,
@@ -191,6 +193,15 @@ export const SIZES = [
   "icon",
 ] as const satisfies readonly ButtonSize[];
 
+export const BADGE_VARIANTS = [
+  "default",
+  "secondary",
+  "destructive",
+  "outline",
+  "ghost",
+  "link",
+] as const satisfies readonly BadgeVariant[];
+
 export type CaptureComponent =
   | "button"
   | "input"
@@ -207,7 +218,8 @@ export type CaptureComponent =
   | "sheet"
   | "tabs"
   | "popover"
-  | "tooltip";
+  | "tooltip"
+  | "badge";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -349,6 +361,14 @@ export type TooltipCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type BadgeCaptureParams = {
+  component: "badge";
+  kit: CaptureKit;
+  variant: BadgeVariant;
+  state: "default" | "focus-visible";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -365,7 +385,8 @@ export type CaptureParams =
   | SheetCaptureParams
   | TabsCaptureParams
   | PopoverCaptureParams
-  | TooltipCaptureParams;
+  | TooltipCaptureParams
+  | BadgeCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1238,6 +1259,39 @@ function TooltipHarness({ kit, theme }: TooltipCaptureParams) {
   );
 }
 
+
+const BADGE_LABEL = "Badge";
+
+function BadgeHarness({ kit, variant, state, theme }: BadgeCaptureParams) {
+  const isDark = theme === "dark";
+  const tabIndex = state === "focus-visible" ? 0 : undefined;
+
+  const badge =
+    kit === "shadcn" ? (
+      <OfficialBadge variant={variant} tabIndex={tabIndex}>
+        {BADGE_LABEL}
+      </OfficialBadge>
+    ) : (
+      <Badge variant={variant} tabIndex={tabIndex}>
+        {BADGE_LABEL}
+      </Badge>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="badge"
+      data-variant={variant}
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {badge}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -1313,6 +1367,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "tooltip") {
     return <TooltipHarness {...params} />;
+  }
+  if (params.component === "badge") {
+    return <BadgeHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -1469,6 +1526,21 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "tooltip", kit, state, theme };
+  }
+
+  if (component === "badge") {
+    const variant = q.get("variant") ?? "default";
+    if (!BADGE_VARIANTS.includes(variant as BadgeVariant)) return null;
+    if (state !== "default" && state !== "focus-visible") {
+      return null;
+    }
+    return {
+      component: "badge",
+      kit,
+      variant: variant as BadgeVariant,
+      state,
+      theme,
+    };
   }
 
   if (component !== "button") return null;

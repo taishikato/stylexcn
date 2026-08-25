@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Tooltip + Badge)
 
-- Passed: 160/160
+- Passed: 174/174
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -268,3 +268,25 @@
 | --- | --- | ---: |
 | `tooltip__light__default` | PASS | 0/153600 |
 | `tooltip__dark__default` | PASS | 0/153600 |
+
+## Badge
+
+- Official New York variants include ghost and link. Hover fills apply only to `[a&]` anchors; default cases are `<span>`.
+- `focus-visible` uses the default variant with `tabIndex={0}` on both kits (span is not tabbable otherwise). Official has no disabled utilities.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `badge__light__default` | PASS | 0/4644 |
+| `badge__light__secondary` | PASS | 0/4644 |
+| `badge__light__destructive` | PASS | 0/4644 |
+| `badge__light__outline` | PASS | 0/4644 |
+| `badge__light__ghost` | PASS | 0/4644 |
+| `badge__light__link` | PASS | 0/4644 |
+| `badge__light__focus-visible` | PASS | 0/4644 |
+| `badge__dark__default` | PASS | 0/4644 |
+| `badge__dark__secondary` | PASS | 0/4644 |
+| `badge__dark__destructive` | PASS | 0/4644 |
+| `badge__dark__outline` | PASS | 0/4644 |
+| `badge__dark__ghost` | PASS | 0/4644 |
+| `badge__dark__link` | PASS | 0/4644 |
+| `badge__dark__focus-visible` | PASS | 0/4644 |
