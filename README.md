@@ -2,7 +2,7 @@
 
 shadcn/ui-compatible components styled with [StyleX](https://stylexjs.com), not Tailwind. Visual target: official shadcn/ui **New York**. Primitives: [Base UI](https://base-ui.com).
 
-This repo is a foundation plus **Button**, **Input**, **Label**, **Textarea**, **Checkbox**, **Switch**, **Radio Group**, **Card**, and **Dialog**. Distribution (copy-into-repo / registry) comes later.
+This repo is a foundation plus **Button**, **Input**, **Label**, **Textarea**, **Checkbox**, **Switch**, **Radio Group**, **Card**, **Dialog**, and **Select**. Distribution (copy-into-repo / registry) comes later.
 
 ## Tokens
 
@@ -23,13 +23,13 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open the root URL for the Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog playground. Isolated capture frames use query params, for example `/?kit=stylex&component=button&variant=default&size=default&state=default&theme=light`, `/?kit=stylex&component=input&state=default&theme=light`, `/?kit=stylex&component=label&state=default&theme=light`, `/?kit=stylex&component=textarea&state=default&theme=light`, `/?kit=stylex&component=checkbox&state=default&theme=light`, `/?kit=stylex&component=switch&state=default&theme=light`, `/?kit=stylex&component=radio-group&state=default&theme=light`, `/?kit=stylex&component=card&state=default&theme=light`, or `/?kit=stylex&component=dialog&state=default&theme=light`. Dialog captures use a fixed **800×600** viewport (Tailwind `sm` / 40rem) so `sm:max-w-lg` applies on both kits.
+Open the root URL for the Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select playground. Isolated capture frames use query params, for example `/?kit=stylex&component=button&variant=default&size=default&state=default&theme=light`, `/?kit=stylex&component=input&state=default&theme=light`, `/?kit=stylex&component=label&state=default&theme=light`, `/?kit=stylex&component=textarea&state=default&theme=light`, `/?kit=stylex&component=checkbox&state=default&theme=light`, `/?kit=stylex&component=switch&state=default&theme=light`, `/?kit=stylex&component=radio-group&state=default&theme=light`, `/?kit=stylex&component=card&state=default&theme=light`, `/?kit=stylex&component=dialog&state=default&theme=light`, or `/?kit=stylex&component=select&state=default&theme=light`. Dialog captures use a fixed **800×600** viewport (Tailwind `sm` / 40rem) so `sm:max-w-lg` applies on both kits. Open Select captures use a fixed **640×560** viewport so the popper stays on-screen.
 
 ## Visual regression
 
 Harness: `src/visual/harness.tsx` (query params `kit`, `component`, `state`, `theme`; Button also uses `variant` and `size`).
 
-Official baselines: `src/visual/official-button.tsx`, `src/visual/official-input.tsx`, `src/visual/official-label.tsx`, `src/visual/official-textarea.tsx`, `src/visual/official-checkbox.tsx`, `src/visual/official-switch.tsx`, `src/visual/official-radio-group.tsx`, `src/visual/official-card.tsx`, `src/visual/official-dialog.tsx`. Candidates: `src/components/button.tsx`, `src/components/input.tsx`, `src/components/label.tsx`, `src/components/textarea.tsx`, `src/components/checkbox.tsx`, `src/components/switch.tsx`, `src/components/radio-group.tsx`, `src/components/card.tsx`, `src/components/dialog.tsx`.
+Official baselines: `src/visual/official-button.tsx`, `src/visual/official-input.tsx`, `src/visual/official-label.tsx`, `src/visual/official-textarea.tsx`, `src/visual/official-checkbox.tsx`, `src/visual/official-switch.tsx`, `src/visual/official-radio-group.tsx`, `src/visual/official-card.tsx`, `src/visual/official-dialog.tsx`, `src/visual/official-select.tsx`. Candidates: `src/components/button.tsx`, `src/components/input.tsx`, `src/components/label.tsx`, `src/components/textarea.tsx`, `src/components/checkbox.tsx`, `src/components/switch.tsx`, `src/components/radio-group.tsx`, `src/components/card.tsx`, `src/components/dialog.tsx`, `src/components/select.tsx`.
 
 ```bash
 npm run build
@@ -38,6 +38,6 @@ npm run visual:diff
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
 
-Latest local run: **122/122 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch + 10 Radio Group + 4 Card + 4 Dialog, threshold 0).
+Latest local run: **122/122 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch + 10 Radio Group + 4 Card + 4 Dialog, threshold 0). Select cases are added in this branch; re-run `npm run visual:diff` after build.
 
 Do not edit the harness or official baseline to hide a delta.

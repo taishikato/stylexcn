@@ -43,9 +43,20 @@ const RADIO_GROUP_STATES = [
 ];
 const CARD_STATES = ["default", "with-action"];
 const DIALOG_STATES = ["default", "no-close"];
+const SELECT_STATES = [
+  "default",
+  "selected",
+  "focus-visible",
+  "disabled",
+  "invalid",
+  "sm",
+  "open",
+];
 const THEMES = ["light", "dark"];
 /* Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg / text-left / footer row. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
+/* Select popper: trigger near top-left so content stays on-screen and does not flip. */
+const SELECT_OPEN_VIEWPORT = { width: 640, height: 560 };
 const CARD_VIEWPORT = { width: 400, height: 480 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
@@ -193,6 +204,20 @@ function dialogCases() {
   return list;
 }
 
+function selectCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SELECT_STATES) {
+      list.push({
+        component: "select",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -204,6 +229,7 @@ function cases() {
     ...radioGroupCases(),
     ...cardCases(),
     ...dialogCases(),
+    ...selectCases(),
   ];
 }
 
@@ -232,6 +258,9 @@ function slug(c) {
   if (c.component === "dialog") {
     return `dialog__${c.theme}__${c.state}`;
   }
+  if (c.component === "select") {
+    return `select__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -250,7 +279,8 @@ function urlFor(kit, c) {
     c.component !== "switch" &&
     c.component !== "radio-group" &&
     c.component !== "card" &&
-    c.component !== "dialog"
+    c.component !== "dialog" &&
+    c.component !== "select"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -324,6 +354,9 @@ function controlLocator(page, c) {
   if (c.component === "dialog") {
     return page.locator('[data-slot="dialog-content"][data-state="open"]');
   }
+  if (c.component === "select") {
+    return page.locator('[data-slot="select-trigger"]');
+  }
   return page.getByRole("button");
 }
 
@@ -331,6 +364,11 @@ async function prepareControl(page, c) {
   if (c.component === "dialog") {
     await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
     await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
+    return;
+  }
+  if (c.component === "select" && c.state === "open") {
+    await page.locator('[data-slot="select-trigger"]').waitFor();
+    await page.locator('[data-slot="select-content"][data-state="open"]').waitFor();
     return;
   }
   const locator = controlLocator(page, c);
@@ -347,6 +385,12 @@ async function screenshotControl(page, c, dest) {
   if (c.component === "dialog") {
     await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
     await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "select" && c.state === "open") {
+    await page.locator('[data-slot="select-trigger"]').waitFor();
+    await page.locator('[data-slot="select-content"][data-state="open"]').waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -414,9 +458,11 @@ async function main() {
     await page.setViewportSize(
       c.component === "dialog"
         ? DIALOG_VIEWPORT
-        : c.component === "card"
-          ? CARD_VIEWPORT
-          : DEFAULT_VIEWPORT,
+        : c.component === "select" && c.state === "open"
+          ? SELECT_OPEN_VIEWPORT
+          : c.component === "card"
+            ? CARD_VIEWPORT
+            : DEFAULT_VIEWPORT,
     );
 
     await page.goto(urlFor("shadcn", c), { waitUntil: "networkidle" });
@@ -465,7 +511,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Select)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -485,7 +531,8 @@ async function main() {
           r.component !== "switch" &&
           r.component !== "radio-group" &&
           r.component !== "card" &&
-          r.component !== "dialog",
+          r.component !== "dialog" &&
+          r.component !== "select",
       )
       .map(
         (r) =>
@@ -578,6 +625,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "dialog")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Select",
+    "",
+    "- Closed cases crop the trigger (16px pad). Open cases are full-viewport (640×560) so trigger + popper content are captured together.",
+    "- Open uses controlled `open={true}` and `position=\"popper\"` on both kits. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "select")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

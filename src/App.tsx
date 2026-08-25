@@ -23,6 +23,16 @@ import {
 import { Input } from "./components/input";
 import { Label } from "./components/label";
 import { RadioGroup, RadioGroupItem } from "./components/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "./components/select";
 import { Switch } from "./components/switch";
 import { Textarea } from "./components/textarea";
 import { darkTheme } from "./theme";
@@ -53,6 +63,16 @@ import {
   OfficialRadioGroup,
   OfficialRadioGroupItem,
 } from "./visual/official-radio-group";
+import {
+  OfficialSelect,
+  OfficialSelectContent,
+  OfficialSelectGroup,
+  OfficialSelectItem,
+  OfficialSelectLabel,
+  OfficialSelectSeparator,
+  OfficialSelectTrigger,
+  OfficialSelectValue,
+} from "./visual/official-select";
 import { OfficialSwitch } from "./visual/official-switch";
 import { OfficialTextarea } from "./visual/official-textarea";
 
@@ -108,8 +128,8 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, and Dialog vs official shadcn New York baseline. Visual capture
-        lives at query-param harness URLs (see README).
+        Card, Dialog, and Select vs official shadcn New York baseline. Visual
+        capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -503,7 +523,106 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundDialog kit="shadcn" dark={dark} />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Select
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundSelect kit="stylex" dark={dark} />
+        <PlaygroundSelect kit="stylex" dark={dark} size="sm" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Select
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundSelect kit="shadcn" dark={dark} />
+        <PlaygroundSelect kit="shadcn" dark={dark} size="sm" />
+      </div>
     </div>
+  );
+}
+
+function PlaygroundSelect({
+  kit,
+  dark,
+  size = "default",
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+  size?: "sm" | "default";
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  const fruits = (
+    <>
+      {kit === "shadcn" ? (
+        <>
+          <OfficialSelectGroup>
+            <OfficialSelectLabel>Fruits</OfficialSelectLabel>
+            <OfficialSelectItem value="apple">Apple</OfficialSelectItem>
+            <OfficialSelectItem value="banana">Banana</OfficialSelectItem>
+            <OfficialSelectItem value="blueberry">Blueberry</OfficialSelectItem>
+          </OfficialSelectGroup>
+          <OfficialSelectSeparator />
+          <OfficialSelectGroup>
+            <OfficialSelectLabel>Vegetables</OfficialSelectLabel>
+            <OfficialSelectItem value="carrot">Carrot</OfficialSelectItem>
+            <OfficialSelectItem value="broccoli">Broccoli</OfficialSelectItem>
+          </OfficialSelectGroup>
+        </>
+      ) : (
+        <>
+          <SelectGroup>
+            <SelectLabel>Fruits</SelectLabel>
+            <SelectItem value="apple">Apple</SelectItem>
+            <SelectItem value="banana">Banana</SelectItem>
+            <SelectItem value="blueberry">Blueberry</SelectItem>
+          </SelectGroup>
+          <SelectSeparator />
+          <SelectGroup>
+            <SelectLabel>Vegetables</SelectLabel>
+            <SelectItem value="carrot">Carrot</SelectItem>
+            <SelectItem value="broccoli">Broccoli</SelectItem>
+          </SelectGroup>
+        </>
+      )}
+    </>
+  );
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialSelect open={open} onOpenChange={setOpen}>
+        <OfficialSelectTrigger size={size}>
+          <OfficialSelectValue placeholder="Select a fruit" />
+        </OfficialSelectTrigger>
+        <OfficialSelectContent position="popper">{fruits}</OfficialSelectContent>
+      </OfficialSelect>
+    );
+  }
+
+  return (
+    <Select open={open} onOpenChange={setOpen}>
+      <SelectTrigger size={size}>
+        <SelectValue placeholder="Select a fruit" />
+      </SelectTrigger>
+      <SelectContent position="popper">{fruits}</SelectContent>
+    </Select>
   );
 }
 

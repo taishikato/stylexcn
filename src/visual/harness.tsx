@@ -22,6 +22,16 @@ import {
 import { Input } from "../components/input";
 import { Label } from "../components/label";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectSeparator,
+  SelectTrigger,
+  SelectValue,
+} from "../components/select";
 import { Switch } from "../components/switch";
 import { Textarea } from "../components/textarea";
 import { darkTheme } from "../theme";
@@ -50,6 +60,16 @@ import {
   OfficialDialogHeader,
   OfficialDialogTitle,
 } from "./official-dialog";
+import {
+  OfficialSelect,
+  OfficialSelectContent,
+  OfficialSelectGroup,
+  OfficialSelectItem,
+  OfficialSelectLabel,
+  OfficialSelectSeparator,
+  OfficialSelectTrigger,
+  OfficialSelectValue,
+} from "./official-select";
 import { OfficialSwitch } from "./official-switch";
 import { OfficialTextarea } from "./official-textarea";
 
@@ -78,7 +98,8 @@ export type CaptureComponent =
   | "switch"
   | "radio-group"
   | "card"
-  | "dialog";
+  | "dialog"
+  | "select";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -88,7 +109,10 @@ export type CaptureState =
   | "invalid"
   | "checked"
   | "with-action"
-  | "no-close";
+  | "no-close"
+  | "selected"
+  | "sm"
+  | "open";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -156,6 +180,20 @@ export type DialogCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SelectCaptureParams = {
+  component: "select";
+  kit: CaptureKit;
+  state:
+    | "default"
+    | "selected"
+    | "focus-visible"
+    | "disabled"
+    | "invalid"
+    | "sm"
+    | "open";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -165,7 +203,8 @@ export type CaptureParams =
   | SwitchCaptureParams
   | RadioGroupCaptureParams
   | CardCaptureParams
-  | DialogCaptureParams;
+  | DialogCaptureParams
+  | SelectCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -182,6 +221,16 @@ const styles = stylex.create({
   },
   cardWell: {
     width: "20rem",
+  },
+  selectOpenFrame: {
+    minHeight: "100vh",
+    margin: 0,
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    padding: "3rem",
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
   },
 });
 
@@ -537,6 +586,107 @@ function DialogHarness({ kit, state, theme }: DialogCaptureParams) {
   );
 }
 
+const SELECT_PLACEHOLDER = "Select a fruit";
+const SELECT_VALUE_APPLE = "apple";
+
+function SelectOptions({ kit }: { kit: CaptureKit }) {
+  if (kit === "shadcn") {
+    return (
+      <>
+        <OfficialSelectGroup>
+          <OfficialSelectLabel>Fruits</OfficialSelectLabel>
+          <OfficialSelectItem value="apple">Apple</OfficialSelectItem>
+          <OfficialSelectItem value="banana">Banana</OfficialSelectItem>
+          <OfficialSelectItem value="blueberry">Blueberry</OfficialSelectItem>
+        </OfficialSelectGroup>
+        <OfficialSelectSeparator />
+        <OfficialSelectGroup>
+          <OfficialSelectLabel>Vegetables</OfficialSelectLabel>
+          <OfficialSelectItem value="carrot">Carrot</OfficialSelectItem>
+          <OfficialSelectItem value="broccoli">Broccoli</OfficialSelectItem>
+        </OfficialSelectGroup>
+      </>
+    );
+  }
+  return (
+    <>
+      <SelectGroup>
+        <SelectLabel>Fruits</SelectLabel>
+        <SelectItem value="apple">Apple</SelectItem>
+        <SelectItem value="banana">Banana</SelectItem>
+        <SelectItem value="blueberry">Blueberry</SelectItem>
+      </SelectGroup>
+      <SelectSeparator />
+      <SelectGroup>
+        <SelectLabel>Vegetables</SelectLabel>
+        <SelectItem value="carrot">Carrot</SelectItem>
+        <SelectItem value="broccoli">Broccoli</SelectItem>
+      </SelectGroup>
+    </>
+  );
+}
+
+function SelectHarness({ kit, state, theme }: SelectCaptureParams) {
+  const isDark = theme === "dark";
+  const isOpen = state === "open";
+  const disabled = state === "disabled";
+  const invalid = state === "invalid";
+  const size = state === "sm" ? "sm" : "default";
+  const value =
+    state === "selected" || state === "open" ? SELECT_VALUE_APPLE : undefined;
+  usePortalDocumentTheme(isDark);
+
+  const select =
+    kit === "shadcn" ? (
+      <OfficialSelect
+        open={isOpen ? true : undefined}
+        onOpenChange={() => {}}
+        value={value}
+        disabled={disabled}
+      >
+        <OfficialSelectTrigger
+          size={size}
+          aria-invalid={invalid || undefined}
+        >
+          <OfficialSelectValue placeholder={SELECT_PLACEHOLDER} />
+        </OfficialSelectTrigger>
+        <OfficialSelectContent position="popper" side="bottom" align="center">
+          <SelectOptions kit={kit} />
+        </OfficialSelectContent>
+      </OfficialSelect>
+    ) : (
+      <Select
+        open={isOpen ? true : undefined}
+        onOpenChange={() => {}}
+        value={value}
+        disabled={disabled}
+      >
+        <SelectTrigger size={size} aria-invalid={invalid || undefined}>
+          <SelectValue placeholder={SELECT_PLACEHOLDER} />
+        </SelectTrigger>
+        <SelectContent position="popper" side="bottom" align="center">
+          <SelectOptions kit={kit} />
+        </SelectContent>
+      </Select>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="select"
+      data-state={state}
+      {...stylex.props(
+        isDark && darkTheme,
+        isOpen ? styles.selectOpenFrame : styles.frame,
+      )}
+    >
+      {select}
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -591,6 +741,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "dialog") {
     return <DialogHarness {...params} />;
+  }
+  if (params.component === "select") {
+    return <SelectHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -685,6 +838,21 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "dialog", kit, state, theme };
+  }
+
+  if (component === "select") {
+    if (
+      state !== "default" &&
+      state !== "selected" &&
+      state !== "focus-visible" &&
+      state !== "disabled" &&
+      state !== "invalid" &&
+      state !== "sm" &&
+      state !== "open"
+    ) {
+      return null;
+    }
+    return { component: "select", kit, state, theme };
   }
 
   if (component !== "button") return null;
