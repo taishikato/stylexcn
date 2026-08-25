@@ -54,6 +54,7 @@ const SELECT_STATES = [
   "open",
 ];
 const DROPDOWN_MENU_STATES = ["closed", "open"];
+const CONTEXT_MENU_STATES = ["closed", "open"];
 const SHEET_STATES = ["default", "left", "top", "bottom"];
 const TABS_STATES = ["default", "second", "disabled"];
 const POPOVER_STATES = ["default"];
@@ -98,6 +99,8 @@ const SHEET_VIEWPORT = { width: 800, height: 600 };
 const SELECT_OPEN_VIEWPORT = { width: 640, height: 560 };
 /* Dropdown Menu: trigger near top-left so portaled content stays on-screen. */
 const DROPDOWN_MENU_OPEN_VIEWPORT = { width: 640, height: 560 };
+/* Context Menu: same 640×560 as Dropdown Menu so portaled content stays on-screen. */
+const CONTEXT_MENU_OPEN_VIEWPORT = { width: 640, height: 560 };
 /* Menubar: pin near the top so the portaled File menu stays on-screen. */
 const MENUBAR_OPEN_VIEWPORT = { width: 640, height: 480 };
 /* Popover: trigger near top, horizontally centered so w-72 content (align=center)
@@ -295,6 +298,20 @@ function dropdownMenuCases() {
     for (const state of DROPDOWN_MENU_STATES) {
       list.push({
         component: "dropdown-menu",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
+function contextMenuCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of CONTEXT_MENU_STATES) {
+      list.push({
+        component: "context-menu",
         state,
         theme,
       });
@@ -604,6 +621,7 @@ function cases() {
     ...alertDialogCases(),
     ...selectCases(),
     ...dropdownMenuCases(),
+    ...contextMenuCases(),
     ...sheetCases(),
     ...tabsCases(),
     ...popoverCases(),
@@ -660,6 +678,9 @@ function slug(c) {
   }
   if (c.component === "dropdown-menu") {
     return `dropdown-menu__${c.theme}__${c.state}`;
+  }
+  if (c.component === "context-menu") {
+    return `context-menu__${c.theme}__${c.state}`;
   }
   if (c.component === "sheet") {
     return `sheet__${c.theme}__${c.state}`;
@@ -746,6 +767,7 @@ function urlFor(kit, c) {
     c.component !== "alert-dialog" &&
     c.component !== "select" &&
     c.component !== "dropdown-menu" &&
+    c.component !== "context-menu" &&
     c.component !== "sheet" &&
     c.component !== "tabs" &&
     c.component !== "popover" &&
@@ -848,6 +870,9 @@ function controlLocator(page, c) {
   if (c.component === "dropdown-menu") {
     return page.locator('[data-slot="dropdown-menu-trigger"]');
   }
+  if (c.component === "context-menu") {
+    return page.locator('[data-slot="context-menu-trigger"]');
+  }
   if (c.component === "sheet") {
     return page.locator('[data-slot="sheet-content"][data-state="open"]');
   }
@@ -940,6 +965,13 @@ async function prepareControl(page, c) {
       .waitFor();
     return;
   }
+  if (c.component === "context-menu" && c.state === "open") {
+    await page.locator('[data-slot="context-menu-trigger"]').waitFor();
+    await page
+      .locator('[data-slot="context-menu-content"][data-state="open"]')
+      .waitFor();
+    return;
+  }
   if (c.component === "menubar" && c.state === "open") {
     await page.locator('[data-slot="menubar"]').waitFor();
     await page
@@ -1024,6 +1056,14 @@ async function screenshotControl(page, c, dest) {
     await page.locator('[data-slot="dropdown-menu-trigger"]').waitFor();
     await page
       .locator('[data-slot="dropdown-menu-content"][data-state="open"]')
+      .waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "context-menu" && c.state === "open") {
+    await page.locator('[data-slot="context-menu-trigger"]').waitFor();
+    await page
+      .locator('[data-slot="context-menu-content"][data-state="open"]')
       .waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
@@ -1130,6 +1170,8 @@ async function main() {
             ? SELECT_OPEN_VIEWPORT
             : c.component === "dropdown-menu" && c.state === "open"
               ? DROPDOWN_MENU_OPEN_VIEWPORT
+              : c.component === "context-menu" && c.state === "open"
+                ? CONTEXT_MENU_OPEN_VIEWPORT
               : c.component === "menubar" && c.state === "open"
                 ? MENUBAR_OPEN_VIEWPORT
               : c.component === "popover"
@@ -1197,7 +1239,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1221,6 +1263,7 @@ async function main() {
           r.component !== "alert-dialog" &&
           r.component !== "select" &&
           r.component !== "dropdown-menu" &&
+          r.component !== "context-menu" &&
           r.component !== "sheet" &&
           r.component !== "tabs" &&
           r.component !== "popover" &&
@@ -1375,6 +1418,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "dropdown-menu")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Context Menu",
+    "",
+    "- Closed cases crop the trigger (`[data-slot=\"context-menu-trigger\"]`, 16px pad). Open cases are full-viewport (640×560) so trigger + portaled content are captured together.",
+    "- Open uses controlled `open={true}` on both kits (do not rely on right-click). Identical copy: trigger `Right click here`; items Back, Forward, Reload (⌘R shortcut), separator, Save Page As…, Print. No submenu / checkbox / radio. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "context-menu")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

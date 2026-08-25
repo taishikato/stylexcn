@@ -85,6 +85,14 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../components/dropdown-menu";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuShortcut,
+  ContextMenuTrigger,
+} from "../components/context-menu";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
 import { Progress } from "../components/progress";
@@ -300,6 +308,14 @@ import {
   OfficialDropdownMenuTrigger,
 } from "./official-dropdown-menu";
 import {
+  OfficialContextMenu,
+  OfficialContextMenuContent,
+  OfficialContextMenuItem,
+  OfficialContextMenuSeparator,
+  OfficialContextMenuShortcut,
+  OfficialContextMenuTrigger,
+} from "./official-context-menu";
+import {
   OfficialTooltip,
   OfficialTooltipContent,
   OfficialTooltipProvider,
@@ -344,6 +360,7 @@ export type CaptureComponent =
   | "select"
   | "alert-dialog"
   | "dropdown-menu"
+  | "context-menu"
   | "sheet"
   | "tabs"
   | "popover"
@@ -487,6 +504,13 @@ export type AlertDialogCaptureParams = {
 
 export type DropdownMenuCaptureParams = {
   component: "dropdown-menu";
+  kit: CaptureKit;
+  state: "closed" | "open";
+  theme: CaptureTheme;
+};
+
+export type ContextMenuCaptureParams = {
+  component: "context-menu";
   kit: CaptureKit;
   state: "closed" | "open";
   theme: CaptureTheme;
@@ -653,6 +677,7 @@ export type CaptureParams =
   | SelectCaptureParams
   | AlertDialogCaptureParams
   | DropdownMenuCaptureParams
+  | ContextMenuCaptureParams
   | SheetCaptureParams
   | TabsCaptureParams
   | PopoverCaptureParams
@@ -1473,6 +1498,91 @@ function DropdownMenuHarness({
       data-theme={theme}
       data-kit={kit}
       data-component="dropdown-menu"
+      data-state={state}
+      {...stylex.props(
+        isDark && darkTheme,
+        isOpen ? styles.selectOpenFrame : styles.frame,
+      )}
+    >
+      {menu}
+    </div>
+  );
+}
+
+const CONTEXT_MENU_TRIGGER = "Right click here";
+const CONTEXT_MENU_TRIGGER_CLASS =
+  "flex h-[150px] w-[300px] items-center justify-center rounded-md border border-dashed text-sm";
+
+function ContextMenuBody({ kit }: { kit: CaptureKit }) {
+  if (kit === "shadcn") {
+    return (
+      <>
+        <OfficialContextMenuItem>Back</OfficialContextMenuItem>
+        <OfficialContextMenuItem>Forward</OfficialContextMenuItem>
+        <OfficialContextMenuItem>
+          Reload
+          <OfficialContextMenuShortcut>⌘R</OfficialContextMenuShortcut>
+        </OfficialContextMenuItem>
+        <OfficialContextMenuSeparator />
+        <OfficialContextMenuItem>Save Page As…</OfficialContextMenuItem>
+        <OfficialContextMenuItem>Print</OfficialContextMenuItem>
+      </>
+    );
+  }
+  return (
+    <>
+      <ContextMenuItem>Back</ContextMenuItem>
+      <ContextMenuItem>Forward</ContextMenuItem>
+      <ContextMenuItem>
+        Reload
+        <ContextMenuShortcut>⌘R</ContextMenuShortcut>
+      </ContextMenuItem>
+      <ContextMenuSeparator />
+      <ContextMenuItem>Save Page As…</ContextMenuItem>
+      <ContextMenuItem>Print</ContextMenuItem>
+    </>
+  );
+}
+
+function ContextMenuHarness({
+  kit,
+  state,
+  theme,
+}: ContextMenuCaptureParams) {
+  const isDark = theme === "dark";
+  const isOpen = state === "open";
+  usePortalDocumentTheme(isDark);
+
+  const menu =
+    kit === "shadcn" ? (
+      <OfficialContextMenu
+        open={isOpen ? true : undefined}
+        onOpenChange={() => {}}
+      >
+        <OfficialContextMenuTrigger className={CONTEXT_MENU_TRIGGER_CLASS}>
+          {CONTEXT_MENU_TRIGGER}
+        </OfficialContextMenuTrigger>
+        <OfficialContextMenuContent>
+          <ContextMenuBody kit={kit} />
+        </OfficialContextMenuContent>
+      </OfficialContextMenu>
+    ) : (
+      <ContextMenu open={isOpen ? true : undefined} onOpenChange={() => {}}>
+        <ContextMenuTrigger className={CONTEXT_MENU_TRIGGER_CLASS}>
+          {CONTEXT_MENU_TRIGGER}
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuBody kit={kit} />
+        </ContextMenuContent>
+      </ContextMenu>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="context-menu"
       data-state={state}
       {...stylex.props(
         isDark && darkTheme,
@@ -2670,6 +2780,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "dropdown-menu") {
     return <DropdownMenuHarness {...params} />;
   }
+  if (params.component === "context-menu") {
+    return <ContextMenuHarness {...params} />;
+  }
   if (params.component === "sheet") {
     return <SheetHarness {...params} />;
   }
@@ -2852,6 +2965,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "dropdown-menu", kit, state, theme };
+  }
+
+  if (component === "context-menu") {
+    if (state !== "closed" && state !== "open") {
+      return null;
+    }
+    return { component: "context-menu", kit, state, theme };
   }
 
   if (component === "sheet") {
