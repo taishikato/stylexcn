@@ -4,13 +4,12 @@ import { useMemo, type ComponentProps } from "react";
 import { tokens } from "../tokens.stylex";
 
 const MIX_RING_50 = "color-mix(in oklab, var(--ring) 50%, transparent)";
-/* Tailwind v4 --shadow-sm (theme.css). Official thumb uses shadow-sm. */
-const SHADOW_SM =
-  "0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)";
+/* Tailwind v4 `shadow-sm` plus the four empty inset/ring slots from preflight. */
+const SHADOW_SM_LAYERS =
+  "0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 #0000, 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a";
 /* Official: hover:ring-4 / focus-visible:ring-4 with ring-ring/50. */
-const RING4 = `0 0 0 4px ${MIX_RING_50}`;
-/* Tailwind v4 paints ring before --tw-shadow (first layer is on top). */
-const RING4_AND_SHADOW = `${RING4}, ${SHADOW_SM}`;
+const SHADOW_SM_RING4 =
+  `0 0 #0000, 0 0 #0000, 0 0 #0000, 0 0 0 4px ${MIX_RING_50}, 0 1px 3px 0 #0000001a, 0 1px 2px -1px #0000001a`;
 
 /**
  * Slider as StyleX tables. Official New York: radix-ui Slider;
@@ -94,22 +93,18 @@ const thumb = stylex.create({
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: tokens["--primary"],
-    backgroundColor: "oklch(1 0 0)",
+    backgroundColor: "#fff",
     transitionProperty: "color, box-shadow",
     transitionDuration: "150ms",
     transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
-    outline: {
+    outlineStyle: {
       default: null,
-      ":focus-visible": "2px solid transparent",
-    },
-    outlineOffset: {
-      default: null,
-      ":focus-visible": "2px",
+      ":focus-visible": "none",
     },
     boxShadow: {
-      default: SHADOW_SM,
-      ":hover": RING4_AND_SHADOW,
-      ":focus-visible": RING4_AND_SHADOW,
+      default: SHADOW_SM_LAYERS,
+      ":hover": SHADOW_SM_RING4,
+      ":focus-visible": SHADOW_SM_RING4,
     },
     pointerEvents: {
       default: null,
