@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-25T14:26:54.331Z",
-  "total": 114,
+  "generatedAt": "2026-08-25T14:44:53.445Z",
+  "total": 118,
   "failed": 0,
-  "passed": 114,
+  "passed": 118,
   "threshold": 0,
   "cases": [
     {
@@ -1732,6 +1732,62 @@
       "shadcn": "visual/results/shadcn/radio-group__dark__invalid.png",
       "stylex": "visual/results/stylex/radio-group__dark__invalid.png",
       "diff": "visual/results/diff/radio-group__dark__invalid.png"
+    },
+    {
+      "name": "card__light__default",
+      "component": "card",
+      "state": "default",
+      "theme": "light",
+      "width": 352,
+      "height": 266,
+      "mismatched": 0,
+      "pixels": 93632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/card__light__default.png",
+      "stylex": "visual/results/stylex/card__light__default.png",
+      "diff": "visual/results/diff/card__light__default.png"
+    },
+    {
+      "name": "card__light__with-action",
+      "component": "card",
+      "state": "with-action",
+      "theme": "light",
+      "width": 352,
+      "height": 266,
+      "mismatched": 0,
+      "pixels": 93632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/card__light__with-action.png",
+      "stylex": "visual/results/stylex/card__light__with-action.png",
+      "diff": "visual/results/diff/card__light__with-action.png"
+    },
+    {
+      "name": "card__dark__default",
+      "component": "card",
+      "state": "default",
+      "theme": "dark",
+      "width": 352,
+      "height": 266,
+      "mismatched": 0,
+      "pixels": 93632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/card__dark__default.png",
+      "stylex": "visual/results/stylex/card__dark__default.png",
+      "diff": "visual/results/diff/card__dark__default.png"
+    },
+    {
+      "name": "card__dark__with-action",
+      "component": "card",
+      "state": "with-action",
+      "theme": "dark",
+      "width": 352,
+      "height": 266,
+      "mismatched": 0,
+      "pixels": 93632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/card__dark__with-action.png",
+      "stylex": "visual/results/stylex/card__dark__with-action.png",
+      "diff": "visual/results/diff/card__dark__with-action.png"
     }
   ]
 }

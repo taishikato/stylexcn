@@ -1,5 +1,14 @@
 import * as stylex from "@stylexjs/stylex";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/card";
 import { Checkbox } from "../components/checkbox";
 import { Input } from "../components/input";
 import { Label } from "../components/label";
@@ -8,6 +17,15 @@ import { Switch } from "../components/switch";
 import { Textarea } from "../components/textarea";
 import { darkTheme } from "../theme";
 import { OfficialButton } from "./official-button";
+import {
+  OfficialCard,
+  OfficialCardAction,
+  OfficialCardContent,
+  OfficialCardDescription,
+  OfficialCardFooter,
+  OfficialCardHeader,
+  OfficialCardTitle,
+} from "./official-card";
 import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
 import { OfficialLabel } from "./official-label";
@@ -41,7 +59,8 @@ export type CaptureComponent =
   | "textarea"
   | "checkbox"
   | "switch"
-  | "radio-group";
+  | "radio-group"
+  | "card";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -49,7 +68,8 @@ export type CaptureState =
   | "focus-visible"
   | "disabled"
   | "invalid"
-  | "checked";
+  | "checked"
+  | "with-action";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -99,7 +119,14 @@ export type SwitchCaptureParams = {
 export type RadioGroupCaptureParams = {
   component: "radio-group";
   kit: CaptureKit;
-  state: Exclude<CaptureState, "hover">;
+  state: Exclude<CaptureState, "hover" | "with-action">;
+  theme: CaptureTheme;
+};
+
+export type CardCaptureParams = {
+  component: "card";
+  kit: CaptureKit;
+  state: "default" | "with-action";
   theme: CaptureTheme;
 };
 
@@ -110,7 +137,8 @@ export type CaptureParams =
   | TextareaCaptureParams
   | CheckboxCaptureParams
   | SwitchCaptureParams
-  | RadioGroupCaptureParams;
+  | RadioGroupCaptureParams
+  | CardCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -124,6 +152,9 @@ const styles = stylex.create({
   },
   inputWell: {
     width: "16rem",
+  },
+  cardWell: {
+    width: "20rem",
   },
 });
 
@@ -331,6 +362,73 @@ function SwitchHarness({ kit, state, theme }: SwitchCaptureParams) {
   );
 }
 
+function CardBody({ withAction }: { withAction: boolean }) {
+  return (
+    <>
+      <CardTitle>Login to your account</CardTitle>
+      <CardDescription>
+        Enter your email below to login to your account
+      </CardDescription>
+      {withAction ? <CardAction>Action</CardAction> : null}
+    </>
+  );
+}
+
+function OfficialCardBody({ withAction }: { withAction: boolean }) {
+  return (
+    <>
+      <OfficialCardTitle>Login to your account</OfficialCardTitle>
+      <OfficialCardDescription>
+        Enter your email below to login to your account
+      </OfficialCardDescription>
+      {withAction ? (
+        <OfficialCardAction>Action</OfficialCardAction>
+      ) : null}
+    </>
+  );
+}
+
+function CardHarness({ kit, state, theme }: CardCaptureParams) {
+  const isDark = theme === "dark";
+  const withAction = state === "with-action";
+
+  const card =
+    kit === "shadcn" ? (
+      <OfficialCard>
+        <OfficialCardHeader>
+          <OfficialCardBody withAction={withAction} />
+        </OfficialCardHeader>
+        <OfficialCardContent>
+          A short body of copy that wraps at this width.
+        </OfficialCardContent>
+        <OfficialCardFooter>Need help?</OfficialCardFooter>
+      </OfficialCard>
+    ) : (
+      <Card>
+        <CardHeader>
+          <CardBody withAction={withAction} />
+        </CardHeader>
+        <CardContent>
+          A short body of copy that wraps at this width.
+        </CardContent>
+        <CardFooter>Need help?</CardFooter>
+      </Card>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="card"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.cardWell)}>{card}</div>
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -379,6 +477,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "radio-group") {
     return <RadioGroupHarness {...params} />;
+  }
+  if (params.component === "card") {
+    return <CardHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -459,6 +560,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "radio-group", kit, state, theme };
+  }
+
+  if (component === "card") {
+    if (state !== "default" && state !== "with-action") {
+      return null;
+    }
+    return { component: "card", kit, state, theme };
   }
 
   if (component !== "button") return null;
