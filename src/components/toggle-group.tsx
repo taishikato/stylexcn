@@ -26,14 +26,12 @@ const RING_DESTRUCTIVE = `0 0 0 3px ${MIX_DESTRUCTIVE_20}`;
 const RING_DESTRUCTIVE_DARK = `0 0 0 3px ${MIX_DESTRUCTIVE_40}`;
 
 type ToggleGroupContextValue = {
-  variant: ToggleVariant;
-  size: ToggleSize;
+  variant?: ToggleVariant;
+  size?: ToggleSize;
   spacing: number;
 };
 
 const ToggleGroupContext = createContext<ToggleGroupContextValue>({
-  variant: "default",
-  size: "default",
   spacing: 0,
 });
 
@@ -69,13 +67,31 @@ const itemExtras = stylex.create({
       ":focus": 10,
       ":focus-visible": 10,
     },
-    /* Official `data-[spacing=0]:rounded-none` plus first/last md corners. */
+    /* Official `rounded-none` + `first:rounded-l-md` + `last:rounded-r-md`
+       (longhands compose on a lone first+last child). */
     borderRadius: {
       default: null,
       '[data-spacing="0"]': 0,
-      '[data-spacing="0"]:first-child':
-        "var(--radius-md) 0 0 var(--radius-md)",
-      '[data-spacing="0"]:last-child': "0 var(--radius-md) var(--radius-md) 0",
+    },
+    borderTopLeftRadius: {
+      default: null,
+      '[data-spacing="0"]': 0,
+      '[data-spacing="0"]:first-child': tokens["--radius-md"],
+    },
+    borderBottomLeftRadius: {
+      default: null,
+      '[data-spacing="0"]': 0,
+      '[data-spacing="0"]:first-child': tokens["--radius-md"],
+    },
+    borderTopRightRadius: {
+      default: null,
+      '[data-spacing="0"]': 0,
+      '[data-spacing="0"]:last-child': tokens["--radius-md"],
+    },
+    borderBottomRightRadius: {
+      default: null,
+      '[data-spacing="0"]': 0,
+      '[data-spacing="0"]:last-child': tokens["--radius-md"],
     },
     boxShadow: {
       default: null,
@@ -107,8 +123,8 @@ export type ToggleGroupItemProps = ComponentProps<
 };
 
 export function ToggleGroup({
-  variant = "default",
-  size = "default",
+  variant,
+  size,
   spacing = 0,
   children,
   style,
