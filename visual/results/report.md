@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle)
 
-- Passed: 214/214
+- Passed: 228/228
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -389,3 +389,26 @@
 | `slider__dark__disabled` | PASS | 0/10944 |
 | `slider__dark__focus-visible` | PASS | 0/10944 |
 | `slider__dark__range` | PASS | 0/10944 |
+
+## Toggle
+
+- Crops `[data-slot="toggle"]` with 16px pad (covers the 3px focus ring).
+- Identical copy (`Italic`) on both kits. `on` uses controlled `pressed={true}`. `outline` / `sm` / `lg` are variant and size, not extra copy.
+- States: `default` / `on` / `outline` / `sm` / `lg` / `disabled` / `focus-visible` (Tab onto the control), each × light/dark. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `toggle__light__default` | PASS | 0/5372 |
+| `toggle__light__on` | PASS | 0/5372 |
+| `toggle__light__outline` | PASS | 0/5508 |
+| `toggle__light__sm` | PASS | 0/4800 |
+| `toggle__light__lg` | PASS | 0/5976 |
+| `toggle__light__disabled` | PASS | 0/5372 |
+| `toggle__light__focus-visible` | PASS | 0/5372 |
+| `toggle__dark__default` | PASS | 0/5372 |
+| `toggle__dark__on` | PASS | 0/5372 |
+| `toggle__dark__outline` | PASS | 0/5508 |
+| `toggle__dark__sm` | PASS | 0/4800 |
+| `toggle__dark__lg` | PASS | 0/5976 |
+| `toggle__dark__disabled` | PASS | 0/5372 |
+| `toggle__dark__focus-visible` | PASS | 0/5372 |
