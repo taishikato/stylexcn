@@ -83,6 +83,7 @@ const TOGGLE_STATES = [
   "focus-visible",
 ];
 const BREADCRUMB_STATES = ["default", "ellipsis"];
+const COLLAPSIBLE_STATES = ["open", "closed"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -101,6 +102,8 @@ const HOVER_CARD_VIEWPORT = { width: 640, height: 480 };
 const TOOLTIP_VIEWPORT = { width: 480, height: 320 };
 const CARD_VIEWPORT = { width: 400, height: 480 };
 const ACCORDION_VIEWPORT = { width: 400, height: 480 };
+/* 20rem well + open copy + 16px crop pad must stay inside the viewport. */
+const COLLAPSIBLE_VIEWPORT = { width: 400, height: 480 };
 /* 24rem well + 16px crop pad on each side must stay inside the viewport. */
 const BREADCRUMB_VIEWPORT = { width: 480, height: 200 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
@@ -494,6 +497,20 @@ function breadcrumbCases() {
   return list;
 }
 
+function collapsibleCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of COLLAPSIBLE_STATES) {
+      list.push({
+        component: "collapsible",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -522,6 +539,7 @@ function cases() {
     ...sliderCases(),
     ...toggleCases(),
     ...breadcrumbCases(),
+    ...collapsibleCases(),
   ];
 }
 
@@ -602,6 +620,9 @@ function slug(c) {
   if (c.component === "breadcrumb") {
     return `breadcrumb__${c.theme}__${c.state}`;
   }
+  if (c.component === "collapsible") {
+    return `collapsible__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -639,7 +660,8 @@ function urlFor(kit, c) {
     c.component !== "accordion" &&
     c.component !== "slider" &&
     c.component !== "toggle" &&
-    c.component !== "breadcrumb"
+    c.component !== "breadcrumb" &&
+    c.component !== "collapsible"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -770,6 +792,9 @@ function controlLocator(page, c) {
   if (c.component === "breadcrumb") {
     return page.locator('[data-slot="breadcrumb"]');
   }
+  if (c.component === "collapsible") {
+    return page.locator('[data-slot="collapsible"]');
+  }
   return page.getByRole("button");
 }
 
@@ -822,6 +847,15 @@ async function prepareControl(page, c) {
     if (c.state === "open" || c.state === "second") {
       await page
         .locator('[data-slot="accordion-content"][data-state="open"]')
+        .waitFor();
+    }
+    return;
+  }
+  if (c.component === "collapsible") {
+    await page.locator('[data-slot="collapsible"]').waitFor();
+    if (c.state === "open") {
+      await page
+        .locator('[data-slot="collapsible-content"][data-state="open"]')
         .waitFor();
     }
     return;
@@ -967,6 +1001,8 @@ async function main() {
                   ? CARD_VIEWPORT
                   : c.component === "accordion"
                     ? ACCORDION_VIEWPORT
+                  : c.component === "collapsible"
+                    ? COLLAPSIBLE_VIEWPORT
                   : c.component === "breadcrumb"
                     ? BREADCRUMB_VIEWPORT
                   : DEFAULT_VIEWPORT,
@@ -1018,7 +1054,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1055,7 +1091,8 @@ async function main() {
           r.component !== "accordion" &&
           r.component !== "slider" &&
           r.component !== "toggle" &&
-          r.component !== "breadcrumb",
+          r.component !== "breadcrumb" &&
+          r.component !== "collapsible",
       )
       .map(
         (r) =>
@@ -1392,6 +1429,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "breadcrumb")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Collapsible",
+    "",
+    "- Crops `[data-slot=\"collapsible\"]` with 16px pad inside an identical 20rem-wide parent on both kits.",
+    "- Identical demo: StyleX/official Button (`variant=\"outline\"`) as the trigger (`asChild`) with copy `Can I use this?` plus the same body when open.",
+    "- Controlled `open` / `onOpenChange`: `open` is `open={true}`, `closed` is `open={false}`. Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "collapsible")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

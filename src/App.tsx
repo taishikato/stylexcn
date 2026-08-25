@@ -34,6 +34,11 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "./components/breadcrumb";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./components/collapsible";
 import { Separator } from "./components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
@@ -157,6 +162,11 @@ import {
   OfficialBreadcrumbPage,
   OfficialBreadcrumbSeparator,
 } from "./visual/official-breadcrumb";
+import {
+  OfficialCollapsible,
+  OfficialCollapsibleContent,
+  OfficialCollapsibleTrigger,
+} from "./visual/official-collapsible";
 import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialSkeleton } from "./visual/official-skeleton";
 import { OfficialSlider } from "./visual/official-slider";
@@ -321,6 +331,9 @@ const styles = stylex.create({
   breadcrumbWell: {
     width: "24rem",
   },
+  collapsibleWell: {
+    width: "20rem",
+  },
 });
 
 function Playground() {
@@ -331,8 +344,8 @@ function Playground() {
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Sheet, Tabs,
         Popover, Hover Card, Tooltip, Badge, Separator, Skeleton, Avatar,
-        Progress, Accordion, Slider, Toggle, and Breadcrumb vs official
-        shadcn New York baseline. Visual capture lives at query-param
+        Progress, Accordion, Slider, Toggle, Breadcrumb, and Collapsible vs
+        official shadcn New York baseline. Visual capture lives at query-param
         harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
@@ -1121,6 +1134,24 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <PlaygroundBreadcrumb kit="shadcn" ellipsis />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Collapsible
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.collapsibleWell)}>
+          <PlaygroundCollapsible kit="stylex" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Collapsible
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.collapsibleWell)}>
+          <PlaygroundCollapsible kit="shadcn" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -1523,6 +1554,36 @@ function PlaygroundBreadcrumb({
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>
+  );
+}
+
+function PlaygroundCollapsible({ kit }: { kit: "stylex" | "shadcn" }) {
+  const [open, setOpen] = useState(false);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialCollapsible open={open} onOpenChange={setOpen}>
+        <OfficialCollapsibleTrigger asChild>
+          <OfficialButton variant="outline">Can I use this?</OfficialButton>
+        </OfficialCollapsibleTrigger>
+        <OfficialCollapsibleContent>
+          Yes. Free to use for personal and commercial projects. No attribution
+          required.
+        </OfficialCollapsibleContent>
+      </OfficialCollapsible>
+    );
+  }
+
+  return (
+    <Collapsible open={open} onOpenChange={setOpen}>
+      <CollapsibleTrigger asChild>
+        <Button variant="outline">Can I use this?</Button>
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        Yes. Free to use for personal and commercial projects. No attribution
+        required.
+      </CollapsibleContent>
+    </Collapsible>
   );
 }
 
