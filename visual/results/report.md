@@ -1,8 +1,10 @@
-# Button visual diff
+# Visual diff (Button + Input)
 
-- Passed: 66/66
+- Passed: 74/74
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
+
+## Button
 
 | Case | Result | Mismatched pixels |
 | --- | --- | ---: |
@@ -72,3 +74,16 @@
 | `dark__link__default__hover` | PASS | 0/7344 |
 | `dark__link__default__focus-visible` | PASS | 0/7344 |
 | `dark__link__default__disabled` | PASS | 0/7344 |
+
+## Input
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `input__light__default` | PASS | 0/19584 |
+| `input__light__focus-visible` | PASS | 0/19584 |
+| `input__light__disabled` | PASS | 0/19584 |
+| `input__light__invalid` | PASS | 0/19584 |
+| `input__dark__default` | PASS | 0/19584 |
+| `input__dark__focus-visible` | PASS | 0/19584 |
+| `input__dark__disabled` | PASS | 0/19584 |
+| `input__dark__invalid` | PASS | 0/19584 |
