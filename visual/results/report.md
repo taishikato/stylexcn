@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination)
 
-- Passed: 240/240
+- Passed: 244/244
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -451,3 +451,16 @@
 | `scroll-area__light__horizontal` | PASS | 0/36864 |
 | `scroll-area__dark__vertical` | PASS | 0/35840 |
 | `scroll-area__dark__horizontal` | PASS | 0/36864 |
+
+## Pagination
+
+- Crops `[data-slot="pagination"]` with 16px pad. `w-full` centers the row in the viewport on both kits.
+- Identical copy: `default` is Previous / 1 / 2 (active) / 3 / Next; `ellipsis` is Previous / 1 / … / 8 / 9 (active) / 10 / Next.
+- Official Previous/Next hide the word labels below Tailwind `sm` (640px). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `pagination__light__default` | PASS | 0/27200 |
+| `pagination__light__ellipsis` | PASS | 0/27200 |
+| `pagination__dark__default` | PASS | 0/27200 |
+| `pagination__dark__ellipsis` | PASS | 0/27200 |
