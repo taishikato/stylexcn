@@ -10,7 +10,7 @@ export default function DocsLayout({
   return (
     <div {...stylex.props(chrome.layout)}>
       <DocsSidebar />
-      <div>
+      <div {...stylex.props(chrome.contentColumn)}>
         <DocsMobileNav />
         <div {...stylex.props(chrome.main)}>{children}</div>
       </div>

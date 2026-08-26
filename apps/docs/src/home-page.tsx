@@ -286,7 +286,7 @@ function NotificationsTile() {
     >
       <div {...stylex.props(landing.tileBody)}>
         <div {...stylex.props(landing.prefRow)}>
-          <div>
+          <div {...stylex.props(landing.prefCopy)}>
             <div>Transaction alerts</div>
             <div {...stylex.props(landing.mutedSm)}>
               Deposits, withdrawals, and transfers.
@@ -295,7 +295,7 @@ function NotificationsTile() {
           <Switch checked={tx} onCheckedChange={setTx} />
         </div>
         <div {...stylex.props(landing.prefRow)}>
-          <div>
+          <div {...stylex.props(landing.prefCopy)}>
             <div>Security alerts</div>
             <div {...stylex.props(landing.mutedSm)}>
               Login attempts and account changes.
@@ -304,7 +304,7 @@ function NotificationsTile() {
           <Switch checked={security} onCheckedChange={setSecurity} />
         </div>
         <div {...stylex.props(landing.prefRow)}>
-          <div>
+          <div {...stylex.props(landing.prefCopy)}>
             <div>Goal milestones</div>
             <div {...stylex.props(landing.mutedSm)}>
               Updates at 25%, 50%, 75%, and 100%.
@@ -313,7 +313,7 @@ function NotificationsTile() {
           <Switch checked={goals} onCheckedChange={setGoals} />
         </div>
         <div {...stylex.props(landing.prefRow)}>
-          <div>
+          <div {...stylex.props(landing.prefCopy)}>
             <div>Market updates</div>
             <div {...stylex.props(landing.mutedSm)}>
               Daily portfolio summary and price alerts.
