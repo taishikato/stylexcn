@@ -23,9 +23,6 @@ export function SiteHeader() {
           <Link href="/docs" {...stylex.props(chrome.ghostLink)}>
             Docs
           </Link>
-          <Link href="/docs" {...stylex.props(chrome.ghostLink)}>
-            Components
-          </Link>
         </nav>
         <div {...stylex.props(landing.headerRight)}>
           <a
