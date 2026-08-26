@@ -15,6 +15,17 @@ Copied from:
 
 Dark overrides: `src/theme.ts` via `stylex.createTheme`. Radius scale from current shadcn v4 `@theme inline` (`apps/v4/app/globals.css`).
 
+## Docs site
+
+Next.js App Router のサイト（`apps/docs`）で、StyleX コンポーネントをブラウザからクリックできます。ルートの Vite playground は視覚回帰用のまま残しています。
+
+```bash
+npm install
+npm run docs
+```
+
+http://localhost:3000 — マーケティングホーム、`/docs` の一覧、各コンポーネントのライブデモ。ライト / ダーク切替あり。ビルドは `npm run docs:build`。詳細は `apps/docs/README.md`。
+
 ## Playground
 
 ```bash
