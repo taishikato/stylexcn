@@ -16,7 +16,6 @@ import {
 import { useState, type ReactNode } from "react";
 import { type DateRange } from "react-day-picker";
 import { enUS } from "react-day-picker/locale";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { toast } from "sonner";
 import {
@@ -1665,22 +1664,17 @@ function SliderDemo() {
 
 function SonnerDemo() {
   const { dark } = useTheme();
-  const theme = dark ? "dark" : "light";
 
   return (
-    <NextThemesProvider
-      attribute="class"
-      forcedTheme={theme}
-      disableTransitionOnChange
-    >
-      <Toaster theme={theme} />
+    <>
+      <Toaster theme={dark ? "dark" : "light"} />
       <Button
         variant="outline"
         onClick={() => toast("Event has been created")}
       >
         Show Toast
       </Button>
-    </NextThemesProvider>
+    </>
   );
 }
 
