@@ -1,7 +1,7 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
-import { CircleAlert, Inbox } from "lucide-react";
+import { CircleAlert, Inbox, Search } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import {
   Accordion,
@@ -104,6 +104,14 @@ import {
   HoverCardTrigger,
 } from "@stylexcn/components/hover-card";
 import { Input } from "@stylexcn/components/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@stylexcn/components/input-group";
 import { Kbd, KbdGroup } from "@stylexcn/components/kbd";
 import { Label } from "@stylexcn/components/label";
 import {
@@ -628,6 +636,98 @@ function InputDemo() {
   );
 }
 
+function InputGroupDemo() {
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <div {...stylex.props(chrome.row)}>
+        <div {...stylex.props(chrome.field)}>
+          <Label htmlFor="docs-ig-start">Inline start</Label>
+          <InputGroup>
+            <InputGroupAddon>
+              <Search />
+            </InputGroupAddon>
+            <InputGroupInput id="docs-ig-start" placeholder="Search..." />
+          </InputGroup>
+        </div>
+        <div {...stylex.props(chrome.field)}>
+          <Label htmlFor="docs-ig-end">Inline end</Label>
+          <InputGroup>
+            <InputGroupInput id="docs-ig-end" placeholder="example" />
+            <InputGroupAddon align="inline-end">
+              <InputGroupText>.com</InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </div>
+      <div {...stylex.props(chrome.row)}>
+        <div {...stylex.props(chrome.field)}>
+          <Label htmlFor="docs-ig-text">Text addons</Label>
+          <InputGroup>
+            <InputGroupAddon>
+              <InputGroupText>$</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput id="docs-ig-text" placeholder="0.00" />
+            <InputGroupAddon align="inline-end">
+              <InputGroupText>.com</InputGroupText>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+        <div {...stylex.props(chrome.field)}>
+          <Label htmlFor="docs-ig-button">Button</Label>
+          <InputGroup>
+            <InputGroupInput id="docs-ig-button" placeholder="Search docs..." />
+            <InputGroupAddon align="inline-end">
+              <InputGroupButton>Search</InputGroupButton>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+      </div>
+      <div {...stylex.props(chrome.row)}>
+        <div {...stylex.props(chrome.field)}>
+          <Label htmlFor="docs-ig-kbd">Kbd</Label>
+          <InputGroup>
+            <InputGroupInput id="docs-ig-kbd" placeholder="Search..." />
+            <InputGroupAddon align="inline-end">
+              <Kbd>⌘</Kbd>
+              <Kbd>K</Kbd>
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
+        <div {...stylex.props(chrome.field)}>
+          <Label htmlFor="docs-ig-off">Disabled</Label>
+          <InputGroup data-disabled="true">
+            <InputGroupAddon>
+              <InputGroupText>$</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput id="docs-ig-off" defaultValue="10.00" disabled />
+          </InputGroup>
+        </div>
+        <div {...stylex.props(chrome.field)}>
+          <Label htmlFor="docs-ig-bad">Invalid</Label>
+          <InputGroup>
+            <InputGroupAddon>
+              <InputGroupText>$</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput id="docs-ig-bad" defaultValue="-1" aria-invalid />
+          </InputGroup>
+        </div>
+      </div>
+      <div {...stylex.props(chrome.field)}>
+        <Label htmlFor="docs-ig-ta">Textarea</Label>
+        <InputGroup>
+          <InputGroupTextarea
+            id="docs-ig-ta"
+            placeholder="Write a short update..."
+          />
+          <InputGroupAddon align="block-end">
+            <InputGroupText>0/280</InputGroupText>
+          </InputGroupAddon>
+        </InputGroup>
+      </div>
+    </div>
+  );
+}
+
 function KbdDemo() {
   return (
     <div {...stylex.props(chrome.row)}>
@@ -1138,6 +1238,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   empty: EmptyDemo,
   "hover-card": HoverCardDemo,
   input: InputDemo,
+  "input-group": InputGroupDemo,
   kbd: KbdDemo,
   label: LabelDemo,
   menubar: MenubarDemo,

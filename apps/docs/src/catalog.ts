@@ -193,6 +193,21 @@ export const COMPONENTS: ComponentDoc[] = [
 <Input aria-invalid defaultValue="bad" />`,
   },
   {
+    slug: "input-group",
+    name: "Input Group",
+    description:
+      "Input or textarea with inline or block addons: text, icons, buttons, and kbd.",
+    usage: `<InputGroup>
+  <InputGroupAddon>
+    <InputGroupText>$</InputGroupText>
+  </InputGroupAddon>
+  <InputGroupInput placeholder="0.00" />
+  <InputGroupAddon align="inline-end">
+    <InputGroupText>.com</InputGroupText>
+  </InputGroupAddon>
+</InputGroup>`,
+  },
+  {
     slug: "kbd",
     name: "Kbd",
     description: "Keyboard shortcut glyphs, alone or grouped.",
