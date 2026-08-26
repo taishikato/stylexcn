@@ -61,6 +61,19 @@ import {
   CollapsibleTrigger,
 } from "@stylexcn/components/collapsible";
 import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+  ComboboxValue,
+  useComboboxAnchor,
+} from "@stylexcn/components/combobox";
+import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
@@ -512,6 +525,70 @@ function CollapsibleDemo() {
           required.
         </CollapsibleContent>
       </Collapsible>
+    </div>
+  );
+}
+
+const COMBOBOX_FRAMEWORKS = [
+  "Next.js",
+  "SvelteKit",
+  "Nuxt.js",
+  "Remix",
+  "Astro",
+];
+
+function ComboboxDemo() {
+  const chipAnchor = useComboboxAnchor();
+
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <div {...stylex.props(chrome.field)}>
+        <Label>Framework</Label>
+        <Combobox items={COMBOBOX_FRAMEWORKS}>
+          <ComboboxInput placeholder="Select a framework" />
+          <ComboboxContent>
+            <ComboboxEmpty>No items found.</ComboboxEmpty>
+            <ComboboxList>
+              {(item: string) => (
+                <ComboboxItem key={item} value={item}>
+                  {item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+      </div>
+      <div {...stylex.props(chrome.field)}>
+        <Label>Frameworks</Label>
+        <Combobox
+          multiple
+          items={COMBOBOX_FRAMEWORKS}
+          defaultValue={[COMBOBOX_FRAMEWORKS[0]]}
+        >
+          <ComboboxChips ref={chipAnchor}>
+            <ComboboxValue>
+              {(values: string[]) => (
+                <>
+                  {values.map((value) => (
+                    <ComboboxChip key={value}>{value}</ComboboxChip>
+                  ))}
+                  <ComboboxChipsInput placeholder="Add a framework" />
+                </>
+              )}
+            </ComboboxValue>
+          </ComboboxChips>
+          <ComboboxContent anchor={chipAnchor}>
+            <ComboboxEmpty>No items found.</ComboboxEmpty>
+            <ComboboxList>
+              {(item: string) => (
+                <ComboboxItem key={item} value={item}>
+                  {item}
+                </ComboboxItem>
+              )}
+            </ComboboxList>
+          </ComboboxContent>
+        </Combobox>
+      </div>
     </div>
   );
 }
@@ -1386,6 +1463,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   card: CardDemo,
   checkbox: CheckboxDemo,
   collapsible: CollapsibleDemo,
+  combobox: ComboboxDemo,
   "context-menu": ContextMenuDemo,
   dialog: DialogDemo,
   "dropdown-menu": DropdownMenuDemo,

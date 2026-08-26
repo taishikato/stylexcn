@@ -124,6 +124,25 @@ export const COMPONENTS: ComponentDoc[] = [
 </Collapsible>`,
   },
   {
+    slug: "combobox",
+    name: "Combobox",
+    description:
+      "Autocomplete with a suggestion list. Open, type, select, and chips.",
+    usage: `<Combobox items={frameworks}>
+  <ComboboxInput placeholder="Select a framework" />
+  <ComboboxContent>
+    <ComboboxEmpty>No items found.</ComboboxEmpty>
+    <ComboboxList>
+      {(item) => (
+        <ComboboxItem key={item} value={item}>
+          {item}
+        </ComboboxItem>
+      )}
+    </ComboboxList>
+  </ComboboxContent>
+</Combobox>`,
+  },
+  {
     slug: "context-menu",
     name: "Context Menu",
     description: "Right-click menu. Use the dashed box on the demo page.",
