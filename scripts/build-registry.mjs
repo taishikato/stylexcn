@@ -42,10 +42,20 @@ const EXTRA_REGISTRY_DEPS = {
 };
 
 const EXTRA_META = {
+  field: {
+    title: "Field",
+    description:
+      "Compose labels, controls, descriptions, and errors into a form field.",
+  },
   "input-group": {
     title: "Input Group",
     description:
       "Groups an input or textarea with addons, buttons, and text.",
+  },
+  "input-otp": {
+    title: "Input OTP",
+    description:
+      "One-time password slots. Type into the group, including a separator.",
   },
   item: {
     title: "Item",

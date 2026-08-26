@@ -175,6 +175,22 @@ export const COMPONENTS: ComponentDoc[] = [
 </Empty>`,
   },
   {
+    slug: "field",
+    name: "Field",
+    description:
+      "Compose labels, controls, descriptions, and errors into a form field.",
+    usage: `<FieldSet>
+  <FieldLegend>Profile</FieldLegend>
+  <FieldGroup>
+    <Field>
+      <FieldLabel htmlFor="email">Email</FieldLabel>
+      <Input id="email" placeholder="you@example.com" />
+      <FieldDescription>We will not share your email.</FieldDescription>
+    </Field>
+  </FieldGroup>
+</FieldSet>`,
+  },
+  {
     slug: "hover-card",
     name: "Hover Card",
     description: "Preview card on hover or focus.",
@@ -206,6 +222,22 @@ export const COMPONENTS: ComponentDoc[] = [
     <InputGroupText>.com</InputGroupText>
   </InputGroupAddon>
 </InputGroup>`,
+  },
+  {
+    slug: "input-otp",
+    name: "Input OTP",
+    description:
+      "One-time password slots. Type into the group, including a separator.",
+    usage: `<InputOTP maxLength={6}>
+  <InputOTPGroup>
+    <InputOTPSlot index={0} />
+    <InputOTPSlot index={1} />
+    <InputOTPSlot index={2} />
+    <InputOTPSlot index={3} />
+    <InputOTPSlot index={4} />
+    <InputOTPSlot index={5} />
+  </InputOTPGroup>
+</InputOTP>`,
   },
   {
     slug: "kbd",
