@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "chart",
   "title": "Chart",
-  "description": "Themed Recharts charts with tooltip and legend.",
+  "description": "Themed Recharts charts with tooltip and legend. Data is pinned and animation is off so the preview does not drift.",
   "dependencies": [
     "@stylexjs/stylex",
     "recharts"

@@ -133,6 +133,20 @@ export const COMPONENTS: ComponentDoc[] = [
 </Carousel>`,
   },
   {
+    slug: "chart",
+    name: "Chart",
+    description:
+      "Themed Recharts charts with tooltip and legend. Data is pinned and animation is off so the preview does not drift.",
+    usage: `<ChartContainer config={chartConfig}>
+  <BarChart accessibilityLayer data={chartData}>
+    <CartesianGrid vertical={false} />
+    <XAxis dataKey="month" tickLine={false} axisLine={false} />
+    <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+    <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8} />
+  </BarChart>
+</ChartContainer>`,
+  },
+  {
     slug: "checkbox",
     name: "Checkbox",
     description: "Boolean control with checked, disabled, and invalid states.",
