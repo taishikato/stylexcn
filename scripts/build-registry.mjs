@@ -91,6 +91,10 @@ const EXTRA_META = {
     description:
       "A carousel with motion and swipe. Horizontal by default; Previous and Next. Slide is pinned so the preview does not drift.",
   },
+  chart: {
+    title: "Chart",
+    description: "Themed Recharts charts with tooltip and legend.",
+  },
 };
 
 const SKIP_NPM = new Set(["react"]);

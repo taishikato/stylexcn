@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart)
 
-- Passed: 456/456
+- Passed: 462/462
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -889,3 +889,19 @@
 | `carousel__dark__default` | PASS | 0/222208 |
 | `carousel__dark__next` | PASS | 0/222208 |
 | `carousel__dark__vertical` | PASS | 0/145152 |
+
+## Chart
+
+- Crops `[data-chart-well]` with 16px pad (20rem well + 2.5rem inner pad so a pinned tooltip stays in frame). Viewport: 480×400 (below Tailwind `md`).
+- Official side is the live registry Chart (Recharts v3 wrapper). StyleX uses the same primitive with StyleX tables. Not Base UI.
+- Pinned data (Jan–Jun 2024) and `isAnimationActive={false}` on Bar / Line / Tooltip. `bar` matches official chart-bar-default (no hover). `line` matches official chart-line-default. `tooltip` is the bar chart with `defaultIndex={1}` so February is shown. Each × light/dark.
+- Skipped: the rest of the official charts gallery (area, pie, radar, radial, interactive), Card chrome, and legend-only variants. Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `chart__light__bar` | PASS | 0/109824 |
+| `chart__light__line` | PASS | 0/109824 |
+| `chart__light__tooltip` | PASS | 0/109824 |
+| `chart__dark__bar` | PASS | 0/109824 |
+| `chart__dark__line` | PASS | 0/109824 |
+| `chart__dark__tooltip` | PASS | 0/109824 |

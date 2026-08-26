@@ -242,6 +242,12 @@ import {
   CarouselPrevious,
 } from "./components/carousel";
 import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "./components/chart";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -257,6 +263,7 @@ import {
   ResizablePanelGroup,
 } from "./components/resizable";
 import { CircleAlert, Command as CommandGlyph, Inbox, Search } from "lucide-react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Tabs,
   TabsContent,
@@ -380,6 +387,11 @@ import {
   OfficialCarouselNext,
   OfficialCarouselPrevious,
 } from "./visual/official-carousel";
+import {
+  OfficialChartContainer,
+  OfficialChartTooltip,
+  OfficialChartTooltipContent,
+} from "./visual/official-chart";
 import {
   OfficialTable,
   OfficialTableBody,
@@ -753,7 +765,7 @@ function Playground() {
         Sheet, Drawer, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Navigation Menu, Calendar, Carousel, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
+        Menubar, Navigation Menu, Calendar, Carousel, Chart, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1796,6 +1808,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundCarousel kit="shadcn" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Chart
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>bar</span>
+        <PlaygroundChart kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Chart
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>bar</span>
+        <PlaygroundChart kit="shadcn" />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Aspect Ratio
@@ -3321,6 +3347,64 @@ function PlaygroundCarousel({ kit }: { kit: "stylex" | "shadcn" }) {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
+    </div>
+  );
+}
+
+const PLAYGROUND_CHART_DATA = [
+  { month: "January", desktop: 186 },
+  { month: "February", desktop: 305 },
+  { month: "March", desktop: 237 },
+  { month: "April", desktop: 73 },
+  { month: "May", desktop: 209 },
+  { month: "June", desktop: 214 },
+];
+
+const PLAYGROUND_CHART_CONFIG = {
+  desktop: {
+    label: "Desktop",
+    color: "var(--chart-1)",
+  },
+} satisfies ChartConfig;
+
+function PlaygroundChart({ kit }: { kit: "stylex" | "shadcn" }) {
+  const Container =
+    kit === "shadcn" ? OfficialChartContainer : ChartContainer;
+  const Tooltip = kit === "shadcn" ? OfficialChartTooltip : ChartTooltip;
+  const TooltipContent =
+    kit === "shadcn" ? OfficialChartTooltipContent : ChartTooltipContent;
+  return (
+    <div style={{ width: "20rem" }}>
+      <Container
+        config={PLAYGROUND_CHART_CONFIG}
+        className={kit === "shadcn" ? "min-h-[200px] w-full" : undefined}
+        style={kit === "stylex" ? { minHeight: 200, width: "100%" } : undefined}
+      >
+        <BarChart
+          accessibilityLayer
+          data={PLAYGROUND_CHART_DATA}
+        >
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+            tickFormatter={(value) => value.slice(0, 3)}
+          />
+          <Tooltip
+            cursor={false}
+            isAnimationActive={false}
+            content={<TooltipContent hideLabel />}
+          />
+          <Bar
+            dataKey="desktop"
+            fill="var(--color-desktop)"
+            radius={8}
+            isAnimationActive={false}
+          />
+        </BarChart>
+      </Container>
     </div>
   );
 }
