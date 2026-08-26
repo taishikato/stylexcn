@@ -11,14 +11,14 @@ export const chrome = stylex.create({
     zIndex: 40,
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
-    gap: "1rem",
-    height: "3.5rem",
+    height: "4rem",
     paddingInline: "1rem",
     borderBottomWidth: "1px",
     borderBottomStyle: "solid",
     borderBottomColor: tokens["--border"],
-    backgroundColor: tokens["--background"],
+    backgroundColor: "color-mix(in oklab, var(--background) 80%, transparent)",
+    backdropFilter: "blur(12px)",
+    boxShadow: "none",
   },
   brand: {
     display: "flex",
@@ -53,7 +53,7 @@ export const chrome = stylex.create({
       default: "1fr",
       [LG]: "16rem minmax(0, 1fr)",
     },
-    minHeight: "calc(100vh - 3.5rem)",
+    minHeight: "calc(100vh - 4rem)",
   },
   sidebar: {
     display: {
@@ -65,8 +65,8 @@ export const chrome = stylex.create({
     borderRightColor: tokens["--border"],
     padding: "1.25rem 1rem 3rem",
     position: "sticky",
-    top: "3.5rem",
-    height: "calc(100vh - 3.5rem)",
+    top: "4rem",
+    height: "calc(100vh - 4rem)",
     overflow: "auto",
   },
   mobileNav: {

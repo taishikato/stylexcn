@@ -28,15 +28,6 @@ export function SiteHeader() {
           </Link>
         </nav>
         <div {...stylex.props(landing.headerRight)}>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggle}
-            type="button"
-            aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
-          >
-            {dark ? <Sun size={16} /> : <Moon size={16} />}
-          </Button>
           <a
             href={GITHUB}
             target="_blank"
@@ -46,6 +37,15 @@ export function SiteHeader() {
           >
             <Github size={16} />
           </a>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggle}
+            type="button"
+            aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
+          >
+            {dark ? <Sun size={16} /> : <Moon size={16} />}
+          </Button>
         </div>
       </div>
     </header>
@@ -55,24 +55,18 @@ export function SiteHeader() {
 export function SiteFooter() {
   return (
     <footer {...stylex.props(landing.footer)}>
-      <div {...stylex.props(landing.footerInner)}>
-        <Link href="/" {...stylex.props(landing.footerName)}>
-          stylexcn
-        </Link>
-        <div {...stylex.props(landing.footerLinks)}>
-          <Link href="/docs" {...stylex.props(chrome.ghostLink)}>
-            Docs
-          </Link>
-          <a
-            href={GITHUB}
-            target="_blank"
-            rel="noreferrer"
-            {...stylex.props(chrome.ghostLink)}
-          >
-            GitHub
-          </a>
-        </div>
-      </div>
+      <p {...stylex.props(landing.footerLine)}>
+        Built for browsing the StyleX kit. Source is on{" "}
+        <a
+          href={GITHUB}
+          target="_blank"
+          rel="noreferrer"
+          {...stylex.props(landing.footerLink)}
+        >
+          GitHub
+        </a>
+        .
+      </p>
     </footer>
   );
 }

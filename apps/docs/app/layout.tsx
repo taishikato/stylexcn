@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import { SiteFooter, SiteHeader } from "../src/site-header";
+import { SiteHeader } from "../src/site-header";
 import { ThemeProvider } from "../src/theme-provider";
 
 export const metadata: Metadata = {
@@ -23,7 +23,6 @@ export default function RootLayout({
         <ThemeProvider>
           <SiteHeader />
           {children}
-          <SiteFooter />
         </ThemeProvider>
       </body>
     </html>
