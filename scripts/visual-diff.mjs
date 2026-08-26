@@ -234,6 +234,9 @@ const CAROUSEL_VIEWPORT = { width: 640, height: 560 };
 const CHART_STATES = ["bar", "line", "tooltip"];
 /* 20rem well + 2.5rem pad + tooltip overflow. Stay below Tailwind md. */
 const CHART_VIEWPORT = { width: 480, height: 400 };
+const SIDEBAR_STATES = ["default", "collapsed", "inset"];
+/* Desktop sidebar is md:block / md:flex (48rem). Pin open/collapsed. */
+const SIDEBAR_VIEWPORT = { width: 800, height: 600 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -821,6 +824,20 @@ function chartCases() {
   return list;
 }
 
+function sidebarCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SIDEBAR_STATES) {
+      list.push({
+        component: "sidebar",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function aspectRatioCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -983,6 +1000,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "chart") {
     return chartCases();
   }
+  if (process.env.VISUAL_ONLY === "sidebar") {
+    return sidebarCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -1036,6 +1056,7 @@ function cases() {
     ...calendarCases(),
     ...carouselCases(),
     ...chartCases(),
+    ...sidebarCases(),
   ];
 }
 
@@ -1222,6 +1243,9 @@ function slug(c) {
   if (c.component === "chart") {
     return `chart__${c.theme}__${c.state}`;
   }
+  if (c.component === "sidebar") {
+    return `sidebar__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1285,7 +1309,8 @@ function urlFor(kit, c) {
     c.component !== "navigation-menu" &&
     c.component !== "calendar" &&
     c.component !== "carousel" &&
-    c.component !== "chart"
+    c.component !== "chart" &&
+    c.component !== "sidebar"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1509,6 +1534,9 @@ function controlLocator(page, c) {
   if (c.component === "chart") {
     return page.locator("[data-chart-well]");
   }
+  if (c.component === "sidebar") {
+    return page.locator('[data-slot="sidebar-wrapper"]');
+  }
   return page.getByRole("button");
 }
 
@@ -1657,6 +1685,12 @@ async function prepareControl(page, c) {
     await page.waitForTimeout(100);
     return;
   }
+  if (c.component === "sidebar") {
+    await page.locator('[data-slot="sidebar-wrapper"]').waitFor();
+    await page.locator('[data-slot="sidebar"][data-state]').waitFor();
+    await page.waitForTimeout(50);
+    return;
+  }
   const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
@@ -1766,6 +1800,12 @@ async function screenshotControl(page, c, dest) {
     await page
       .locator('[data-slot="navigation-menu-viewport"][data-state="open"]')
       .waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "sidebar") {
+    await page.locator('[data-slot="sidebar-wrapper"]').waitFor();
+    await page.locator('[data-slot="sidebar"][data-state]').waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -1896,6 +1936,8 @@ async function main() {
                     ? CAROUSEL_VIEWPORT
                   : c.component === "chart"
                     ? CHART_VIEWPORT
+                  : c.component === "sidebar"
+                    ? SIDEBAR_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1945,7 +1987,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -2008,7 +2050,8 @@ async function main() {
           r.component !== "navigation-menu" &&
           r.component !== "calendar" &&
           r.component !== "carousel" &&
-          r.component !== "chart",
+          r.component !== "chart" &&
+          r.component !== "sidebar",
       )
       .map(
         (r) =>
@@ -2751,6 +2794,23 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "chart")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Sidebar",
+    "",
+    "- Viewport: 800×600 so Tailwind `md` (48rem) desktop layout applies (`md:block` / `md:flex`). Full-viewport screenshots because the container is `fixed`.",
+    "- Official side is the live registry Sidebar (radix Slot + CVA, Sheet on mobile). StyleX uses the same primitive. Not Base UI.",
+    "- Controlled `open` so screenshots do not drift (no cookie/localStorage). `default` is expanded `variant=\"sidebar\"` `collapsible=\"icon\"`. `collapsed` is the same with `open={false}` (icon mode). `inset` is expanded `variant=\"inset\"` plus SidebarInset.",
+    "- Identical copy: Acme Inc, Application group, Home (active) / Inbox / Calendar. Trigger is in the inset header. Playwright `animations: \"disabled\"`.",
+    "- Skipped: mobile Sheet, floating, offcanvas, rail hover, menu action/badge/sub, skeleton (random width), and the rest of the official sidebar blocks.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "sidebar")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

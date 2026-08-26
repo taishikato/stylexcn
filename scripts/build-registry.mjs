@@ -96,6 +96,11 @@ const EXTRA_META = {
     description:
       "Themed Recharts charts with tooltip and legend. Data is pinned and animation is off so the preview does not drift.",
   },
+  sidebar: {
+    title: "Sidebar",
+    description:
+      "A collapsible sidebar with menu groups. Open and collapsed states are pinned so the preview does not drift.",
+  },
 };
 
 const SKIP_NPM = new Set(["react"]);

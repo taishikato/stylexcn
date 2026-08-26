@@ -228,6 +228,7 @@ export function SheetOverlay({ className, ...props }: SheetOverlayProps) {
 
 export function SheetContent({
   className,
+  style,
   children,
   side = "right",
   showCloseButton = true,
@@ -241,7 +242,7 @@ export function SheetContent({
         data-slot="sheet-content"
         {...props}
         className={[sx.className, className].filter(Boolean).join(" ")}
-        style={sx.style}
+        style={{ ...sx.style, ...style }}
       >
         {children}
         {showCloseButton ? (

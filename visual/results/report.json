@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T18:35:43.814Z",
-  "total": 462,
+  "generatedAt": "2026-08-26T19:27:42.519Z",
+  "total": 468,
   "failed": 0,
-  "passed": 462,
+  "passed": 468,
   "threshold": 0,
   "cases": [
     {
@@ -6618,6 +6618,90 @@
       "shadcn": "visual/results/shadcn/chart__dark__tooltip.png",
       "stylex": "visual/results/stylex/chart__dark__tooltip.png",
       "diff": "visual/results/diff/chart__dark__tooltip.png"
+    },
+    {
+      "name": "sidebar__light__default",
+      "component": "sidebar",
+      "state": "default",
+      "theme": "light",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sidebar__light__default.png",
+      "stylex": "visual/results/stylex/sidebar__light__default.png",
+      "diff": "visual/results/diff/sidebar__light__default.png"
+    },
+    {
+      "name": "sidebar__light__collapsed",
+      "component": "sidebar",
+      "state": "collapsed",
+      "theme": "light",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sidebar__light__collapsed.png",
+      "stylex": "visual/results/stylex/sidebar__light__collapsed.png",
+      "diff": "visual/results/diff/sidebar__light__collapsed.png"
+    },
+    {
+      "name": "sidebar__light__inset",
+      "component": "sidebar",
+      "state": "inset",
+      "theme": "light",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sidebar__light__inset.png",
+      "stylex": "visual/results/stylex/sidebar__light__inset.png",
+      "diff": "visual/results/diff/sidebar__light__inset.png"
+    },
+    {
+      "name": "sidebar__dark__default",
+      "component": "sidebar",
+      "state": "default",
+      "theme": "dark",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sidebar__dark__default.png",
+      "stylex": "visual/results/stylex/sidebar__dark__default.png",
+      "diff": "visual/results/diff/sidebar__dark__default.png"
+    },
+    {
+      "name": "sidebar__dark__collapsed",
+      "component": "sidebar",
+      "state": "collapsed",
+      "theme": "dark",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sidebar__dark__collapsed.png",
+      "stylex": "visual/results/stylex/sidebar__dark__collapsed.png",
+      "diff": "visual/results/diff/sidebar__dark__collapsed.png"
+    },
+    {
+      "name": "sidebar__dark__inset",
+      "component": "sidebar",
+      "state": "inset",
+      "theme": "dark",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sidebar__dark__inset.png",
+      "stylex": "visual/results/stylex/sidebar__dark__inset.png",
+      "diff": "visual/results/diff/sidebar__dark__inset.png"
     }
   ]
 }
