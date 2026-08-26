@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)
 
-- Passed: 286/286
+- Passed: 294/294
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -336,6 +336,22 @@
 | `skeleton__light__circle` | PASS | 0/5184 |
 | `skeleton__dark__bar` | PASS | 0/13536 |
 | `skeleton__dark__circle` | PASS | 0/5184 |
+
+## Spinner
+
+- Official is `Loader2Icon` with `size-4 animate-spin`, `role="status"`, `aria-label="Loading"`. Size example uses `size-3` / `size-4` / `size-6` / `size-8`.
+- StyleX `size` keys `3` / `4` / `6` / `8` map to those utilities. Both kits keep `animate-spin`. Capture frame sets inherited `animation-play-state: paused` and crops a same-sized well (not the SVG AABB). Playwright `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `spinner__light__default` | PASS | 0/2304 |
+| `spinner__light__sm` | PASS | 0/1936 |
+| `spinner__light__lg` | PASS | 0/3136 |
+| `spinner__light__xl` | PASS | 0/4096 |
+| `spinner__dark__default` | PASS | 0/2304 |
+| `spinner__dark__sm` | PASS | 0/1936 |
+| `spinner__dark__lg` | PASS | 0/3136 |
+| `spinner__dark__xl` | PASS | 0/4096 |
 
 ## Avatar
 
