@@ -28,6 +28,9 @@ const fieldSet = stylex.create({
       ":has(> [data-slot=checkbox-group])": "0.75rem",
       ":has(> [data-slot=radio-group])": "0.75rem",
     },
+    ":not(#\\0) > [data-variant='legend'] + [data-slot='field-description']": {
+      marginTop: "-0.375rem",
+    },
   },
 });
 
@@ -46,6 +49,10 @@ const legend = stylex.create({
       default: null,
       '[data-variant="legend"]': "1.5rem",
       '[data-variant="label"]': "1.25rem",
+    },
+    /* Official `[[data-variant=legend]+&]:-mt-1.5` on FieldDescription. */
+    ":not(#\\0)[data-variant='legend'] + [data-slot='field-description']": {
+      marginTop: "-0.375rem",
     },
   },
 });
@@ -249,7 +256,6 @@ const description = stylex.create({
       default: null,
       ":nth-last-child(2)": "-0.25rem",
       ":last-child": 0,
-      ":not(#\\0):where([data-variant=legend] + &)": "-0.375rem",
     },
     ":not(#\\0) > a": {
       textDecorationLine: "underline",
