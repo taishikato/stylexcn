@@ -347,6 +347,15 @@ export const chrome = stylex.create({
     width: "100%",
     maxWidth: "24rem",
   },
+  commandWell: {
+    width: "100%",
+    maxWidth: "24rem",
+    overflow: "hidden",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: tokens["--border"],
+    borderRadius: tokens["--radius-lg"],
+  },
   wideWell: {
     width: "100%",
     maxWidth: "32rem",

@@ -143,6 +143,21 @@ export const COMPONENTS: ComponentDoc[] = [
 </Combobox>`,
   },
   {
+    slug: "command",
+    name: "Command",
+    description:
+      "Command menu for search and quick actions. Type to filter, select an item, or open CommandDialog.",
+    usage: `<Command>
+  <CommandInput placeholder="Type a command or search..." />
+  <CommandList>
+    <CommandEmpty>No results found.</CommandEmpty>
+    <CommandGroup heading="Suggestions">
+      <CommandItem>Calendar</CommandItem>
+    </CommandGroup>
+  </CommandList>
+</Command>`,
+  },
+  {
     slug: "context-menu",
     name: "Context Menu",
     description: "Right-click menu. Use the dashed box on the demo page.",

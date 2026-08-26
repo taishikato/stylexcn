@@ -283,7 +283,7 @@
       "name": "command",
       "type": "registry:ui",
       "title": "Command",
-      "description": "Command menu for search and quick actions. cmdk plus Dialog.",
+      "description": "Command menu for search and quick actions. Type to filter, select an item, or open CommandDialog.",
       "files": [
         {
           "path": "registry/ui/command.tsx",
