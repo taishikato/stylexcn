@@ -96,6 +96,15 @@ export const chrome = stylex.create({
     color: tokens["--muted-foreground"],
     marginBottom: "0.75rem",
   },
+  navSummary: {
+    fontSize: "0.75rem",
+    fontWeight: 600,
+    letterSpacing: "0.06em",
+    textTransform: "uppercase",
+    color: tokens["--muted-foreground"],
+    marginBottom: "0.75rem",
+    cursor: "pointer",
+  },
   navList: {
     listStyleType: "none",
     padding: 0,

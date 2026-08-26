@@ -6,12 +6,14 @@ import { usePathname } from "next/navigation";
 import { COMPONENTS } from "./catalog";
 import { chrome } from "./chrome.stylex";
 
-function NavList() {
+function NavList({ hideLabel = false }: { hideLabel?: boolean }) {
   const pathname = usePathname();
 
   return (
     <nav>
-      <div {...stylex.props(chrome.navLabel)}>Components</div>
+      {hideLabel ? null : (
+        <div {...stylex.props(chrome.navLabel)}>Components</div>
+      )}
       <ul {...stylex.props(chrome.navList)}>
         {COMPONENTS.map((item) => {
           const href = `/docs/${item.slug}`;
@@ -43,7 +45,10 @@ export function DocsSidebar() {
 export function DocsMobileNav() {
   return (
     <div {...stylex.props(chrome.mobileNav)}>
-      <NavList />
+      <details>
+        <summary {...stylex.props(chrome.navSummary)}>Components</summary>
+        <NavList hideLabel />
+      </details>
     </div>
   );
 }
