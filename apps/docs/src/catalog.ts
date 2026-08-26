@@ -93,6 +93,18 @@ export const COMPONENTS: ComponentDoc[] = [
 </ButtonGroup>`,
   },
   {
+    slug: "calendar",
+    name: "Calendar",
+    description: "A monthly date grid. Pick a day or a range. Month is pinned so the preview does not drift.",
+    usage: `<Calendar
+  mode="single"
+  selected={date}
+  onSelect={setDate}
+  month={new Date(2024, 5, 1)}
+  today={new Date(2024, 5, 15)}
+/>`,
+  },
+  {
     slug: "card",
     name: "Card",
     description: "Container for header, body, and footer.",

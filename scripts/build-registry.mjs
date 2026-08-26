@@ -55,7 +55,7 @@ const EXTRA_META = {
   calendar: {
     title: "Calendar",
     description:
-      "A monthly date grid with selection and range. Built on react-day-picker.",
+      "A monthly date grid. Pick a day or a range. Month is pinned so the preview does not drift.",
   },
   drawer: {
     title: "Drawer",
