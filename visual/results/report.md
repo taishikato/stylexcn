@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item)
 
-- Passed: 340/340
+- Passed: 356/356
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -681,3 +681,30 @@
 | `input-group__dark__focus-visible` | PASS | 0/19584 |
 | `input-group__dark__disabled` | PASS | 0/19584 |
 | `input-group__dark__invalid` | PASS | 0/19584 |
+
+## Item
+
+- Crops `[data-slot="item"]` (or `[data-slot="item-group"]` for `group`) with 16px pad inside an identical 20rem-wide parent on both kits.
+- Viewport: 400×400 so the 20rem well plus group / header-footer plus pad stays on-screen.
+- Identical copy on both kits: title `Basic Item`, description `A simple item with title and description.` Variants `default` / `outline` / `muted`; `sm` is `size="sm"`. `media` is icon media + content + sm Action button. `image` is a local SVG data URI (no network). `group` is two outline items with ItemSeparator. `header-footer` is outline with Header / Footer.
+- Official side composes official Separator / Button. StyleX composes StyleX Separator / Button.
+- Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `item__light__default` | PASS | 0/38720 |
+| `item__light__outline` | PASS | 0/38720 |
+| `item__light__muted` | PASS | 0/38720 |
+| `item__light__sm` | PASS | 0/35904 |
+| `item__light__media` | PASS | 0/46112 |
+| `item__light__image` | PASS | 0/46112 |
+| `item__light__group` | PASS | 0/66528 |
+| `item__light__header-footer` | PASS | 0/64064 |
+| `item__dark__default` | PASS | 0/38720 |
+| `item__dark__outline` | PASS | 0/38720 |
+| `item__dark__muted` | PASS | 0/38720 |
+| `item__dark__sm` | PASS | 0/35904 |
+| `item__dark__media` | PASS | 0/46112 |
+| `item__dark__image` | PASS | 0/46112 |
+| `item__dark__group` | PASS | 0/66528 |
+| `item__dark__header-footer` | PASS | 0/64064 |
