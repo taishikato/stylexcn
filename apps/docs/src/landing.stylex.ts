@@ -143,6 +143,7 @@ export const landing = stylex.create({
     minWidth: 0,
     maxWidth: "40rem",
     marginTop: "1.25rem",
+    overflow: "hidden",
   },
   galleryStage: {
     position: "relative",
