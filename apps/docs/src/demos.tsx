@@ -14,6 +14,7 @@ import {
   User,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { useForm } from "react-hook-form";
 import { type DateRange } from "react-day-picker";
 import { enUS } from "react-day-picker/locale";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
@@ -174,6 +175,15 @@ import {
   FieldSet,
   FieldTitle,
 } from "@stylexcn/components/field";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@stylexcn/components/form";
 import {
   HoverCard,
   HoverCardContent,
@@ -1054,6 +1064,41 @@ function FieldDemo() {
   );
 }
 
+function FormDemo() {
+  const form = useForm<{ username: string }>({
+    defaultValues: { username: "shadcn" },
+  });
+
+  return (
+    <div {...stylex.props(chrome.well)}>
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(() => {})}
+          {...stylex.props(chrome.stack)}
+        >
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input placeholder="shadcn" {...field} />
+                </FormControl>
+                <FormDescription>
+                  This is your public display name.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
+    </div>
+  );
+}
+
 function HoverCardDemo() {
   return (
     <HoverCard>
@@ -1855,6 +1900,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   "dropdown-menu": DropdownMenuDemo,
   empty: EmptyDemo,
   field: FieldDemo,
+  form: FormDemo,
   "hover-card": HoverCardDemo,
   input: InputDemo,
   "input-group": InputGroupDemo,

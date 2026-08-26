@@ -278,6 +278,33 @@ export const COMPONENTS: ComponentDoc[] = [
 </FieldSet>`,
   },
   {
+    slug: "form",
+    name: "Form",
+    description:
+      "React Hook Form bindings for labels, controls, descriptions, and messages. Values and errors are pinned so the preview does not drift.",
+    usage: `<Form {...form}>
+  <form onSubmit={form.handleSubmit(onSubmit)}>
+    <FormField
+      control={form.control}
+      name="username"
+      render={({ field }) => (
+        <FormItem>
+          <FormLabel>Username</FormLabel>
+          <FormControl>
+            <Input placeholder="shadcn" {...field} />
+          </FormControl>
+          <FormDescription>
+            This is your public display name.
+          </FormDescription>
+          <FormMessage />
+        </FormItem>
+      )}
+    />
+    <Button type="submit">Submit</Button>
+  </form>
+</Form>`,
+  },
+  {
     slug: "hover-card",
     name: "Hover Card",
     description: "Preview card on hover or focus.",
