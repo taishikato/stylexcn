@@ -348,7 +348,7 @@
       "name": "drawer",
       "type": "registry:ui",
       "title": "Drawer",
-      "description": "A panel that slides in from an edge of the screen. Built on vaul.",
+      "description": "A panel that slides in from an edge of the screen. Open bottom, left, right, or top.",
       "files": [
         {
           "path": "registry/ui/drawer.tsx",

@@ -112,6 +112,17 @@ import {
   DialogTrigger,
 } from "@stylexcn/components/dialog";
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  type DrawerDirection,
+} from "@stylexcn/components/drawer";
+import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
@@ -729,6 +740,36 @@ function DialogDemo() {
         </DialogFooter>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function DrawerDemo() {
+  const directions: DrawerDirection[] = ["bottom", "left", "right", "top"];
+  return (
+    <div {...stylex.props(chrome.row)}>
+      {directions.map((direction) => (
+        <Drawer key={direction} direction={direction}>
+          <DrawerTrigger asChild>
+            <Button variant="outline">{direction}</Button>
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Edit profile</DrawerTitle>
+              <DrawerDescription>
+                Make changes to your profile here. Click save when you are done.
+              </DrawerDescription>
+            </DrawerHeader>
+            <p>This is the drawer body.</p>
+            <DrawerFooter>
+              <Button>Save changes</Button>
+              <DrawerClose asChild>
+                <Button variant="outline">Cancel</Button>
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      ))}
+    </div>
   );
 }
 
@@ -1560,6 +1601,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   command: CommandDemo,
   "context-menu": ContextMenuDemo,
   dialog: DialogDemo,
+  drawer: DrawerDemo,
   "dropdown-menu": DropdownMenuDemo,
   empty: EmptyDemo,
   field: FieldDemo,

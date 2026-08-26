@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "drawer",
   "title": "Drawer",
-  "description": "A panel that slides in from an edge of the screen. Built on vaul.",
+  "description": "A panel that slides in from an edge of the screen. Open bottom, left, right, or top.",
   "dependencies": [
     "@stylexjs/stylex",
     "vaul"
