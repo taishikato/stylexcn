@@ -89,7 +89,7 @@ const EXTRA_META = {
   carousel: {
     title: "Carousel",
     description:
-      "A carousel with motion and swipe. Built on embla-carousel-react.",
+      "A carousel with motion and swipe. Horizontal by default; Previous and Next. Slide is pinned so the preview does not drift.",
   },
 };
 

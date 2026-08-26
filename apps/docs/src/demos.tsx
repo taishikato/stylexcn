@@ -67,6 +67,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@stylexcn/components/card";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@stylexcn/components/carousel";
 import { Checkbox } from "@stylexcn/components/checkbox";
 import {
   Collapsible,
@@ -523,6 +530,37 @@ function CalendarDemo() {
         selected={range}
         onSelect={setRange}
       />
+    </div>
+  );
+}
+
+/* Pin Embla index and disable drag/tween so the preview does not drift. */
+const CAROUSEL_OPTS = {
+  watchDrag: false as const,
+  duration: 0,
+  startIndex: 0,
+};
+
+function CarouselDemo() {
+  return (
+    <div {...stylex.props(chrome.carouselStage)}>
+      <Carousel opts={CAROUSEL_OPTS} {...stylex.props(chrome.carouselShell)}>
+        <CarouselContent>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <CarouselItem key={n}>
+              <div {...stylex.props(chrome.carouselPad)}>
+                <Card>
+                  <CardContent {...stylex.props(chrome.carouselSlideFace)}>
+                    <span {...stylex.props(chrome.carouselSlideLabel)}>{n}</span>
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
     </div>
   );
 }
@@ -1669,6 +1707,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   "button-group": ButtonGroupDemo,
   calendar: CalendarDemo,
   card: CardDemo,
+  carousel: CarouselDemo,
   checkbox: CheckboxDemo,
   collapsible: CollapsibleDemo,
   combobox: ComboboxDemo,
