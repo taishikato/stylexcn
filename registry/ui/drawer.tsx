@@ -115,16 +115,10 @@ const header = stylex.create({
     },
     padding: "1rem",
     fontFamily: "inherit",
-    textAlign: {
-      default: null,
-      [MD]: "left",
-    },
   },
+  /* Official `md:text-left` loses to group-data text-center (higher specificity). */
   vertical: {
-    textAlign: {
-      default: "center",
-      [MD]: "left",
-    },
+    textAlign: "center",
   },
 });
 

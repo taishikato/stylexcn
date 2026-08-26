@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)
 
-- Passed: 430/430
+- Passed: 438/438
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -265,6 +265,24 @@
 | `sheet__dark__left` | PASS | 0/480000 |
 | `sheet__dark__top` | PASS | 0/480000 |
 | `sheet__dark__bottom` | PASS | 0/480000 |
+
+## Drawer
+
+- Viewport: 800×600 (Tailwind `sm` / 40rem and `md` / 48rem). Overlay + content are portaled to `document.body`.
+- Official baseline is the live new-york-v4 registry Drawer (vaul). StyleX is vaul + StyleX tables. Not Base UI.
+- `default` is vaul `direction="bottom"` (handle visible). `left` / `right` / `top` cover the other official sides.
+- Screenshots are full-viewport (overlay + panel). `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `drawer__light__default` | PASS | 0/480000 |
+| `drawer__light__left` | PASS | 0/480000 |
+| `drawer__light__right` | PASS | 0/480000 |
+| `drawer__light__top` | PASS | 0/480000 |
+| `drawer__dark__default` | PASS | 0/480000 |
+| `drawer__dark__left` | PASS | 0/480000 |
+| `drawer__dark__right` | PASS | 0/480000 |
+| `drawer__dark__top` | PASS | 0/480000 |
 
 ## Tabs
 
