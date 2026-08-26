@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar)
 
-- Passed: 444/444
+- Passed: 450/450
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -857,3 +857,19 @@
 | `navigation-menu__dark__closed` | PASS | 0/20536 |
 | `navigation-menu__dark__open` | PASS | 0/480000 |
 | `navigation-menu__dark__viewport` | PASS | 0/480000 |
+
+## Calendar
+
+- Crops `[data-slot="calendar"]` with 16px pad. Viewport: 400×480 so the month grid plus pad stays on-screen (below Tailwind `md` / 768px so `md:flex-row` does not apply).
+- Official side is the live registry Calendar (`react-day-picker` DayPicker + Button). StyleX is the same primitive with StyleX tables. Date Picker is not a leftover component here.
+- Pinned `today` / `month` to 15 June 2024 so the grid does not drift. `default` has no selected date, `selected` is 10 June 2024, `range` is 10–18 June 2024. Each × light/dark.
+- Skipped: dropdown caption, week numbers, disabled dates, RTL, and a Date Picker popover demo (not in official calendar.json). Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `calendar__light__default` | PASS | 0/101640 |
+| `calendar__light__selected` | PASS | 0/101640 |
+| `calendar__light__range` | PASS | 0/101640 |
+| `calendar__dark__default` | PASS | 0/101640 |
+| `calendar__dark__selected` | PASS | 0/101640 |
+| `calendar__dark__range` | PASS | 0/101640 |

@@ -24,8 +24,6 @@ const RING = `0 0 0 3px ${MIX_RING_50}`;
 const RING_AND_SHADOW = `${RING}, ${SHADOW_XS}`;
 const MD = "@media (min-width: 48rem)";
 const FOCUSED_DAY = ':is([data-focused="true"] *)';
-const SELECTED_LAST = ':is(:last-child[data-selected="true"] *)';
-const SELECTED_FIRST = ':is(:first-child[data-selected="true"] *)';
 
 /**
  * Calendar as StyleX tables. Official item is react-day-picker DayPicker
@@ -358,7 +356,7 @@ const dayButton = stylex.create({
       '[data-range-middle="true"]': tokens["--accent"],
     },
     color: {
-      default: tokens["--foreground"],
+      default: "inherit",
       ":hover": tokens["--accent-foreground"],
       ":is(.dark *):hover": tokens["--accent-foreground"],
       '[data-selected-single="true"]': tokens["--primary-foreground"],
@@ -373,22 +371,34 @@ const dayButton = stylex.create({
     borderTopLeftRadius: {
       default: null,
       '[data-range-start="true"]': tokens["--radius-md"],
-      [SELECTED_FIRST]: tokens["--radius-md"],
+      '[data-week-start="true"][data-range-middle="true"]': tokens["--radius-md"],
+      '[data-week-start="true"][data-selected-single="true"]':
+        tokens["--radius-md"],
+      '[data-week-start="true"][data-range-end="true"]': tokens["--radius-md"],
     },
     borderBottomLeftRadius: {
       default: null,
       '[data-range-start="true"]': tokens["--radius-md"],
-      [SELECTED_FIRST]: tokens["--radius-md"],
+      '[data-week-start="true"][data-range-middle="true"]': tokens["--radius-md"],
+      '[data-week-start="true"][data-selected-single="true"]':
+        tokens["--radius-md"],
+      '[data-week-start="true"][data-range-end="true"]': tokens["--radius-md"],
     },
     borderTopRightRadius: {
       default: null,
       '[data-range-end="true"]': tokens["--radius-md"],
-      [SELECTED_LAST]: tokens["--radius-md"],
+      '[data-week-end="true"][data-range-middle="true"]': tokens["--radius-md"],
+      '[data-week-end="true"][data-selected-single="true"]':
+        tokens["--radius-md"],
+      '[data-week-end="true"][data-range-start="true"]': tokens["--radius-md"],
     },
     borderBottomRightRadius: {
       default: null,
       '[data-range-end="true"]': tokens["--radius-md"],
-      [SELECTED_LAST]: tokens["--radius-md"],
+      '[data-week-end="true"][data-range-middle="true"]': tokens["--radius-md"],
+      '[data-week-end="true"][data-selected-single="true"]':
+        tokens["--radius-md"],
+      '[data-week-end="true"][data-range-start="true"]': tokens["--radius-md"],
     },
     ":not(#\\0) > span": {
       fontSize: "0.75rem",
@@ -574,6 +584,8 @@ export function CalendarDayButton({
       data-range-start={modifiers.range_start}
       data-range-end={modifiers.range_end}
       data-range-middle={modifiers.range_middle}
+      data-week-start={day.date.getDay() === 0}
+      data-week-end={day.date.getDay() === 6}
       {...props}
       className={[sx.className, defaultClassNames.day, className]
         .filter(Boolean)
