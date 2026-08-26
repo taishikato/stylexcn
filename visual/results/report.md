@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP)
 
-- Passed: 356/356
+- Passed: 366/366
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -708,3 +708,24 @@
 | `item__dark__image` | PASS | 0/46112 |
 | `item__dark__group` | PASS | 0/66528 |
 | `item__dark__header-footer` | PASS | 0/64064 |
+
+## Input OTP
+
+- Crops `[data-input-otp-container]` with 16px pad (covers the 3px active ring).
+- Identical copy on both kits. `default` is one 6-slot group with value `123456`. `separator` is 3 + InputOTPSeparator + 3.
+- `disabled` sets `disabled` on the root. `invalid` sets `aria-invalid` on every slot with value `000000`.
+- `focus-visible` uses empty value + `autoFocus` so the first slot is active with a fake caret. Capture frame pauses inherited `animate-caret-blink`.
+- Viewport: 400×200. `pushPasswordManagerStrategy="none"` on both kits. Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `input-otp__light__default` | PASS | 0/16864 |
+| `input-otp__light__separator` | PASS | 0/19584 |
+| `input-otp__light__disabled` | PASS | 0/16864 |
+| `input-otp__light__invalid` | PASS | 0/16864 |
+| `input-otp__light__focus-visible` | PASS | 0/16864 |
+| `input-otp__dark__default` | PASS | 0/16864 |
+| `input-otp__dark__separator` | PASS | 0/19584 |
+| `input-otp__dark__disabled` | PASS | 0/16864 |
+| `input-otp__dark__invalid` | PASS | 0/16864 |
+| `input-otp__dark__focus-visible` | PASS | 0/16864 |
