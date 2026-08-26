@@ -105,6 +105,11 @@ const EXTRA_META = {
     title: "Sonner",
     description: "A toast. Built on sonner.",
   },
+  form: {
+    title: "Form",
+    description:
+      "React Hook Form bindings for labels, controls, descriptions, and messages. Values and errors are pinned so the preview does not drift.",
+  },
 };
 
 const SKIP_NPM = new Set(["react"]);

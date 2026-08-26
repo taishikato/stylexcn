@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar + Sonner)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar + Sonner + Form)
 
-- Passed: 474/474
+- Passed: 480/480
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -939,3 +939,19 @@
 | `sonner__dark__default` | PASS | 0/96000 |
 | `sonner__dark__success` | PASS | 0/96000 |
 | `sonner__dark__error` | PASS | 0/96000 |
+
+## Form
+
+- Crops `[data-form-well]` with 16px pad. Viewport: 480×400 (below Tailwind `md`). Identical 16rem column with 1.5rem gap (`space-y-6`) on both kits.
+- Official side is the live registry Form family (`react-hook-form` FormProvider + Controller + Label + Slot). StyleX uses the same primitive with StyleX tables. Not Field. Not Base UI.
+- Pinned `defaultValues.username` to `shadcn`. `default` has description and no message. `error` uses `setError` with `shouldFocus: false` so the invalid Input and destructive label/message do not drift. `message` shows FormMessage children with no error. Submit is included. Each × light/dark.
+- Skipped: zod / `@hookform/resolvers`, checkbox/select/radio FormField demos, and the rest of the official form gallery. Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `form__light__default` | PASS | 0/51264 |
+| `form__light__error` | PASS | 0/65088 |
+| `form__light__message` | PASS | 0/59328 |
+| `form__dark__default` | PASS | 0/51264 |
+| `form__dark__error` | PASS | 0/65088 |
+| `form__dark__message` | PASS | 0/59328 |

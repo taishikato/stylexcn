@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useRef } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import {
   Accordion,
@@ -175,6 +176,15 @@ import {
   FieldSet,
   FieldTitle,
 } from "../components/field";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../components/form";
 import {
   NativeSelect,
   NativeSelectOptGroup,
@@ -465,6 +475,15 @@ import {
   OfficialFieldSet,
   OfficialFieldTitle,
 } from "./official-field";
+import {
+  OfficialForm,
+  OfficialFormControl,
+  OfficialFormDescription,
+  OfficialFormField,
+  OfficialFormItem,
+  OfficialFormLabel,
+  OfficialFormMessage,
+} from "./official-form";
 import {
   OfficialNativeSelect,
   OfficialNativeSelectOptGroup,
@@ -1225,6 +1244,13 @@ export type SonnerCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type FormCaptureParams = {
+  component: "form";
+  kit: CaptureKit;
+  state: "default" | "error" | "message";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1279,7 +1305,8 @@ export type CaptureParams =
   | CarouselCaptureParams
   | ChartCaptureParams
   | SidebarCaptureParams
-  | SonnerCaptureParams;
+  | SonnerCaptureParams
+  | FormCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1592,6 +1619,13 @@ const styles = stylex.create({
   /* Below @md/field-group (28rem) so responsive stays column unless pinned wide. */
   fieldWell: {
     width: "16rem",
+  },
+  /* Identical 16rem stack on both kits. space-y-6 = 1.5rem between item and submit. */
+  formWell: {
+    width: "16rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1.5rem",
   },
   /* Above @md/field-group (28rem) so official container query and StyleX agree. */
   fieldResponsiveWell: {
@@ -4365,6 +4399,94 @@ function SonnerHarness({ kit, state, theme }: SonnerCaptureParams) {
   );
 }
 
+const FORM_USERNAME = "shadcn";
+const FORM_LABEL = "Username";
+const FORM_DESCRIPTION = "This is your public display name.";
+const FORM_ERROR = "Username must be at least 2 characters.";
+const FORM_MESSAGE = "Choose a unique username.";
+const FORM_SUBMIT = "Submit";
+
+type FormValues = { username: string };
+
+function FormDemo({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: FormCaptureParams["state"];
+}) {
+  const form = useForm<FormValues>({
+    defaultValues: { username: FORM_USERNAME },
+  });
+
+  useLayoutEffect(() => {
+    if (state === "error") {
+      form.setError(
+        "username",
+        { type: "manual", message: FORM_ERROR },
+        { shouldFocus: false },
+      );
+    }
+  }, [form, state]);
+
+  const FormRoot = kit === "shadcn" ? OfficialForm : Form;
+  const FieldRoot = kit === "shadcn" ? OfficialFormField : FormField;
+  const Item = kit === "shadcn" ? OfficialFormItem : FormItem;
+  const Label = kit === "shadcn" ? OfficialFormLabel : FormLabel;
+  const Control = kit === "shadcn" ? OfficialFormControl : FormControl;
+  const Desc = kit === "shadcn" ? OfficialFormDescription : FormDescription;
+  const Msg = kit === "shadcn" ? OfficialFormMessage : FormMessage;
+  const FieldInput = kit === "shadcn" ? OfficialInput : Input;
+  const Submit = kit === "shadcn" ? OfficialButton : Button;
+
+  return (
+    <FormRoot {...form}>
+      <form
+        data-form-well
+        onSubmit={form.handleSubmit(() => {})}
+        {...stylex.props(styles.formWell)}
+      >
+        <FieldRoot
+          control={form.control}
+          name="username"
+          render={({ field }) => (
+            <Item>
+              <Label>{FORM_LABEL}</Label>
+              <Control>
+                <FieldInput {...field} />
+              </Control>
+              <Desc>{FORM_DESCRIPTION}</Desc>
+              {state === "message" ? (
+                <Msg>{FORM_MESSAGE}</Msg>
+              ) : (
+                <Msg />
+              )}
+            </Item>
+          )}
+        />
+        <Submit type="submit">{FORM_SUBMIT}</Submit>
+      </form>
+    </FormRoot>
+  );
+}
+
+function FormHarness({ kit, state, theme }: FormCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="form"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <FormDemo kit={kit} state={state} />
+    </div>
+  );
+}
+
 function AspectRatioFill() {
   return <div {...stylex.props(styles.aspectRatioFill)} />;
 }
@@ -6061,6 +6183,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "sonner") {
     return <SonnerHarness {...params} />;
   }
+  if (params.component === "form") {
+    return <FormHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -6611,6 +6736,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "sonner", kit, state, theme };
+  }
+
+  if (component === "form") {
+    if (state !== "default" && state !== "error" && state !== "message") {
+      return null;
+    }
+    return { component: "form", kit, state, theme };
   }
 
   if (component !== "button") return null;
