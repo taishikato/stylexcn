@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "collapsible",
+  "title": "Collapsible",
+  "description": "Show and hide a panel from a trigger. Chrome is up to you.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/collapsible.tsx",
+      "content": "import { Collapsible as CollapsiblePrimitive } from \"radix-ui\";\nimport type { ComponentProps } from \"react\";\n\n/**\n * Collapsible family. Official New York is an unstyled radix-ui wrapper\n * (data-slot only); keep StyleX equivalently unstyled. Visual chrome lives\n * in the shared demo, not on this primitive.\n */\nexport type CollapsibleProps = ComponentProps<typeof CollapsiblePrimitive.Root>;\n\nexport function Collapsible(props: CollapsibleProps) {\n  return <CollapsiblePrimitive.Root data-slot=\"collapsible\" {...props} />;\n}\n\nexport type CollapsibleTriggerProps = ComponentProps<\n  typeof CollapsiblePrimitive.CollapsibleTrigger\n>;\n\nexport function CollapsibleTrigger(props: CollapsibleTriggerProps) {\n  return (\n    <CollapsiblePrimitive.CollapsibleTrigger\n      data-slot=\"collapsible-trigger\"\n      {...props}\n    />\n  );\n}\n\nexport type CollapsibleContentProps = ComponentProps<\n  typeof CollapsiblePrimitive.CollapsibleContent\n>;\n\nexport function CollapsibleContent(props: CollapsibleContentProps) {\n  return (\n    <CollapsiblePrimitive.CollapsibleContent\n      data-slot=\"collapsible-content\"\n      {...props}\n    />\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/collapsible.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

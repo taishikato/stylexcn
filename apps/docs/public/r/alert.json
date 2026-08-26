@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert",
+  "title": "Alert",
+  "description": "Inline callout for default or destructive messages.",
+  "dependencies": [
+    "@stylexjs/stylex"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/alert.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport type { ComponentProps } from \"react\";\nimport { tokens } from \"@/lib/tokens.stylex\";\n\n/** Official `text-destructive/90` — color-mix in oklab of --destructive at 90%. */\nconst MIX_DESTRUCTIVE_90 =\n  \"color-mix(in oklab, var(--destructive) 90%, transparent)\";\n\n/**\n * Alert family as StyleX tables. Official New York: default is bg-card /\n * text-card-foreground; destructive is bg-card / text-destructive with\n * description text-destructive/90. Grid columns switch when an svg child\n * is present (`has-[>svg]`).\n */\nconst variants = stylex.create({\n  default: {\n    backgroundColor: tokens[\"--card\"],\n    color: {\n      default: tokens[\"--card-foreground\"],\n      \":has(> svg) > svg\": \"currentColor\",\n    },\n  },\n  destructive: {\n    backgroundColor: tokens[\"--card\"],\n    color: {\n      default: tokens[\"--destructive\"],\n      \":has(> svg) > svg\": \"currentColor\",\n      ':has([data-slot=\"alert-description\"]) [data-slot=\"alert-description\"]':\n        MIX_DESTRUCTIVE_90,\n    },\n  },\n});\n\nconst root = stylex.create({\n  base: {\n    position: \"relative\",\n    display: \"grid\",\n    width: {\n      default: \"100%\",\n      \":has(> svg) > svg\": \"1rem\",\n    },\n    height: {\n      default: null,\n      \":has(> svg) > svg\": \"1rem\",\n    },\n    gridTemplateColumns: {\n      default: \"0 1fr\",\n      \":has(> svg)\": \"calc(var(--spacing)*4) 1fr\",\n    },\n    alignItems: \"flex-start\",\n    rowGap: \"0.125rem\",\n    columnGap: {\n      default: \"0\",\n      \":has(> svg)\": \"0.75rem\",\n    },\n    boxSizing: \"border-box\",\n    borderRadius: tokens[\"--radius-lg\"],\n    borderWidth: \"1px\",\n    borderStyle: \"solid\",\n    borderColor: tokens[\"--border\"],\n    paddingInline: \"1rem\",\n    paddingBlock: \"0.75rem\",\n    fontSize: \"0.875rem\",\n    lineHeight: \"1.25rem\",\n    fontFamily: \"inherit\",\n    transform: {\n      default: null,\n      \":has(> svg) > svg\": \"translateY(0.125rem)\",\n    },\n  },\n});\n\nconst title = stylex.create({\n  on: {\n    gridColumnStart: 2,\n    overflow: \"hidden\",\n    display: \"-webkit-box\",\n    WebkitBoxOrient: \"vertical\",\n    WebkitLineClamp: 1,\n    minHeight: \"1rem\",\n    fontWeight: 500,\n    letterSpacing: \"-0.025em\",\n    fontFamily: \"inherit\",\n  },\n});\n\nconst description = stylex.create({\n  on: {\n    gridColumnStart: 2,\n    display: \"grid\",\n    justifyItems: \"start\",\n    gap: \"0.25rem\",\n    fontSize: \"0.875rem\",\n    lineHeight: {\n      default: \"1.25rem\",\n      \":has(p) p\": 1.625,\n    },\n    color: tokens[\"--muted-foreground\"],\n    fontFamily: \"inherit\",\n  },\n});\n\nexport type AlertVariant = keyof typeof variants;\n\nexport type AlertProps = ComponentProps<\"div\"> & {\n  variant?: AlertVariant;\n};\n\nexport function Alert({ variant = \"default\", ...props }: AlertProps) {\n  return (\n    <div\n      data-slot=\"alert\"\n      role=\"alert\"\n      {...props}\n      {...stylex.props(root.base, variants[variant])}\n    />\n  );\n}\n\nexport type AlertTitleProps = ComponentProps<\"div\">;\n\nexport function AlertTitle(props: AlertTitleProps) {\n  return (\n    <div data-slot=\"alert-title\" {...props} {...stylex.props(title.on)} />\n  );\n}\n\nexport type AlertDescriptionProps = ComponentProps<\"div\">;\n\nexport function AlertDescription(props: AlertDescriptionProps) {\n  return (\n    <div\n      data-slot=\"alert-description\"\n      {...props}\n      {...stylex.props(description.on)}\n    />\n  );\n}\n\nexport const alertVariants = variants;\nexport const alertRoot = root;\n",
+      "type": "registry:ui",
+      "target": "@ui/alert.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

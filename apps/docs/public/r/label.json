@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "label",
+  "title": "Label",
+  "description": "Caption for a form control. Pair it with Input.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "radix-ui"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/label.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport { Label as LabelPrimitive } from \"radix-ui\";\nimport type { ComponentProps } from \"react\";\n\n/**\n * Group-disabled / peer-disabled styles as a StyleX table.\n * Official New York Label has no variants; illegal keys fail at compile time.\n */\nconst disabled = stylex.create({\n  on: {\n    pointerEvents: {\n      default: null,\n      \":is(.group[data-disabled=true] *)\": \"none\",\n    },\n    opacity: {\n      default: 1,\n      \":is(.group[data-disabled=true] *)\": 0.5,\n      \":is(.peer:disabled ~ *)\": 0.5,\n    },\n    cursor: {\n      default: null,\n      \":is(.peer:disabled ~ *)\": \"not-allowed\",\n    },\n  },\n});\n\nconst base = stylex.create({\n  root: {\n    display: \"flex\",\n    alignItems: \"center\",\n    gap: \"0.5rem\",\n    fontSize: \"0.875rem\",\n    lineHeight: 1,\n    fontWeight: 500,\n    userSelect: \"none\",\n    fontFamily: \"inherit\",\n  },\n});\n\nexport type LabelProps = ComponentProps<typeof LabelPrimitive.Root>;\n\nexport function Label(props: LabelProps) {\n  return (\n    <LabelPrimitive.Root\n      data-slot=\"label\"\n      {...props}\n      {...stylex.props(base.root, disabled.on)}\n    />\n  );\n}\n\nexport const labelDisabled = disabled;\n",
+      "type": "registry:ui",
+      "target": "@ui/label.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

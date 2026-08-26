@@ -9,6 +9,7 @@
     "build": "tsc -p tsconfig.app.json && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "visual:diff": "node scripts/visual-diff.mjs",
+    "registry:build": "node scripts/build-registry.mjs",
     "docs": "npm run dev -w stylexcn-docs",
     "docs:build": "npm run build -w stylexcn-docs"
   },

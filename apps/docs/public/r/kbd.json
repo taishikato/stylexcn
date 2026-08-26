@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "kbd",
+  "title": "Kbd",
+  "description": "Keyboard shortcut glyphs, alone or grouped.",
+  "dependencies": [
+    "@stylexjs/stylex"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/kbd.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport type { ComponentProps } from \"react\";\nimport { tokens } from \"@/lib/tokens.stylex\";\n\n/** Official `bg-background/20` inside tooltip content. */\nconst MIX_BACKGROUND_20 =\n  \"color-mix(in oklab, var(--background) 20%, transparent)\";\n/** Official `dark:` `bg-background/10` inside tooltip content. */\nconst MIX_BACKGROUND_10 =\n  \"color-mix(in oklab, var(--background) 10%, transparent)\";\n\n/**\n * Official New York Kbd:\n * pointer-events-none inline-flex h-5 w-fit min-w-5 items-center\n * justify-center gap-1 rounded-sm bg-muted px-1 font-sans text-xs\n * font-medium text-muted-foreground select-none\n * [&_svg:not([class*='size-'])]:size-3\n * [[data-slot=tooltip-content]_&]:bg-background/20\n * [[data-slot=tooltip-content]_&]:text-background\n * dark:[[data-slot=tooltip-content]_&]:bg-background/10\n */\nconst root = stylex.create({\n  base: {\n    pointerEvents: \"none\",\n    display: \"inline-flex\",\n    height: \"1.25rem\",\n    width: \"fit-content\",\n    minWidth: \"1.25rem\",\n    alignItems: \"center\",\n    justifyContent: \"center\",\n    gap: \"0.25rem\",\n    boxSizing: \"border-box\",\n    borderRadius: tokens[\"--radius-sm\"],\n    backgroundColor: {\n      default: tokens[\"--muted\"],\n      ':is([data-slot=\"tooltip-content\"] *)': MIX_BACKGROUND_20,\n      ':is(.dark [data-slot=\"tooltip-content\"] *)': MIX_BACKGROUND_10,\n    },\n    paddingInline: \"0.25rem\",\n    fontFamily: \"ui-sans-serif, system-ui, sans-serif\",\n    fontSize: \"0.75rem\",\n    lineHeight: \"1rem\",\n    fontWeight: 500,\n    color: {\n      default: tokens[\"--muted-foreground\"],\n      ':is([data-slot=\"tooltip-content\"] *)': tokens[\"--background\"],\n    },\n    userSelect: \"none\",\n    \":not(#\\\\0) svg:not([class*='size-'])\": {\n      width: \"0.75rem\",\n      height: \"0.75rem\",\n    },\n  },\n});\n\n/**\n * Official KbdGroup: inline-flex items-center gap-1 on a native kbd.\n */\nconst group = stylex.create({\n  base: {\n    display: \"inline-flex\",\n    alignItems: \"center\",\n    gap: \"0.25rem\",\n  },\n});\n\nexport type KbdProps = ComponentProps<\"kbd\">;\nexport type KbdGroupProps = ComponentProps<\"div\">;\n\nexport function Kbd(props: KbdProps) {\n  return <kbd data-slot=\"kbd\" {...props} {...stylex.props(root.base)} />;\n}\n\nexport function KbdGroup(props: KbdGroupProps) {\n  return (\n    <kbd data-slot=\"kbd-group\" {...props} {...stylex.props(group.base)} />\n  );\n}\n\nexport const kbd = root;\nexport const kbdGroup = group;\n",
+      "type": "registry:ui",
+      "target": "@ui/kbd.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -3,6 +3,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { COMPONENTS } from "../../src/catalog";
 import { chrome } from "../../src/chrome.stylex";
+import { InstallCommand } from "../../src/install-command";
+import {
+  addNamespaceCommand,
+  addUrlCommand,
+  listRegistryCommand,
+  registerNamespaceCommand,
+} from "../../src/install";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -16,6 +23,21 @@ export default function DocsIndexPage() {
         Implemented StyleX components. Each page is a live demo — click, type,
         and open overlays. Pixel-perfect with official shadcn/ui.
       </p>
+      <h2 {...stylex.props(chrome.sectionTitle)}>Install</h2>
+      <p {...stylex.props(chrome.note)}>
+        Add a component with the official shadcn CLI. The consumer project must
+        already compile StyleX (<code>@stylexjs/stylex</code> plus a bundler
+        plugin). Tailwind init is not enough.
+      </p>
+      <InstallCommand command={addUrlCommand("button")} />
+      <p {...stylex.props(chrome.note)}>Optional namespace:</p>
+      <InstallCommand
+        command={registerNamespaceCommand()}
+        secondary={addNamespaceCommand("button")}
+      />
+      <p {...stylex.props(chrome.note)}>List the catalog:</p>
+      <InstallCommand command={listRegistryCommand()} />
+      <h2 {...stylex.props(chrome.sectionTitle)}>Catalog</h2>
       <div {...stylex.props(chrome.catalog)}>
         {COMPONENTS.map((item) => (
           <Link

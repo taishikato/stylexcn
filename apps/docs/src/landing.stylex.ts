@@ -112,6 +112,11 @@ export const landing = stylex.create({
     maxWidth: "38rem",
     textWrap: "pretty",
   },
+  heroInstall: {
+    width: "100%",
+    maxWidth: "40rem",
+    marginTop: "1.25rem",
+  },
   galleryStage: {
     position: "relative",
     paddingInline: {

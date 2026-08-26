@@ -52,6 +52,8 @@ import {
 } from "@stylexcn/components/table";
 import { Tabs, TabsList, TabsTrigger } from "@stylexcn/components/tabs";
 import { Textarea } from "@stylexcn/components/textarea";
+import { InstallCommand } from "./install-command";
+import { addUrlCommand } from "./install";
 import { landing } from "./landing.stylex";
 import { SiteFooter } from "./site-header";
 
@@ -77,6 +79,12 @@ export function HomePage() {
             Get Started
             <ArrowRight size={16} />
           </Button>
+          <div {...stylex.props(landing.heroInstall)}>
+            <InstallCommand
+              command={addUrlCommand("button")}
+              hint="Official shadcn CLI. StyleX must already be set up in your app."
+            />
+          </div>
         </div>
       </section>
       <Showcase />

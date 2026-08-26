@@ -1,0 +1,19 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "spinner",
+  "title": "Spinner",
+  "description": "Loading indicator at size 3, 4, 6, and 8.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "lucide-react"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/spinner.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport { Loader2Icon } from \"lucide-react\";\nimport type { ComponentProps } from \"react\";\n\n/**\n * Tailwind `animate-spin`: 1s linear infinite, rotate to 360deg.\n * Visual-diff disables CSS animations on both kits.\n */\nconst spin = stylex.keyframes({\n  to: {\n    transform: \"rotate(360deg)\",\n  },\n});\n\nconst root = stylex.create({\n  base: {\n    animationName: spin,\n    animationDuration: \"1s\",\n    animationTimingFunction: \"linear\",\n    animationIterationCount: \"infinite\",\n  },\n});\n\n/**\n * Official size comes from caller `size-*` className. StyleX uses a keyed\n * table matching the registry size example: size-3 / size-4 / size-6 / size-8.\n */\nconst sizes = stylex.create({\n  \"3\": {\n    width: \"0.75rem\",\n    height: \"0.75rem\",\n  },\n  \"4\": {\n    width: \"1rem\",\n    height: \"1rem\",\n  },\n  \"6\": {\n    width: \"1.5rem\",\n    height: \"1.5rem\",\n  },\n  \"8\": {\n    width: \"2rem\",\n    height: \"2rem\",\n  },\n});\n\nexport type SpinnerSize = keyof typeof sizes;\n\nexport type SpinnerProps = Omit<ComponentProps<typeof Loader2Icon>, \"size\"> & {\n  size?: SpinnerSize;\n};\n\nexport function Spinner({ size = \"4\", ...props }: SpinnerProps) {\n  return (\n    <Loader2Icon\n      role=\"status\"\n      aria-label=\"Loading\"\n      {...props}\n      {...stylex.props(root.base, sizes[size])}\n    />\n  );\n}\n\nexport const spinner = root;\nexport const spinnerSizes = sizes;\n",
+      "type": "registry:ui",
+      "target": "@ui/spinner.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "switch",
+  "title": "Switch",
+  "description": "On/off toggle you can click.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/switch.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport { Switch as SwitchPrimitive } from \"radix-ui\";\nimport type { ComponentProps } from \"react\";\nimport { tokens } from \"@/lib/tokens.stylex\";\n\nconst MIX_INPUT_80 = \"color-mix(in oklab, var(--input) 80%, transparent)\";\nconst MIX_RING_50 = \"color-mix(in oklab, var(--ring) 50%, transparent)\";\nconst SHADOW_XS = \"0 1px 2px 0 rgb(0 0 0 / 0.05)\";\nconst RING = `0 0 0 3px ${MIX_RING_50}`;\n/* Tailwind v4 paints ring before --tw-shadow (first layer is on top). */\nconst RING_AND_SHADOW = `${RING}, ${SHADOW_XS}`;\n\n/**\n * Track / thumb / disabled / focus as StyleX tables.\n * Official New York Switch default size only; illegal keys fail at compile time.\n * Official source has no aria-invalid utilities — do not invent them.\n */\nconst track = stylex.create({\n  on: {\n    display: \"inline-flex\",\n    flexShrink: 0,\n    alignItems: \"center\",\n    height: \"1.15rem\",\n    width: \"2rem\",\n    boxSizing: \"border-box\",\n    borderRadius: \"9999px\",\n    borderWidth: \"1px\",\n    borderStyle: \"solid\",\n    padding: 0,\n    margin: 0,\n    outline: \"none\",\n    fontFamily: \"inherit\",\n    transitionProperty: \"all\",\n    transitionDuration: \"150ms\",\n    transitionTimingFunction: \"cubic-bezier(0.4, 0, 0.2, 1)\",\n  },\n});\n\nconst fill = stylex.create({\n  on: {\n    backgroundColor: {\n      default: tokens[\"--input\"],\n      '[data-state=\"unchecked\"]': tokens[\"--input\"],\n      ':is(.dark *)[data-state=\"unchecked\"]': MIX_INPUT_80,\n      '[data-state=\"checked\"]': tokens[\"--primary\"],\n      ':is(.dark *)[data-state=\"checked\"]': tokens[\"--primary\"],\n    },\n    borderColor: {\n      default: \"transparent\",\n      \":focus-visible\": tokens[\"--ring\"],\n    },\n  },\n});\n\nconst disabled = stylex.create({\n  on: {\n    cursor: {\n      default: null,\n      \":disabled\": \"not-allowed\",\n    },\n    opacity: {\n      default: 1,\n      \":disabled\": 0.5,\n    },\n  },\n});\n\nconst focus = stylex.create({\n  on: {\n    boxShadow: {\n      default: SHADOW_XS,\n      \":focus-visible\": RING_AND_SHADOW,\n    },\n  },\n});\n\nconst thumb = stylex.create({\n  on: {\n    pointerEvents: \"none\",\n    display: \"block\",\n    width: \"1rem\",\n    height: \"1rem\",\n    borderRadius: \"9999px\",\n    boxSizing: \"border-box\",\n    backgroundColor: {\n      default: tokens[\"--background\"],\n      ':is(.dark *)[data-state=\"unchecked\"]': tokens[\"--foreground\"],\n      ':is(.dark *)[data-state=\"checked\"]': tokens[\"--primary-foreground\"],\n    },\n    boxShadow: \"none\",\n    transitionProperty: \"transform\",\n    transitionDuration: \"150ms\",\n    transitionTimingFunction: \"cubic-bezier(0.4, 0, 0.2, 1)\",\n    transform: {\n      default: \"translateX(0)\",\n      '[data-state=\"unchecked\"]': \"translateX(0)\",\n      '[data-state=\"checked\"]': \"translateX(calc(100% - 2px))\",\n    },\n  },\n});\n\nexport type SwitchProps = ComponentProps<typeof SwitchPrimitive.Root>;\n\nexport function Switch(props: SwitchProps) {\n  return (\n    <SwitchPrimitive.Root\n      data-slot=\"switch\"\n      {...props}\n      {...stylex.props(track.on, fill.on, disabled.on, focus.on)}\n    >\n      <SwitchPrimitive.Thumb\n        data-slot=\"switch-thumb\"\n        {...stylex.props(thumb.on)}\n      />\n    </SwitchPrimitive.Root>\n  );\n}\n\nexport const switchTrack = track;\nexport const switchFill = fill;\nexport const switchDisabled = disabled;\nexport const switchFocus = focus;\nexport const switchThumb = thumb;\n",
+      "type": "registry:ui",
+      "target": "@ui/switch.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

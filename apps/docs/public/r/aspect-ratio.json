@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "aspect-ratio",
+  "title": "Aspect Ratio",
+  "description": "Constrains content to a ratio. Fill is up to the caller.",
+  "dependencies": [
+    "radix-ui"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/aspect-ratio.tsx",
+      "content": "import { AspectRatio as AspectRatioPrimitive } from \"radix-ui\";\nimport type { ComponentProps } from \"react\";\n\n/**\n * Aspect Ratio. Official New York is an unstyled radix-ui wrapper\n * (data-slot only); keep StyleX equivalently unstyled. Visual fill lives\n * in the shared demo, not on this primitive.\n */\nexport type AspectRatioProps = ComponentProps<typeof AspectRatioPrimitive.Root>;\n\nexport function AspectRatio(props: AspectRatioProps) {\n  return (\n    <AspectRatioPrimitive.Root data-slot=\"aspect-ratio\" {...props} />\n  );\n}\n",
+      "type": "registry:ui",
+      "target": "@ui/aspect-ratio.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

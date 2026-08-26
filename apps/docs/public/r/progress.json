@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "title": "Progress",
+  "description": "Progress bar at empty, in-progress, and complete.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/progress.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport { Progress as ProgressPrimitive } from \"radix-ui\";\nimport type { ComponentProps } from \"react\";\nimport { tokens } from \"@/lib/tokens.stylex\";\n\n/** Official `bg-primary/20` — color-mix in oklab of --primary at 20%. */\nconst MIX_PRIMARY_20 =\n  \"color-mix(in oklab, var(--primary) 20%, transparent)\";\n\n/**\n * Root: relative h-2 w-full overflow-hidden rounded-full bg-primary/20\n * Indicator: h-full w-full flex-1 bg-primary transition-all\n * Value via transform translateX(-(100 - value)%)\n */\nconst root = stylex.create({\n  base: {\n    position: \"relative\",\n    height: \"0.5rem\",\n    width: \"100%\",\n    overflow: \"hidden\",\n    borderRadius: \"9999px\",\n    backgroundColor: MIX_PRIMARY_20,\n  },\n});\n\nconst indicator = stylex.create({\n  base: {\n    height: \"100%\",\n    width: \"100%\",\n    flexGrow: 1,\n    backgroundColor: tokens[\"--primary\"],\n    transitionProperty: \"all\",\n    transitionDuration: \"150ms\",\n    transitionTimingFunction: \"cubic-bezier(0.4, 0, 0.2, 1)\",\n  },\n});\n\nexport type ProgressProps = ComponentProps<typeof ProgressPrimitive.Root>;\n\nexport function Progress({ value, ...props }: ProgressProps) {\n  const sxIndicator = stylex.props(indicator.base);\n\n  return (\n    <ProgressPrimitive.Root\n      data-slot=\"progress\"\n      value={value}\n      {...props}\n      {...stylex.props(root.base)}\n    >\n      <ProgressPrimitive.Indicator\n        data-slot=\"progress-indicator\"\n        {...sxIndicator}\n        style={{\n          ...sxIndicator.style,\n          transform: `translateX(-${100 - (value || 0)}%)`,\n        }}\n      />\n    </ProgressPrimitive.Root>\n  );\n}\n\nexport const progressRoot = root;\nexport const progressIndicator = indicator;\n",
+      "type": "registry:ui",
+      "target": "@ui/progress.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

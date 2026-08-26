@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "skeleton",
+  "title": "Skeleton",
+  "description": "Loading placeholder. Rounded bar and circle.",
+  "dependencies": [
+    "@stylexjs/stylex"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/skeleton.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport type { ComponentProps } from \"react\";\nimport { tokens } from \"@/lib/tokens.stylex\";\n\n/**\n * Tailwind `animate-pulse`: 2s cubic-bezier(0.4, 0, 0.6, 1) infinite,\n * opacity 1 → 0.5 at 50%. Visual-diff disables CSS animations on both kits.\n */\nconst pulse = stylex.keyframes({\n  \"0%\": { opacity: 1 },\n  \"50%\": { opacity: 0.5 },\n  \"100%\": { opacity: 1 },\n});\n\nconst root = stylex.create({\n  base: {\n    boxSizing: \"border-box\",\n    width: \"100%\",\n    height: \"100%\",\n    backgroundColor: tokens[\"--accent\"],\n    animationName: pulse,\n    animationDuration: \"2s\",\n    animationTimingFunction: \"cubic-bezier(0.4, 0, 0.6, 1)\",\n    animationIterationCount: \"infinite\",\n  },\n});\n\n/**\n * Official size comes from caller className. StyleX fills a same-sized parent.\n * `rounded-md` is the official default; `rounded-full` is a caller override.\n */\nconst radius = stylex.create({\n  md: {\n    borderRadius: tokens[\"--radius-md\"],\n  },\n  full: {\n    borderRadius: \"9999px\",\n  },\n});\n\nexport type SkeletonRadius = keyof typeof radius;\n\nexport type SkeletonProps = ComponentProps<\"div\"> & {\n  radius?: SkeletonRadius;\n};\n\nexport function Skeleton({ radius: radiusKey = \"md\", ...props }: SkeletonProps) {\n  return (\n    <div\n      data-slot=\"skeleton\"\n      {...props}\n      {...stylex.props(root.base, radius[radiusKey])}\n    />\n  );\n}\n\nexport const skeleton = root;\nexport const skeletonRadius = radius;\n",
+      "type": "registry:ui",
+      "target": "@ui/skeleton.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}
