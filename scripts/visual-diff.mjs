@@ -1013,7 +1013,7 @@ function controlLocator(page, c) {
     return page.locator('[data-slot="skeleton"]');
   }
   if (c.component === "spinner") {
-    return page.locator('[role="status"][aria-label="Loading"]');
+    return page.locator("[data-spinner-well]");
   }
   if (c.component === "avatar") {
     if (c.state === "group") {
@@ -1691,7 +1691,7 @@ async function main() {
     "## Spinner",
     "",
     "- Official is `Loader2Icon` with `size-4 animate-spin`, `role=\"status\"`, `aria-label=\"Loading\"`. Size example uses `size-3` / `size-4` / `size-6` / `size-8`.",
-    "- StyleX `size` keys `3` / `4` / `6` / `8` map to those utilities. `animate-spin` stays on both kits; Playwright `animations: \"disabled\"` for both kits.",
+    "- StyleX `size` keys `3` / `4` / `6` / `8` map to those utilities. Both kits keep `animate-spin`. Capture frame sets inherited `animation-play-state: paused` and crops a same-sized well (not the SVG AABB). Playwright `animations: \"disabled\"` for both kits.",
     "",
     "| Case | Result | Mismatched pixels |",
     "| --- | --- | ---: |",

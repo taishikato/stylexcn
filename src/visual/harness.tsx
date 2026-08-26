@@ -862,6 +862,33 @@ const styles = stylex.create({
     width: 40,
     height: 40,
   },
+  /* Pause inherited `animate-spin` for capture only. Product Spinner still
+     spins; Playwright also uses animations: "disabled". */
+  spinnerPaused: {
+    animationPlayState: "paused",
+  },
+  /* Crop the well, not the SVG AABB (rotation inflates getBoundingClientRect). */
+  spinnerWell: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  spinnerWell3: {
+    width: "0.75rem",
+    height: "0.75rem",
+  },
+  spinnerWell4: {
+    width: "1rem",
+    height: "1rem",
+  },
+  spinnerWell6: {
+    width: "1.5rem",
+    height: "1.5rem",
+  },
+  spinnerWell8: {
+    width: "2rem",
+    height: "2rem",
+  },
   /* Identical 16rem parent on both kits so w-full matches. */
   progressWell: {
     width: "16rem",
@@ -2023,6 +2050,13 @@ function spinnerStylexSize(state: SpinnerCaptureParams["state"]): SpinnerSize {
   return "4";
 }
 
+function spinnerWellStyle(state: SpinnerCaptureParams["state"]) {
+  if (state === "sm") return styles.spinnerWell3;
+  if (state === "lg") return styles.spinnerWell6;
+  if (state === "xl") return styles.spinnerWell8;
+  return styles.spinnerWell4;
+}
+
 function SpinnerHarness({ kit, state, theme }: SpinnerCaptureParams) {
   const isDark = theme === "dark";
   const officialClassName = spinnerOfficialClassName(state);
@@ -2042,9 +2076,15 @@ function SpinnerHarness({ kit, state, theme }: SpinnerCaptureParams) {
       data-kit={kit}
       data-component="spinner"
       data-state={state}
-      {...stylex.props(isDark && darkTheme, styles.frame)}
+      {...stylex.props(
+        isDark && darkTheme,
+        styles.frame,
+        styles.spinnerPaused,
+      )}
     >
-      {spinner}
+      <div data-spinner-well="" {...stylex.props(styles.spinnerWell, spinnerWellStyle(state))}>
+        {spinner}
+      </div>
     </div>
   );
 }
