@@ -347,6 +347,31 @@ export const chrome = stylex.create({
     width: "100%",
     maxWidth: "24rem",
   },
+  /* Room for Previous/Next, which sit 3rem outside the carousel. */
+  carouselStage: {
+    display: "flex",
+    justifyContent: "center",
+    paddingInline: "3rem",
+  },
+  carouselShell: {
+    width: "100%",
+    maxWidth: "20rem",
+  },
+  carouselPad: {
+    padding: "0.25rem",
+  },
+  carouselSlideFace: {
+    display: "flex",
+    aspectRatio: "1 / 1",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "1.5rem",
+  },
+  carouselSlideLabel: {
+    fontSize: "2.25rem",
+    lineHeight: "2.5rem",
+    fontWeight: 600,
+  },
   commandWell: {
     width: "100%",
     maxWidth: "24rem",
