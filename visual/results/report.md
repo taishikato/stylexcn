@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)
 
-- Passed: 276/276
+- Passed: 286/286
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -560,3 +560,22 @@
 | `resizable__light__vertical` | PASS | 0/64512 |
 | `resizable__dark__horizontal` | PASS | 0/66560 |
 | `resizable__dark__vertical` | PASS | 0/64512 |
+
+## Button Group
+
+- Crops the outermost `[data-slot="button-group"]` with 16px pad (`.first()` so nested groups do not steal the crop).
+- Identical copy on both kits. `horizontal` / `vertical`: outline Archive / Report / Snooze. `separator`: default Copy + ButtonGroupSeparator + Paste. `text`: ButtonGroupText `https://` + outline Copy. `nested`: outer group with Archive+Report and Snooze inner groups (gap-2).
+- Official side uses official Button / Separator. StyleX side uses StyleX Button / Separator styles. Closed, no Input/Select. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `button-group__light__horizontal` | PASS | 0/18496 |
+| `button-group__light__vertical` | PASS | 0/15960 |
+| `button-group__light__separator` | PASS | 0/11220 |
+| `button-group__light__text` | PASS | 0/12240 |
+| `button-group__light__nested` | PASS | 0/19108 |
+| `button-group__dark__horizontal` | PASS | 0/18496 |
+| `button-group__dark__vertical` | PASS | 0/15960 |
+| `button-group__dark__separator` | PASS | 0/11220 |
+| `button-group__dark__text` | PASS | 0/12240 |
+| `button-group__dark__nested` | PASS | 0/19108 |
