@@ -180,6 +180,18 @@ export const COMPONENTS: ComponentDoc[] = [
 </Dialog>`,
   },
   {
+    slug: "drawer",
+    name: "Drawer",
+    description:
+      "A panel that slides in from an edge of the screen. Open bottom, left, right, or top.",
+    usage: `<Drawer>
+  <DrawerTrigger asChild>
+    <Button variant="outline">Open drawer</Button>
+  </DrawerTrigger>
+  <DrawerContent>…</DrawerContent>
+</Drawer>`,
+  },
+  {
     slug: "dropdown-menu",
     name: "Dropdown Menu",
     description: "Menu from a button, including items, checkboxes, and radios.",
