@@ -99,6 +99,18 @@ import {
   EmptyTitle,
 } from "@stylexcn/components/empty";
 import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "@stylexcn/components/field";
+import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger,
@@ -112,6 +124,12 @@ import {
   InputGroupText,
   InputGroupTextarea,
 } from "@stylexcn/components/input-group";
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@stylexcn/components/input-otp";
 import { Kbd, KbdGroup } from "@stylexcn/components/kbd";
 import { Label } from "@stylexcn/components/label";
 import {
@@ -603,6 +621,72 @@ function EmptyDemo() {
   );
 }
 
+function FieldDemo() {
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <div {...stylex.props(chrome.well)}>
+        <FieldSet>
+          <FieldLegend>Account</FieldLegend>
+          <FieldDescription>
+            Type into the inputs. Required fields show an error below.
+          </FieldDescription>
+          <FieldGroup>
+            <Field>
+              <FieldLabel htmlFor="docs-field-name">Name</FieldLabel>
+              <Input id="docs-field-name" placeholder="Ada Lovelace" />
+              <FieldDescription>Shown on your public profile.</FieldDescription>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="docs-field-email">Email</FieldLabel>
+              <Input id="docs-field-email" placeholder="ada@example.com" />
+            </Field>
+            <Field data-invalid="true">
+              <FieldLabel htmlFor="docs-field-bad">Username</FieldLabel>
+              <Input
+                id="docs-field-bad"
+                defaultValue="ada"
+                aria-invalid
+              />
+              <FieldError errors={[{ message: "This username is taken." }]} />
+            </Field>
+          </FieldGroup>
+        </FieldSet>
+      </div>
+      <div {...stylex.props(chrome.well)}>
+        <FieldGroup>
+          <Field orientation="horizontal">
+            <Checkbox id="docs-field-terms" />
+            <FieldLabel htmlFor="docs-field-terms">
+              Accept terms and conditions
+            </FieldLabel>
+          </Field>
+          <FieldSeparator>Or choose a plan</FieldSeparator>
+          <RadioGroup defaultValue="starter">
+            <FieldLabel htmlFor="docs-field-starter">
+              <Field orientation="horizontal">
+                <FieldContent>
+                  <FieldTitle>Starter</FieldTitle>
+                  <FieldDescription>For personal projects.</FieldDescription>
+                </FieldContent>
+                <RadioGroupItem value="starter" id="docs-field-starter" />
+              </Field>
+            </FieldLabel>
+            <FieldLabel htmlFor="docs-field-pro">
+              <Field orientation="horizontal">
+                <FieldContent>
+                  <FieldTitle>Pro</FieldTitle>
+                  <FieldDescription>For teams that ship weekly.</FieldDescription>
+                </FieldContent>
+                <RadioGroupItem value="pro" id="docs-field-pro" />
+              </Field>
+            </FieldLabel>
+          </RadioGroup>
+        </FieldGroup>
+      </div>
+    </div>
+  );
+}
+
 function HoverCardDemo() {
   return (
     <HoverCard>
@@ -723,6 +807,76 @@ function InputGroupDemo() {
             <InputGroupText>0/280</InputGroupText>
           </InputGroupAddon>
         </InputGroup>
+      </div>
+    </div>
+  );
+}
+
+function InputOTPDemo() {
+  const [code, setCode] = useState("");
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <div {...stylex.props(chrome.field)}>
+        <Label htmlFor="docs-otp">One-time code</Label>
+        <InputOTP
+          id="docs-otp"
+          maxLength={6}
+          value={code}
+          onChange={setCode}
+        >
+          <InputOTPGroup>
+            <InputOTPSlot index={0} />
+            <InputOTPSlot index={1} />
+            <InputOTPSlot index={2} />
+            <InputOTPSlot index={3} />
+            <InputOTPSlot index={4} />
+            <InputOTPSlot index={5} />
+          </InputOTPGroup>
+        </InputOTP>
+      </div>
+      <div {...stylex.props(chrome.field)}>
+        <Label>With separator</Label>
+        <InputOTP maxLength={6}>
+          <InputOTPGroup>
+            <InputOTPSlot index={0} />
+            <InputOTPSlot index={1} />
+            <InputOTPSlot index={2} />
+          </InputOTPGroup>
+          <InputOTPSeparator />
+          <InputOTPGroup>
+            <InputOTPSlot index={3} />
+            <InputOTPSlot index={4} />
+            <InputOTPSlot index={5} />
+          </InputOTPGroup>
+        </InputOTP>
+      </div>
+      <div {...stylex.props(chrome.row)}>
+        <div {...stylex.props(chrome.field)}>
+          <Label>Disabled</Label>
+          <InputOTP maxLength={6} disabled>
+            <InputOTPGroup>
+              <InputOTPSlot index={0} />
+              <InputOTPSlot index={1} />
+              <InputOTPSlot index={2} />
+              <InputOTPSlot index={3} />
+              <InputOTPSlot index={4} />
+              <InputOTPSlot index={5} />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
+        <div {...stylex.props(chrome.field)}>
+          <Label>Invalid</Label>
+          <InputOTP maxLength={6} defaultValue="000000">
+            <InputOTPGroup>
+              <InputOTPSlot index={0} aria-invalid />
+              <InputOTPSlot index={1} aria-invalid />
+              <InputOTPSlot index={2} aria-invalid />
+              <InputOTPSlot index={3} aria-invalid />
+              <InputOTPSlot index={4} aria-invalid />
+              <InputOTPSlot index={5} aria-invalid />
+            </InputOTPGroup>
+          </InputOTP>
+        </div>
       </div>
     </div>
   );
@@ -1236,9 +1390,11 @@ const DEMOS: Record<string, () => ReactNode> = {
   dialog: DialogDemo,
   "dropdown-menu": DropdownMenuDemo,
   empty: EmptyDemo,
+  field: FieldDemo,
   "hover-card": HoverCardDemo,
   input: InputDemo,
   "input-group": InputGroupDemo,
+  "input-otp": InputOTPDemo,
   kbd: KbdDemo,
   label: LabelDemo,
   menubar: MenubarDemo,

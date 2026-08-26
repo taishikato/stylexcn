@@ -340,6 +340,28 @@
       ]
     },
     {
+      "name": "field",
+      "type": "registry:ui",
+      "title": "Field",
+      "description": "Compose labels, controls, descriptions, and errors into a form field.",
+      "files": [
+        {
+          "path": "registry/ui/field.tsx",
+          "type": "registry:ui",
+          "target": "@ui/field.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/label.json",
+        "https://stylexcn.vercel.app/r/separator.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
       "name": "hover-card",
       "type": "registry:ui",
       "title": "Hover Card",
@@ -398,6 +420,27 @@
         "https://stylexcn.vercel.app/r/button.json",
         "https://stylexcn.vercel.app/r/input.json",
         "https://stylexcn.vercel.app/r/textarea.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:ui",
+      "title": "Input OTP",
+      "description": "One-time password slots. Type into the group, including a separator.",
+      "files": [
+        {
+          "path": "registry/ui/input-otp.tsx",
+          "type": "registry:ui",
+          "target": "@ui/input-otp.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "input-otp",
+        "lucide-react"
+      ],
+      "registryDependencies": [
         "https://stylexcn.vercel.app/r/tokens.json"
       ]
     },
