@@ -32,20 +32,22 @@ function CommandRow({ command }: { command: string }) {
         </span>
         <code>{command}</code>
       </pre>
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        aria-label={copied ? "Copied" : "Copy command"}
-        onClick={async () => {
-          const ok = await copyText(command);
-          if (!ok) return;
-          setCopied(true);
-          window.setTimeout(() => setCopied(false), 1500);
-        }}
-      >
-        {copied ? <Check size={16} /> : <Copy size={16} />}
-      </Button>
+      <div {...stylex.props(chrome.installCopy)}>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label={copied ? "Copied" : "Copy command"}
+          onClick={async () => {
+            const ok = await copyText(command);
+            if (!ok) return;
+            setCopied(true);
+            window.setTimeout(() => setCopied(false), 1500);
+          }}
+        >
+          {copied ? <Check size={16} /> : <Copy size={16} />}
+        </Button>
+      </div>
     </div>
   );
 }

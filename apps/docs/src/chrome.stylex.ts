@@ -11,6 +11,9 @@ export const chrome = stylex.create({
     zIndex: 40,
     display: "flex",
     alignItems: "center",
+    width: "100%",
+    minWidth: 0,
+    boxSizing: "border-box",
     height: "4rem",
     paddingInline: "1rem",
     borderBottomWidth: "1px",
@@ -50,10 +53,16 @@ export const chrome = stylex.create({
   layout: {
     display: "grid",
     gridTemplateColumns: {
-      default: "1fr",
+      default: "minmax(0, 1fr)",
       [LG]: "16rem minmax(0, 1fr)",
     },
+    width: "100%",
+    minWidth: 0,
     minHeight: "calc(100vh - 4rem)",
+  },
+  contentColumn: {
+    minWidth: 0,
+    width: "100%",
   },
   sidebar: {
     display: {
@@ -124,6 +133,8 @@ export const chrome = stylex.create({
   },
   main: {
     minWidth: 0,
+    width: "100%",
+    boxSizing: "border-box",
     padding: {
       default: "1.5rem 1rem 4rem",
       [SM]: "2.5rem 2rem 5rem",
@@ -139,6 +150,7 @@ export const chrome = stylex.create({
     letterSpacing: "-0.04em",
     fontWeight: 650,
     marginBottom: "0.75rem",
+    overflowWrap: "break-word",
   },
   lead: {
     fontSize: "1rem",
@@ -146,6 +158,7 @@ export const chrome = stylex.create({
     color: tokens["--muted-foreground"],
     maxWidth: "40rem",
     marginBottom: "2rem",
+    overflowWrap: "break-word",
   },
   note: {
     fontSize: "0.875rem",
@@ -160,11 +173,12 @@ export const chrome = stylex.create({
     flexDirection: "column",
     gap: "0.5rem",
     width: "100%",
+    minWidth: 0,
     textAlign: "left",
   },
   installRow: {
     display: "flex",
-    alignItems: "center",
+    alignItems: "flex-start",
     gap: "0.25rem",
     width: "100%",
     minWidth: 0,
@@ -181,26 +195,37 @@ export const chrome = stylex.create({
     display: "block",
     flexGrow: 1,
     minWidth: 0,
-    overflow: "auto",
+    maxWidth: "100%",
+    overflowX: "auto",
+    overflowY: "hidden",
     margin: 0,
     paddingBlock: "0.45rem",
     paddingInline: "0.45rem",
     fontFamily:
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    fontSize: "0.75rem",
+    fontSize: {
+      default: "0.6875rem",
+      [SM]: "0.75rem",
+    },
     lineHeight: 1.5,
     color: tokens["--foreground"],
-    whiteSpace: "pre",
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
+    wordBreak: "break-word",
   },
   installPrompt: {
     color: tokens["--muted-foreground"],
     userSelect: "none",
+  },
+  installCopy: {
+    flexShrink: 0,
   },
   installHint: {
     fontSize: "0.8125rem",
     lineHeight: 1.5,
     color: tokens["--muted-foreground"],
     margin: 0,
+    overflowWrap: "break-word",
   },
   sectionTitle: {
     fontSize: "1.125rem",
@@ -210,6 +235,9 @@ export const chrome = stylex.create({
     marginTop: "2rem",
   },
   demo: {
+    minWidth: 0,
+    maxWidth: "100%",
+    overflowX: "auto",
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: tokens["--border"],
@@ -249,19 +277,28 @@ export const chrome = stylex.create({
   },
   code: {
     display: "block",
-    overflow: "auto",
+    minWidth: 0,
+    maxWidth: "100%",
+    overflowX: "auto",
     fontFamily:
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    fontSize: "0.8125rem",
+    fontSize: {
+      default: "0.75rem",
+      [SM]: "0.8125rem",
+    },
     lineHeight: 1.6,
-    padding: "1rem 1.125rem",
+    padding: {
+      default: "0.875rem 1rem",
+      [SM]: "1rem 1.125rem",
+    },
     borderRadius: tokens["--radius-xl"],
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: tokens["--border"],
     backgroundColor: tokens["--muted"],
     color: tokens["--foreground"],
-    whiteSpace: "pre",
+    whiteSpace: "pre-wrap",
+    overflowWrap: "anywhere",
   },
   hero: {
     padding: {
@@ -351,7 +388,13 @@ export const chrome = stylex.create({
   carouselStage: {
     display: "flex",
     justifyContent: "center",
-    paddingInline: "3rem",
+    minWidth: 0,
+    maxWidth: "100%",
+    boxSizing: "border-box",
+    paddingInline: {
+      default: "2.5rem",
+      [SM]: "3rem",
+    },
   },
   carouselShell: {
     width: "100%",
