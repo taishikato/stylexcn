@@ -190,6 +190,14 @@ import {
   NativeSelectOption,
 } from "@stylexcn/components/native-select";
 import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "@stylexcn/components/navigation-menu";
+import {
   Pagination,
   PaginationContent,
   PaginationEllipsis,
@@ -1166,6 +1174,33 @@ function NativeSelectDemo() {
   );
 }
 
+function NavigationMenuDemo() {
+  return (
+    <div {...stylex.props(chrome.navMenuStage)}>
+      <NavigationMenu>
+        <NavigationMenuList>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul {...stylex.props(chrome.navMenuPanel)}>
+                <li>
+                  <NavigationMenuLink href="#">Introduction</NavigationMenuLink>
+                </li>
+                <li>
+                  <NavigationMenuLink href="#">Installation</NavigationMenuLink>
+                </li>
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="#">Documentation</NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    </div>
+  );
+}
+
 function PaginationDemo() {
   return (
     <div {...stylex.props(chrome.stack)}>
@@ -1613,6 +1648,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   label: LabelDemo,
   menubar: MenubarDemo,
   "native-select": NativeSelectDemo,
+  "navigation-menu": NavigationMenuDemo,
   pagination: PaginationDemo,
   popover: PopoverDemo,
   progress: ProgressDemo,

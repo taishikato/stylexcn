@@ -356,6 +356,17 @@ export const chrome = stylex.create({
     borderColor: tokens["--border"],
     borderRadius: tokens["--radius-lg"],
   },
+  navMenuStage: {
+    minHeight: "12rem",
+  },
+  navMenuPanel: {
+    display: "grid",
+    width: "12.5rem",
+    gap: "0.25rem",
+    margin: 0,
+    padding: 0,
+    listStyleType: "none",
+  },
   wideWell: {
     width: "100%",
     maxWidth: "32rem",
