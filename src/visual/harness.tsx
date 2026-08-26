@@ -152,6 +152,17 @@ import {
   ComboboxValue,
 } from "../components/combobox";
 import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "../components/command";
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -215,7 +226,19 @@ import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
-import { CircleAlert, Command, GlobeIcon, Inbox, Search } from "lucide-react";
+import {
+  Calculator,
+  Calendar,
+  CircleAlert,
+  Command as CommandGlyph,
+  CreditCard,
+  GlobeIcon,
+  Inbox,
+  Search,
+  Settings,
+  Smile,
+  User,
+} from "lucide-react";
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { AspectRatio } from "../components/aspect-ratio";
 import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
@@ -372,6 +395,17 @@ import {
   OfficialComboboxTrigger,
   OfficialComboboxValue,
 } from "./official-combobox";
+import {
+  OfficialCommand,
+  OfficialCommandDialog,
+  OfficialCommandEmpty,
+  OfficialCommandGroup,
+  OfficialCommandInput,
+  OfficialCommandItem,
+  OfficialCommandList,
+  OfficialCommandSeparator,
+  OfficialCommandShortcut,
+} from "./official-command";
 import {
   OfficialField,
   OfficialFieldContent,
@@ -577,7 +611,8 @@ export type CaptureComponent =
   | "item"
   | "input-otp"
   | "field"
-  | "combobox";
+  | "combobox"
+  | "command";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -1020,6 +1055,13 @@ export type ComboboxCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type CommandCaptureParams = {
+  component: "command";
+  kit: CaptureKit;
+  state: "default" | "selected" | "empty" | "disabled" | "dialog";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1066,7 +1108,8 @@ export type CaptureParams =
   | ItemCaptureParams
   | InputOtpCaptureParams
   | FieldCaptureParams
-  | ComboboxCaptureParams;
+  | ComboboxCaptureParams
+  | CommandCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1295,6 +1338,11 @@ const styles = stylex.create({
     fontWeight: 400,
     /* Official Button default is px-4, has-[>svg]:px-3 because ComboboxTrigger injects a chevron. */
     paddingInline: "0.75rem",
+  },
+  /* Identical 24rem parent on both kits so w-full matches. Hide caret for capture. */
+  commandWell: {
+    width: "24rem",
+    caretColor: "transparent",
   },
 });
 
@@ -3741,11 +3789,11 @@ function KbdBody({
   if (state === "with-icon") {
     return kit === "shadcn" ? (
       <OfficialKbd>
-        <Command />
+        <CommandGlyph />
       </OfficialKbd>
     ) : (
       <Kbd>
-        <Command />
+        <CommandGlyph />
       </Kbd>
     );
   }
@@ -4821,6 +4869,136 @@ function ComboboxHarness({ kit, state, theme }: ComboboxCaptureParams) {
   );
 }
 
+const COMMAND_PLACEHOLDER = "Type a command or search...";
+const COMMAND_EMPTY = "No results found.";
+const COMMAND_SUGGESTIONS = "Suggestions";
+const COMMAND_SETTINGS = "Settings";
+const COMMAND_CALENDAR = "Calendar";
+const COMMAND_EMOJI = "Search Emoji";
+const COMMAND_CALCULATOR = "Calculator";
+const COMMAND_PROFILE = "Profile";
+const COMMAND_BILLING = "Billing";
+const COMMAND_SETTINGS_ITEM = "Settings";
+const COMMAND_SHORTCUT_P = "⌘P";
+const COMMAND_SHORTCUT_B = "⌘B";
+const COMMAND_SHORTCUT_S = "⌘S";
+
+function CommandMenuBody({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: CommandCaptureParams["state"];
+}) {
+  const Input = kit === "shadcn" ? OfficialCommandInput : CommandInput;
+  const List = kit === "shadcn" ? OfficialCommandList : CommandList;
+  const Empty = kit === "shadcn" ? OfficialCommandEmpty : CommandEmpty;
+  const Group = kit === "shadcn" ? OfficialCommandGroup : CommandGroup;
+  const Item = kit === "shadcn" ? OfficialCommandItem : CommandItem;
+  const Separator = kit === "shadcn" ? OfficialCommandSeparator : CommandSeparator;
+  const Shortcut = kit === "shadcn" ? OfficialCommandShortcut : CommandShortcut;
+
+  const searchValue = state === "empty" ? "zzzz" : undefined;
+  const calculatorDisabled = state === "disabled";
+
+  return (
+    <>
+      <Input
+        placeholder={COMMAND_PLACEHOLDER}
+        {...(searchValue != null
+          ? { value: searchValue, onValueChange: () => {} }
+          : {})}
+        autoFocus={false}
+      />
+      <List>
+        <Empty>{COMMAND_EMPTY}</Empty>
+        <Group heading={COMMAND_SUGGESTIONS}>
+          <Item value="calendar">
+            <Calendar />
+            {COMMAND_CALENDAR}
+          </Item>
+          <Item value="emoji">
+            <Smile />
+            {COMMAND_EMOJI}
+          </Item>
+          <Item value="calculator" disabled={calculatorDisabled}>
+            <Calculator />
+            {COMMAND_CALCULATOR}
+          </Item>
+        </Group>
+        <Separator />
+        <Group heading={COMMAND_SETTINGS}>
+          <Item value="profile">
+            <User />
+            {COMMAND_PROFILE}
+            <Shortcut>{COMMAND_SHORTCUT_P}</Shortcut>
+          </Item>
+          <Item value="billing">
+            <CreditCard />
+            {COMMAND_BILLING}
+            <Shortcut>{COMMAND_SHORTCUT_B}</Shortcut>
+          </Item>
+          <Item value="settings">
+            <Settings />
+            {COMMAND_SETTINGS_ITEM}
+            <Shortcut>{COMMAND_SHORTCUT_S}</Shortcut>
+          </Item>
+        </Group>
+      </List>
+    </>
+  );
+}
+
+function CommandHarness({ kit, state, theme }: CommandCaptureParams) {
+  const isDark = theme === "dark";
+  const isDialog = state === "dialog";
+  usePortalDocumentTheme(isDark);
+
+  const selected = state === "selected" ? "settings" : undefined;
+  const commandProps =
+    selected != null
+      ? { value: selected, onValueChange: () => {} }
+      : {};
+
+  const menu =
+    kit === "shadcn" ? (
+      isDialog ? (
+        <OfficialCommandDialog open onOpenChange={() => {}}>
+          <CommandMenuBody kit={kit} state={state} />
+        </OfficialCommandDialog>
+      ) : (
+        <OfficialCommand {...commandProps}>
+          <CommandMenuBody kit={kit} state={state} />
+        </OfficialCommand>
+      )
+    ) : isDialog ? (
+      <CommandDialog open onOpenChange={() => {}}>
+        <CommandMenuBody kit={kit} state={state} />
+      </CommandDialog>
+    ) : (
+      <Command {...commandProps}>
+        <CommandMenuBody kit={kit} state={state} />
+      </Command>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="command"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {isDialog ? (
+        menu
+      ) : (
+        <div {...stylex.props(styles.commandWell)}>{menu}</div>
+      )}
+    </div>
+  );
+}
+
 function FieldHarness({ kit, state, theme }: FieldCaptureParams) {
   const isDark = theme === "dark";
   const well = state === "responsive" ? styles.fieldResponsiveWell : styles.fieldWell;
@@ -4976,6 +5154,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "combobox") {
     return <ComboboxHarness {...params} />;
+  }
+  if (params.component === "command") {
+    return <CommandHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -5460,6 +5641,19 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "combobox", kit, state, theme };
+  }
+
+  if (component === "command") {
+    if (
+      state !== "default" &&
+      state !== "selected" &&
+      state !== "empty" &&
+      state !== "disabled" &&
+      state !== "dialog"
+    ) {
+      return null;
+    }
+    return { component: "command", kit, state, theme };
   }
 
   if (component !== "button") return null;
