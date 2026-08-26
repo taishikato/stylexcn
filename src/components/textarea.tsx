@@ -108,6 +108,7 @@ export function Textarea(props: TextareaProps) {
   );
 }
 
+export const textareaBase = base;
 export const textareaSizes = sizes;
 export const textareaInvalid = invalid;
 export const textareaDisabled = disabled;

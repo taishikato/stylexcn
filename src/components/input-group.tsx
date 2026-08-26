@@ -8,8 +8,21 @@ import {
   type ButtonProps,
   type ButtonVariant,
 } from "./button";
-import { Input, type InputProps } from "./input";
-import { Textarea, type TextareaProps } from "./textarea";
+import {
+  inputBase,
+  inputDisabled,
+  inputFile,
+  inputInvalid,
+  inputSizes,
+  type InputProps,
+} from "./input";
+import {
+  textareaBase,
+  textareaDisabled,
+  textareaInvalid,
+  textareaSizes,
+  type TextareaProps,
+} from "./textarea";
 
 const MIX_INPUT_30 = "color-mix(in oklab, var(--input) 30%, transparent)";
 const MIX_RING_50 = "color-mix(in oklab, var(--ring) 50%, transparent)";
@@ -84,28 +97,6 @@ const root = stylex.create({
       ":is(.dark *):has([data-slot][aria-invalid='true']):has([data-slot=input-group-control]:focus-visible)":
         RING_DESTRUCTIVE_DARK_AND_SHADOW,
     },
-    ':not(#\\0) > [data-slot="input-group-control"]': {
-      flexGrow: 1,
-      flexShrink: 1,
-      flexBasis: "0%",
-      borderRadius: 0,
-      borderWidth: 0,
-      backgroundColor: "transparent",
-      boxShadow: "none",
-    },
-    ':not(#\\0) > [data-slot="input-group-control"]:focus-visible': {
-      boxShadow: "none",
-      borderColor: "transparent",
-    },
-    ':not(#\\0) > [data-slot="input-group-control"][aria-invalid="true"]': {
-      boxShadow: "none",
-      borderColor: "transparent",
-    },
-    ':not(#\\0) > [data-slot="input-group-control"][aria-invalid="true"]:focus-visible':
-      {
-        boxShadow: "none",
-        borderColor: "transparent",
-      },
     ":not(#\\0):has(> [data-align='inline-start']) > input": {
       paddingLeft: "0.5rem",
     },
@@ -117,11 +108,6 @@ const root = stylex.create({
     },
     ":not(#\\0):has(> [data-align='block-end']) > input": {
       paddingTop: "0.75rem",
-    },
-    ":not(#\\0) > textarea": {
-      resize: "none",
-      paddingTop: "0.75rem",
-      paddingBottom: "0.75rem",
     },
     ":not(#\\0)[data-disabled='true'] > [data-slot='input-group-addon']": {
       opacity: 0.5,
@@ -203,6 +189,61 @@ const groupButton = stylex.create({
     boxShadow: {
       default: "none",
       ":focus-visible": RING,
+    },
+  },
+  /* Official ghost does not set text color, so the addon muted color inherits. */
+  ghost: {
+    color: {
+      default: "inherit",
+      ":hover": tokens["--accent-foreground"],
+    },
+  },
+});
+
+const control = stylex.create({
+  input: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: "0%",
+    borderRadius: 0,
+    borderWidth: 0,
+    backgroundColor: "transparent",
+    boxShadow: {
+      default: "none",
+      ":focus-visible": "none",
+      '[aria-invalid="true"]': "none",
+      '[aria-invalid="true"]:focus-visible': "none",
+      ':is(.dark *)[aria-invalid="true"]:focus-visible': "none",
+    },
+    borderColor: {
+      default: "transparent",
+      ":focus-visible": "transparent",
+      '[aria-invalid="true"]': "transparent",
+      '[aria-invalid="true"]:focus-visible': "transparent",
+    },
+  },
+  textarea: {
+    flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: "0%",
+    resize: "none",
+    borderRadius: 0,
+    borderWidth: 0,
+    backgroundColor: "transparent",
+    paddingTop: "0.75rem",
+    paddingBottom: "0.75rem",
+    boxShadow: {
+      default: "none",
+      ":focus-visible": "none",
+      '[aria-invalid="true"]': "none",
+      '[aria-invalid="true"]:focus-visible': "none",
+      ':is(.dark *)[aria-invalid="true"]:focus-visible': "none",
+    },
+    borderColor: {
+      default: "transparent",
+      ":focus-visible": "transparent",
+      '[aria-invalid="true"]': "transparent",
+      '[aria-invalid="true"]:focus-visible': "transparent",
     },
   },
 });
@@ -349,6 +390,7 @@ export function InputGroupButton({
         buttonBase.root,
         buttonVariants[variant as ButtonVariant],
         groupButton.base,
+        variant === "ghost" && groupButton.ghost,
         groupButtonSizes[size],
       )}
     />
@@ -359,12 +401,38 @@ export function InputGroupText(props: InputGroupTextProps) {
   return <span {...props} {...stylex.props(text.on)} />;
 }
 
-export function InputGroupInput(props: InputGroupInputProps) {
-  return <Input data-slot="input-group-control" {...props} />;
+export function InputGroupInput({ type, ...props }: InputGroupInputProps) {
+  return (
+    <input
+      type={type}
+      data-slot="input-group-control"
+      {...props}
+      {...stylex.props(
+        inputBase.root,
+        inputSizes.default,
+        inputInvalid.on,
+        inputDisabled.on,
+        inputFile.on,
+        control.input,
+      )}
+    />
+  );
 }
 
 export function InputGroupTextarea(props: InputGroupTextareaProps) {
-  return <Textarea data-slot="input-group-control" {...props} />;
+  return (
+    <textarea
+      data-slot="input-group-control"
+      {...props}
+      {...stylex.props(
+        textareaBase.root,
+        textareaSizes.default,
+        textareaInvalid.on,
+        textareaDisabled.on,
+        control.textarea,
+      )}
+    />
+  );
 }
 
 export const inputGroupRoot = root;

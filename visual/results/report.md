@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group)
 
-- Passed: 318/318
+- Passed: 340/340
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -648,3 +648,36 @@
 | `empty__dark__default` | PASS | 0/94016 |
 | `empty__dark__with-icon` | PASS | 0/100672 |
 | `empty__dark__with-content` | PASS | 0/125632 |
+
+## Input Group
+
+- Crops `[data-slot="input-group"]` with 16px pad inside an identical 16rem-wide parent on both kits so `w-full` matches.
+- Viewport: 400×320 (below Tailwind `md` / 768px) so Input/Textarea `md:text-sm` stays on the same side as StyleX.
+- Official side composes official Button / Input / Textarea / Kbd. StyleX composes StyleX Button tables / Input / Textarea / Kbd.
+- States: `inline-start` (Search icon), `inline-end` (Search icon), `block-start` / `block-end` text, `text` (`$` + `.com`), `button` (ghost xs Search), `kbd` (`⌘K`), `textarea` + block-end, `focus-visible` / `disabled` / `invalid` on the inline-start icon layout. Each × light/dark.
+- Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `input-group__light__inline-start` | PASS | 0/19584 |
+| `input-group__light__inline-end` | PASS | 0/19584 |
+| `input-group__light__block-start` | PASS | 0/31104 |
+| `input-group__light__block-end` | PASS | 0/31104 |
+| `input-group__light__text` | PASS | 0/19584 |
+| `input-group__light__button` | PASS | 0/19584 |
+| `input-group__light__kbd` | PASS | 0/19584 |
+| `input-group__light__textarea` | PASS | 0/39168 |
+| `input-group__light__focus-visible` | PASS | 0/19584 |
+| `input-group__light__disabled` | PASS | 0/19584 |
+| `input-group__light__invalid` | PASS | 0/19584 |
+| `input-group__dark__inline-start` | PASS | 0/19584 |
+| `input-group__dark__inline-end` | PASS | 0/19584 |
+| `input-group__dark__block-start` | PASS | 0/31104 |
+| `input-group__dark__block-end` | PASS | 0/31104 |
+| `input-group__dark__text` | PASS | 0/19584 |
+| `input-group__dark__button` | PASS | 0/19584 |
+| `input-group__dark__kbd` | PASS | 0/19584 |
+| `input-group__dark__textarea` | PASS | 0/39168 |
+| `input-group__dark__focus-visible` | PASS | 0/19584 |
+| `input-group__dark__disabled` | PASS | 0/19584 |
+| `input-group__dark__invalid` | PASS | 0/19584 |
