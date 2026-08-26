@@ -240,6 +240,9 @@ const SIDEBAR_VIEWPORT = { width: 800, height: 600 };
 const SONNER_STATES = ["default", "success", "error"];
 /* Toast is portaled to body (bottom-right). Pin duration Infinity. */
 const SONNER_VIEWPORT = { width: 400, height: 240 };
+const FORM_STATES = ["default", "error", "message"];
+/* 16rem well + label/input/description/message + submit + 16px crop pad. */
+const FORM_VIEWPORT = { width: 480, height: 400 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -855,6 +858,20 @@ function sonnerCases() {
   return list;
 }
 
+function formCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of FORM_STATES) {
+      list.push({
+        component: "form",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function aspectRatioCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -1023,6 +1040,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "sonner") {
     return sonnerCases();
   }
+  if (process.env.VISUAL_ONLY === "form") {
+    return formCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -1078,6 +1098,7 @@ function cases() {
     ...chartCases(),
     ...sidebarCases(),
     ...sonnerCases(),
+    ...formCases(),
   ];
 }
 
@@ -1270,6 +1291,9 @@ function slug(c) {
   if (c.component === "sonner") {
     return `sonner__${c.theme}__${c.state}`;
   }
+  if (c.component === "form") {
+    return `form__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1335,7 +1359,8 @@ function urlFor(kit, c) {
     c.component !== "carousel" &&
     c.component !== "chart" &&
     c.component !== "sidebar" &&
-    c.component !== "sonner"
+    c.component !== "sonner" &&
+    c.component !== "form"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1565,6 +1590,9 @@ function controlLocator(page, c) {
   if (c.component === "sonner") {
     return page.locator("[data-sonner-toast]");
   }
+  if (c.component === "form") {
+    return page.locator("[data-form-well]");
+  }
   return page.getByRole("button");
 }
 
@@ -1721,6 +1749,15 @@ async function prepareControl(page, c) {
   }
   if (c.component === "sonner") {
     await page.locator("[data-sonner-toast]").waitFor();
+    await page.waitForTimeout(50);
+    return;
+  }
+  if (c.component === "form") {
+    await page.locator("[data-form-well]").waitFor();
+    await page.locator('[data-slot="form-item"]').waitFor();
+    if (c.state === "error" || c.state === "message") {
+      await page.locator('[data-slot="form-message"]').waitFor();
+    }
     await page.waitForTimeout(50);
     return;
   }
@@ -1979,6 +2016,8 @@ async function main() {
                     ? SIDEBAR_VIEWPORT
                   : c.component === "sonner"
                     ? SONNER_VIEWPORT
+                  : c.component === "form"
+                    ? FORM_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -2028,7 +2067,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar + Sonner)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar + Sonner + Form)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -2093,7 +2132,8 @@ async function main() {
           r.component !== "carousel" &&
           r.component !== "chart" &&
           r.component !== "sidebar" &&
-          r.component !== "sonner",
+          r.component !== "sonner" &&
+          r.component !== "form",
       )
       .map(
         (r) =>
@@ -2870,6 +2910,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "sonner")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Form",
+    "",
+    "- Crops `[data-form-well]` with 16px pad. Viewport: 480×400 (below Tailwind `md`). Identical 16rem column with 1.5rem gap (`space-y-6`) on both kits.",
+    "- Official side is the live registry Form family (`react-hook-form` FormProvider + Controller + Label + Slot). StyleX uses the same primitive with StyleX tables. Not Field. Not Base UI.",
+    "- Pinned `defaultValues.username` to `shadcn`. `default` has description and no message. `error` uses `setError` with `shouldFocus: false` so the invalid Input and destructive label/message do not drift. `message` shows FormMessage children with no error. Submit is included. Each × light/dark.",
+    "- Skipped: zod / `@hookform/resolvers`, checkbox/select/radio FormField demos, and the rest of the official form gallery. Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "form")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
