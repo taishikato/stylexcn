@@ -20,6 +20,18 @@ import {
   EmptyTitle,
 } from "../components/empty";
 import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemFooter,
+  ItemGroup,
+  ItemHeader,
+  ItemMedia,
+  ItemSeparator,
+  ItemTitle,
+} from "../components/item";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -221,6 +233,18 @@ import {
   OfficialEmptyMedia,
   OfficialEmptyTitle,
 } from "./official-empty";
+import {
+  OfficialItem,
+  OfficialItemActions,
+  OfficialItemContent,
+  OfficialItemDescription,
+  OfficialItemFooter,
+  OfficialItemGroup,
+  OfficialItemHeader,
+  OfficialItemMedia,
+  OfficialItemSeparator,
+  OfficialItemTitle,
+} from "./official-item";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -478,7 +502,8 @@ export type CaptureComponent =
   | "button-group"
   | "kbd"
   | "empty"
-  | "input-group";
+  | "input-group"
+  | "item";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -525,7 +550,11 @@ export type CaptureState =
   | "block-end"
   | "button"
   | "kbd"
-  | "textarea";
+  | "textarea"
+  | "muted"
+  | "media"
+  | "image"
+  | "header-footer";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -850,6 +879,21 @@ export type InputGroupCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ItemCaptureParams = {
+  component: "item";
+  kit: CaptureKit;
+  state:
+    | "default"
+    | "outline"
+    | "muted"
+    | "sm"
+    | "media"
+    | "image"
+    | "group"
+    | "header-footer";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -892,7 +936,8 @@ export type CaptureParams =
   | ButtonGroupCaptureParams
   | KbdCaptureParams
   | EmptyCaptureParams
-  | InputGroupCaptureParams;
+  | InputGroupCaptureParams
+  | ItemCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1097,6 +1142,10 @@ const styles = stylex.create({
   /* Identical 16rem parent on both kits so w-full matches. */
   inputGroupWell: {
     width: "16rem",
+  },
+  /* Identical 20rem parent on both kits so wrapped header/footer and group width match. */
+  itemWell: {
+    width: "20rem",
   },
 });
 
@@ -3775,6 +3824,199 @@ function InputGroupHarness({ kit, state, theme }: InputGroupCaptureParams) {
   );
 }
 
+const ITEM_TITLE = "Basic Item";
+const ITEM_DESCRIPTION = "A simple item with title and description.";
+const ITEM_ACTION = "Action";
+const ITEM_HEADER = "Header";
+const ITEM_FOOTER = "Footer";
+const ITEM_IMAGE_SRC =
+  "data:image/svg+xml," +
+  encodeURIComponent(
+    '<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" fill="#737373"/></svg>',
+  );
+
+function ItemDemo({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: ItemCaptureParams["state"];
+}) {
+  if (kit === "shadcn") {
+    if (state === "group") {
+      return (
+        <OfficialItemGroup>
+          <OfficialItem variant="outline">
+            <OfficialItemContent>
+              <OfficialItemTitle>{ITEM_TITLE}</OfficialItemTitle>
+              <OfficialItemDescription>{ITEM_DESCRIPTION}</OfficialItemDescription>
+            </OfficialItemContent>
+          </OfficialItem>
+          <OfficialItemSeparator />
+          <OfficialItem variant="outline">
+            <OfficialItemContent>
+              <OfficialItemTitle>{ITEM_TITLE}</OfficialItemTitle>
+              <OfficialItemDescription>{ITEM_DESCRIPTION}</OfficialItemDescription>
+            </OfficialItemContent>
+          </OfficialItem>
+        </OfficialItemGroup>
+      );
+    }
+
+    if (state === "header-footer") {
+      return (
+        <OfficialItem variant="outline">
+          <OfficialItemHeader>{ITEM_HEADER}</OfficialItemHeader>
+          <OfficialItemContent>
+            <OfficialItemTitle>{ITEM_TITLE}</OfficialItemTitle>
+            <OfficialItemDescription>{ITEM_DESCRIPTION}</OfficialItemDescription>
+          </OfficialItemContent>
+          <OfficialItemFooter>{ITEM_FOOTER}</OfficialItemFooter>
+        </OfficialItem>
+      );
+    }
+
+    if (state === "media") {
+      return (
+        <OfficialItem variant="outline">
+          <OfficialItemMedia variant="icon">
+            <Inbox />
+          </OfficialItemMedia>
+          <OfficialItemContent>
+            <OfficialItemTitle>{ITEM_TITLE}</OfficialItemTitle>
+            <OfficialItemDescription>{ITEM_DESCRIPTION}</OfficialItemDescription>
+          </OfficialItemContent>
+          <OfficialItemActions>
+            <OfficialButton size="sm">{ITEM_ACTION}</OfficialButton>
+          </OfficialItemActions>
+        </OfficialItem>
+      );
+    }
+
+    if (state === "image") {
+      return (
+        <OfficialItem variant="outline">
+          <OfficialItemMedia variant="image">
+            <img src={ITEM_IMAGE_SRC} alt="" />
+          </OfficialItemMedia>
+          <OfficialItemContent>
+            <OfficialItemTitle>{ITEM_TITLE}</OfficialItemTitle>
+            <OfficialItemDescription>{ITEM_DESCRIPTION}</OfficialItemDescription>
+          </OfficialItemContent>
+        </OfficialItem>
+      );
+    }
+
+    const variant =
+      state === "outline" || state === "muted" ? state : "default";
+    const size = state === "sm" ? "sm" : "default";
+
+    return (
+      <OfficialItem variant={variant} size={size}>
+        <OfficialItemContent>
+          <OfficialItemTitle>{ITEM_TITLE}</OfficialItemTitle>
+          <OfficialItemDescription>{ITEM_DESCRIPTION}</OfficialItemDescription>
+        </OfficialItemContent>
+      </OfficialItem>
+    );
+  }
+
+  if (state === "group") {
+    return (
+      <ItemGroup>
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{ITEM_TITLE}</ItemTitle>
+            <ItemDescription>{ITEM_DESCRIPTION}</ItemDescription>
+          </ItemContent>
+        </Item>
+        <ItemSeparator />
+        <Item variant="outline">
+          <ItemContent>
+            <ItemTitle>{ITEM_TITLE}</ItemTitle>
+            <ItemDescription>{ITEM_DESCRIPTION}</ItemDescription>
+          </ItemContent>
+        </Item>
+      </ItemGroup>
+    );
+  }
+
+  if (state === "header-footer") {
+    return (
+      <Item variant="outline">
+        <ItemHeader>{ITEM_HEADER}</ItemHeader>
+        <ItemContent>
+          <ItemTitle>{ITEM_TITLE}</ItemTitle>
+          <ItemDescription>{ITEM_DESCRIPTION}</ItemDescription>
+        </ItemContent>
+        <ItemFooter>{ITEM_FOOTER}</ItemFooter>
+      </Item>
+    );
+  }
+
+  if (state === "media") {
+    return (
+      <Item variant="outline">
+        <ItemMedia variant="icon">
+          <Inbox />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>{ITEM_TITLE}</ItemTitle>
+          <ItemDescription>{ITEM_DESCRIPTION}</ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Button size="sm">{ITEM_ACTION}</Button>
+        </ItemActions>
+      </Item>
+    );
+  }
+
+  if (state === "image") {
+    return (
+      <Item variant="outline">
+        <ItemMedia variant="image">
+          <img src={ITEM_IMAGE_SRC} alt="" />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>{ITEM_TITLE}</ItemTitle>
+          <ItemDescription>{ITEM_DESCRIPTION}</ItemDescription>
+        </ItemContent>
+      </Item>
+    );
+  }
+
+  const variant = state === "outline" || state === "muted" ? state : "default";
+  const size = state === "sm" ? "sm" : "default";
+
+  return (
+    <Item variant={variant} size={size}>
+      <ItemContent>
+        <ItemTitle>{ITEM_TITLE}</ItemTitle>
+        <ItemDescription>{ITEM_DESCRIPTION}</ItemDescription>
+      </ItemContent>
+    </Item>
+  );
+}
+
+function ItemHarness({ kit, state, theme }: ItemCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="item"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.itemWell)}>
+        <ItemDemo kit={kit} state={state} />
+      </div>
+    </div>
+  );
+}
+
 export function Harness(params: CaptureParams) {
   if (params.component === "input") {
     return <InputHarness {...params} />;
@@ -3898,6 +4140,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "input-group") {
     return <InputGroupHarness {...params} />;
+  }
+  if (params.component === "item") {
+    return <ItemHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -4310,6 +4555,22 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "input-group", kit, state, theme };
+  }
+
+  if (component === "item") {
+    if (
+      state !== "default" &&
+      state !== "outline" &&
+      state !== "muted" &&
+      state !== "sm" &&
+      state !== "media" &&
+      state !== "image" &&
+      state !== "group" &&
+      state !== "header-footer"
+    ) {
+      return null;
+    }
+    return { component: "item", kit, state, theme };
   }
 
   if (component !== "button") return null;

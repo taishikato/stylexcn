@@ -123,6 +123,16 @@ const INPUT_GROUP_STATES = [
   "disabled",
   "invalid",
 ];
+const ITEM_STATES = [
+  "default",
+  "outline",
+  "muted",
+  "sm",
+  "media",
+  "image",
+  "group",
+  "header-footer",
+];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -162,6 +172,8 @@ const RESIZABLE_VIEWPORT = { width: 480, height: 280 };
 const EMPTY_VIEWPORT = { width: 800, height: 600 };
 /* 16rem well + textarea/block addons + 16px crop pad. Stay below Tailwind md (768px). */
 const INPUT_GROUP_VIEWPORT = { width: 400, height: 320 };
+/* 20rem well + group/header-footer + 16px crop pad. */
+const ITEM_VIEWPORT = { width: 400, height: 400 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -777,6 +789,20 @@ function inputGroupCases() {
   return list;
 }
 
+function itemCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of ITEM_STATES) {
+      list.push({
+        component: "item",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -821,6 +847,7 @@ function cases() {
     ...kbdCases(),
     ...emptyCases(),
     ...inputGroupCases(),
+    ...itemCases(),
   ];
 }
 
@@ -949,6 +976,9 @@ function slug(c) {
   if (c.component === "input-group") {
     return `input-group__${c.theme}__${c.state}`;
   }
+  if (c.component === "item") {
+    return `item__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1002,7 +1032,8 @@ function urlFor(kit, c) {
     c.component !== "button-group" &&
     c.component !== "kbd" &&
     c.component !== "empty" &&
-    c.component !== "input-group"
+    c.component !== "input-group" &&
+    c.component !== "item"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1183,6 +1214,12 @@ function controlLocator(page, c) {
   }
   if (c.component === "input-group") {
     return page.locator('[data-slot="input-group"]');
+  }
+  if (c.component === "item") {
+    if (c.state === "group") {
+      return page.locator('[data-slot="item-group"]');
+    }
+    return page.locator('[data-slot="item"]');
   }
   return page.getByRole("button");
 }
@@ -1445,6 +1482,8 @@ async function main() {
                     ? EMPTY_VIEWPORT
                   : c.component === "input-group"
                     ? INPUT_GROUP_VIEWPORT
+                  : c.component === "item"
+                    ? ITEM_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1494,7 +1533,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1547,7 +1586,8 @@ async function main() {
           r.component !== "button-group" &&
           r.component !== "kbd" &&
           r.component !== "empty" &&
-          r.component !== "input-group",
+          r.component !== "input-group" &&
+          r.component !== "item",
       )
       .map(
         (r) =>
@@ -2128,6 +2168,23 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "input-group")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Item",
+    "",
+    "- Crops `[data-slot=\"item\"]` (or `[data-slot=\"item-group\"]` for `group`) with 16px pad inside an identical 20rem-wide parent on both kits.",
+    "- Viewport: 400×400 so the 20rem well plus group / header-footer plus pad stays on-screen.",
+    "- Identical copy on both kits: title `Basic Item`, description `A simple item with title and description.` Variants `default` / `outline` / `muted`; `sm` is `size=\"sm\"`. `media` is icon media + content + sm Action button. `image` is a local SVG data URI (no network). `group` is two outline items with ItemSeparator. `header-footer` is outline with Header / Footer.",
+    "- Official side composes official Separator / Button. StyleX composes StyleX Separator / Button.",
+    "- Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "item")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
