@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "sonner",
+  "title": "Sonner",
+  "description": "A toast. Built on sonner. Duration is pinned so the preview does not drift.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "lucide-react",
+    "next-themes",
+    "sonner"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/sonner.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport {\n  CircleCheckIcon,\n  InfoIcon,\n  Loader2Icon,\n  OctagonXIcon,\n  TriangleAlertIcon,\n} from \"lucide-react\";\nimport { useTheme } from \"next-themes\";\nimport type { CSSProperties, ComponentProps } from \"react\";\nimport { Toaster as Sonner } from \"sonner\";\n\n/**\n * Tailwind `animate-spin`: 1s linear infinite, rotate to 360deg.\n * Visual-diff disables CSS animations on both kits.\n */\nconst spin = stylex.keyframes({\n  to: {\n    transform: \"rotate(360deg)\",\n  },\n});\n\n/**\n * Official icons use `size-4`. Loading also uses `animate-spin`.\n */\nconst icon = stylex.create({\n  size: {\n    width: \"1rem\",\n    height: \"1rem\",\n  },\n  loading: {\n    width: \"1rem\",\n    height: \"1rem\",\n    animationName: spin,\n    animationDuration: \"1s\",\n    animationTimingFunction: \"linear\",\n    animationIterationCount: \"infinite\",\n  },\n});\n\n/**\n * Sonner toaster as a StyleX wrapper around the `sonner` package.\n * Official item (new-york-v4/sonner.json) is still the sonner Toaster,\n * not the deprecated Toast primitive. Do not switch the primitive.\n */\nexport type ToasterProps = ComponentProps<typeof Sonner>;\n\nexport function Toaster({ ...props }: ToasterProps) {\n  const { theme = \"system\" } = useTheme();\n\n  return (\n    <Sonner\n      theme={theme as ToasterProps[\"theme\"]}\n      icons={{\n        success: <CircleCheckIcon {...stylex.props(icon.size)} />,\n        info: <InfoIcon {...stylex.props(icon.size)} />,\n        warning: <TriangleAlertIcon {...stylex.props(icon.size)} />,\n        error: <OctagonXIcon {...stylex.props(icon.size)} />,\n        loading: <Loader2Icon {...stylex.props(icon.loading)} />,\n      }}\n      style={\n        {\n          \"--normal-bg\": \"var(--popover)\",\n          \"--normal-text\": \"var(--popover-foreground)\",\n          \"--normal-border\": \"var(--border)\",\n          \"--border-radius\": \"var(--radius)\",\n        } as CSSProperties\n      }\n      {...props}\n    />\n  );\n}\n\nexport const sonnerIcon = icon;\n",
+      "type": "registry:ui",
+      "target": "@ui/sonner.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

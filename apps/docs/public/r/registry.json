@@ -945,6 +945,25 @@
       ]
     },
     {
+      "name": "sonner",
+      "type": "registry:ui",
+      "title": "Sonner",
+      "description": "A toast. Built on sonner. Duration is pinned so the preview does not drift.",
+      "files": [
+        {
+          "path": "registry/ui/sonner.tsx",
+          "type": "registry:ui",
+          "target": "@ui/sonner.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "next-themes",
+        "sonner"
+      ]
+    },
+    {
       "name": "spinner",
       "type": "registry:ui",
       "title": "Spinner",
