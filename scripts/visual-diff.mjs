@@ -110,6 +110,19 @@ const BUTTON_GROUP_STATES = [
 ];
 const KBD_STATES = ["default", "with-icon", "group", "tooltip"];
 const EMPTY_STATES = ["default", "with-icon", "with-content"];
+const INPUT_GROUP_STATES = [
+  "inline-start",
+  "inline-end",
+  "block-start",
+  "block-end",
+  "text",
+  "button",
+  "kbd",
+  "textarea",
+  "focus-visible",
+  "disabled",
+  "invalid",
+];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -147,6 +160,8 @@ const RESIZABLE_VIEWPORT = { width: 480, height: 280 };
 /* 24rem well + 16px crop pad. 800px is above Tailwind md (768px) so md:p-12
    applies on both kits; 480 would land on p-6 instead. */
 const EMPTY_VIEWPORT = { width: 800, height: 600 };
+/* 16rem well + textarea/block addons + 16px crop pad. Stay below Tailwind md (768px). */
+const INPUT_GROUP_VIEWPORT = { width: 400, height: 320 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -748,6 +763,20 @@ function emptyCases() {
   return list;
 }
 
+function inputGroupCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of INPUT_GROUP_STATES) {
+      list.push({
+        component: "input-group",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -791,6 +820,7 @@ function cases() {
     ...buttonGroupCases(),
     ...kbdCases(),
     ...emptyCases(),
+    ...inputGroupCases(),
   ];
 }
 
@@ -916,6 +946,9 @@ function slug(c) {
   if (c.component === "empty") {
     return `empty__${c.theme}__${c.state}`;
   }
+  if (c.component === "input-group") {
+    return `input-group__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -968,7 +1001,8 @@ function urlFor(kit, c) {
     c.component !== "resizable" &&
     c.component !== "button-group" &&
     c.component !== "kbd" &&
-    c.component !== "empty"
+    c.component !== "empty" &&
+    c.component !== "input-group"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1146,6 +1180,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "empty") {
     return page.locator('[data-slot="empty"]');
+  }
+  if (c.component === "input-group") {
+    return page.locator('[data-slot="input-group"]');
   }
   return page.getByRole("button");
 }
@@ -1406,6 +1443,8 @@ async function main() {
                     ? RESIZABLE_VIEWPORT
                   : c.component === "empty"
                     ? EMPTY_VIEWPORT
+                  : c.component === "input-group"
+                    ? INPUT_GROUP_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1455,7 +1494,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1507,7 +1546,8 @@ async function main() {
           r.component !== "resizable" &&
           r.component !== "button-group" &&
           r.component !== "kbd" &&
-          r.component !== "empty",
+          r.component !== "empty" &&
+          r.component !== "input-group",
       )
       .map(
         (r) =>
@@ -2071,6 +2111,23 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "empty")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Input Group",
+    "",
+    "- Crops `[data-slot=\"input-group\"]` with 16px pad inside an identical 16rem-wide parent on both kits so `w-full` matches.",
+    "- Viewport: 400×320 (below Tailwind `md` / 768px) so Input/Textarea `md:text-sm` stays on the same side as StyleX.",
+    "- Official side composes official Button / Input / Textarea / Kbd. StyleX composes StyleX Button tables / Input / Textarea / Kbd.",
+    "- States: `inline-start` (Search icon), `inline-end` (Search icon), `block-start` / `block-end` text, `text` (`$` + `.com`), `button` (ghost xs Search), `kbd` (`⌘K`), `textarea` + block-end, `focus-visible` / `disabled` / `invalid` on the inline-start icon layout. Each × light/dark.",
+    "- Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "input-group")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
