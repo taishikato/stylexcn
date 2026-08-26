@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "sonner",
   "title": "Sonner",
-  "description": "A toast. Built on sonner. Duration is pinned so the preview does not drift.",
+  "description": "A toast. Built on sonner.",
   "dependencies": [
     "@stylexjs/stylex",
     "lucide-react",

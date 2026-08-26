@@ -103,8 +103,7 @@ const EXTRA_META = {
   },
   sonner: {
     title: "Sonner",
-    description:
-      "A toast. Built on sonner. Duration is pinned so the preview does not drift.",
+    description: "A toast. Built on sonner.",
   },
 };
 

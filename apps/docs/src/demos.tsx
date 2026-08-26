@@ -17,6 +17,7 @@ import { useState, type ReactNode } from "react";
 import { type DateRange } from "react-day-picker";
 import { enUS } from "react-day-picker/locale";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
+import { toast } from "sonner";
 import {
   Accordion,
   AccordionContent,
@@ -277,6 +278,7 @@ import {
 } from "@stylexcn/components/sidebar";
 import { Skeleton } from "@stylexcn/components/skeleton";
 import { Slider } from "@stylexcn/components/slider";
+import { Toaster } from "@stylexcn/components/sonner";
 import { Spinner } from "@stylexcn/components/spinner";
 import { Switch } from "@stylexcn/components/switch";
 import {
@@ -305,6 +307,7 @@ import {
   TooltipTrigger,
 } from "@stylexcn/components/tooltip";
 import { chrome } from "./chrome.stylex";
+import { useTheme } from "./theme-provider";
 
 const BUTTON_VARIANTS: ButtonVariant[] = [
   "default",
@@ -1659,6 +1662,22 @@ function SliderDemo() {
   );
 }
 
+function SonnerDemo() {
+  const { dark } = useTheme();
+
+  return (
+    <>
+      <Toaster theme={dark ? "dark" : "light"} />
+      <Button
+        variant="outline"
+        onClick={() => toast("Event has been created")}
+      >
+        Show Toast
+      </Button>
+    </>
+  );
+}
+
 function SpinnerDemo() {
   return (
     <div {...stylex.props(chrome.row)}>
@@ -1857,6 +1876,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   sidebar: SidebarDemo,
   skeleton: SkeletonDemo,
   slider: SliderDemo,
+  sonner: SonnerDemo,
   spinner: SpinnerDemo,
   switch: SwitchDemo,
   table: TableDemo,
