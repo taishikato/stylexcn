@@ -141,6 +141,7 @@ import {
   TabsTrigger,
 } from "../components/tabs";
 import { Skeleton, type SkeletonRadius } from "../components/skeleton";
+import { Spinner, type SpinnerSize } from "../components/spinner";
 import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
@@ -295,6 +296,7 @@ import {
   OfficialSheetTitle,
 } from "./official-sheet";
 import { OfficialSkeleton } from "./official-skeleton";
+import { OfficialSpinner } from "./official-spinner";
 import {
   OfficialScrollArea,
   OfficialScrollBar,
@@ -412,6 +414,7 @@ export type CaptureComponent =
   | "badge"
   | "separator"
   | "skeleton"
+  | "spinner"
   | "avatar"
   | "progress"
   | "accordion"
@@ -459,6 +462,7 @@ export type CaptureState =
   | "on"
   | "outline"
   | "lg"
+  | "xl"
   | "ellipsis"
   | "with-icon"
   | "with-footer"
@@ -624,6 +628,13 @@ export type SkeletonCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SpinnerCaptureParams = {
+  component: "spinner";
+  kit: CaptureKit;
+  state: "default" | "sm" | "lg" | "xl";
+  theme: CaptureTheme;
+};
+
 export type AvatarCaptureParams = {
   component: "avatar";
   kit: CaptureKit;
@@ -765,6 +776,7 @@ export type CaptureParams =
   | BadgeCaptureParams
   | SeparatorCaptureParams
   | SkeletonCaptureParams
+  | SpinnerCaptureParams
   | AvatarCaptureParams
   | ProgressCaptureParams
   | AccordionCaptureParams
@@ -1991,6 +2003,48 @@ function SkeletonHarness({ kit, state, theme }: SkeletonCaptureParams) {
       {...stylex.props(isDark && darkTheme, styles.frame)}
     >
       <div {...stylex.props(box)}>{skeleton}</div>
+    </div>
+  );
+}
+
+function spinnerOfficialClassName(
+  state: SpinnerCaptureParams["state"],
+): string | undefined {
+  if (state === "sm") return "size-3";
+  if (state === "lg") return "size-6";
+  if (state === "xl") return "size-8";
+  return undefined;
+}
+
+function spinnerStylexSize(state: SpinnerCaptureParams["state"]): SpinnerSize {
+  if (state === "sm") return "3";
+  if (state === "lg") return "6";
+  if (state === "xl") return "8";
+  return "4";
+}
+
+function SpinnerHarness({ kit, state, theme }: SpinnerCaptureParams) {
+  const isDark = theme === "dark";
+  const officialClassName = spinnerOfficialClassName(state);
+  const stylexSize = spinnerStylexSize(state);
+
+  const spinner =
+    kit === "shadcn" ? (
+      <OfficialSpinner className={officialClassName} />
+    ) : (
+      <Spinner size={stylexSize} />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="spinner"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {spinner}
     </div>
   );
 }
@@ -3271,6 +3325,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "skeleton") {
     return <SkeletonHarness {...params} />;
   }
+  if (params.component === "spinner") {
+    return <SpinnerHarness {...params} />;
+  }
   if (params.component === "avatar") {
     return <AvatarHarness {...params} />;
   }
@@ -3517,6 +3574,18 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "skeleton", kit, state, theme };
+  }
+
+  if (component === "spinner") {
+    if (
+      state !== "default" &&
+      state !== "sm" &&
+      state !== "lg" &&
+      state !== "xl"
+    ) {
+      return null;
+    }
+    return { component: "spinner", kit, state, theme };
   }
 
   if (component === "avatar") {
