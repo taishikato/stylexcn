@@ -155,6 +155,7 @@ export function Input({ type, ...props }: InputProps) {
   );
 }
 
+export const inputBase = base;
 export const inputSizes = sizes;
 export const inputInvalid = invalid;
 export const inputDisabled = disabled;

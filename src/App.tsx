@@ -111,6 +111,14 @@ import {
 } from "./components/context-menu";
 import { Input } from "./components/input";
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "./components/input-group";
+import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
@@ -181,7 +189,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "./components/resizable";
-import { CircleAlert, Command, Inbox } from "lucide-react";
+import { CircleAlert, Command, Inbox, Search } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -343,6 +351,14 @@ import {
   OfficialContextMenuTrigger,
 } from "./visual/official-context-menu";
 import { OfficialInput } from "./visual/official-input";
+import {
+  OfficialInputGroup,
+  OfficialInputGroupAddon,
+  OfficialInputGroupButton,
+  OfficialInputGroupInput,
+  OfficialInputGroupText,
+  OfficialInputGroupTextarea,
+} from "./visual/official-input-group";
 import {
   OfficialNativeSelect,
   OfficialNativeSelectOptGroup,
@@ -545,6 +561,9 @@ const styles = stylex.create({
   emptyWell: {
     width: "24rem",
   },
+  inputGroupWell: {
+    width: "16rem",
+  },
 });
 
 function Playground() {
@@ -557,9 +576,9 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, Kbd, and Empty vs official
-        shadcn/ui. Visual capture lives at query-param harness URLs (see
-        README).
+        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, and Input Group vs
+        official shadcn/ui. Visual capture lives at query-param harness URLs
+        (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1683,6 +1702,48 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <OfficialKbd>⌘S</OfficialKbd>
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Input Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>icon</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="stylex" state="inline-start" />
+        </div>
+        <span {...stylex.props(styles.label)}>text</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="stylex" state="text" />
+        </div>
+        <span {...stylex.props(styles.label)}>button</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="stylex" state="button" />
+        </div>
+        <span {...stylex.props(styles.label)}>textarea</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="stylex" state="textarea" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Input Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>icon</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="shadcn" state="inline-start" />
+        </div>
+        <span {...stylex.props(styles.label)}>text</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="shadcn" state="text" />
+        </div>
+        <span {...stylex.props(styles.label)}>button</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="shadcn" state="button" />
+        </div>
+        <span {...stylex.props(styles.label)}>textarea</span>
+        <div {...stylex.props(styles.inputGroupWell)}>
+          <PlaygroundInputGroup kit="shadcn" state="textarea" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -2313,6 +2374,100 @@ function PlaygroundToggleGroup({
       <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
       <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
     </ToggleGroup>
+  );
+}
+
+function PlaygroundInputGroup({
+  kit,
+  state,
+}: {
+  kit: "stylex" | "shadcn";
+  state: "inline-start" | "text" | "button" | "textarea";
+}) {
+  if (kit === "shadcn") {
+    if (state === "text") {
+      return (
+        <OfficialInputGroup>
+          <OfficialInputGroupAddon>
+            <OfficialInputGroupText>$</OfficialInputGroupText>
+          </OfficialInputGroupAddon>
+          <OfficialInputGroupInput defaultValue="Email" />
+          <OfficialInputGroupAddon align="inline-end">
+            <OfficialInputGroupText>.com</OfficialInputGroupText>
+          </OfficialInputGroupAddon>
+        </OfficialInputGroup>
+      );
+    }
+    if (state === "button") {
+      return (
+        <OfficialInputGroup>
+          <OfficialInputGroupInput defaultValue="Email" />
+          <OfficialInputGroupAddon align="inline-end">
+            <OfficialInputGroupButton>Search</OfficialInputGroupButton>
+          </OfficialInputGroupAddon>
+        </OfficialInputGroup>
+      );
+    }
+    if (state === "textarea") {
+      return (
+        <OfficialInputGroup>
+          <OfficialInputGroupTextarea defaultValue="Email" />
+          <OfficialInputGroupAddon align="block-end">
+            <OfficialInputGroupText>0/280</OfficialInputGroupText>
+          </OfficialInputGroupAddon>
+        </OfficialInputGroup>
+      );
+    }
+    return (
+      <OfficialInputGroup>
+        <OfficialInputGroupAddon>
+          <Search />
+        </OfficialInputGroupAddon>
+        <OfficialInputGroupInput defaultValue="Email" />
+      </OfficialInputGroup>
+    );
+  }
+
+  if (state === "text") {
+    return (
+      <InputGroup>
+        <InputGroupAddon>
+          <InputGroupText>$</InputGroupText>
+        </InputGroupAddon>
+        <InputGroupInput defaultValue="Email" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupText>.com</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    );
+  }
+  if (state === "button") {
+    return (
+      <InputGroup>
+        <InputGroupInput defaultValue="Email" />
+        <InputGroupAddon align="inline-end">
+          <InputGroupButton>Search</InputGroupButton>
+        </InputGroupAddon>
+      </InputGroup>
+    );
+  }
+  if (state === "textarea") {
+    return (
+      <InputGroup>
+        <InputGroupTextarea defaultValue="Email" />
+        <InputGroupAddon align="block-end">
+          <InputGroupText>0/280</InputGroupText>
+        </InputGroupAddon>
+      </InputGroup>
+    );
+  }
+  return (
+    <InputGroup>
+      <InputGroupAddon>
+        <Search />
+      </InputGroupAddon>
+      <InputGroupInput defaultValue="Email" />
+    </InputGroup>
   );
 }
 

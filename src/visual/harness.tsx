@@ -109,6 +109,14 @@ import {
 } from "../components/context-menu";
 import { Input } from "../components/input";
 import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "../components/input-group";
+import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
@@ -160,7 +168,7 @@ import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
-import { CircleAlert, Command, Inbox } from "lucide-react";
+import { CircleAlert, Command, Inbox, Search } from "lucide-react";
 import { AspectRatio } from "../components/aspect-ratio";
 import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import {
@@ -273,6 +281,14 @@ import {
 } from "./official-alert-dialog";
 import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
+import {
+  OfficialInputGroup,
+  OfficialInputGroupAddon,
+  OfficialInputGroupButton,
+  OfficialInputGroupInput,
+  OfficialInputGroupText,
+  OfficialInputGroupTextarea,
+} from "./official-input-group";
 import {
   OfficialNativeSelect,
   OfficialNativeSelectOptGroup,
@@ -461,7 +477,8 @@ export type CaptureComponent =
   | "resizable"
   | "button-group"
   | "kbd"
-  | "empty";
+  | "empty"
+  | "input-group";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -501,7 +518,14 @@ export type CaptureState =
   | "text"
   | "nested"
   | "tooltip"
-  | "with-content";
+  | "with-content"
+  | "inline-start"
+  | "inline-end"
+  | "block-start"
+  | "block-end"
+  | "button"
+  | "kbd"
+  | "textarea";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -808,6 +832,24 @@ export type EmptyCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type InputGroupCaptureParams = {
+  component: "input-group";
+  kit: CaptureKit;
+  state:
+    | "inline-start"
+    | "inline-end"
+    | "block-start"
+    | "block-end"
+    | "text"
+    | "button"
+    | "kbd"
+    | "textarea"
+    | "focus-visible"
+    | "disabled"
+    | "invalid";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -849,7 +891,8 @@ export type CaptureParams =
   | ResizableCaptureParams
   | ButtonGroupCaptureParams
   | KbdCaptureParams
-  | EmptyCaptureParams;
+  | EmptyCaptureParams
+  | InputGroupCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1050,6 +1093,10 @@ const styles = stylex.create({
   /* Identical 24rem parent on both kits so w-full / max-w-sm match. */
   emptyWell: {
     width: "24rem",
+  },
+  /* Identical 16rem parent on both kits so w-full matches. */
+  inputGroupWell: {
+    width: "16rem",
   },
 });
 
@@ -3583,6 +3630,151 @@ function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   );
 }
 
+const INPUT_GROUP_VALUE = "Email";
+const INPUT_GROUP_BUTTON = "Search";
+const INPUT_GROUP_KBD = "⌘K";
+const INPUT_GROUP_PREFIX = "$";
+const INPUT_GROUP_SUFFIX = ".com";
+const INPUT_GROUP_BLOCK_START = "https://";
+const INPUT_GROUP_BLOCK_END = "Footer";
+const INPUT_GROUP_TEXTAREA_END = "0/280";
+
+function InputGroupDemo({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: InputGroupCaptureParams["state"];
+}) {
+  const disabled = state === "disabled";
+  const invalid = state === "invalid";
+  const Group = kit === "shadcn" ? OfficialInputGroup : InputGroup;
+  const Addon = kit === "shadcn" ? OfficialInputGroupAddon : InputGroupAddon;
+  const GroupInput =
+    kit === "shadcn" ? OfficialInputGroupInput : InputGroupInput;
+  const GroupText =
+    kit === "shadcn" ? OfficialInputGroupText : InputGroupText;
+  const GroupButton =
+    kit === "shadcn" ? OfficialInputGroupButton : InputGroupButton;
+  const GroupTextarea =
+    kit === "shadcn" ? OfficialInputGroupTextarea : InputGroupTextarea;
+  const Key = kit === "shadcn" ? OfficialKbd : Kbd;
+
+  const controlProps = {
+    defaultValue: INPUT_GROUP_VALUE,
+    disabled,
+    "aria-invalid": invalid || undefined,
+  };
+
+  if (state === "inline-end") {
+    return (
+      <Group data-disabled={disabled ? "true" : undefined}>
+        <GroupInput {...controlProps} />
+        <Addon align="inline-end">
+          <Search />
+        </Addon>
+      </Group>
+    );
+  }
+
+  if (state === "block-start") {
+    return (
+      <Group data-disabled={disabled ? "true" : undefined}>
+        <Addon align="block-start">
+          <GroupText>{INPUT_GROUP_BLOCK_START}</GroupText>
+        </Addon>
+        <GroupInput {...controlProps} />
+      </Group>
+    );
+  }
+
+  if (state === "block-end") {
+    return (
+      <Group data-disabled={disabled ? "true" : undefined}>
+        <GroupInput {...controlProps} />
+        <Addon align="block-end">
+          <GroupText>{INPUT_GROUP_BLOCK_END}</GroupText>
+        </Addon>
+      </Group>
+    );
+  }
+
+  if (state === "text") {
+    return (
+      <Group data-disabled={disabled ? "true" : undefined}>
+        <Addon align="inline-start">
+          <GroupText>{INPUT_GROUP_PREFIX}</GroupText>
+        </Addon>
+        <GroupInput {...controlProps} />
+        <Addon align="inline-end">
+          <GroupText>{INPUT_GROUP_SUFFIX}</GroupText>
+        </Addon>
+      </Group>
+    );
+  }
+
+  if (state === "button") {
+    return (
+      <Group data-disabled={disabled ? "true" : undefined}>
+        <GroupInput {...controlProps} />
+        <Addon align="inline-end">
+          <GroupButton>{INPUT_GROUP_BUTTON}</GroupButton>
+        </Addon>
+      </Group>
+    );
+  }
+
+  if (state === "kbd") {
+    return (
+      <Group data-disabled={disabled ? "true" : undefined}>
+        <GroupInput {...controlProps} />
+        <Addon align="inline-end">
+          <Key>{INPUT_GROUP_KBD}</Key>
+        </Addon>
+      </Group>
+    );
+  }
+
+  if (state === "textarea") {
+    return (
+      <Group data-disabled={disabled ? "true" : undefined}>
+        <GroupTextarea {...controlProps} />
+        <Addon align="block-end">
+          <GroupText>{INPUT_GROUP_TEXTAREA_END}</GroupText>
+        </Addon>
+      </Group>
+    );
+  }
+
+  return (
+    <Group data-disabled={disabled ? "true" : undefined}>
+      <Addon align="inline-start">
+        <Search />
+      </Addon>
+      <GroupInput {...controlProps} />
+    </Group>
+  );
+}
+
+function InputGroupHarness({ kit, state, theme }: InputGroupCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="input-group"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.inputGroupWell)}>
+        <InputGroupDemo kit={kit} state={state} />
+      </div>
+    </div>
+  );
+}
+
 export function Harness(params: CaptureParams) {
   if (params.component === "input") {
     return <InputHarness {...params} />;
@@ -3703,6 +3895,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "empty") {
     return <EmptyHarness {...params} />;
+  }
+  if (params.component === "input-group") {
+    return <InputGroupHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -4096,6 +4291,25 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "empty", kit, state, theme };
+  }
+
+  if (component === "input-group") {
+    if (
+      state !== "inline-start" &&
+      state !== "inline-end" &&
+      state !== "block-start" &&
+      state !== "block-end" &&
+      state !== "text" &&
+      state !== "button" &&
+      state !== "kbd" &&
+      state !== "textarea" &&
+      state !== "focus-visible" &&
+      state !== "disabled" &&
+      state !== "invalid"
+    ) {
+      return null;
+    }
+    return { component: "input-group", kit, state, theme };
   }
 
   if (component !== "button") return null;
