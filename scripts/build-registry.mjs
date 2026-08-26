@@ -42,6 +42,11 @@ const EXTRA_REGISTRY_DEPS = {
 };
 
 const EXTRA_META = {
+  command: {
+    title: "Command",
+    description:
+      "Command menu for search and quick actions. cmdk plus Dialog.",
+  },
   field: {
     title: "Field",
     description:

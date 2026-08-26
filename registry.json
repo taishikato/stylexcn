@@ -280,6 +280,28 @@
       ]
     },
     {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "Command menu for search and quick actions. cmdk plus Dialog.",
+      "files": [
+        {
+          "path": "registry/ui/command.tsx",
+          "type": "registry:ui",
+          "target": "@ui/command.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "cmdk",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/dialog.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
       "name": "context-menu",
       "type": "registry:ui",
       "title": "Context Menu",

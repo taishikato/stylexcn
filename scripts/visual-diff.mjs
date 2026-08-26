@@ -219,6 +219,8 @@ const FIELD_VIEWPORT = { width: 480, height: 480 };
 const FIELD_RESPONSIVE_VIEWPORT = { width: 640, height: 400 };
 const COMBOBOX_OPEN_VIEWPORT = { width: 640, height: 560 };
 const COMBOBOX_VIEWPORT = { width: 480, height: 240 };
+const COMMAND_STATES = ["default", "selected", "empty", "disabled", "dialog"];
+const COMMAND_VIEWPORT = { width: 480, height: 480 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -880,6 +882,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "combobox") {
     return comboboxCases();
   }
+  if (process.env.VISUAL_ONLY === "command") {
+    return commandCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -927,6 +932,7 @@ function cases() {
     ...inputOtpCases(),
     ...fieldCases(),
     ...comboboxCases(),
+    ...commandCases(),
   ];
 }
 
@@ -936,6 +942,20 @@ function comboboxCases() {
     for (const state of COMBOBOX_STATES) {
       list.push({
         component: "combobox",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
+function commandCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of COMMAND_STATES) {
+      list.push({
+        component: "command",
         state,
         theme,
       });
@@ -1081,6 +1101,9 @@ function slug(c) {
   if (c.component === "combobox") {
     return `combobox__${c.theme}__${c.state}`;
   }
+  if (c.component === "command") {
+    return `command__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1138,7 +1161,8 @@ function urlFor(kit, c) {
     c.component !== "item" &&
     c.component !== "input-otp" &&
     c.component !== "field" &&
-    c.component !== "combobox"
+    c.component !== "combobox" &&
+    c.component !== "command"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1341,6 +1365,12 @@ function controlLocator(page, c) {
     }
     return page.locator('[data-slot="input-group"]');
   }
+  if (c.component === "command") {
+    if (c.state === "dialog") {
+      return page.locator('[data-slot="dialog-content"]');
+    }
+    return page.locator('[data-slot="command"]');
+  }
   return page.getByRole("button");
 }
 
@@ -1440,6 +1470,16 @@ async function prepareControl(page, c) {
     await page.waitForTimeout(50);
     return;
   }
+  if (c.component === "command") {
+    if (c.state === "dialog") {
+      await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
+      await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
+    } else {
+      await page.locator('[data-slot="command"]').waitFor();
+    }
+    await page.waitForTimeout(50);
+    return;
+  }
   const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
@@ -1519,6 +1559,13 @@ async function screenshotControl(page, c, dest) {
   }
   if (c.component === "combobox" && COMBOBOX_OPEN_STATES.has(c.state)) {
     await page.locator('[data-slot="combobox-content"]').waitFor();
+    await page.waitForTimeout(50);
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "command" && c.state === "dialog") {
+    await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
     await page.waitForTimeout(50);
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
@@ -1635,6 +1682,10 @@ async function main() {
                     ? COMBOBOX_OPEN_VIEWPORT
                   : c.component === "combobox"
                     ? COMBOBOX_VIEWPORT
+                  : c.component === "command" && c.state === "dialog"
+                    ? DIALOG_VIEWPORT
+                  : c.component === "command"
+                    ? COMMAND_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1684,7 +1735,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1741,7 +1792,8 @@ async function main() {
           r.component !== "item" &&
           r.component !== "input-otp" &&
           r.component !== "field" &&
-          r.component !== "combobox",
+          r.component !== "combobox" &&
+          r.component !== "command",
       )
       .map(
         (r) =>
@@ -2389,6 +2441,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "combobox")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Command",
+    "",
+    "- Inline states crop `[data-slot=\"command\"]` with 16px pad inside an identical 24rem well. `dialog` is full-viewport (800×600, same as Dialog) so overlay + `p-0` content are captured together.",
+    "- Official side is the live registry Command family (`cmdk` + Dialog). StyleX is cmdk + StyleX Dialog tables. Combobox is a separate Base UI leftover and is not used here.",
+    "- States: `default` / `selected` / `empty` / `disabled` / `dialog`, each × light/dark.",
+    "- Skipped: RTL, scrollable overflow, and a dedicated focus-visible input case (official Command input has `outline-hidden` and no ring; caret would dominate the crop). Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "command")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

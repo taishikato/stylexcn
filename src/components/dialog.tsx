@@ -214,6 +214,7 @@ export function DialogContent({
   className,
   children,
   showCloseButton = true,
+  style,
   ...props
 }: DialogContentProps) {
   const sx = stylex.props(content.root);
@@ -224,7 +225,7 @@ export function DialogContent({
         data-slot="dialog-content"
         {...props}
         className={[sx.className, className].filter(Boolean).join(" ")}
-        style={sx.style}
+        style={{ ...sx.style, ...style }}
       >
         {children}
         {showCloseButton ? (
@@ -241,14 +242,14 @@ export function DialogContent({
   );
 }
 
-export function DialogHeader({ className, ...props }: DialogHeaderProps) {
+export function DialogHeader({ className, style, ...props }: DialogHeaderProps) {
   const sx = stylex.props(header.root);
   return (
     <div
       data-slot="dialog-header"
       {...props}
       className={[sx.className, className].filter(Boolean).join(" ")}
-      style={sx.style}
+      style={{ ...sx.style, ...style }}
     />
   );
 }

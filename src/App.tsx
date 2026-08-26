@@ -141,6 +141,16 @@ import {
   ComboboxList,
 } from "./components/combobox";
 import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "./components/command";
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -220,7 +230,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "./components/resizable";
-import { CircleAlert, Command, Inbox, Search } from "lucide-react";
+import { CircleAlert, Command as CommandGlyph, Inbox, Search } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -412,6 +422,16 @@ import {
   OfficialComboboxItem,
   OfficialComboboxList,
 } from "./visual/official-combobox";
+import {
+  OfficialCommand,
+  OfficialCommandEmpty,
+  OfficialCommandGroup,
+  OfficialCommandInput,
+  OfficialCommandItem,
+  OfficialCommandList,
+  OfficialCommandSeparator,
+  OfficialCommandShortcut,
+} from "./visual/official-command";
 import {
   OfficialField,
   OfficialFieldContent,
@@ -632,6 +652,9 @@ const styles = stylex.create({
   fieldWell: {
     width: "16rem",
   },
+  commandWell: {
+    width: "24rem",
+  },
 });
 
 function PlaygroundInputOtp({ kit }: { kit: "stylex" | "shadcn" }) {
@@ -678,7 +701,7 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, and Combobox vs
+        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1777,7 +1800,7 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <Kbd>Ctrl</Kbd>
         <Kbd>
-          <Command />
+          <CommandGlyph />
         </Kbd>
         <KbdGroup>
           <Kbd>Ctrl</Kbd>
@@ -1794,7 +1817,7 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <OfficialKbd>Ctrl</OfficialKbd>
         <OfficialKbd>
-          <Command />
+          <CommandGlyph />
         </OfficialKbd>
         <OfficialKbdGroup>
           <OfficialKbd>Ctrl</OfficialKbd>
@@ -1941,6 +1964,24 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundCombobox kit="shadcn" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Command
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.commandWell)}>
+          <PlaygroundCommand kit="stylex" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Command
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.commandWell)}>
+          <PlaygroundCommand kit="shadcn" />
+        </div>
       </div>
     </div>
   );
@@ -2771,6 +2812,47 @@ function PlaygroundCombobox({ kit }: { kit: "stylex" | "shadcn" }) {
         </ComboboxList>
       </ComboboxContent>
     </Combobox>
+  );
+}
+
+function PlaygroundCommand({ kit }: { kit: "stylex" | "shadcn" }) {
+  const Root = kit === "shadcn" ? OfficialCommand : Command;
+  const Input = kit === "shadcn" ? OfficialCommandInput : CommandInput;
+  const List = kit === "shadcn" ? OfficialCommandList : CommandList;
+  const Empty = kit === "shadcn" ? OfficialCommandEmpty : CommandEmpty;
+  const Group = kit === "shadcn" ? OfficialCommandGroup : CommandGroup;
+  const Item = kit === "shadcn" ? OfficialCommandItem : CommandItem;
+  const Separator =
+    kit === "shadcn" ? OfficialCommandSeparator : CommandSeparator;
+  const Shortcut = kit === "shadcn" ? OfficialCommandShortcut : CommandShortcut;
+
+  return (
+    <Root>
+      <Input placeholder="Type a command or search..." />
+      <List>
+        <Empty>No results found.</Empty>
+        <Group heading="Suggestions">
+          <Item>Calendar</Item>
+          <Item>Search Emoji</Item>
+          <Item>Calculator</Item>
+        </Group>
+        <Separator />
+        <Group heading="Settings">
+          <Item>
+            Profile
+            <Shortcut>⌘P</Shortcut>
+          </Item>
+          <Item>
+            Billing
+            <Shortcut>⌘B</Shortcut>
+          </Item>
+          <Item>
+            Settings
+            <Shortcut>⌘S</Shortcut>
+          </Item>
+        </Group>
+      </List>
+    </Root>
   );
 }
 
