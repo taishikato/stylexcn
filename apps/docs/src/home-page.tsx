@@ -26,6 +26,12 @@ import {
   EmptyTitle,
 } from "@stylexcn/components/empty";
 import { Input } from "@stylexcn/components/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupInput,
+  InputGroupText,
+} from "@stylexcn/components/input-group";
 import { Kbd, KbdGroup } from "@stylexcn/components/kbd";
 import { Label } from "@stylexcn/components/label";
 import {
@@ -56,8 +62,8 @@ export function HomePage() {
     <div {...stylex.props(landing.page)}>
       <section {...stylex.props(landing.hero)}>
         <div {...stylex.props(landing.heroInner)}>
-          <Link href="/docs/empty" {...stylex.props(landing.pill)}>
-            New Empty component
+          <Link href="/docs/input-group" {...stylex.props(landing.pill)}>
+            New Input Group
             <ArrowRight size={14} />
           </Link>
           <h1 {...stylex.props(landing.title)}>
@@ -234,7 +240,12 @@ function GoalTile() {
         </div>
         <div {...stylex.props(landing.field)}>
           <Label htmlFor="goal-amount">Target amount</Label>
-          <Input id="goal-amount" defaultValue="$10,000" />
+          <InputGroup>
+            <InputGroupAddon>
+              <InputGroupText>$</InputGroupText>
+            </InputGroupAddon>
+            <InputGroupInput id="goal-amount" defaultValue="10,000" />
+          </InputGroup>
         </div>
         <div {...stylex.props(landing.field)}>
           <Label htmlFor="goal-plan">Savings plan</Label>
