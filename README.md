@@ -2,7 +2,32 @@
 
 A [StyleX](https://stylexjs.com) port of [shadcn/ui](https://ui.shadcn.com) — same look, StyleX instead of Tailwind. Pixel-perfect with official shadcn/ui. Primitives: [Base UI](https://base-ui.com).
 
-This repo is a foundation plus **Button**, **Input**, **Label**, **Textarea**, **Checkbox**, **Switch**, **Radio Group**, **Card**, **Dialog**, **Alert Dialog**, **Select**, **Native Select**, **Dropdown Menu**, **Context Menu**, **Sheet**, **Tabs**, **Popover**, **Hover Card**, **Tooltip**, **Badge**, **Separator**, **Skeleton**, **Spinner**, **Avatar**, **Progress**, **Accordion**, **Slider**, **Toggle**, **Breadcrumb**, **Collapsible**, **Scroll Area**, **Pagination**, **Alert**, **Toggle Group**, **Button Group**, **Menubar**, **Aspect Ratio**, **Table**, **Resizable**, **Kbd**, **Empty**, **Input Group**, and **Item**. Distribution (copy-into-repo / registry) comes later.
+This repo is a foundation plus **Button**, **Input**, **Label**, **Textarea**, **Checkbox**, **Switch**, **Radio Group**, **Card**, **Dialog**, **Alert Dialog**, **Select**, **Native Select**, **Dropdown Menu**, **Context Menu**, **Sheet**, **Tabs**, **Popover**, **Hover Card**, **Tooltip**, **Badge**, **Separator**, **Skeleton**, **Spinner**, **Avatar**, **Progress**, **Accordion**, **Slider**, **Toggle**, **Breadcrumb**, **Collapsible**, **Scroll Area**, **Pagination**, **Alert**, **Toggle Group**, **Button Group**, **Menubar**, **Aspect Ratio**, **Table**, **Resizable**, **Kbd**, **Empty**, **Input Group**, and **Item**.
+
+## Install
+
+Install any merged component with the official [shadcn CLI](https://ui.shadcn.com/docs/cli). Files land in your app (typically `components/ui` and `lib`) with consumer imports such as `@/components/ui/button` and `@/lib/tokens.stylex`.
+
+The consumer project must already compile StyleX (`@stylexjs/stylex` plus a bundler plugin such as `@stylexjs/unplugin` or `@stylexjs/babel-plugin`). Initializing Tailwind is not enough.
+
+```bash
+pnpm dlx shadcn@latest add https://stylexcn.vercel.app/r/input.json
+```
+
+Optional namespace:
+
+```bash
+pnpm dlx shadcn@latest registry add @stylexcn=https://stylexcn.vercel.app/r/{name}.json
+pnpm dlx shadcn@latest add @stylexcn/button
+```
+
+List the catalog:
+
+```bash
+pnpm dlx shadcn@latest list https://stylexcn.vercel.app/r/registry.json
+```
+
+The registry is generated from kit source (`npm run registry:build`) and served as static JSON from the docs site (`/r/<name>.json`). Do not hand-edit `registry.json` or `apps/docs/public/r`.
 
 ## Tokens
 

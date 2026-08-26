@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "hover-card",
+  "title": "Hover Card",
+  "description": "Preview card on hover or focus.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/hover-card.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport { HoverCard as HoverCardPrimitive } from \"radix-ui\";\nimport type { ComponentProps } from \"react\";\nimport { tokens } from \"@/lib/tokens.stylex\";\n\n/* Tailwind v4 --shadow-md (theme.css). Official HoverCardContent uses shadow-md. */\nconst SHADOW_MD =\n  \"0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)\";\n\n/**\n * Hover Card family as StyleX tables.\n * Official New York content is w-64 / rounded-md / p-4 / shadow-md.\n * Default align is center; default sideOffset is 4.\n */\nconst content = stylex.create({\n  root: {\n    zIndex: 50,\n    width: \"16rem\",\n    transformOrigin: \"var(--radix-hover-card-content-transform-origin)\",\n    boxSizing: \"border-box\",\n    borderRadius: tokens[\"--radius-md\"],\n    borderWidth: \"1px\",\n    borderStyle: \"solid\",\n    borderColor: tokens[\"--border\"],\n    backgroundColor: tokens[\"--popover\"],\n    padding: \"1rem\",\n    color: tokens[\"--popover-foreground\"],\n    boxShadow: SHADOW_MD,\n    outline: \"none\",\n    fontFamily: \"inherit\",\n  },\n});\n\nexport type HoverCardProps = ComponentProps<typeof HoverCardPrimitive.Root>;\nexport type HoverCardTriggerProps = ComponentProps<\n  typeof HoverCardPrimitive.Trigger\n>;\nexport type HoverCardContentProps = ComponentProps<\n  typeof HoverCardPrimitive.Content\n>;\n\nexport function HoverCard({ ...props }: HoverCardProps) {\n  return <HoverCardPrimitive.Root data-slot=\"hover-card\" {...props} />;\n}\n\nexport function HoverCardTrigger({ ...props }: HoverCardTriggerProps) {\n  return (\n    <HoverCardPrimitive.Trigger data-slot=\"hover-card-trigger\" {...props} />\n  );\n}\n\nexport function HoverCardContent({\n  className,\n  align = \"center\",\n  sideOffset = 4,\n  ...props\n}: HoverCardContentProps) {\n  const sx = stylex.props(content.root);\n  return (\n    <HoverCardPrimitive.Portal data-slot=\"hover-card-portal\">\n      <HoverCardPrimitive.Content\n        data-slot=\"hover-card-content\"\n        align={align}\n        sideOffset={sideOffset}\n        {...props}\n        className={[sx.className, className].filter(Boolean).join(\" \")}\n        style={sx.style}\n      />\n    </HoverCardPrimitive.Portal>\n  );\n}\n\nexport const hoverCardContent = content;\n",
+      "type": "registry:ui",
+      "target": "@ui/hover-card.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -147,6 +147,14 @@ export const chrome = stylex.create({
     maxWidth: "40rem",
     marginBottom: "2rem",
   },
+  note: {
+    fontSize: "0.875rem",
+    lineHeight: 1.6,
+    color: tokens["--muted-foreground"],
+    maxWidth: "40rem",
+    marginTop: "0.75rem",
+    marginBottom: "0.5rem",
+  },
   sectionTitle: {
     fontSize: "1.125rem",
     fontWeight: 600,

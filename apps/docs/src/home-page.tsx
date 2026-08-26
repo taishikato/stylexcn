@@ -71,8 +71,14 @@ export function HomePage() {
           </h1>
           <p {...stylex.props(landing.copy)}>
             A port of shadcn/ui — same look, StyleX instead of Tailwind. Open
-            source. Open code.
+            source. Open code. Install any merged component with the official
+            shadcn CLI.
           </p>
+          <pre {...stylex.props(landing.heroCode)}>
+            <code>
+              pnpm dlx shadcn@latest add https://stylexcn.vercel.app/r/input.json
+            </code>
+          </pre>
           <Button type="button" onClick={() => router.push("/docs")}>
             Get Started
             <ArrowRight size={16} />

@@ -1,0 +1,861 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry.json",
+  "name": "stylexcn",
+  "homepage": "https://stylexcn.vercel.app",
+  "items": [
+    {
+      "name": "tokens",
+      "type": "registry:lib",
+      "title": "Tokens",
+      "description": "Shared StyleX design tokens (defineVars) used by the StyleX component set.",
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "docs": "This kit uses StyleX, not Tailwind utilities. The consumer app must compile StyleX (`@stylexjs/stylex` plus a bundler plugin such as `@stylexjs/unplugin` or `@stylexjs/babel-plugin`). Initializing Tailwind is not enough.",
+      "files": [
+        {
+          "path": "registry/lib/tokens.stylex.ts",
+          "type": "registry:lib",
+          "target": "@lib/tokens.stylex.ts"
+        }
+      ]
+    },
+    {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "A vertically stacked set of headings that reveal related content.",
+      "files": [
+        {
+          "path": "registry/ui/accordion.tsx",
+          "type": "registry:ui",
+          "target": "@ui/accordion.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "alert",
+      "type": "registry:ui",
+      "title": "Alert",
+      "description": "Inline callout for default or destructive messages.",
+      "files": [
+        {
+          "path": "registry/ui/alert.tsx",
+          "type": "registry:ui",
+          "target": "@ui/alert.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert Dialog",
+      "description": "A modal for confirming destructive actions.",
+      "files": [
+        {
+          "path": "registry/ui/alert-dialog.tsx",
+          "type": "registry:ui",
+          "target": "@ui/alert-dialog.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "aspect-ratio",
+      "type": "registry:ui",
+      "title": "Aspect Ratio",
+      "description": "Constrains content to a ratio. Fill is up to the caller.",
+      "files": [
+        {
+          "path": "registry/ui/aspect-ratio.tsx",
+          "type": "registry:ui",
+          "target": "@ui/aspect-ratio.tsx"
+        }
+      ],
+      "dependencies": [
+        "radix-ui"
+      ]
+    },
+    {
+      "name": "avatar",
+      "type": "registry:ui",
+      "title": "Avatar",
+      "description": "User image or initials, with sizes, badge, and group.",
+      "files": [
+        {
+          "path": "registry/ui/avatar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/avatar.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "badge",
+      "type": "registry:ui",
+      "title": "Badge",
+      "description": "Small status labels: default, secondary, destructive, outline, ghost, link.",
+      "files": [
+        {
+          "path": "registry/ui/badge.tsx",
+          "type": "registry:ui",
+          "target": "@ui/badge.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "breadcrumb",
+      "type": "registry:ui",
+      "title": "Breadcrumb",
+      "description": "Trail of links to the current page, with an optional ellipsis.",
+      "files": [
+        {
+          "path": "registry/ui/breadcrumb.tsx",
+          "type": "registry:ui",
+          "target": "@ui/breadcrumb.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "button",
+      "type": "registry:ui",
+      "title": "Button",
+      "description": "Primary actions across variant and size.",
+      "files": [
+        {
+          "path": "registry/ui/button.tsx",
+          "type": "registry:ui",
+          "target": "@ui/button.tsx"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "button-group",
+      "type": "registry:ui",
+      "title": "Button Group",
+      "description": "Joins related buttons, inputs, or selects into one control.",
+      "files": [
+        {
+          "path": "registry/ui/button-group.tsx",
+          "type": "registry:ui",
+          "target": "@ui/button-group.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json",
+        "https://stylexcn.vercel.app/r/separator.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "card",
+      "type": "registry:ui",
+      "title": "Card",
+      "description": "Container for header, body, and footer.",
+      "files": [
+        {
+          "path": "registry/ui/card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/card.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "Boolean control with checked, disabled, and invalid states.",
+      "files": [
+        {
+          "path": "registry/ui/checkbox.tsx",
+          "type": "registry:ui",
+          "target": "@ui/checkbox.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "collapsible",
+      "type": "registry:ui",
+      "title": "Collapsible",
+      "description": "Show and hide a panel from a trigger. Chrome is up to you.",
+      "files": [
+        {
+          "path": "registry/ui/collapsible.tsx",
+          "type": "registry:ui",
+          "target": "@ui/collapsible.tsx"
+        }
+      ],
+      "dependencies": [
+        "radix-ui"
+      ]
+    },
+    {
+      "name": "context-menu",
+      "type": "registry:ui",
+      "title": "Context Menu",
+      "description": "Right-click menu. Use the dashed box on the demo page.",
+      "files": [
+        {
+          "path": "registry/ui/context-menu.tsx",
+          "type": "registry:ui",
+          "target": "@ui/context-menu.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "Centered modal you can open, edit, and close.",
+      "files": [
+        {
+          "path": "registry/ui/dialog.tsx",
+          "type": "registry:ui",
+          "target": "@ui/dialog.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown Menu",
+      "description": "Menu from a button, including items, checkboxes, and radios.",
+      "files": [
+        {
+          "path": "registry/ui/dropdown-menu.tsx",
+          "type": "registry:ui",
+          "target": "@ui/dropdown-menu.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "empty",
+      "type": "registry:ui",
+      "title": "Empty",
+      "description": "Placeholder for a vacant list or page. Media, title, description, and optional action.",
+      "files": [
+        {
+          "path": "registry/ui/empty.tsx",
+          "type": "registry:ui",
+          "target": "@ui/empty.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "hover-card",
+      "type": "registry:ui",
+      "title": "Hover Card",
+      "description": "Preview card on hover or focus.",
+      "files": [
+        {
+          "path": "registry/ui/hover-card.tsx",
+          "type": "registry:ui",
+          "target": "@ui/hover-card.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "Single-line field. Try typing, disabled, and invalid.",
+      "files": [
+        {
+          "path": "registry/ui/input.tsx",
+          "type": "registry:ui",
+          "target": "@ui/input.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "input-group",
+      "type": "registry:ui",
+      "title": "Input Group",
+      "description": "Groups an input or textarea with addons, buttons, and text.",
+      "files": [
+        {
+          "path": "registry/ui/input-group.tsx",
+          "type": "registry:ui",
+          "target": "@ui/input-group.tsx"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json",
+        "https://stylexcn.vercel.app/r/input.json",
+        "https://stylexcn.vercel.app/r/textarea.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Keyboard shortcut glyphs, alone or grouped.",
+      "files": [
+        {
+          "path": "registry/ui/kbd.tsx",
+          "type": "registry:ui",
+          "target": "@ui/kbd.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "label",
+      "type": "registry:ui",
+      "title": "Label",
+      "description": "Caption for a form control. Pair it with Input.",
+      "files": [
+        {
+          "path": "registry/ui/label.tsx",
+          "type": "registry:ui",
+          "target": "@ui/label.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ]
+    },
+    {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menubar",
+      "description": "Application menu bar. Open File to pick an item.",
+      "files": [
+        {
+          "path": "registry/ui/menubar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/menubar.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "native-select",
+      "type": "registry:ui",
+      "title": "Native Select",
+      "description": "Native HTML select with shadcn/ui styling. Default and sm.",
+      "files": [
+        {
+          "path": "registry/ui/native-select.tsx",
+          "type": "registry:ui",
+          "target": "@ui/native-select.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "Page navigation with an active page and ellipsis.",
+      "files": [
+        {
+          "path": "registry/ui/pagination.tsx",
+          "type": "registry:ui",
+          "target": "@ui/pagination.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json"
+      ]
+    },
+    {
+      "name": "popover",
+      "type": "registry:ui",
+      "title": "Popover",
+      "description": "Floating panel opened from a click.",
+      "files": [
+        {
+          "path": "registry/ui/popover.tsx",
+          "type": "registry:ui",
+          "target": "@ui/popover.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Progress bar at empty, in-progress, and complete.",
+      "files": [
+        {
+          "path": "registry/ui/progress.tsx",
+          "type": "registry:ui",
+          "target": "@ui/progress.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio Group",
+      "description": "Single-choice radios, including disabled.",
+      "files": [
+        {
+          "path": "registry/ui/radio-group.tsx",
+          "type": "registry:ui",
+          "target": "@ui/radio-group.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "resizable",
+      "type": "registry:ui",
+      "title": "Resizable",
+      "description": "Split panes. Drag the handle to change the ratio.",
+      "files": [
+        {
+          "path": "registry/ui/resizable.tsx",
+          "type": "registry:ui",
+          "target": "@ui/resizable.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "react-resizable-panels"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "scroll-area",
+      "type": "registry:ui",
+      "title": "Scroll Area",
+      "description": "Scrollable region. Vertical list and horizontal strip.",
+      "files": [
+        {
+          "path": "registry/ui/scroll-area.tsx",
+          "type": "registry:ui",
+          "target": "@ui/scroll-area.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "Custom dropdown. Open default and sm sizes.",
+      "files": [
+        {
+          "path": "registry/ui/select.tsx",
+          "type": "registry:ui",
+          "target": "@ui/select.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "separator",
+      "type": "registry:ui",
+      "title": "Separator",
+      "description": "Horizontal or vertical divider.",
+      "files": [
+        {
+          "path": "registry/ui/separator.tsx",
+          "type": "registry:ui",
+          "target": "@ui/separator.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "Edge panel from right, left, top, or bottom.",
+      "files": [
+        {
+          "path": "registry/ui/sheet.tsx",
+          "type": "registry:ui",
+          "target": "@ui/sheet.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "skeleton",
+      "type": "registry:ui",
+      "title": "Skeleton",
+      "description": "Loading placeholder. Rounded bar and circle.",
+      "files": [
+        {
+          "path": "registry/ui/skeleton.tsx",
+          "type": "registry:ui",
+          "target": "@ui/skeleton.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "slider",
+      "type": "registry:ui",
+      "title": "Slider",
+      "description": "Numeric slider. Single thumb, range, and disabled.",
+      "files": [
+        {
+          "path": "registry/ui/slider.tsx",
+          "type": "registry:ui",
+          "target": "@ui/slider.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "spinner",
+      "type": "registry:ui",
+      "title": "Spinner",
+      "description": "Loading indicator at size 3, 4, 6, and 8.",
+      "files": [
+        {
+          "path": "registry/ui/spinner.tsx",
+          "type": "registry:ui",
+          "target": "@ui/spinner.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react"
+      ]
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "On/off toggle you can click.",
+      "files": [
+        {
+          "path": "registry/ui/switch.tsx",
+          "type": "registry:ui",
+          "target": "@ui/switch.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "Data table with header, rows, footer, and caption.",
+      "files": [
+        {
+          "path": "registry/ui/table.tsx",
+          "type": "registry:ui",
+          "target": "@ui/table.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "Switch between panels.",
+      "files": [
+        {
+          "path": "registry/ui/tabs.tsx",
+          "type": "registry:ui",
+          "target": "@ui/tabs.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "Multiline field. Try typing, disabled, and invalid.",
+      "files": [
+        {
+          "path": "registry/ui/textarea.tsx",
+          "type": "registry:ui",
+          "target": "@ui/textarea.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "toggle",
+      "type": "registry:ui",
+      "title": "Toggle",
+      "description": "Latching button with variant and size.",
+      "files": [
+        {
+          "path": "registry/ui/toggle.tsx",
+          "type": "registry:ui",
+          "target": "@ui/toggle.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "toggle-group",
+      "type": "registry:ui",
+      "title": "Toggle Group",
+      "description": "Grouped toggles. Single-select Bold / Italic / Underline.",
+      "files": [
+        {
+          "path": "registry/ui/toggle-group.tsx",
+          "type": "registry:ui",
+          "target": "@ui/toggle-group.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/toggle.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
+      "name": "tooltip",
+      "type": "registry:ui",
+      "title": "Tooltip",
+      "description": "Short hint on hover.",
+      "files": [
+        {
+          "path": "registry/ui/tooltip.tsx",
+          "type": "registry:ui",
+          "target": "@ui/tooltip.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    }
+  ]
+}

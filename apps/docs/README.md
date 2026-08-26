@@ -21,6 +21,14 @@ Production build:
 npm run docs:build
 ```
 
+That command regenerates the shadcn registry JSON under `public/r` before `next build`, so Vercel always publishes a fresh catalog. Install a component with:
+
+```bash
+pnpm dlx shadcn@latest add https://stylexcn.vercel.app/r/input.json
+```
+
+The consumer app must compile StyleX. Tailwind init is not enough. See the root README for namespace and list commands.
+
 From `apps/docs` via the workspace:
 
 ```bash

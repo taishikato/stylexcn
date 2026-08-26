@@ -1,0 +1,22 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "separator",
+  "title": "Separator",
+  "description": "Horizontal or vertical divider.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "radix-ui"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/tokens.json"
+  ],
+  "files": [
+    {
+      "path": "registry/ui/separator.tsx",
+      "content": "import * as stylex from \"@stylexjs/stylex\";\nimport { Separator as SeparatorPrimitive } from \"radix-ui\";\nimport type { ComponentProps } from \"react\";\nimport { tokens } from \"@/lib/tokens.stylex\";\n\n/**\n * Size maps keyed by Radix `data-orientation`. Official:\n * shrink-0 bg-border\n * data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full\n * data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px\n */\nconst root = stylex.create({\n  base: {\n    flexShrink: 0,\n    backgroundColor: tokens[\"--border\"],\n    height: {\n      default: null,\n      '[data-orientation=\"horizontal\"]': \"1px\",\n      '[data-orientation=\"vertical\"]': \"100%\",\n    },\n    width: {\n      default: null,\n      '[data-orientation=\"horizontal\"]': \"100%\",\n      '[data-orientation=\"vertical\"]': \"1px\",\n    },\n  },\n});\n\nexport type SeparatorProps = ComponentProps<typeof SeparatorPrimitive.Root>;\n\nexport function Separator({\n  orientation = \"horizontal\",\n  decorative = true,\n  ...props\n}: SeparatorProps) {\n  return (\n    <SeparatorPrimitive.Root\n      data-slot=\"separator\"\n      decorative={decorative}\n      orientation={orientation}\n      {...props}\n      {...stylex.props(root.base)}\n    />\n  );\n}\n\nexport const separatorRoot = root;\n",
+      "type": "registry:ui",
+      "target": "@ui/separator.tsx"
+    }
+  ],
+  "type": "registry:ui"
+}

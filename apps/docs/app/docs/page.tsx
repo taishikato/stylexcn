@@ -16,6 +16,25 @@ export default function DocsIndexPage() {
         Implemented StyleX components. Each page is a live demo — click, type,
         and open overlays. Pixel-perfect with official shadcn/ui.
       </p>
+      <h2 {...stylex.props(chrome.sectionTitle)}>Install</h2>
+      <p {...stylex.props(chrome.note)}>
+        Add a component with the official shadcn CLI. The consumer project must
+        already compile StyleX (<code>@stylexjs/stylex</code> plus a bundler
+        plugin). Tailwind init is not enough.
+      </p>
+      <pre {...stylex.props(chrome.code)}>
+        <code>{`pnpm dlx shadcn@latest add https://stylexcn.vercel.app/r/input.json`}</code>
+      </pre>
+      <p {...stylex.props(chrome.note)}>Optional namespace:</p>
+      <pre {...stylex.props(chrome.code)}>
+        <code>{`pnpm dlx shadcn@latest registry add @stylexcn=https://stylexcn.vercel.app/r/{name}.json
+pnpm dlx shadcn@latest add @stylexcn/button`}</code>
+      </pre>
+      <p {...stylex.props(chrome.note)}>List the catalog:</p>
+      <pre {...stylex.props(chrome.code)}>
+        <code>{`pnpm dlx shadcn@latest list https://stylexcn.vercel.app/r/registry.json`}</code>
+      </pre>
+      <h2 {...stylex.props(chrome.sectionTitle)}>Catalog</h2>
       <div {...stylex.props(chrome.catalog)}>
         {COMPONENTS.map((item) => (
           <Link
