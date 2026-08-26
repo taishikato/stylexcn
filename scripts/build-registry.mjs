@@ -62,6 +62,10 @@ const EXTRA_META = {
     description:
       "A row of media, content, and actions with outline and muted variants.",
   },
+  combobox: {
+    title: "Combobox",
+    description: "Autocomplete input with a list of suggestions.",
+  },
 };
 
 const SKIP_NPM = new Set(["react"]);

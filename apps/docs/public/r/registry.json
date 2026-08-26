@@ -257,6 +257,29 @@
       ]
     },
     {
+      "name": "combobox",
+      "type": "registry:ui",
+      "title": "Combobox",
+      "description": "Autocomplete input with a list of suggestions.",
+      "files": [
+        {
+          "path": "registry/ui/combobox.tsx",
+          "type": "registry:ui",
+          "target": "@ui/combobox.tsx"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@stylexjs/stylex",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json",
+        "https://stylexcn.vercel.app/r/input-group.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
       "name": "context-menu",
       "type": "registry:ui",
       "title": "Context Menu",

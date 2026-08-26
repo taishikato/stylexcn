@@ -133,6 +133,14 @@ import {
   InputOTPSlot,
 } from "./components/input-otp";
 import {
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "./components/combobox";
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -396,6 +404,14 @@ import {
   OfficialInputOTPSeparator,
   OfficialInputOTPSlot,
 } from "./visual/official-input-otp";
+import {
+  OfficialCombobox,
+  OfficialComboboxContent,
+  OfficialComboboxEmpty,
+  OfficialComboboxInput,
+  OfficialComboboxItem,
+  OfficialComboboxList,
+} from "./visual/official-combobox";
 import {
   OfficialField,
   OfficialFieldContent,
@@ -662,7 +678,7 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, and Field vs
+        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, and Combobox vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1912,6 +1928,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <PlaygroundField kit="shadcn" state="choice-card" />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Combobox
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundCombobox kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Combobox
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundCombobox kit="shadcn" />
+      </div>
     </div>
   );
 }
@@ -2705,6 +2735,42 @@ function PlaygroundItem({
         </ItemDescription>
       </ItemContent>
     </Item>
+  );
+}
+
+function PlaygroundCombobox({ kit }: { kit: "stylex" | "shadcn" }) {
+  const frameworks = ["Next.js", "SvelteKit", "Nuxt.js", "Remix", "Astro"];
+  if (kit === "shadcn") {
+    return (
+      <OfficialCombobox items={frameworks}>
+        <OfficialComboboxInput placeholder="Select a framework" />
+        <OfficialComboboxContent>
+          <OfficialComboboxEmpty>No items found.</OfficialComboboxEmpty>
+          <OfficialComboboxList>
+            {(item: string) => (
+              <OfficialComboboxItem key={item} value={item}>
+                {item}
+              </OfficialComboboxItem>
+            )}
+          </OfficialComboboxList>
+        </OfficialComboboxContent>
+      </OfficialCombobox>
+    );
+  }
+  return (
+    <Combobox items={frameworks}>
+      <ComboboxInput placeholder="Select a framework" />
+      <ComboboxContent>
+        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item: string) => (
+            <ComboboxItem key={item} value={item}>
+              {item}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   );
 }
 
