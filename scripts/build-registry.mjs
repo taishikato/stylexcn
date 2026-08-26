@@ -47,6 +47,10 @@ const EXTRA_META = {
     description:
       "Command menu for search and quick actions. cmdk plus Dialog.",
   },
+  "navigation-menu": {
+    title: "Navigation Menu",
+    description: "A collection of links for site navigation. Built on Radix.",
+  },
   drawer: {
     title: "Drawer",
     description:

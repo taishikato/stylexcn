@@ -99,6 +99,7 @@ const PAGINATION_STATES = ["default", "ellipsis"];
 const ALERT_STATES = ["default", "with-icon", "destructive"];
 const TOGGLE_GROUP_STATES = ["default", "outline", "sm", "lg"];
 const MENUBAR_STATES = ["closed", "open"];
+const NAVIGATION_MENU_STATES = ["closed", "open", "viewport"];
 const ASPECT_RATIO_STATES = ["default"];
 const TABLE_STATES = ["default", "with-footer"];
 const RESIZABLE_STATES = ["horizontal", "vertical"];
@@ -224,6 +225,7 @@ const COMBOBOX_OPEN_VIEWPORT = { width: 640, height: 560 };
 const COMBOBOX_VIEWPORT = { width: 480, height: 240 };
 const COMMAND_STATES = ["default", "selected", "empty", "disabled", "dialog"];
 const COMMAND_VIEWPORT = { width: 480, height: 480 };
+const NAVIGATION_MENU_VIEWPORT = { width: 800, height: 600 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -755,6 +757,20 @@ function menubarCases() {
   return list;
 }
 
+function navigationMenuCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of NAVIGATION_MENU_STATES) {
+      list.push({
+        component: "navigation-menu",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function aspectRatioCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -905,6 +921,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "drawer") {
     return drawerCases();
   }
+  if (process.env.VISUAL_ONLY === "navigation-menu") {
+    return navigationMenuCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -954,6 +973,7 @@ function cases() {
     ...fieldCases(),
     ...comboboxCases(),
     ...commandCases(),
+    ...navigationMenuCases(),
   ];
 }
 
@@ -1128,6 +1148,9 @@ function slug(c) {
   if (c.component === "command") {
     return `command__${c.theme}__${c.state}`;
   }
+  if (c.component === "navigation-menu") {
+    return `navigation-menu__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1187,7 +1210,8 @@ function urlFor(kit, c) {
     c.component !== "input-otp" &&
     c.component !== "field" &&
     c.component !== "combobox" &&
-    c.component !== "command"
+    c.component !== "command" &&
+    c.component !== "navigation-menu"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1399,6 +1423,9 @@ function controlLocator(page, c) {
     }
     return page.locator('[data-slot="command"]');
   }
+  if (c.component === "navigation-menu") {
+    return page.locator('[data-slot="navigation-menu"]');
+  }
   return page.getByRole("button");
 }
 
@@ -1513,6 +1540,20 @@ async function prepareControl(page, c) {
     await page.waitForTimeout(50);
     return;
   }
+  if (c.component === "navigation-menu" && c.state === "open") {
+    await page.locator('[data-slot="navigation-menu"]').waitFor();
+    await page
+      .locator('[data-slot="navigation-menu-content"][data-state="open"]')
+      .waitFor();
+    return;
+  }
+  if (c.component === "navigation-menu" && c.state === "viewport") {
+    await page.locator('[data-slot="navigation-menu"]').waitFor();
+    await page
+      .locator('[data-slot="navigation-menu-viewport"][data-state="open"]')
+      .waitFor();
+    return;
+  }
   const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
@@ -1606,6 +1647,22 @@ async function screenshotControl(page, c, dest) {
     await page.locator('[data-slot="dialog-overlay"][data-state="open"]').waitFor();
     await page.locator('[data-slot="dialog-content"][data-state="open"]').waitFor();
     await page.waitForTimeout(50);
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "navigation-menu" && c.state === "open") {
+    await page.locator('[data-slot="navigation-menu"]').waitFor();
+    await page
+      .locator('[data-slot="navigation-menu-content"][data-state="open"]')
+      .waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "navigation-menu" && c.state === "viewport") {
+    await page.locator('[data-slot="navigation-menu"]').waitFor();
+    await page
+      .locator('[data-slot="navigation-menu-viewport"][data-state="open"]')
+      .waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -1727,6 +1784,9 @@ async function main() {
                     ? DIALOG_VIEWPORT
                   : c.component === "command"
                     ? COMMAND_VIEWPORT
+                  : c.component === "navigation-menu" &&
+                      (c.state === "open" || c.state === "viewport")
+                    ? NAVIGATION_MENU_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1776,7 +1836,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1835,7 +1895,8 @@ async function main() {
           r.component !== "input-otp" &&
           r.component !== "field" &&
           r.component !== "combobox" &&
-          r.component !== "command",
+          r.component !== "command" &&
+          r.component !== "navigation-menu",
       )
       .map(
         (r) =>
@@ -2515,6 +2576,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "command")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Navigation Menu",
+    "",
+    "- Closed cases crop `[data-slot=\"navigation-menu\"]` with 16px pad (the trigger row only).",
+    "- `open` is `viewport={false}` with controlled `value=\"getting-started\"` so the trigger is open and Content is a per-item dropdown. `viewport` is the default shared Viewport with the same item open. Both open cases are full-viewport (800×600) so Tailwind `md` (48rem) applies.",
+    "- Identical copy: Getting started (trigger + Introduction / Installation links) and Documentation (link). No Indicator. Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "navigation-menu")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

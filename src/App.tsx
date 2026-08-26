@@ -226,6 +226,14 @@ import {
   MenubarTrigger,
 } from "./components/menubar";
 import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "./components/navigation-menu";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -348,6 +356,14 @@ import {
   OfficialMenubarSeparator,
   OfficialMenubarTrigger,
 } from "./visual/official-menubar";
+import {
+  OfficialNavigationMenu,
+  OfficialNavigationMenuContent,
+  OfficialNavigationMenuItem,
+  OfficialNavigationMenuLink,
+  OfficialNavigationMenuList,
+  OfficialNavigationMenuTrigger,
+} from "./visual/official-navigation-menu";
 import {
   OfficialTable,
   OfficialTableBody,
@@ -721,7 +737,7 @@ function Playground() {
         Sheet, Drawer, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
+        Menubar, Navigation Menu, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1722,6 +1738,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundMenubar kit="shadcn" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Navigation Menu
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundNavigationMenu kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Navigation Menu
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundNavigationMenu kit="shadcn" />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Aspect Ratio
@@ -3175,6 +3205,75 @@ function PlaygroundMenubar({
         <MenubarTrigger>Profiles</MenubarTrigger>
       </MenubarMenu>
     </Menubar>
+  );
+}
+
+function PlaygroundNavigationMenu({ kit }: { kit: "stylex" | "shadcn" }) {
+  const [value, setValue] = useState("");
+  const panel = (
+    <ul
+      style={{
+        display: "grid",
+        width: "12.5rem",
+        gap: "0.25rem",
+        margin: 0,
+        padding: 0,
+        listStyleType: "none",
+      }}
+    >
+      <li>
+        {kit === "shadcn" ? (
+          <OfficialNavigationMenuLink href="#">
+            Introduction
+          </OfficialNavigationMenuLink>
+        ) : (
+          <NavigationMenuLink href="#">Introduction</NavigationMenuLink>
+        )}
+      </li>
+      <li>
+        {kit === "shadcn" ? (
+          <OfficialNavigationMenuLink href="#">
+            Installation
+          </OfficialNavigationMenuLink>
+        ) : (
+          <NavigationMenuLink href="#">Installation</NavigationMenuLink>
+        )}
+      </li>
+    </ul>
+  );
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialNavigationMenu value={value} onValueChange={setValue}>
+        <OfficialNavigationMenuList>
+          <OfficialNavigationMenuItem value="getting-started">
+            <OfficialNavigationMenuTrigger>
+              Getting started
+            </OfficialNavigationMenuTrigger>
+            <OfficialNavigationMenuContent>{panel}</OfficialNavigationMenuContent>
+          </OfficialNavigationMenuItem>
+          <OfficialNavigationMenuItem>
+            <OfficialNavigationMenuLink href="#">
+              Documentation
+            </OfficialNavigationMenuLink>
+          </OfficialNavigationMenuItem>
+        </OfficialNavigationMenuList>
+      </OfficialNavigationMenu>
+    );
+  }
+
+  return (
+    <NavigationMenu value={value} onValueChange={setValue}>
+      <NavigationMenuList>
+        <NavigationMenuItem value="getting-started">
+          <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+          <NavigationMenuContent>{panel}</NavigationMenuContent>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <NavigationMenuLink href="#">Documentation</NavigationMenuLink>
+        </NavigationMenuItem>
+      </NavigationMenuList>
+    </NavigationMenu>
   );
 }
 

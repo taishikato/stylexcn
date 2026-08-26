@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu)
 
-- Passed: 438/438
+- Passed: 444/444
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -842,3 +842,18 @@
 | `command__dark__empty` | PASS | 0/56576 |
 | `command__dark__disabled` | PASS | 0/138528 |
 | `command__dark__dialog` | PASS | 0/480000 |
+
+## Navigation Menu
+
+- Closed cases crop `[data-slot="navigation-menu"]` with 16px pad (the trigger row only).
+- `open` is `viewport={false}` with controlled `value="getting-started"` so the trigger is open and Content is a per-item dropdown. `viewport` is the default shared Viewport with the same item open. Both open cases are full-viewport (800×600) so Tailwind `md` (48rem) applies.
+- Identical copy: Getting started (trigger + Introduction / Installation links) and Documentation (link). No Indicator. Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `navigation-menu__light__closed` | PASS | 0/20536 |
+| `navigation-menu__light__open` | PASS | 0/480000 |
+| `navigation-menu__light__viewport` | PASS | 0/480000 |
+| `navigation-menu__dark__closed` | PASS | 0/20536 |
+| `navigation-menu__dark__open` | PASS | 0/480000 |
+| `navigation-menu__dark__viewport` | PASS | 0/480000 |

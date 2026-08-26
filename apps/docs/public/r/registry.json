@@ -608,6 +608,27 @@
       ]
     },
     {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation Menu",
+      "description": "A collection of links for site navigation. Built on Radix.",
+      "files": [
+        {
+          "path": "registry/ui/navigation-menu.tsx",
+          "type": "registry:ui",
+          "target": "@ui/navigation-menu.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
       "name": "pagination",
       "type": "registry:ui",
       "title": "Pagination",
