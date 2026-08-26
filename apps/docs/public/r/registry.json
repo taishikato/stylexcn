@@ -243,6 +243,28 @@
       ]
     },
     {
+      "name": "carousel",
+      "type": "registry:ui",
+      "title": "Carousel",
+      "description": "A carousel with motion and swipe. Built on embla-carousel-react.",
+      "files": [
+        {
+          "path": "registry/ui/carousel.tsx",
+          "type": "registry:ui",
+          "target": "@ui/carousel.tsx"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@stylexjs/stylex",
+        "embla-carousel-react",
+        "lucide-react"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json"
+      ]
+    },
+    {
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",
