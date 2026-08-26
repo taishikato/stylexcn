@@ -239,6 +239,7 @@ import {
   Calendar as CalendarIcon,
   CircleAlert,
   Command as CommandGlyph,
+  Home,
   CreditCard,
   GlobeIcon,
   Inbox,
@@ -280,6 +281,20 @@ import {
   ChartTooltipContent,
   type ChartConfig,
 } from "../components/chart";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "../components/sidebar";
 import {
   Table,
   TableBody,
@@ -550,6 +565,20 @@ import {
   OfficialChartTooltipContent,
 } from "./official-chart";
 import {
+  OfficialSidebar,
+  OfficialSidebarContent,
+  OfficialSidebarGroup,
+  OfficialSidebarGroupContent,
+  OfficialSidebarGroupLabel,
+  OfficialSidebarHeader,
+  OfficialSidebarInset,
+  OfficialSidebarMenu,
+  OfficialSidebarMenuButton,
+  OfficialSidebarMenuItem,
+  OfficialSidebarProvider,
+  OfficialSidebarTrigger,
+} from "./official-sidebar";
+import {
   Bar,
   BarChart,
   CartesianGrid,
@@ -684,7 +713,8 @@ export type CaptureComponent =
   | "navigation-menu"
   | "calendar"
   | "carousel"
-  | "chart";
+  | "chart"
+  | "sidebar";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -743,7 +773,9 @@ export type CaptureState =
   | "popup"
   | "viewport"
   | "next"
-  | "line";
+  | "line"
+  | "collapsed"
+  | "inset";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -1173,6 +1205,13 @@ export type ChartCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SidebarCaptureParams = {
+  component: "sidebar";
+  kit: CaptureKit;
+  state: "default" | "collapsed" | "inset";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1225,7 +1264,8 @@ export type CaptureParams =
   | NavigationMenuCaptureParams
   | CalendarCaptureParams
   | CarouselCaptureParams
-  | ChartCaptureParams;
+  | ChartCaptureParams
+  | SidebarCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1463,6 +1503,33 @@ const styles = stylex.create({
   chartSize: {
     minHeight: 200,
     width: "100%",
+  },
+  sidebarFrame: {
+    minHeight: "100vh",
+    margin: 0,
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
+  },
+  sidebarHeader: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    fontWeight: 500,
+    paddingInline: "0.5rem",
+    paddingBlock: "0.25rem",
+  },
+  sidebarInsetHeader: {
+    display: "flex",
+    height: "3rem",
+    alignItems: "center",
+    gap: "0.5rem",
+    borderBottomWidth: "1px",
+    borderBottomStyle: "solid",
+    borderBottomColor: "var(--border)",
+    paddingInline: "1rem",
+    boxSizing: "border-box",
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    fontWeight: 500,
   },
   /* Identical 32rem parent on both kits so w-full matches. */
   tableWell: {
@@ -4133,6 +4200,106 @@ function ChartHarness({ kit, state, theme }: ChartCaptureParams) {
   );
 }
 
+const SIDEBAR_ITEMS = [
+  { title: "Home", icon: Home, isActive: true },
+  { title: "Inbox", icon: Inbox, isActive: false },
+  { title: "Calendar", icon: CalendarIcon, isActive: false },
+] as const;
+
+function SidebarHarness({ kit, state, theme }: SidebarCaptureParams) {
+  const isDark = theme === "dark";
+  const open = state !== "collapsed";
+  const variant = state === "inset" ? "inset" : "sidebar";
+
+  const body =
+    kit === "shadcn" ? (
+      <OfficialSidebarProvider
+        open={open}
+        onOpenChange={() => {}}
+        className="min-h-svh"
+      >
+        <OfficialSidebar variant={variant} collapsible="icon">
+          <OfficialSidebarHeader>
+            <div className="px-2 py-1 text-sm font-medium">Acme Inc</div>
+          </OfficialSidebarHeader>
+          <OfficialSidebarContent>
+            <OfficialSidebarGroup>
+              <OfficialSidebarGroupLabel>Application</OfficialSidebarGroupLabel>
+              <OfficialSidebarGroupContent>
+                <OfficialSidebarMenu>
+                  {SIDEBAR_ITEMS.map((item) => (
+                    <OfficialSidebarMenuItem key={item.title}>
+                      <OfficialSidebarMenuButton
+                        isActive={item.isActive}
+                        tooltip={item.title}
+                      >
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </OfficialSidebarMenuButton>
+                    </OfficialSidebarMenuItem>
+                  ))}
+                </OfficialSidebarMenu>
+              </OfficialSidebarGroupContent>
+            </OfficialSidebarGroup>
+          </OfficialSidebarContent>
+        </OfficialSidebar>
+        <OfficialSidebarInset>
+          <header className="flex h-12 items-center gap-2 border-b px-4 text-sm font-medium">
+            <OfficialSidebarTrigger />
+            Inbox
+          </header>
+        </OfficialSidebarInset>
+      </OfficialSidebarProvider>
+    ) : (
+      <SidebarProvider open={open} onOpenChange={() => {}}>
+        <Sidebar variant={variant} collapsible="icon">
+          <SidebarHeader>
+            <div {...stylex.props(styles.sidebarHeader)}>Acme Inc</div>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupLabel>Application</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {SIDEBAR_ITEMS.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton
+                        isActive={item.isActive}
+                        tooltip={item.title}
+                      >
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+        </Sidebar>
+        <SidebarInset>
+          <header {...stylex.props(styles.sidebarInsetHeader)}>
+            <SidebarTrigger />
+            Inbox
+          </header>
+        </SidebarInset>
+      </SidebarProvider>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="sidebar"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.sidebarFrame)}
+    >
+      {body}
+    </div>
+  );
+}
+
 function AspectRatioFill() {
   return <div {...stylex.props(styles.aspectRatioFill)} />;
 }
@@ -5823,6 +5990,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "chart") {
     return <ChartHarness {...params} />;
   }
+  if (params.component === "sidebar") {
+    return <SidebarHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -6359,6 +6529,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "chart", kit, state, theme };
+  }
+
+  if (component === "sidebar") {
+    if (state !== "default" && state !== "collapsed" && state !== "inset") {
+      return null;
+    }
+    return { component: "sidebar", kit, state, theme };
   }
 
   if (component !== "button") return null;

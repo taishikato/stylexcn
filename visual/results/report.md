@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar)
 
-- Passed: 462/462
+- Passed: 468/468
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -905,3 +905,20 @@
 | `chart__dark__bar` | PASS | 0/109824 |
 | `chart__dark__line` | PASS | 0/109824 |
 | `chart__dark__tooltip` | PASS | 0/109824 |
+
+## Sidebar
+
+- Viewport: 800×600 so Tailwind `md` (48rem) desktop layout applies (`md:block` / `md:flex`). Full-viewport screenshots because the container is `fixed`.
+- Official side is the live registry Sidebar (radix Slot + CVA, Sheet on mobile). StyleX uses the same primitive. Not Base UI.
+- Controlled `open` so screenshots do not drift (no cookie/localStorage). `default` is expanded `variant="sidebar"` `collapsible="icon"`. `collapsed` is the same with `open={false}` (icon mode). `inset` is expanded `variant="inset"` plus SidebarInset.
+- Identical copy: Acme Inc, Application group, Home (active) / Inbox / Calendar. Trigger is in the inset header. Playwright `animations: "disabled"`.
+- Skipped: mobile Sheet, floating, offcanvas, rail hover, menu action/badge/sub, skeleton (random width), and the rest of the official sidebar blocks.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `sidebar__light__default` | PASS | 0/480000 |
+| `sidebar__light__collapsed` | PASS | 0/480000 |
+| `sidebar__light__inset` | PASS | 0/480000 |
+| `sidebar__dark__default` | PASS | 0/480000 |
+| `sidebar__dark__collapsed` | PASS | 0/480000 |
+| `sidebar__dark__inset` | PASS | 0/480000 |

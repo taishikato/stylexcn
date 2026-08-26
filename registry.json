@@ -878,6 +878,34 @@
       ]
     },
     {
+      "name": "sidebar",
+      "type": "registry:ui",
+      "title": "Sidebar",
+      "description": "A collapsible sidebar with menu groups. Open and collapsed states are pinned so the preview does not drift.",
+      "files": [
+        {
+          "path": "registry/ui/sidebar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/sidebar.tsx"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@stylexjs/stylex",
+        "lucide-react",
+        "radix-ui"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json",
+        "https://stylexcn.vercel.app/r/input.json",
+        "https://stylexcn.vercel.app/r/separator.json",
+        "https://stylexcn.vercel.app/r/sheet.json",
+        "https://stylexcn.vercel.app/r/skeleton.json",
+        "https://stylexcn.vercel.app/r/tokens.json",
+        "https://stylexcn.vercel.app/r/tooltip.json"
+      ]
+    },
+    {
       "name": "skeleton",
       "type": "registry:ui",
       "title": "Skeleton",
