@@ -1540,10 +1540,17 @@ async function prepareControl(page, c) {
     await page.waitForTimeout(50);
     return;
   }
-  if (c.component === "navigation-menu" && (c.state === "open" || c.state === "viewport")) {
+  if (c.component === "navigation-menu" && c.state === "open") {
     await page.locator('[data-slot="navigation-menu"]').waitFor();
     await page
       .locator('[data-slot="navigation-menu-content"][data-state="open"]')
+      .waitFor();
+    return;
+  }
+  if (c.component === "navigation-menu" && c.state === "viewport") {
+    await page.locator('[data-slot="navigation-menu"]').waitFor();
+    await page
+      .locator('[data-slot="navigation-menu-viewport"][data-state="open"]')
       .waitFor();
     return;
   }
@@ -1643,10 +1650,18 @@ async function screenshotControl(page, c, dest) {
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
-  if (c.component === "navigation-menu" && (c.state === "open" || c.state === "viewport")) {
+  if (c.component === "navigation-menu" && c.state === "open") {
     await page.locator('[data-slot="navigation-menu"]').waitFor();
     await page
       .locator('[data-slot="navigation-menu-content"][data-state="open"]')
+      .waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "navigation-menu" && c.state === "viewport") {
+    await page.locator('[data-slot="navigation-menu"]').waitFor();
+    await page
+      .locator('[data-slot="navigation-menu-viewport"][data-state="open"]')
       .waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T14:36:21.488Z",
-  "total": 438,
+  "generatedAt": "2026-08-26T15:06:49.073Z",
+  "total": 444,
   "failed": 0,
-  "passed": 438,
+  "passed": 444,
   "threshold": 0,
   "cases": [
     {
@@ -6282,6 +6282,90 @@
       "shadcn": "visual/results/shadcn/command__dark__dialog.png",
       "stylex": "visual/results/stylex/command__dark__dialog.png",
       "diff": "visual/results/diff/command__dark__dialog.png"
+    },
+    {
+      "name": "navigation-menu__light__closed",
+      "component": "navigation-menu",
+      "state": "closed",
+      "theme": "light",
+      "width": 302,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 20536,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/navigation-menu__light__closed.png",
+      "stylex": "visual/results/stylex/navigation-menu__light__closed.png",
+      "diff": "visual/results/diff/navigation-menu__light__closed.png"
+    },
+    {
+      "name": "navigation-menu__light__open",
+      "component": "navigation-menu",
+      "state": "open",
+      "theme": "light",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/navigation-menu__light__open.png",
+      "stylex": "visual/results/stylex/navigation-menu__light__open.png",
+      "diff": "visual/results/diff/navigation-menu__light__open.png"
+    },
+    {
+      "name": "navigation-menu__light__viewport",
+      "component": "navigation-menu",
+      "state": "viewport",
+      "theme": "light",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/navigation-menu__light__viewport.png",
+      "stylex": "visual/results/stylex/navigation-menu__light__viewport.png",
+      "diff": "visual/results/diff/navigation-menu__light__viewport.png"
+    },
+    {
+      "name": "navigation-menu__dark__closed",
+      "component": "navigation-menu",
+      "state": "closed",
+      "theme": "dark",
+      "width": 302,
+      "height": 68,
+      "mismatched": 0,
+      "pixels": 20536,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/navigation-menu__dark__closed.png",
+      "stylex": "visual/results/stylex/navigation-menu__dark__closed.png",
+      "diff": "visual/results/diff/navigation-menu__dark__closed.png"
+    },
+    {
+      "name": "navigation-menu__dark__open",
+      "component": "navigation-menu",
+      "state": "open",
+      "theme": "dark",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/navigation-menu__dark__open.png",
+      "stylex": "visual/results/stylex/navigation-menu__dark__open.png",
+      "diff": "visual/results/diff/navigation-menu__dark__open.png"
+    },
+    {
+      "name": "navigation-menu__dark__viewport",
+      "component": "navigation-menu",
+      "state": "viewport",
+      "theme": "dark",
+      "width": 800,
+      "height": 600,
+      "mismatched": 0,
+      "pixels": 480000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/navigation-menu__dark__viewport.png",
+      "stylex": "visual/results/stylex/navigation-menu__dark__viewport.png",
+      "diff": "visual/results/diff/navigation-menu__dark__viewport.png"
     }
   ]
 }
