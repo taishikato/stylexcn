@@ -52,6 +52,11 @@ const EXTRA_META = {
     description:
       "A collection of links for site navigation. Open a trigger to show the viewport.",
   },
+  calendar: {
+    title: "Calendar",
+    description:
+      "A monthly date grid with selection and range. Built on react-day-picker.",
+  },
   drawer: {
     title: "Drawer",
     description:

@@ -233,6 +233,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "./components/navigation-menu";
+import { Calendar } from "./components/calendar";
 import {
   Table,
   TableBody,
@@ -364,6 +365,7 @@ import {
   OfficialNavigationMenuList,
   OfficialNavigationMenuTrigger,
 } from "./visual/official-navigation-menu";
+import { OfficialCalendar } from "./visual/official-calendar";
 import {
   OfficialTable,
   OfficialTableBody,
@@ -737,7 +739,7 @@ function Playground() {
         Sheet, Drawer, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Navigation Menu, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
+        Menubar, Navigation Menu, Calendar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1752,6 +1754,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundNavigationMenu kit="shadcn" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Calendar
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundCalendar kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Calendar
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundCalendar kit="shadcn" />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Aspect Ratio
@@ -3206,6 +3222,15 @@ function PlaygroundMenubar({
       </MenubarMenu>
     </Menubar>
   );
+}
+
+function PlaygroundCalendar({ kit }: { kit: "stylex" | "shadcn" }) {
+  const today = new Date(2024, 5, 15);
+  const month = new Date(2024, 5, 1);
+  if (kit === "shadcn") {
+    return <OfficialCalendar today={today} defaultMonth={month} mode="single" />;
+  }
+  return <Calendar today={today} defaultMonth={month} mode="single" />;
 }
 
 function PlaygroundNavigationMenu({ kit }: { kit: "stylex" | "shadcn" }) {

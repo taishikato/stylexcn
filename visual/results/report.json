@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T15:19:06.064Z",
-  "total": 444,
+  "generatedAt": "2026-08-26T15:56:49.281Z",
+  "total": 450,
   "failed": 0,
-  "passed": 444,
+  "passed": 450,
   "threshold": 0,
   "cases": [
     {
@@ -6366,6 +6366,90 @@
       "shadcn": "visual/results/shadcn/navigation-menu__dark__viewport.png",
       "stylex": "visual/results/stylex/navigation-menu__dark__viewport.png",
       "diff": "visual/results/diff/navigation-menu__dark__viewport.png"
+    },
+    {
+      "name": "calendar__light__default",
+      "component": "calendar",
+      "state": "default",
+      "theme": "light",
+      "width": 280,
+      "height": 363,
+      "mismatched": 0,
+      "pixels": 101640,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/calendar__light__default.png",
+      "stylex": "visual/results/stylex/calendar__light__default.png",
+      "diff": "visual/results/diff/calendar__light__default.png"
+    },
+    {
+      "name": "calendar__light__selected",
+      "component": "calendar",
+      "state": "selected",
+      "theme": "light",
+      "width": 280,
+      "height": 363,
+      "mismatched": 0,
+      "pixels": 101640,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/calendar__light__selected.png",
+      "stylex": "visual/results/stylex/calendar__light__selected.png",
+      "diff": "visual/results/diff/calendar__light__selected.png"
+    },
+    {
+      "name": "calendar__light__range",
+      "component": "calendar",
+      "state": "range",
+      "theme": "light",
+      "width": 280,
+      "height": 363,
+      "mismatched": 0,
+      "pixels": 101640,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/calendar__light__range.png",
+      "stylex": "visual/results/stylex/calendar__light__range.png",
+      "diff": "visual/results/diff/calendar__light__range.png"
+    },
+    {
+      "name": "calendar__dark__default",
+      "component": "calendar",
+      "state": "default",
+      "theme": "dark",
+      "width": 280,
+      "height": 363,
+      "mismatched": 0,
+      "pixels": 101640,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/calendar__dark__default.png",
+      "stylex": "visual/results/stylex/calendar__dark__default.png",
+      "diff": "visual/results/diff/calendar__dark__default.png"
+    },
+    {
+      "name": "calendar__dark__selected",
+      "component": "calendar",
+      "state": "selected",
+      "theme": "dark",
+      "width": 280,
+      "height": 363,
+      "mismatched": 0,
+      "pixels": 101640,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/calendar__dark__selected.png",
+      "stylex": "visual/results/stylex/calendar__dark__selected.png",
+      "diff": "visual/results/diff/calendar__dark__selected.png"
+    },
+    {
+      "name": "calendar__dark__range",
+      "component": "calendar",
+      "state": "range",
+      "theme": "dark",
+      "width": 280,
+      "height": 363,
+      "mismatched": 0,
+      "pixels": 101640,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/calendar__dark__range.png",
+      "stylex": "visual/results/stylex/calendar__dark__range.png",
+      "diff": "visual/results/diff/calendar__dark__range.png"
     }
   ]
 }

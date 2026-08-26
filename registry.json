@@ -201,6 +201,29 @@
       ]
     },
     {
+      "name": "calendar",
+      "type": "registry:ui",
+      "title": "Calendar",
+      "description": "A monthly date grid with selection and range. Built on react-day-picker.",
+      "files": [
+        {
+          "path": "registry/ui/calendar.tsx",
+          "type": "registry:ui",
+          "target": "@ui/calendar.tsx"
+        }
+      ],
+      "dependencies": [
+        "@base-ui/react",
+        "@stylexjs/stylex",
+        "lucide-react",
+        "react-day-picker"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/button.json",
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
       "name": "card",
       "type": "registry:ui",
       "title": "Card",
