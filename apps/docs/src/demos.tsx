@@ -3,7 +3,7 @@
 import * as stylex from "@stylexjs/stylex";
 import {
   Calculator,
-  Calendar,
+  Calendar as CalendarIcon,
   CircleAlert,
   CreditCard,
   Inbox,
@@ -13,6 +13,8 @@ import {
   User,
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
+import { type DateRange } from "react-day-picker";
+import { enUS } from "react-day-picker/locale";
 import {
   Accordion,
   AccordionContent,
@@ -55,6 +57,7 @@ import {
 } from "@stylexcn/components/breadcrumb";
 import { Button, type ButtonSize, type ButtonVariant } from "@stylexcn/components/button";
 import { ButtonGroup } from "@stylexcn/components/button-group";
+import { Calendar } from "@stylexcn/components/calendar";
 import {
   Card,
   CardAction,
@@ -489,6 +492,41 @@ function ButtonGroupDemo() {
   );
 }
 
+/* Pin month/today so the preview does not drift with the current date. */
+const CALENDAR_TODAY = new Date(2024, 5, 15);
+const CALENDAR_MONTH = new Date(2024, 5, 1);
+const CALENDAR_SELECTED = new Date(2024, 5, 10);
+const CALENDAR_RANGE = {
+  from: new Date(2024, 5, 10),
+  to: new Date(2024, 5, 18),
+};
+
+function CalendarDemo() {
+  const [date, setDate] = useState<Date | undefined>(CALENDAR_SELECTED);
+  const [range, setRange] = useState<DateRange | undefined>(CALENDAR_RANGE);
+
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <Calendar
+        mode="single"
+        locale={enUS}
+        today={CALENDAR_TODAY}
+        defaultMonth={CALENDAR_MONTH}
+        selected={date}
+        onSelect={setDate}
+      />
+      <Calendar
+        mode="range"
+        locale={enUS}
+        today={CALENDAR_TODAY}
+        defaultMonth={CALENDAR_MONTH}
+        selected={range}
+        onSelect={setRange}
+      />
+    </div>
+  );
+}
+
 function CardDemo() {
   return (
     <div {...stylex.props(chrome.row)}>
@@ -641,7 +679,7 @@ function CommandMenu({ onSelect }: { onSelect?: (value: string) => void }) {
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Suggestions">
           <CommandItem value="calendar" onSelect={onSelect}>
-            <Calendar />
+            <CalendarIcon />
             Calendar
           </CommandItem>
           <CommandItem value="emoji" onSelect={onSelect}>
@@ -1629,6 +1667,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   breadcrumb: BreadcrumbDemo,
   button: ButtonDemo,
   "button-group": ButtonGroupDemo,
+  calendar: CalendarDemo,
   card: CardDemo,
   checkbox: CheckboxDemo,
   collapsible: CollapsibleDemo,
