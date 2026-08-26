@@ -140,6 +140,23 @@ const INPUT_OTP_STATES = [
   "invalid",
   "focus-visible",
 ];
+const FIELD_STATES = [
+  "vertical",
+  "horizontal",
+  "responsive",
+  "description",
+  "error",
+  "error-list",
+  "separator",
+  "separator-text",
+  "legend",
+  "legend-label",
+  "checkbox-group",
+  "radio-group",
+  "disabled",
+  "invalid",
+  "choice-card",
+];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -182,6 +199,9 @@ const INPUT_GROUP_VIEWPORT = { width: 400, height: 320 };
 /* 20rem well + group/header-footer + 16px crop pad. */
 const ITEM_VIEWPORT = { width: 400, height: 400 };
 const INPUT_OTP_VIEWPORT = { width: 400, height: 200 };
+/* Field wells are 16rem (below @md/field-group 28rem) except responsive at 32rem. */
+const FIELD_VIEWPORT = { width: 480, height: 480 };
+const FIELD_RESPONSIVE_VIEWPORT = { width: 640, height: 400 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -825,6 +845,20 @@ function inputOtpCases() {
   return list;
 }
 
+function fieldCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of FIELD_STATES) {
+      list.push({
+        component: "field",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -871,6 +905,7 @@ function cases() {
     ...inputGroupCases(),
     ...itemCases(),
     ...inputOtpCases(),
+    ...fieldCases(),
   ];
 }
 
@@ -1005,6 +1040,9 @@ function slug(c) {
   if (c.component === "input-otp") {
     return `input-otp__${c.theme}__${c.state}`;
   }
+  if (c.component === "field") {
+    return `field__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1060,7 +1098,8 @@ function urlFor(kit, c) {
     c.component !== "empty" &&
     c.component !== "input-group" &&
     c.component !== "item" &&
-    c.component !== "input-otp"
+    c.component !== "input-otp" &&
+    c.component !== "field"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1250,6 +1289,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "input-otp") {
     return page.locator("[data-input-otp-container]");
+  }
+  if (c.component === "field") {
+    return page.locator('[data-slot="field-group"]');
   }
   return page.getByRole("button");
 }
@@ -1525,6 +1567,10 @@ async function main() {
                     ? ITEM_VIEWPORT
                   : c.component === "input-otp"
                     ? INPUT_OTP_VIEWPORT
+                  : c.component === "field" && c.state === "responsive"
+                    ? FIELD_RESPONSIVE_VIEWPORT
+                  : c.component === "field"
+                    ? FIELD_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1574,7 +1620,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1629,7 +1675,8 @@ async function main() {
           r.component !== "empty" &&
           r.component !== "input-group" &&
           r.component !== "item" &&
-          r.component !== "input-otp",
+          r.component !== "input-otp" &&
+          r.component !== "field",
       )
       .map(
         (r) =>
@@ -2244,6 +2291,23 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "input-otp")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "",
+    "## Field",
+    "",
+    "- Crops `[data-slot=\"field-group\"]` with 16px pad. Default well is 16rem (below `@md/field-group` / 28rem). `responsive` uses a 32rem well and 640×400 viewport so the named container query lands on the row side for both kits.",
+    "- Official side is the live registry Field family composed with official Label / Separator / Input / Checkbox / Radio Group. StyleX composes StyleX Label / Separator tables plus those controls.",
+    "- States: `vertical` / `horizontal` / `responsive` / `description` / `error` (single message) / `error-list` / `separator` / `separator-text` / `legend` / `legend-label` / `checkbox-group` / `radio-group` / `disabled` / `invalid` / `choice-card` (FieldLabel wrapping a checked Field). Each × light/dark.",
+    "- Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "field")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

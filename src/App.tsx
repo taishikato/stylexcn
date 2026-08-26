@@ -133,6 +133,15 @@ import {
   InputOTPSlot,
 } from "./components/input-otp";
 import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldTitle,
+} from "./components/field";
+import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
@@ -388,6 +397,15 @@ import {
   OfficialInputOTPSlot,
 } from "./visual/official-input-otp";
 import {
+  OfficialField,
+  OfficialFieldContent,
+  OfficialFieldDescription,
+  OfficialFieldError,
+  OfficialFieldGroup,
+  OfficialFieldLabel,
+  OfficialFieldTitle,
+} from "./visual/official-field";
+import {
   OfficialNativeSelect,
   OfficialNativeSelectOptGroup,
   OfficialNativeSelectOption,
@@ -595,6 +613,9 @@ const styles = stylex.create({
   itemWell: {
     width: "20rem",
   },
+  fieldWell: {
+    width: "16rem",
+  },
 });
 
 function PlaygroundInputOtp({ kit }: { kit: "stylex" | "shadcn" }) {
@@ -641,7 +662,7 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, and Input OTP vs
+        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, and Field vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1857,6 +1878,40 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundInputOtp kit="shadcn" />
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Field
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.fieldWell)}>
+          <PlaygroundField kit="stylex" state="vertical" />
+        </div>
+        <span {...stylex.props(styles.label)}>error</span>
+        <div {...stylex.props(styles.fieldWell)}>
+          <PlaygroundField kit="stylex" state="error" />
+        </div>
+        <span {...stylex.props(styles.label)}>choice</span>
+        <div {...stylex.props(styles.fieldWell)}>
+          <PlaygroundField kit="stylex" state="choice-card" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Field
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>vertical</span>
+        <div {...stylex.props(styles.fieldWell)}>
+          <PlaygroundField kit="shadcn" state="vertical" />
+        </div>
+        <span {...stylex.props(styles.label)}>error</span>
+        <div {...stylex.props(styles.fieldWell)}>
+          <PlaygroundField kit="shadcn" state="error" />
+        </div>
+        <span {...stylex.props(styles.label)}>choice</span>
+        <div {...stylex.props(styles.fieldWell)}>
+          <PlaygroundField kit="shadcn" state="choice-card" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -2650,6 +2705,92 @@ function PlaygroundItem({
         </ItemDescription>
       </ItemContent>
     </Item>
+  );
+}
+
+function PlaygroundField({
+  kit,
+  state,
+}: {
+  kit: "stylex" | "shadcn";
+  state: "vertical" | "error" | "choice-card";
+}) {
+  if (kit === "shadcn") {
+    if (state === "error") {
+      return (
+        <OfficialFieldGroup>
+          <OfficialField data-invalid="true">
+            <OfficialFieldLabel htmlFor="pg-shad-error">Email</OfficialFieldLabel>
+            <OfficialInput id="pg-shad-error" defaultValue="evil@rabbit.com" aria-invalid />
+            <OfficialFieldError errors={[{ message: "Enter a valid email." }]} />
+          </OfficialField>
+        </OfficialFieldGroup>
+      );
+    }
+    if (state === "choice-card") {
+      return (
+        <OfficialFieldGroup>
+          <OfficialRadioGroup defaultValue="kubernetes">
+            <OfficialFieldLabel htmlFor="pg-shad-card">
+              <OfficialField orientation="horizontal">
+                <OfficialFieldContent>
+                  <OfficialFieldTitle>Kubernetes</OfficialFieldTitle>
+                  <OfficialFieldDescription>
+                    Run GPU workloads.
+                  </OfficialFieldDescription>
+                </OfficialFieldContent>
+                <OfficialRadioGroupItem value="kubernetes" id="pg-shad-card" />
+              </OfficialField>
+            </OfficialFieldLabel>
+          </OfficialRadioGroup>
+        </OfficialFieldGroup>
+      );
+    }
+    return (
+      <OfficialFieldGroup>
+        <OfficialField>
+          <OfficialFieldLabel htmlFor="pg-shad-email">Email</OfficialFieldLabel>
+          <OfficialInput id="pg-shad-email" defaultValue="evil@rabbit.com" />
+        </OfficialField>
+      </OfficialFieldGroup>
+    );
+  }
+
+  if (state === "error") {
+    return (
+      <FieldGroup>
+        <Field data-invalid="true">
+          <FieldLabel htmlFor="pg-sx-error">Email</FieldLabel>
+          <Input id="pg-sx-error" defaultValue="evil@rabbit.com" aria-invalid />
+          <FieldError errors={[{ message: "Enter a valid email." }]} />
+        </Field>
+      </FieldGroup>
+    );
+  }
+  if (state === "choice-card") {
+    return (
+      <FieldGroup>
+        <RadioGroup defaultValue="kubernetes">
+          <FieldLabel htmlFor="pg-sx-card">
+            <Field orientation="horizontal">
+              <FieldContent>
+                <FieldTitle>Kubernetes</FieldTitle>
+                <FieldDescription>Run GPU workloads.</FieldDescription>
+              </FieldContent>
+              <RadioGroupItem value="kubernetes" id="pg-sx-card" />
+            </Field>
+          </FieldLabel>
+        </RadioGroup>
+      </FieldGroup>
+    );
+  }
+  return (
+    <FieldGroup>
+      <Field>
+        <FieldLabel htmlFor="pg-sx-email">Email</FieldLabel>
+        <Input id="pg-sx-email" defaultValue="evil@rabbit.com" />
+      </Field>
+    </FieldGroup>
   );
 }
 

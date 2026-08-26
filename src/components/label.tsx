@@ -49,4 +49,5 @@ export function Label(props: LabelProps) {
   );
 }
 
+export const labelBase = base;
 export const labelDisabled = disabled;
