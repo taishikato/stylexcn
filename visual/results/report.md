@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field)
 
-- Passed: 366/366
+- Passed: 396/396
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -729,3 +729,44 @@
 | `input-otp__dark__disabled` | PASS | 0/16864 |
 | `input-otp__dark__invalid` | PASS | 0/16864 |
 | `input-otp__dark__focus-visible` | PASS | 0/16864 |
+
+
+## Field
+
+- Crops `[data-slot="field-group"]` with 16px pad. Default well is 16rem (below `@md/field-group` / 28rem). `responsive` uses a 32rem well and 640×400 viewport so the named container query lands on the row side for both kits.
+- Official side is the live registry Field family composed with official Label / Separator / Input / Checkbox / Radio Group. StyleX composes StyleX Label / Separator tables plus those controls.
+- States: `vertical` / `horizontal` / `responsive` / `description` / `error` (single message) / `error-list` / `separator` / `separator-text` / `legend` / `legend-label` / `checkbox-group` / `radio-group` / `disabled` / `invalid` / `choice-card` (FieldLabel wrapping a checked Field). Each × light/dark.
+- Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `field__light__vertical` | PASS | 0/28512 |
+| `field__light__horizontal` | PASS | 0/14688 |
+| `field__light__responsive` | PASS | 0/42432 |
+| `field__light__description` | PASS | 0/38016 |
+| `field__light__error` | PASS | 0/37728 |
+| `field__light__error-list` | PASS | 0/44640 |
+| `field__light__separator` | PASS | 0/65088 |
+| `field__light__separator-text` | PASS | 0/65088 |
+| `field__light__legend` | PASS | 0/50112 |
+| `field__light__legend-label` | PASS | 0/49536 |
+| `field__light__checkbox-group` | PASS | 0/29376 |
+| `field__light__radio-group` | PASS | 0/32832 |
+| `field__light__disabled` | PASS | 0/28512 |
+| `field__light__invalid` | PASS | 0/28512 |
+| `field__light__choice-card` | PASS | 0/32256 |
+| `field__dark__vertical` | PASS | 0/28512 |
+| `field__dark__horizontal` | PASS | 0/14688 |
+| `field__dark__responsive` | PASS | 0/42432 |
+| `field__dark__description` | PASS | 0/38016 |
+| `field__dark__error` | PASS | 0/37728 |
+| `field__dark__error-list` | PASS | 0/44640 |
+| `field__dark__separator` | PASS | 0/65088 |
+| `field__dark__separator-text` | PASS | 0/65088 |
+| `field__dark__legend` | PASS | 0/50112 |
+| `field__dark__legend-label` | PASS | 0/49536 |
+| `field__dark__checkbox-group` | PASS | 0/29376 |
+| `field__dark__radio-group` | PASS | 0/32832 |
+| `field__dark__disabled` | PASS | 0/28512 |
+| `field__dark__invalid` | PASS | 0/28512 |
+| `field__dark__choice-card` | PASS | 0/32256 |
