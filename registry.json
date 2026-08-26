@@ -345,6 +345,26 @@
       ]
     },
     {
+      "name": "drawer",
+      "type": "registry:ui",
+      "title": "Drawer",
+      "description": "A panel that slides in from an edge of the screen. Built on vaul.",
+      "files": [
+        {
+          "path": "registry/ui/drawer.tsx",
+          "type": "registry:ui",
+          "target": "@ui/drawer.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "vaul"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
       "name": "dropdown-menu",
       "type": "registry:ui",
       "title": "Dropdown Menu",

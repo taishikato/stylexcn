@@ -206,6 +206,14 @@ import {
   SelectValue,
 } from "../components/select";
 import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+} from "../components/drawer";
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -461,6 +469,14 @@ import {
   OfficialSelectValue,
 } from "./official-select";
 import {
+  OfficialDrawer,
+  OfficialDrawerContent,
+  OfficialDrawerDescription,
+  OfficialDrawerFooter,
+  OfficialDrawerHeader,
+  OfficialDrawerTitle,
+} from "./official-drawer";
+import {
   OfficialSheet,
   OfficialSheetContent,
   OfficialSheetDescription,
@@ -581,6 +597,7 @@ export type CaptureComponent =
   | "dropdown-menu"
   | "context-menu"
   | "sheet"
+  | "drawer"
   | "tabs"
   | "popover"
   | "hover-card"
@@ -628,6 +645,7 @@ export type CaptureState =
   | "open"
   | "closed"
   | "left"
+  | "right"
   | "top"
   | "bottom"
   | "second"
@@ -781,6 +799,13 @@ export type SheetCaptureParams = {
   component: "sheet";
   kit: CaptureKit;
   state: "default" | "left" | "top" | "bottom";
+  theme: CaptureTheme;
+};
+
+export type DrawerCaptureParams = {
+  component: "drawer";
+  kit: CaptureKit;
+  state: "default" | "left" | "right" | "top";
   theme: CaptureTheme;
 };
 
@@ -1078,6 +1103,7 @@ export type CaptureParams =
   | DropdownMenuCaptureParams
   | ContextMenuCaptureParams
   | SheetCaptureParams
+  | DrawerCaptureParams
   | TabsCaptureParams
   | PopoverCaptureParams
   | HoverCardCaptureParams
@@ -1866,6 +1892,77 @@ function SheetHarness({ kit, state, theme }: SheetCaptureParams) {
       {...stylex.props(isDark && darkTheme, styles.frame)}
     >
       {sheet}
+    </div>
+  );
+}
+
+const DRAWER_TITLE = "Edit profile";
+const DRAWER_DESCRIPTION =
+  "Make changes to your profile here. Click save when you are done.";
+const DRAWER_BODY = "This is the drawer body.";
+const DRAWER_SAVE = "Save changes";
+
+function drawerDirectionFor(
+  state: DrawerCaptureParams["state"],
+): "top" | "right" | "bottom" | "left" | undefined {
+  if (state === "default") return undefined;
+  return state;
+}
+
+function DrawerHarness({ kit, state, theme }: DrawerCaptureParams) {
+  const isDark = theme === "dark";
+  const direction = drawerDirectionFor(state);
+  usePortalDocumentTheme(isDark);
+
+  const drawer =
+    kit === "shadcn" ? (
+      <OfficialDrawer
+        open
+        onOpenChange={() => {}}
+        {...(direction ? { direction } : {})}
+      >
+        <OfficialDrawerContent>
+          <OfficialDrawerHeader>
+            <OfficialDrawerTitle>{DRAWER_TITLE}</OfficialDrawerTitle>
+            <OfficialDrawerDescription>
+              {DRAWER_DESCRIPTION}
+            </OfficialDrawerDescription>
+          </OfficialDrawerHeader>
+          <p>{DRAWER_BODY}</p>
+          <OfficialDrawerFooter>
+            <OfficialButton>{DRAWER_SAVE}</OfficialButton>
+          </OfficialDrawerFooter>
+        </OfficialDrawerContent>
+      </OfficialDrawer>
+    ) : (
+      <Drawer
+        open
+        onOpenChange={() => {}}
+        {...(direction ? { direction } : {})}
+      >
+        <DrawerContent>
+          <DrawerHeader>
+            <DrawerTitle>{DRAWER_TITLE}</DrawerTitle>
+            <DrawerDescription>{DRAWER_DESCRIPTION}</DrawerDescription>
+          </DrawerHeader>
+          <p>{DRAWER_BODY}</p>
+          <DrawerFooter>
+            <Button>{DRAWER_SAVE}</Button>
+          </DrawerFooter>
+        </DrawerContent>
+      </Drawer>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="drawer"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {drawer}
     </div>
   );
 }
@@ -5067,6 +5164,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "sheet") {
     return <SheetHarness {...params} />;
   }
+  if (params.component === "drawer") {
+    return <DrawerHarness {...params} />;
+  }
   if (params.component === "tabs") {
     return <TabsHarness {...params} />;
   }
@@ -5317,6 +5417,18 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "sheet", kit, state, theme };
+  }
+
+  if (component === "drawer") {
+    if (
+      state !== "default" &&
+      state !== "left" &&
+      state !== "right" &&
+      state !== "top"
+    ) {
+      return null;
+    }
+    return { component: "drawer", kit, state, theme };
   }
 
   if (component === "tabs") {

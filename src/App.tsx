@@ -191,6 +191,16 @@ import {
   SelectValue,
 } from "./components/select";
 import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "./components/drawer";
+import {
   Sheet,
   SheetContent,
   SheetDescription,
@@ -476,6 +486,16 @@ import {
   OfficialSelectValue,
 } from "./visual/official-select";
 import {
+  OfficialDrawer,
+  OfficialDrawerClose,
+  OfficialDrawerContent,
+  OfficialDrawerDescription,
+  OfficialDrawerFooter,
+  OfficialDrawerHeader,
+  OfficialDrawerTitle,
+  OfficialDrawerTrigger,
+} from "./visual/official-drawer";
+import {
   OfficialSheet,
   OfficialSheetContent,
   OfficialSheetDescription,
@@ -698,7 +718,7 @@ function Playground() {
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Native Select, Dropdown Menu, Context Menu,
-        Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
+        Sheet, Drawer, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
         Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
@@ -1188,6 +1208,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundSheet kit="shadcn" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Drawer
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundDrawer kit="stylex" dark={dark} />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Drawer
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundDrawer kit="shadcn" dark={dark} />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Tabs
@@ -2053,6 +2087,81 @@ function PlaygroundSheet({
         </SheetFooter>
       </SheetContent>
     </Sheet>
+  );
+}
+
+function PlaygroundDrawer({
+  kit,
+  dark,
+}: {
+  kit: "stylex" | "shadcn";
+  dark: boolean;
+}) {
+  const [open, setOpen] = useState(false);
+
+  useLayoutEffect(() => {
+    if (!open || !dark) return;
+    const html = document.documentElement;
+    const applied: string[] = ["dark"];
+    html.classList.add("dark");
+    const sx = stylex.props(darkTheme);
+    for (const cls of sx.className?.split(/\s+/).filter(Boolean) ?? []) {
+      html.classList.add(cls);
+      applied.push(cls);
+    }
+    return () => {
+      for (const cls of applied) html.classList.remove(cls);
+    };
+  }, [open, dark]);
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialDrawer open={open} onOpenChange={setOpen}>
+        <OfficialDrawerTrigger asChild>
+          <OfficialButton variant="outline">Open drawer</OfficialButton>
+        </OfficialDrawerTrigger>
+        <OfficialDrawerContent>
+          <OfficialDrawerHeader>
+            <OfficialDrawerTitle>Edit profile</OfficialDrawerTitle>
+            <OfficialDrawerDescription>
+              Make changes to your profile here. Click save when you are done.
+            </OfficialDrawerDescription>
+          </OfficialDrawerHeader>
+          <p>This is the drawer body.</p>
+          <OfficialDrawerFooter>
+            <OfficialButton onClick={() => setOpen(false)}>
+              Save changes
+            </OfficialButton>
+            <OfficialDrawerClose asChild>
+              <OfficialButton variant="outline">Cancel</OfficialButton>
+            </OfficialDrawerClose>
+          </OfficialDrawerFooter>
+        </OfficialDrawerContent>
+      </OfficialDrawer>
+    );
+  }
+
+  return (
+    <Drawer open={open} onOpenChange={setOpen}>
+      <DrawerTrigger asChild>
+        <Button variant="outline">Open drawer</Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Edit profile</DrawerTitle>
+          <DrawerDescription>
+            Make changes to your profile here. Click save when you are done.
+          </DrawerDescription>
+        </DrawerHeader>
+        <p>This is the drawer body.</p>
+        <DrawerFooter>
+          <Button onClick={() => setOpen(false)}>Save changes</Button>
+          <DrawerClose asChild>
+            <Button variant="outline">Cancel</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
