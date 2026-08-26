@@ -259,6 +259,14 @@ import {
   MenubarTrigger,
 } from "../components/menubar";
 import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+} from "../components/navigation-menu";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -507,6 +515,14 @@ import {
   OfficialMenubarTrigger,
 } from "./official-menubar";
 import {
+  OfficialNavigationMenu,
+  OfficialNavigationMenuContent,
+  OfficialNavigationMenuItem,
+  OfficialNavigationMenuLink,
+  OfficialNavigationMenuList,
+  OfficialNavigationMenuTrigger,
+} from "./official-navigation-menu";
+import {
   OfficialTable,
   OfficialTableBody,
   OfficialTableCaption,
@@ -629,7 +645,8 @@ export type CaptureComponent =
   | "input-otp"
   | "field"
   | "combobox"
-  | "command";
+  | "command"
+  | "navigation-menu";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -685,7 +702,8 @@ export type CaptureState =
   | "clear"
   | "chips"
   | "addon"
-  | "popup";
+  | "popup"
+  | "viewport";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -1087,6 +1105,13 @@ export type CommandCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type NavigationMenuCaptureParams = {
+  component: "navigation-menu";
+  kit: CaptureKit;
+  state: "closed" | "open" | "viewport";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1135,7 +1160,8 @@ export type CaptureParams =
   | InputOtpCaptureParams
   | FieldCaptureParams
   | ComboboxCaptureParams
-  | CommandCaptureParams;
+  | CommandCaptureParams
+  | NavigationMenuCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1287,6 +1313,25 @@ const styles = stylex.create({
   /* Identical 24rem parent on both kits so w-full matches. */
   alertWell: {
     width: "24rem",
+  },
+  navMenuPanel: {
+    display: "grid",
+    width: "12.5rem",
+    gap: "0.25rem",
+    margin: 0,
+    padding: 0,
+    listStyleType: "none",
+  },
+  navigationMenuOpenFrame: {
+    minHeight: "100vh",
+    margin: 0,
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "flex-start",
+    paddingTop: "2rem",
+    paddingLeft: "2rem",
+    backgroundColor: "var(--background)",
+    color: "var(--foreground)",
   },
   /* Menubar pinned near the top so the portaled File menu stays on-screen. */
   menubarOpenFrame: {
@@ -3585,6 +3630,112 @@ function MenubarHarness({ kit, state, theme }: MenubarCaptureParams) {
   );
 }
 
+const NAV_MENU_STARTED = "Getting started";
+const NAV_MENU_DOCS = "Documentation";
+const NAV_MENU_INTRO = "Introduction";
+const NAV_MENU_INSTALL = "Installation";
+const NAV_MENU_VALUE = "getting-started";
+
+function NavigationMenuPanel({ kit }: { kit: CaptureKit }) {
+  return (
+    <ul {...stylex.props(styles.navMenuPanel)}>
+      <li>
+        {kit === "shadcn" ? (
+          <OfficialNavigationMenuLink href="#">
+            {NAV_MENU_INTRO}
+          </OfficialNavigationMenuLink>
+        ) : (
+          <NavigationMenuLink href="#">{NAV_MENU_INTRO}</NavigationMenuLink>
+        )}
+      </li>
+      <li>
+        {kit === "shadcn" ? (
+          <OfficialNavigationMenuLink href="#">
+            {NAV_MENU_INSTALL}
+          </OfficialNavigationMenuLink>
+        ) : (
+          <NavigationMenuLink href="#">{NAV_MENU_INSTALL}</NavigationMenuLink>
+        )}
+      </li>
+    </ul>
+  );
+}
+
+function NavigationMenuHarness({
+  kit,
+  state,
+  theme,
+}: NavigationMenuCaptureParams) {
+  const isDark = theme === "dark";
+  const isClosed = state === "closed";
+  const useViewport = state !== "open";
+  const value = isClosed ? "" : NAV_MENU_VALUE;
+  const isOpenFrame = !isClosed;
+
+  const menu =
+    kit === "shadcn" ? (
+      <OfficialNavigationMenu
+        delayDuration={0}
+        skipDelayDuration={0}
+        viewport={useViewport}
+        value={value}
+        onValueChange={() => {}}
+      >
+        <OfficialNavigationMenuList>
+          <OfficialNavigationMenuItem value={NAV_MENU_VALUE}>
+            <OfficialNavigationMenuTrigger>
+              {NAV_MENU_STARTED}
+            </OfficialNavigationMenuTrigger>
+            <OfficialNavigationMenuContent>
+              <NavigationMenuPanel kit={kit} />
+            </OfficialNavigationMenuContent>
+          </OfficialNavigationMenuItem>
+          <OfficialNavigationMenuItem>
+            <OfficialNavigationMenuLink href="#">
+              {NAV_MENU_DOCS}
+            </OfficialNavigationMenuLink>
+          </OfficialNavigationMenuItem>
+        </OfficialNavigationMenuList>
+      </OfficialNavigationMenu>
+    ) : (
+      <NavigationMenu
+        delayDuration={0}
+        skipDelayDuration={0}
+        viewport={useViewport}
+        value={value}
+        onValueChange={() => {}}
+      >
+        <NavigationMenuList>
+          <NavigationMenuItem value={NAV_MENU_VALUE}>
+            <NavigationMenuTrigger>{NAV_MENU_STARTED}</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <NavigationMenuPanel kit={kit} />
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="#">{NAV_MENU_DOCS}</NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="navigation-menu"
+      data-state={state}
+      {...stylex.props(
+        isDark && darkTheme,
+        isOpenFrame ? styles.navigationMenuOpenFrame : styles.frame,
+      )}
+    >
+      {menu}
+    </div>
+  );
+}
+
 function AspectRatioFill() {
   return <div {...stylex.props(styles.aspectRatioFill)} />;
 }
@@ -5263,6 +5414,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "command") {
     return <CommandHarness {...params} />;
   }
+  if (params.component === "navigation-menu") {
+    return <NavigationMenuHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -5771,6 +5925,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "command", kit, state, theme };
+  }
+
+  if (component === "navigation-menu") {
+    if (state !== "closed" && state !== "open" && state !== "viewport") {
+      return null;
+    }
+    return { component: "navigation-menu", kit, state, theme };
   }
 
   if (component !== "button") return null;
