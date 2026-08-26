@@ -558,8 +558,8 @@ function Playground() {
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
         Menubar, Aspect Ratio, Table, Resizable, Kbd, and Empty vs official
-        shadcn New York baseline. Visual capture lives at query-param harness
-        URLs (see README).
+        shadcn/ui. Visual capture lives at query-param harness URLs (see
+        README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />

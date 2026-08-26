@@ -14,7 +14,7 @@ export default function DocsIndexPage() {
       <h1 {...stylex.props(chrome.pageTitle)}>Components</h1>
       <p {...stylex.props(chrome.lead)}>
         Implemented StyleX components. Each page is a live demo — click, type,
-        and open overlays. Visual target is official shadcn/ui New York v4.
+        and open overlays. Pixel-perfect with official shadcn/ui.
       </p>
       <div {...stylex.props(chrome.catalog)}>
         {COMPONENTS.map((item) => (

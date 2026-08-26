@@ -224,7 +224,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "native-select",
     name: "Native Select",
-    description: "Native HTML select with New York styling. Default and sm.",
+    description: "Native HTML select with shadcn/ui styling. Default and sm.",
     usage: `<NativeSelect>
   <NativeSelectOption value="apple">Apple</NativeSelectOption>
 </NativeSelect>`,

@@ -61,11 +61,11 @@ export function HomePage() {
             <ArrowRight size={14} />
           </Link>
           <h1 {...stylex.props(landing.title)}>
-            StyleX components with New York bones.
+            StyleX components. shadcn look.
           </h1>
           <p {...stylex.props(landing.copy)}>
-            A port of shadcn/ui New York v4 — same look, StyleX instead of
-            Tailwind. Open source. Open code.
+            A port of shadcn/ui — same look, StyleX instead of Tailwind. Open
+            source. Open code.
           </p>
           <Button type="button" onClick={() => router.push("/docs")}>
             Get Started
