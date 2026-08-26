@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T19:27:42.519Z",
-  "total": 468,
+  "generatedAt": "2026-08-26T20:24:31.835Z",
+  "total": 474,
   "failed": 0,
-  "passed": 468,
+  "passed": 474,
   "threshold": 0,
   "cases": [
     {
@@ -6702,6 +6702,90 @@
       "shadcn": "visual/results/shadcn/sidebar__dark__inset.png",
       "stylex": "visual/results/stylex/sidebar__dark__inset.png",
       "diff": "visual/results/diff/sidebar__dark__inset.png"
+    },
+    {
+      "name": "sonner__light__default",
+      "component": "sonner",
+      "state": "default",
+      "theme": "light",
+      "width": 400,
+      "height": 240,
+      "mismatched": 0,
+      "pixels": 96000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sonner__light__default.png",
+      "stylex": "visual/results/stylex/sonner__light__default.png",
+      "diff": "visual/results/diff/sonner__light__default.png"
+    },
+    {
+      "name": "sonner__light__success",
+      "component": "sonner",
+      "state": "success",
+      "theme": "light",
+      "width": 400,
+      "height": 240,
+      "mismatched": 0,
+      "pixels": 96000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sonner__light__success.png",
+      "stylex": "visual/results/stylex/sonner__light__success.png",
+      "diff": "visual/results/diff/sonner__light__success.png"
+    },
+    {
+      "name": "sonner__light__error",
+      "component": "sonner",
+      "state": "error",
+      "theme": "light",
+      "width": 400,
+      "height": 240,
+      "mismatched": 0,
+      "pixels": 96000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sonner__light__error.png",
+      "stylex": "visual/results/stylex/sonner__light__error.png",
+      "diff": "visual/results/diff/sonner__light__error.png"
+    },
+    {
+      "name": "sonner__dark__default",
+      "component": "sonner",
+      "state": "default",
+      "theme": "dark",
+      "width": 400,
+      "height": 240,
+      "mismatched": 0,
+      "pixels": 96000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sonner__dark__default.png",
+      "stylex": "visual/results/stylex/sonner__dark__default.png",
+      "diff": "visual/results/diff/sonner__dark__default.png"
+    },
+    {
+      "name": "sonner__dark__success",
+      "component": "sonner",
+      "state": "success",
+      "theme": "dark",
+      "width": 400,
+      "height": 240,
+      "mismatched": 0,
+      "pixels": 96000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sonner__dark__success.png",
+      "stylex": "visual/results/stylex/sonner__dark__success.png",
+      "diff": "visual/results/diff/sonner__dark__success.png"
+    },
+    {
+      "name": "sonner__dark__error",
+      "component": "sonner",
+      "state": "error",
+      "theme": "dark",
+      "width": 400,
+      "height": 240,
+      "mismatched": 0,
+      "pixels": 96000,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/sonner__dark__error.png",
+      "stylex": "visual/results/stylex/sonner__dark__error.png",
+      "diff": "visual/results/diff/sonner__dark__error.png"
     }
   ]
 }

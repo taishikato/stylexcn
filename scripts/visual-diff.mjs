@@ -237,6 +237,9 @@ const CHART_VIEWPORT = { width: 480, height: 400 };
 const SIDEBAR_STATES = ["default", "collapsed", "inset"];
 /* Desktop sidebar is md:block / md:flex (48rem). Pin open/collapsed. */
 const SIDEBAR_VIEWPORT = { width: 800, height: 600 };
+const SONNER_STATES = ["default", "success", "error"];
+/* Toast is portaled to body (bottom-right). Pin duration Infinity. */
+const SONNER_VIEWPORT = { width: 400, height: 240 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -838,6 +841,20 @@ function sidebarCases() {
   return list;
 }
 
+function sonnerCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SONNER_STATES) {
+      list.push({
+        component: "sonner",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function aspectRatioCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -1003,6 +1020,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "sidebar") {
     return sidebarCases();
   }
+  if (process.env.VISUAL_ONLY === "sonner") {
+    return sonnerCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -1057,6 +1077,7 @@ function cases() {
     ...carouselCases(),
     ...chartCases(),
     ...sidebarCases(),
+    ...sonnerCases(),
   ];
 }
 
@@ -1246,6 +1267,9 @@ function slug(c) {
   if (c.component === "sidebar") {
     return `sidebar__${c.theme}__${c.state}`;
   }
+  if (c.component === "sonner") {
+    return `sonner__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1310,7 +1334,8 @@ function urlFor(kit, c) {
     c.component !== "calendar" &&
     c.component !== "carousel" &&
     c.component !== "chart" &&
-    c.component !== "sidebar"
+    c.component !== "sidebar" &&
+    c.component !== "sonner"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1537,6 +1562,9 @@ function controlLocator(page, c) {
   if (c.component === "sidebar") {
     return page.locator('[data-slot="sidebar-wrapper"]');
   }
+  if (c.component === "sonner") {
+    return page.locator("[data-sonner-toast]");
+  }
   return page.getByRole("button");
 }
 
@@ -1691,6 +1719,11 @@ async function prepareControl(page, c) {
     await page.waitForTimeout(50);
     return;
   }
+  if (c.component === "sonner") {
+    await page.locator("[data-sonner-toast]").waitFor();
+    await page.waitForTimeout(50);
+    return;
+  }
   const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
@@ -1806,6 +1839,12 @@ async function screenshotControl(page, c, dest) {
   if (c.component === "sidebar") {
     await page.locator('[data-slot="sidebar-wrapper"]').waitFor();
     await page.locator('[data-slot="sidebar"][data-state]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "sonner") {
+    await page.locator("[data-sonner-toast]").waitFor();
+    await page.waitForTimeout(50);
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -1938,6 +1977,8 @@ async function main() {
                     ? CHART_VIEWPORT
                   : c.component === "sidebar"
                     ? SIDEBAR_VIEWPORT
+                  : c.component === "sonner"
+                    ? SONNER_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1987,7 +2028,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar + Sonner)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -2051,7 +2092,8 @@ async function main() {
           r.component !== "calendar" &&
           r.component !== "carousel" &&
           r.component !== "chart" &&
-          r.component !== "sidebar",
+          r.component !== "sidebar" &&
+          r.component !== "sonner",
       )
       .map(
         (r) =>
@@ -2811,6 +2853,23 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "sidebar")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Sonner",
+    "",
+    "- Viewport: 400×240. Toast is portaled to `document.body` (default bottom-right). Screenshots are full-viewport.",
+    "- Official side is the live registry Sonner (`sonner` Toaster + lucide icons + `next-themes`). StyleX wraps the same primitive with StyleX icon sizes. Not the deprecated Toast primitive. Not Base UI.",
+    "- Pinned `duration={Infinity}` / `visibleToasts={1}` and toast `id` so the toast does not auto-dismiss. `default` is `toast()`, `success` is `toast.success()`, `error` is `toast.error()`. Each × light/dark.",
+    "- Identical copy: `Event has been created` (default/success) and `Event has not been created` (error). Playwright `animations: \"disabled\"`.",
+    "- Skipped: warning, info, loading/promise, action buttons, close button, richColors, and positions other than bottom-right.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "sonner")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

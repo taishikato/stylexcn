@@ -101,6 +101,11 @@ const EXTRA_META = {
     description:
       "A collapsible sidebar with menu groups. Open and collapsed states are pinned so the preview does not drift.",
   },
+  sonner: {
+    title: "Sonner",
+    description:
+      "A toast. Built on sonner. Duration is pinned so the preview does not drift.",
+  },
 };
 
 const SKIP_NPM = new Set(["react"]);

@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart + Sidebar + Sonner)
 
-- Passed: 468/468
+- Passed: 474/474
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -922,3 +922,20 @@
 | `sidebar__dark__default` | PASS | 0/480000 |
 | `sidebar__dark__collapsed` | PASS | 0/480000 |
 | `sidebar__dark__inset` | PASS | 0/480000 |
+
+## Sonner
+
+- Viewport: 400×240. Toast is portaled to `document.body` (default bottom-right). Screenshots are full-viewport.
+- Official side is the live registry Sonner (`sonner` Toaster + lucide icons + `next-themes`). StyleX wraps the same primitive with StyleX icon sizes. Not the deprecated Toast primitive. Not Base UI.
+- Pinned `duration={Infinity}` / `visibleToasts={1}` and toast `id` so the toast does not auto-dismiss. `default` is `toast()`, `success` is `toast.success()`, `error` is `toast.error()`. Each × light/dark.
+- Identical copy: `Event has been created` (default/success) and `Event has not been created` (error). Playwright `animations: "disabled"`.
+- Skipped: warning, info, loading/promise, action buttons, close button, richColors, and positions other than bottom-right.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `sonner__light__default` | PASS | 0/96000 |
+| `sonner__light__success` | PASS | 0/96000 |
+| `sonner__light__error` | PASS | 0/96000 |
+| `sonner__dark__default` | PASS | 0/96000 |
+| `sonner__dark__success` | PASS | 0/96000 |
+| `sonner__dark__error` | PASS | 0/96000 |

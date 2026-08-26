@@ -1,5 +1,6 @@
 import * as stylex from "@stylexjs/stylex";
 import { useLayoutEffect, useRef } from "react";
+import { toast } from "sonner";
 import {
   Accordion,
   AccordionContent,
@@ -295,6 +296,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "../components/sidebar";
+import { Toaster } from "../components/sonner";
 import {
   Table,
   TableBody,
@@ -578,6 +580,7 @@ import {
   OfficialSidebarProvider,
   OfficialSidebarTrigger,
 } from "./official-sidebar";
+import { OfficialToaster } from "./official-sonner";
 import {
   Bar,
   BarChart,
@@ -714,7 +717,8 @@ export type CaptureComponent =
   | "calendar"
   | "carousel"
   | "chart"
-  | "sidebar";
+  | "sidebar"
+  | "sonner";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -775,7 +779,9 @@ export type CaptureState =
   | "next"
   | "line"
   | "collapsed"
-  | "inset";
+  | "inset"
+  | "success"
+  | "error";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -1212,6 +1218,13 @@ export type SidebarCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type SonnerCaptureParams = {
+  component: "sonner";
+  kit: CaptureKit;
+  state: "default" | "success" | "error";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1265,7 +1278,8 @@ export type CaptureParams =
   | CalendarCaptureParams
   | CarouselCaptureParams
   | ChartCaptureParams
-  | SidebarCaptureParams;
+  | SidebarCaptureParams
+  | SonnerCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -4300,6 +4314,57 @@ function SidebarHarness({ kit, state, theme }: SidebarCaptureParams) {
   );
 }
 
+const SONNER_DEFAULT = "Event has been created";
+const SONNER_ERROR = "Event has not been created";
+
+function SonnerHarness({ kit, state, theme }: SonnerCaptureParams) {
+  const isDark = theme === "dark";
+  usePortalDocumentTheme(isDark);
+
+  useLayoutEffect(() => {
+    const id = "visual-sonner";
+    const opts = { id, duration: Number.POSITIVE_INFINITY };
+    if (state === "success") {
+      toast.success(SONNER_DEFAULT, opts);
+    } else if (state === "error") {
+      toast.error(SONNER_ERROR, opts);
+    } else {
+      toast(SONNER_DEFAULT, opts);
+    }
+    return () => {
+      toast.dismiss(id);
+    };
+  }, [state]);
+
+  const toaster =
+    kit === "shadcn" ? (
+      <OfficialToaster
+        theme={theme}
+        duration={Number.POSITIVE_INFINITY}
+        visibleToasts={1}
+      />
+    ) : (
+      <Toaster
+        theme={theme}
+        duration={Number.POSITIVE_INFINITY}
+        visibleToasts={1}
+      />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="sonner"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {toaster}
+    </div>
+  );
+}
+
 function AspectRatioFill() {
   return <div {...stylex.props(styles.aspectRatioFill)} />;
 }
@@ -5993,6 +6058,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "sidebar") {
     return <SidebarHarness {...params} />;
   }
+  if (params.component === "sonner") {
+    return <SonnerHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -6536,6 +6604,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "sidebar", kit, state, theme };
+  }
+
+  if (component === "sonner") {
+    if (state !== "default" && state !== "success" && state !== "error") {
+      return null;
+    }
+    return { component: "sonner", kit, state, theme };
   }
 
   if (component !== "button") return null;
