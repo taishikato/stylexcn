@@ -133,6 +133,13 @@ const ITEM_STATES = [
   "group",
   "header-footer",
 ];
+const INPUT_OTP_STATES = [
+  "default",
+  "separator",
+  "disabled",
+  "invalid",
+  "focus-visible",
+];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -174,6 +181,7 @@ const EMPTY_VIEWPORT = { width: 800, height: 600 };
 const INPUT_GROUP_VIEWPORT = { width: 400, height: 320 };
 /* 20rem well + group/header-footer + 16px crop pad. */
 const ITEM_VIEWPORT = { width: 400, height: 400 };
+const INPUT_OTP_VIEWPORT = { width: 400, height: 200 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -803,6 +811,20 @@ function itemCases() {
   return list;
 }
 
+function inputOtpCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of INPUT_OTP_STATES) {
+      list.push({
+        component: "input-otp",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -848,6 +870,7 @@ function cases() {
     ...emptyCases(),
     ...inputGroupCases(),
     ...itemCases(),
+    ...inputOtpCases(),
   ];
 }
 
@@ -979,6 +1002,9 @@ function slug(c) {
   if (c.component === "item") {
     return `item__${c.theme}__${c.state}`;
   }
+  if (c.component === "input-otp") {
+    return `input-otp__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1033,7 +1059,8 @@ function urlFor(kit, c) {
     c.component !== "kbd" &&
     c.component !== "empty" &&
     c.component !== "input-group" &&
-    c.component !== "item"
+    c.component !== "item" &&
+    c.component !== "input-otp"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1221,6 +1248,9 @@ function controlLocator(page, c) {
     }
     return page.locator('[data-slot="item"]');
   }
+  if (c.component === "input-otp") {
+    return page.locator("[data-input-otp-container]");
+  }
   return page.getByRole("button");
 }
 
@@ -1303,6 +1333,15 @@ async function prepareControl(page, c) {
   if (c.component === "scroll-area") {
     await page.locator('[data-slot="scroll-area"]').waitFor();
     await page.locator('[data-slot="scroll-area-thumb"]').waitFor();
+    return;
+  }
+  if (c.component === "input-otp") {
+    await page.locator("[data-input-otp-container]").waitFor();
+    if (c.state === "focus-visible") {
+      await page
+        .locator('[data-slot="input-otp-slot"][data-active="true"]')
+        .waitFor();
+    }
     return;
   }
   const locator = controlLocator(page, c);
@@ -1484,6 +1523,8 @@ async function main() {
                     ? INPUT_GROUP_VIEWPORT
                   : c.component === "item"
                     ? ITEM_VIEWPORT
+                  : c.component === "input-otp"
+                    ? INPUT_OTP_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1533,7 +1574,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1587,7 +1628,8 @@ async function main() {
           r.component !== "kbd" &&
           r.component !== "empty" &&
           r.component !== "input-group" &&
-          r.component !== "item",
+          r.component !== "item" &&
+          r.component !== "input-otp",
       )
       .map(
         (r) =>
@@ -2185,6 +2227,23 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "item")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Input OTP",
+    "",
+    "- Crops `[data-input-otp-container]` with 16px pad (covers the 3px active ring).",
+    "- Identical copy on both kits. `default` is one 6-slot group with value `123456`. `separator` is 3 + InputOTPSeparator + 3.",
+    "- `disabled` sets `disabled` on the root. `invalid` sets `aria-invalid` on every slot with value `000000`.",
+    "- `focus-visible` uses empty value + `autoFocus` so the first slot is active with a fake caret. Capture frame pauses inherited `animate-caret-blink`.",
+    "- Viewport: 400×200. `pushPasswordManagerStrategy=\"none\"` on both kits. Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "input-otp")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

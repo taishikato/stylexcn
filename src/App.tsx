@@ -127,6 +127,12 @@ import {
   InputGroupTextarea,
 } from "./components/input-group";
 import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "./components/input-otp";
+import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
@@ -376,6 +382,12 @@ import {
   OfficialInputGroupTextarea,
 } from "./visual/official-input-group";
 import {
+  OfficialInputOTP,
+  OfficialInputOTPGroup,
+  OfficialInputOTPSeparator,
+  OfficialInputOTPSlot,
+} from "./visual/official-input-otp";
+import {
   OfficialNativeSelect,
   OfficialNativeSelectOptGroup,
   OfficialNativeSelectOption,
@@ -585,6 +597,40 @@ const styles = stylex.create({
   },
 });
 
+function PlaygroundInputOtp({ kit }: { kit: "stylex" | "shadcn" }) {
+  const Root = kit === "shadcn" ? OfficialInputOTP : InputOTP;
+  const Group = kit === "shadcn" ? OfficialInputOTPGroup : InputOTPGroup;
+  const Slot = kit === "shadcn" ? OfficialInputOTPSlot : InputOTPSlot;
+  const Sep = kit === "shadcn" ? OfficialInputOTPSeparator : InputOTPSeparator;
+  return (
+    <>
+      <Root maxLength={6} value="123456" onChange={() => {}}>
+        <Group>
+          <Slot index={0} />
+          <Slot index={1} />
+          <Slot index={2} />
+          <Slot index={3} />
+          <Slot index={4} />
+          <Slot index={5} />
+        </Group>
+      </Root>
+      <Root maxLength={6} value="123456" onChange={() => {}}>
+        <Group>
+          <Slot index={0} />
+          <Slot index={1} />
+          <Slot index={2} />
+        </Group>
+        <Sep />
+        <Group>
+          <Slot index={3} />
+          <Slot index={4} />
+          <Slot index={5} />
+        </Group>
+      </Root>
+    </>
+  );
+}
+
 function Playground() {
   return (
     <div {...stylex.props(styles.page)}>
@@ -595,7 +641,7 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, and Item vs
+        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, and Input OTP vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1796,6 +1842,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <div {...stylex.props(styles.itemWell)}>
           <PlaygroundItem kit="shadcn" state="media" />
         </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Input OTP
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundInputOtp kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Input OTP
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundInputOtp kit="shadcn" />
       </div>
     </div>
   );
