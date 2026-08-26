@@ -877,6 +877,9 @@ function fieldCases() {
 }
 
 function cases() {
+  if (process.env.VISUAL_ONLY === "combobox") {
+    return comboboxCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -1433,6 +1436,8 @@ async function prepareControl(page, c) {
   }
   if (c.component === "combobox" && COMBOBOX_OPEN_STATES.has(c.state)) {
     await page.locator('[data-slot="combobox-content"]').waitFor();
+    /* Focused popup input can paint a caret on the first frame. */
+    await page.waitForTimeout(50);
     return;
   }
   const locator = controlLocator(page, c);
@@ -1514,6 +1519,7 @@ async function screenshotControl(page, c, dest) {
   }
   if (c.component === "combobox" && COMBOBOX_OPEN_STATES.has(c.state)) {
     await page.locator('[data-slot="combobox-content"]').waitFor();
+    await page.waitForTimeout(50);
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }

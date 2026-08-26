@@ -1293,6 +1293,8 @@ const styles = stylex.create({
     width: "16rem",
     justifyContent: "space-between",
     fontWeight: 400,
+    /* Official Button default is px-4, has-[>svg]:px-3 because ComboboxTrigger injects a chevron. */
+    paddingInline: "0.75rem",
   },
 });
 
@@ -4665,14 +4667,14 @@ function ComboboxPopupDemo({ kit }: { kit: CaptureKit }) {
             data-slot="button"
             data-variant="outline"
             data-size="default"
-            {...stylex.props(
-              buttonBase.root,
-              buttonVariants.outline,
-              buttonSizes.default,
-              styles.comboboxPopupTrigger,
-            )}
           />
         }
+        {...stylex.props(
+          buttonBase.root,
+          buttonVariants.outline,
+          buttonSizes.default,
+          styles.comboboxPopupTrigger,
+        )}
       >
         <ComboboxValue />
       </ComboboxTrigger>

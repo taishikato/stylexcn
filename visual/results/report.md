@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox)
 
-- Passed: 396/396
+- Passed: 420/420
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -770,3 +770,37 @@
 | `field__dark__disabled` | PASS | 0/28512 |
 | `field__dark__invalid` | PASS | 0/28512 |
 | `field__dark__choice-card` | PASS | 0/32256 |
+
+## Combobox
+
+- Closed states crop `[data-slot="input-group"]` (or `[data-slot="combobox-chips"]`) with 16px pad.
+- Open states (`open` / `empty` / `group` / `popup`) are full-viewport. Official side is the live registry Combobox family. StyleX is Base UI Combobox + StyleX Input Group / Button tables.
+- States: `default` / `selected` / `focus-visible` / `disabled` / `invalid` / `clear` / `chips` / `addon` / `open` / `empty` / `group` / `popup`, each × light/dark.
+- Skipped: RTL (needs the docs language selector) and custom Item rows (Item composition is already covered by Item). Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `combobox__light__default` | PASS | 0/21284 |
+| `combobox__light__selected` | PASS | 0/21284 |
+| `combobox__light__focus-visible` | PASS | 0/21284 |
+| `combobox__light__disabled` | PASS | 0/21284 |
+| `combobox__light__invalid` | PASS | 0/21284 |
+| `combobox__light__clear` | PASS | 0/21284 |
+| `combobox__light__chips` | PASS | 0/21896 |
+| `combobox__light__addon` | PASS | 0/22916 |
+| `combobox__light__open` | PASS | 0/358400 |
+| `combobox__light__empty` | PASS | 0/358400 |
+| `combobox__light__group` | PASS | 0/358400 |
+| `combobox__light__popup` | PASS | 0/358400 |
+| `combobox__dark__default` | PASS | 0/21284 |
+| `combobox__dark__selected` | PASS | 0/21284 |
+| `combobox__dark__focus-visible` | PASS | 0/21284 |
+| `combobox__dark__disabled` | PASS | 0/21284 |
+| `combobox__dark__invalid` | PASS | 0/21284 |
+| `combobox__dark__clear` | PASS | 0/21284 |
+| `combobox__dark__chips` | PASS | 0/21896 |
+| `combobox__dark__addon` | PASS | 0/22916 |
+| `combobox__dark__open` | PASS | 0/358400 |
+| `combobox__dark__empty` | PASS | 0/358400 |
+| `combobox__dark__group` | PASS | 0/358400 |
+| `combobox__dark__popup` | PASS | 0/358400 |

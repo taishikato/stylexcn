@@ -101,15 +101,22 @@ const content = stylex.create({
     color: tokens["--popover-foreground"],
     boxShadow: POPUP_SHADOW,
     fontFamily: "inherit",
-    ":not(#\\0) [data-slot='input-group']": {
+    ":not(#\\0) > [data-slot='input-group']": {
       marginTop: "0.25rem",
       marginRight: "0.25rem",
       marginBottom: 0,
       marginLeft: "0.25rem",
       height: "2rem",
-      borderColor: MIX_INPUT_30,
       backgroundColor: MIX_INPUT_30,
-      boxShadow: "none",
+      borderColor: {
+        default: MIX_INPUT_30,
+        ":has([data-slot='input-group-control']:focus-visible)": tokens["--ring"],
+      },
+      /* Official `shadow-none` zeros --tw-shadow but keeps the focus ring layer. */
+      boxShadow: {
+        default: "none",
+        ":has([data-slot='input-group-control']:focus-visible)": RING,
+      },
     },
   },
 });
@@ -385,8 +392,10 @@ function ComboboxTrigger({
       {children}
       <ChevronDownIcon
         data-slot="combobox-trigger-icon"
-        className="size-4"
-        {...stylex.props(trigger.icon)}
+        className={["size-4", stylex.props(trigger.icon).className]
+          .filter(Boolean)
+          .join(" ")}
+        style={stylex.props(trigger.icon).style}
       />
     </ComboboxPrimitive.Trigger>
   );
@@ -538,7 +547,12 @@ function ComboboxItem({
         data-slot="combobox-item-indicator"
         render={<span {...stylex.props(item.indicator)} />}
       >
-        <CheckIcon className="size-4" {...stylex.props(item.check)} />
+        <CheckIcon
+          className={["size-4", stylex.props(item.check).className]
+            .filter(Boolean)
+            .join(" ")}
+          style={stylex.props(item.check).style}
+        />
       </ComboboxPrimitive.ItemIndicator>
     </ComboboxPrimitive.Item>
   );
@@ -647,7 +661,7 @@ function ComboboxChip({
         <ComboboxPrimitive.ChipRemove
           render={
             <ButtonPrimitive
-              data-slot="button"
+              data-slot="combobox-chip-remove"
               data-variant="ghost"
               data-size="icon-xs"
               {...stylex.props(
