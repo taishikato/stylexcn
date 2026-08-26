@@ -86,6 +86,11 @@ const EXTRA_META = {
     title: "Combobox",
     description: "Autocomplete input with a list of suggestions.",
   },
+  carousel: {
+    title: "Carousel",
+    description:
+      "A carousel with motion and swipe. Built on embla-carousel-react.",
+  },
 };
 
 const SKIP_NPM = new Set(["react"]);

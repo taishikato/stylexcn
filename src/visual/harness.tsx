@@ -268,6 +268,13 @@ import {
 } from "../components/navigation-menu";
 import { Calendar } from "../components/calendar";
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "../components/carousel";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -525,6 +532,13 @@ import {
 } from "./official-navigation-menu";
 import { OfficialCalendar } from "./official-calendar";
 import {
+  OfficialCarousel,
+  OfficialCarouselContent,
+  OfficialCarouselItem,
+  OfficialCarouselNext,
+  OfficialCarouselPrevious,
+} from "./official-carousel";
+import {
   OfficialTable,
   OfficialTableBody,
   OfficialTableCaption,
@@ -649,7 +663,8 @@ export type CaptureComponent =
   | "combobox"
   | "command"
   | "navigation-menu"
-  | "calendar";
+  | "calendar"
+  | "carousel";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -706,7 +721,8 @@ export type CaptureState =
   | "chips"
   | "addon"
   | "popup"
-  | "viewport";
+  | "viewport"
+  | "next";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -1122,6 +1138,13 @@ export type CalendarCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type CarouselCaptureParams = {
+  component: "carousel";
+  kit: CaptureKit;
+  state: "default" | "next" | "vertical";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1172,7 +1195,8 @@ export type CaptureParams =
   | ComboboxCaptureParams
   | CommandCaptureParams
   | NavigationMenuCaptureParams
-  | CalendarCaptureParams;
+  | CalendarCaptureParams
+  | CarouselCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1365,6 +1389,40 @@ const styles = stylex.create({
     width: "100%",
     height: "100%",
     backgroundColor: tokens["--muted"],
+  },
+  /* Identical 20rem parent on both kits so max-w-xs / w-full matches. */
+  carouselWell: {
+    width: "20rem",
+  },
+  carouselShell: {
+    width: "100%",
+    maxWidth: "20rem",
+  },
+  carouselPad: {
+    padding: "0.25rem",
+  },
+  carouselSlideFace: {
+    display: "flex",
+    aspectRatio: "1 / 1",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "1.5rem",
+  },
+  carouselSlideLabel: {
+    fontSize: "2.25rem",
+    lineHeight: "2.5rem",
+    fontWeight: 600,
+  },
+  carouselVerticalFace: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "1.5rem",
+  },
+  carouselVerticalLabel: {
+    fontSize: "1.875rem",
+    lineHeight: "2.25rem",
+    fontWeight: 600,
   },
   /* Identical 32rem parent on both kits so w-full matches. */
   tableWell: {
@@ -3811,6 +3869,126 @@ function CalendarHarness({ kit, state, theme }: CalendarCaptureParams) {
   );
 }
 
+/* Pin Embla index and disable drag/tween so screenshots do not drift. */
+const CAROUSEL_OPTS = {
+  watchDrag: false as const,
+  duration: 0,
+};
+
+function CarouselHarness({ kit, state, theme }: CarouselCaptureParams) {
+  const isDark = theme === "dark";
+  const isVertical = state === "vertical";
+  const startIndex = state === "next" ? 1 : 0;
+  const opts = isVertical
+    ? { ...CAROUSEL_OPTS, align: "start" as const, startIndex }
+    : { ...CAROUSEL_OPTS, startIndex };
+  const slides = [1, 2, 3, 4, 5];
+
+  const carousel =
+    kit === "shadcn" ? (
+      <OfficialCarousel
+        className="w-full max-w-xs"
+        orientation={isVertical ? "vertical" : "horizontal"}
+        opts={opts}
+      >
+        <OfficialCarouselContent
+          className={isVertical ? "-mt-1 h-[200px]" : undefined}
+        >
+          {slides.map((n) => (
+            <OfficialCarouselItem
+              key={n}
+              className={isVertical ? "pt-1 md:basis-1/2" : undefined}
+            >
+              <div className="p-1">
+                <OfficialCard>
+                  <OfficialCardContent
+                    className={
+                      isVertical
+                        ? "flex items-center justify-center p-6"
+                        : "flex aspect-square items-center justify-center p-6"
+                    }
+                  >
+                    <span
+                      className={
+                        isVertical
+                          ? "text-3xl font-semibold"
+                          : "text-4xl font-semibold"
+                      }
+                    >
+                      {n}
+                    </span>
+                  </OfficialCardContent>
+                </OfficialCard>
+              </div>
+            </OfficialCarouselItem>
+          ))}
+        </OfficialCarouselContent>
+        <OfficialCarouselPrevious />
+        <OfficialCarouselNext />
+      </OfficialCarousel>
+    ) : (
+      <Carousel
+        orientation={isVertical ? "vertical" : "horizontal"}
+        opts={opts}
+        {...stylex.props(styles.carouselShell)}
+      >
+        <CarouselContent
+          style={
+            isVertical
+              ? { marginTop: "-0.25rem", height: 200 }
+              : undefined
+          }
+        >
+          {slides.map((n) => (
+            <CarouselItem
+              key={n}
+              style={isVertical ? { paddingTop: "0.25rem" } : undefined}
+            >
+              <div {...stylex.props(styles.carouselPad)}>
+                <Card>
+                  <CardContent
+                    {...stylex.props(
+                      isVertical
+                        ? styles.carouselVerticalFace
+                        : styles.carouselSlideFace,
+                    )}
+                  >
+                    <span
+                      {...stylex.props(
+                        isVertical
+                          ? styles.carouselVerticalLabel
+                          : styles.carouselSlideLabel,
+                      )}
+                    >
+                      {n}
+                    </span>
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="carousel"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div data-carousel-well {...stylex.props(styles.carouselWell)}>
+        {carousel}
+      </div>
+    </div>
+  );
+}
+
 function AspectRatioFill() {
   return <div {...stylex.props(styles.aspectRatioFill)} />;
 }
@@ -5495,6 +5673,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "calendar") {
     return <CalendarHarness {...params} />;
   }
+  if (params.component === "carousel") {
+    return <CarouselHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -6017,6 +6198,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "calendar", kit, state, theme };
+  }
+
+  if (component === "carousel") {
+    if (state !== "default" && state !== "next" && state !== "vertical") {
+      return null;
+    }
+    return { component: "carousel", kit, state, theme };
   }
 
   if (component !== "button") return null;

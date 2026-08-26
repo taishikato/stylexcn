@@ -228,6 +228,9 @@ const COMMAND_VIEWPORT = { width: 480, height: 480 };
 const NAVIGATION_MENU_VIEWPORT = { width: 800, height: 600 };
 const CALENDAR_STATES = ["default", "selected", "range"];
 const CALENDAR_VIEWPORT = { width: 400, height: 480 };
+const CAROUSEL_STATES = ["default", "next", "vertical"];
+/* 20rem well + prev/next at ±3rem + 64px crop pad. Stay below Tailwind md. */
+const CAROUSEL_VIEWPORT = { width: 640, height: 560 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -787,6 +790,20 @@ function calendarCases() {
   return list;
 }
 
+function carouselCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of CAROUSEL_STATES) {
+      list.push({
+        component: "carousel",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function aspectRatioCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -943,6 +960,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "calendar") {
     return calendarCases();
   }
+  if (process.env.VISUAL_ONLY === "carousel") {
+    return carouselCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -994,6 +1014,7 @@ function cases() {
     ...commandCases(),
     ...navigationMenuCases(),
     ...calendarCases(),
+    ...carouselCases(),
   ];
 }
 
@@ -1174,6 +1195,9 @@ function slug(c) {
   if (c.component === "calendar") {
     return `calendar__${c.theme}__${c.state}`;
   }
+  if (c.component === "carousel") {
+    return `carousel__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1235,7 +1259,8 @@ function urlFor(kit, c) {
     c.component !== "combobox" &&
     c.component !== "command" &&
     c.component !== "navigation-menu" &&
-    c.component !== "calendar"
+    c.component !== "calendar" &&
+    c.component !== "carousel"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1453,6 +1478,9 @@ function controlLocator(page, c) {
   if (c.component === "calendar") {
     return page.locator('[data-slot="calendar"]');
   }
+  if (c.component === "carousel") {
+    return page.locator('[data-slot="carousel"]');
+  }
   return page.getByRole("button");
 }
 
@@ -1581,6 +1609,18 @@ async function prepareControl(page, c) {
       .waitFor();
     return;
   }
+  if (c.component === "carousel") {
+    await page.locator('[data-slot="carousel"]').waitFor();
+    if (c.state === "next") {
+      await page
+        .locator('[data-slot="carousel-previous"]:not([disabled])')
+        .waitFor();
+    } else {
+      await page.locator('[data-slot="carousel-previous"][disabled]').waitFor();
+    }
+    await page.waitForTimeout(50);
+    return;
+  }
   const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
@@ -1696,7 +1736,7 @@ async function screenshotControl(page, c, dest) {
   const locator = controlLocator(page, c);
   const box = await locator.boundingBox();
   if (!box) throw new Error("no bounding box");
-  const pad = 16;
+  const pad = c.component === "carousel" ? 64 : 16;
   const clip = {
     x: Math.max(0, box.x - pad),
     y: Math.max(0, box.y - pad),
@@ -1816,6 +1856,8 @@ async function main() {
                     ? NAVIGATION_MENU_VIEWPORT
                   : c.component === "calendar"
                     ? CALENDAR_VIEWPORT
+                  : c.component === "carousel"
+                    ? CAROUSEL_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1865,7 +1907,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1926,7 +1968,8 @@ async function main() {
           r.component !== "combobox" &&
           r.component !== "command" &&
           r.component !== "navigation-menu" &&
-          r.component !== "calendar",
+          r.component !== "calendar" &&
+          r.component !== "carousel",
       )
       .map(
         (r) =>
@@ -2637,6 +2680,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "calendar")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Carousel",
+    "",
+    "- Crops `[data-slot=\"carousel\"]` with 64px pad so Previous/Next at `-left-12` / `-right-12` stay in frame. Viewport: 640×560 (below Tailwind `md`).",
+    "- Official side is the live registry Carousel (`embla-carousel-react` + Button). StyleX uses the same primitive with StyleX tables.",
+    "- Pinned `watchDrag: false` and `duration: 0` on both kits. `default` is index 0 (Previous disabled). `next` is `startIndex: 1` (both controls enabled). `vertical` matches the official orientation demo (`align: start`, content `h-[200px]`, item `pt-1`). Each × light/dark.",
+    "- Skipped: Autoplay plugins, RTL, loop, custom `basis-*` sizes, spacing variants, and the API slide-count demo. Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "carousel")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

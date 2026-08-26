@@ -235,6 +235,13 @@ import {
 } from "./components/navigation-menu";
 import { Calendar } from "./components/calendar";
 import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "./components/carousel";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -366,6 +373,13 @@ import {
   OfficialNavigationMenuTrigger,
 } from "./visual/official-navigation-menu";
 import { OfficialCalendar } from "./visual/official-calendar";
+import {
+  OfficialCarousel,
+  OfficialCarouselContent,
+  OfficialCarouselItem,
+  OfficialCarouselNext,
+  OfficialCarouselPrevious,
+} from "./visual/official-carousel";
 import {
   OfficialTable,
   OfficialTableBody,
@@ -739,7 +753,7 @@ function Playground() {
         Sheet, Drawer, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Navigation Menu, Calendar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
+        Menubar, Navigation Menu, Calendar, Carousel, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, Item, Input OTP, Field, Combobox, and Command vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1768,6 +1782,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
       <div {...stylex.props(styles.row)}>
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundCalendar kit="shadcn" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Carousel
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundCarousel kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Carousel
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundCarousel kit="shadcn" />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Aspect Ratio
@@ -3231,6 +3259,70 @@ function PlaygroundCalendar({ kit }: { kit: "stylex" | "shadcn" }) {
     return <OfficialCalendar today={today} defaultMonth={month} mode="single" />;
   }
   return <Calendar today={today} defaultMonth={month} mode="single" />;
+}
+
+function PlaygroundCarousel({ kit }: { kit: "stylex" | "shadcn" }) {
+  const slides = [1, 2, 3, 4, 5];
+  if (kit === "shadcn") {
+    return (
+      <div style={{ width: "20rem" }}>
+        <OfficialCarousel className="w-full max-w-xs">
+          <OfficialCarouselContent>
+            {slides.map((n) => (
+              <OfficialCarouselItem key={n}>
+                <div className="p-1">
+                  <OfficialCard>
+                    <OfficialCardContent className="flex aspect-square items-center justify-center p-6">
+                      <span className="text-4xl font-semibold">{n}</span>
+                    </OfficialCardContent>
+                  </OfficialCard>
+                </div>
+              </OfficialCarouselItem>
+            ))}
+          </OfficialCarouselContent>
+          <OfficialCarouselPrevious />
+          <OfficialCarouselNext />
+        </OfficialCarousel>
+      </div>
+    );
+  }
+  return (
+    <div style={{ width: "20rem" }}>
+      <Carousel style={{ width: "100%", maxWidth: "20rem" }}>
+        <CarouselContent>
+          {slides.map((n) => (
+            <CarouselItem key={n}>
+              <div style={{ padding: "0.25rem" }}>
+                <Card>
+                  <CardContent
+                    style={{
+                      display: "flex",
+                      aspectRatio: "1 / 1",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      padding: "1.5rem",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: "2.25rem",
+                        lineHeight: "2.5rem",
+                        fontWeight: 600,
+                      }}
+                    >
+                      {n}
+                    </span>
+                  </CardContent>
+                </Card>
+              </div>
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+        <CarouselPrevious />
+        <CarouselNext />
+      </Carousel>
+    </div>
+  );
 }
 
 function PlaygroundNavigationMenu({ kit }: { kit: "stylex" | "shadcn" }) {

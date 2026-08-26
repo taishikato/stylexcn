@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T15:56:49.281Z",
-  "total": 450,
+  "generatedAt": "2026-08-26T17:50:01.699Z",
+  "total": 456,
   "failed": 0,
-  "passed": 450,
+  "passed": 456,
   "threshold": 0,
   "cases": [
     {
@@ -6450,6 +6450,90 @@
       "shadcn": "visual/results/shadcn/calendar__dark__range.png",
       "stylex": "visual/results/stylex/calendar__dark__range.png",
       "diff": "visual/results/diff/calendar__dark__range.png"
+    },
+    {
+      "name": "carousel__light__default",
+      "component": "carousel",
+      "state": "default",
+      "theme": "light",
+      "width": 448,
+      "height": 496,
+      "mismatched": 0,
+      "pixels": 222208,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/carousel__light__default.png",
+      "stylex": "visual/results/stylex/carousel__light__default.png",
+      "diff": "visual/results/diff/carousel__light__default.png"
+    },
+    {
+      "name": "carousel__light__next",
+      "component": "carousel",
+      "state": "next",
+      "theme": "light",
+      "width": 448,
+      "height": 496,
+      "mismatched": 0,
+      "pixels": 222208,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/carousel__light__next.png",
+      "stylex": "visual/results/stylex/carousel__light__next.png",
+      "diff": "visual/results/diff/carousel__light__next.png"
+    },
+    {
+      "name": "carousel__light__vertical",
+      "component": "carousel",
+      "state": "vertical",
+      "theme": "light",
+      "width": 448,
+      "height": 324,
+      "mismatched": 0,
+      "pixels": 145152,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/carousel__light__vertical.png",
+      "stylex": "visual/results/stylex/carousel__light__vertical.png",
+      "diff": "visual/results/diff/carousel__light__vertical.png"
+    },
+    {
+      "name": "carousel__dark__default",
+      "component": "carousel",
+      "state": "default",
+      "theme": "dark",
+      "width": 448,
+      "height": 496,
+      "mismatched": 0,
+      "pixels": 222208,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/carousel__dark__default.png",
+      "stylex": "visual/results/stylex/carousel__dark__default.png",
+      "diff": "visual/results/diff/carousel__dark__default.png"
+    },
+    {
+      "name": "carousel__dark__next",
+      "component": "carousel",
+      "state": "next",
+      "theme": "dark",
+      "width": 448,
+      "height": 496,
+      "mismatched": 0,
+      "pixels": 222208,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/carousel__dark__next.png",
+      "stylex": "visual/results/stylex/carousel__dark__next.png",
+      "diff": "visual/results/diff/carousel__dark__next.png"
+    },
+    {
+      "name": "carousel__dark__vertical",
+      "component": "carousel",
+      "state": "vertical",
+      "theme": "dark",
+      "width": 448,
+      "height": 324,
+      "mismatched": 0,
+      "pixels": 145152,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/carousel__dark__vertical.png",
+      "stylex": "visual/results/stylex/carousel__dark__vertical.png",
+      "diff": "visual/results/diff/carousel__dark__vertical.png"
     }
   ]
 }
