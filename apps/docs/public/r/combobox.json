@@ -2,7 +2,7 @@
   "$schema": "https://ui.shadcn.com/schema/registry-item.json",
   "name": "combobox",
   "title": "Combobox",
-  "description": "Autocomplete input with a list of suggestions.",
+  "description": "Autocomplete with a suggestion list. Open, type, select, and chips.",
   "dependencies": [
     "@base-ui/react",
     "@stylexjs/stylex",

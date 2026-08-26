@@ -260,7 +260,7 @@
       "name": "combobox",
       "type": "registry:ui",
       "title": "Combobox",
-      "description": "Autocomplete input with a list of suggestions.",
+      "description": "Autocomplete with a suggestion list. Open, type, select, and chips.",
       "files": [
         {
           "path": "registry/ui/combobox.tsx",
