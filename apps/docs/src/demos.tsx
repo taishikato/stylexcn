@@ -14,8 +14,8 @@ import {
 } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { type DateRange } from "react-day-picker";
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { enUS } from "react-day-picker/locale";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Accordion,
   AccordionContent,
