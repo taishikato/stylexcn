@@ -172,6 +172,20 @@ const sizes = stylex.create({
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
   },
+  /* Official Button `icon-xs`: size-6 rounded-md, svg size-3. Combobox chips. */
+  "icon-xs": {
+    width: "1.5rem",
+    height: "1.5rem",
+    padding: 0,
+    gap: "0.5rem",
+    borderRadius: tokens["--radius-md"],
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    ":not(#\\0) svg:not([class*='size-'])": {
+      width: "0.75rem",
+      height: "0.75rem",
+    },
+  },
 });
 
 const base = stylex.create({

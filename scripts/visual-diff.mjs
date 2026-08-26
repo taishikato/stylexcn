@@ -157,6 +157,21 @@ const FIELD_STATES = [
   "invalid",
   "choice-card",
 ];
+const COMBOBOX_STATES = [
+  "default",
+  "selected",
+  "focus-visible",
+  "disabled",
+  "invalid",
+  "clear",
+  "chips",
+  "addon",
+  "open",
+  "empty",
+  "group",
+  "popup",
+];
+const COMBOBOX_OPEN_STATES = new Set(["open", "empty", "group", "popup"]);
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -202,6 +217,8 @@ const INPUT_OTP_VIEWPORT = { width: 400, height: 200 };
 /* Field wells are 16rem (below @md/field-group 28rem) except responsive at 32rem. */
 const FIELD_VIEWPORT = { width: 480, height: 480 };
 const FIELD_RESPONSIVE_VIEWPORT = { width: 640, height: 400 };
+const COMBOBOX_OPEN_VIEWPORT = { width: 640, height: 560 };
+const COMBOBOX_VIEWPORT = { width: 480, height: 240 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -906,7 +923,22 @@ function cases() {
     ...itemCases(),
     ...inputOtpCases(),
     ...fieldCases(),
+    ...comboboxCases(),
   ];
+}
+
+function comboboxCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of COMBOBOX_STATES) {
+      list.push({
+        component: "combobox",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
 }
 
 function slug(c) {
@@ -1043,6 +1075,9 @@ function slug(c) {
   if (c.component === "field") {
     return `field__${c.theme}__${c.state}`;
   }
+  if (c.component === "combobox") {
+    return `combobox__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1099,7 +1134,8 @@ function urlFor(kit, c) {
     c.component !== "input-group" &&
     c.component !== "item" &&
     c.component !== "input-otp" &&
-    c.component !== "field"
+    c.component !== "field" &&
+    c.component !== "combobox"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1293,6 +1329,15 @@ function controlLocator(page, c) {
   if (c.component === "field") {
     return page.locator('[data-slot="field-group"]');
   }
+  if (c.component === "combobox") {
+    if (c.state === "chips") {
+      return page.locator('[data-slot="combobox-chips"]');
+    }
+    if (COMBOBOX_OPEN_STATES.has(c.state)) {
+      return page.locator('[data-slot="combobox-content"]');
+    }
+    return page.locator('[data-slot="input-group"]');
+  }
   return page.getByRole("button");
 }
 
@@ -1386,6 +1431,10 @@ async function prepareControl(page, c) {
     }
     return;
   }
+  if (c.component === "combobox" && COMBOBOX_OPEN_STATES.has(c.state)) {
+    await page.locator('[data-slot="combobox-content"]').waitFor();
+    return;
+  }
   const locator = controlLocator(page, c);
   await locator.waitFor();
   if (c.state === "hover") {
@@ -1460,6 +1509,11 @@ async function screenshotControl(page, c, dest) {
   if (c.component === "tooltip") {
     await page.locator('[data-slot="tooltip-trigger"]').waitFor();
     await page.locator('[data-slot="tooltip-content"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
+  if (c.component === "combobox" && COMBOBOX_OPEN_STATES.has(c.state)) {
+    await page.locator('[data-slot="combobox-content"]').waitFor();
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
@@ -1571,6 +1625,10 @@ async function main() {
                     ? FIELD_RESPONSIVE_VIEWPORT
                   : c.component === "field"
                     ? FIELD_VIEWPORT
+                  : c.component === "combobox" && COMBOBOX_OPEN_STATES.has(c.state)
+                    ? COMBOBOX_OPEN_VIEWPORT
+                  : c.component === "combobox"
+                    ? COMBOBOX_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1620,7 +1678,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1676,7 +1734,8 @@ async function main() {
           r.component !== "input-group" &&
           r.component !== "item" &&
           r.component !== "input-otp" &&
-          r.component !== "field",
+          r.component !== "field" &&
+          r.component !== "combobox",
       )
       .map(
         (r) =>
@@ -2308,6 +2367,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "field")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Combobox",
+    "",
+    "- Closed states crop `[data-slot=\"input-group\"]` (or `[data-slot=\"combobox-chips\"]`) with 16px pad.",
+    "- Open states (`open` / `empty` / `group` / `popup`) are full-viewport. Official side is the live registry Combobox family. StyleX is Base UI Combobox + StyleX Input Group / Button tables.",
+    "- States: `default` / `selected` / `focus-visible` / `disabled` / `invalid` / `clear` / `chips` / `addon` / `open` / `empty` / `group` / `popup`, each × light/dark.",
+    "- Skipped: RTL (needs the docs language selector) and custom Item rows (Item composition is already covered by Item). Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "combobox")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

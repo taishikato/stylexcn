@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { useLayoutEffect } from "react";
+import { useLayoutEffect, useRef } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -64,7 +64,7 @@ import {
   PaginationPrevious,
 } from "../components/pagination";
 import { Separator } from "../components/separator";
-import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
+import { Button, buttonBase, buttonSizes, buttonVariants, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
   ButtonGroup,
   ButtonGroupSeparator,
@@ -135,6 +135,23 @@ import {
   InputOTPSlot,
 } from "../components/input-otp";
 import {
+  Combobox,
+  ComboboxChip,
+  ComboboxChips,
+  ComboboxChipsInput,
+  ComboboxCollection,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxGroup,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxLabel,
+  ComboboxList,
+  ComboboxSeparator,
+  ComboboxTrigger,
+  ComboboxValue,
+} from "../components/combobox";
+import {
   Field,
   FieldContent,
   FieldDescription,
@@ -198,7 +215,8 @@ import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
-import { CircleAlert, Command, Inbox, Search } from "lucide-react";
+import { CircleAlert, Command, GlobeIcon, Inbox, Search } from "lucide-react";
+import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { AspectRatio } from "../components/aspect-ratio";
 import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import {
@@ -337,6 +355,23 @@ import {
   OfficialInputOTPSeparator,
   OfficialInputOTPSlot,
 } from "./official-input-otp";
+import {
+  OfficialCombobox,
+  OfficialComboboxChip,
+  OfficialComboboxChips,
+  OfficialComboboxChipsInput,
+  OfficialComboboxCollection,
+  OfficialComboboxContent,
+  OfficialComboboxEmpty,
+  OfficialComboboxGroup,
+  OfficialComboboxInput,
+  OfficialComboboxItem,
+  OfficialComboboxLabel,
+  OfficialComboboxList,
+  OfficialComboboxSeparator,
+  OfficialComboboxTrigger,
+  OfficialComboboxValue,
+} from "./official-combobox";
 import {
   OfficialField,
   OfficialFieldContent,
@@ -540,7 +575,9 @@ export type CaptureComponent =
   | "empty"
   | "input-group"
   | "item"
-  | "input-otp";
+  | "input-otp"
+  | "field"
+  | "combobox";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -591,7 +628,11 @@ export type CaptureState =
   | "muted"
   | "media"
   | "image"
-  | "header-footer";
+  | "header-footer"
+  | "clear"
+  | "chips"
+  | "addon"
+  | "popup";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -960,6 +1001,25 @@ export type FieldCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ComboboxCaptureParams = {
+  component: "combobox";
+  kit: CaptureKit;
+  state:
+    | "default"
+    | "selected"
+    | "focus-visible"
+    | "disabled"
+    | "invalid"
+    | "clear"
+    | "chips"
+    | "addon"
+    | "open"
+    | "empty"
+    | "group"
+    | "popup";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1005,7 +1065,8 @@ export type CaptureParams =
   | InputGroupCaptureParams
   | ItemCaptureParams
   | InputOtpCaptureParams
-  | FieldCaptureParams;
+  | FieldCaptureParams
+  | ComboboxCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1227,6 +1288,11 @@ const styles = stylex.create({
   /* Above @md/field-group (28rem) so official container query and StyleX agree. */
   fieldResponsiveWell: {
     width: "32rem",
+  },
+  comboboxPopupTrigger: {
+    width: "16rem",
+    justifyContent: "space-between",
+    fontWeight: 400,
   },
 });
 
@@ -4459,6 +4525,300 @@ function FieldDemo({
   );
 }
 
+const COMBOBOX_FRAMEWORKS = [
+  "Next.js",
+  "SvelteKit",
+  "Nuxt.js",
+  "Remix",
+  "Astro",
+] as const;
+
+const COMBOBOX_GROUPS = [
+  {
+    value: "Americas",
+    items: ["(GMT-5) New York", "(GMT-8) Los Angeles"],
+  },
+  {
+    value: "Europe",
+    items: ["(GMT+0) London", "(GMT+1) Paris"],
+  },
+] as const;
+
+const COMBOBOX_COUNTRIES = [
+  { code: "", value: "", continent: "", label: "Select country" },
+  {
+    code: "ar",
+    value: "argentina",
+    label: "Argentina",
+    continent: "South America",
+  },
+  {
+    code: "jp",
+    value: "japan",
+    label: "Japan",
+    continent: "Asia",
+  },
+] as const;
+
+function ComboboxListItems({
+  kit,
+  items = COMBOBOX_FRAMEWORKS,
+}: {
+  kit: CaptureKit;
+  items?: readonly string[];
+}) {
+  const Item = kit === "shadcn" ? OfficialComboboxItem : ComboboxItem;
+  return (
+    <>
+      {items.map((item) => (
+        <Item key={item} value={item}>
+          {item}
+        </Item>
+      ))}
+    </>
+  );
+}
+
+function ComboboxChipsDemo({ kit }: { kit: CaptureKit }) {
+  const anchor = useRef<HTMLDivElement | null>(null);
+  const Root = kit === "shadcn" ? OfficialCombobox : Combobox;
+  const Chips = kit === "shadcn" ? OfficialComboboxChips : ComboboxChips;
+  const Value = kit === "shadcn" ? OfficialComboboxValue : ComboboxValue;
+  const Chip = kit === "shadcn" ? OfficialComboboxChip : ComboboxChip;
+  const ChipsInput =
+    kit === "shadcn" ? OfficialComboboxChipsInput : ComboboxChipsInput;
+  const Content = kit === "shadcn" ? OfficialComboboxContent : ComboboxContent;
+  const Empty = kit === "shadcn" ? OfficialComboboxEmpty : ComboboxEmpty;
+  const List = kit === "shadcn" ? OfficialComboboxList : ComboboxList;
+
+  return (
+    <Root
+      multiple
+      items={COMBOBOX_FRAMEWORKS}
+      defaultValue={[COMBOBOX_FRAMEWORKS[0]]}
+    >
+      <Chips ref={anchor}>
+        <Value>
+          {(values: string[]) => (
+            <>
+              {values.map((value) => (
+                <Chip key={value}>{value}</Chip>
+              ))}
+              <ChipsInput />
+            </>
+          )}
+        </Value>
+      </Chips>
+      <Content anchor={anchor}>
+        <Empty>No items found.</Empty>
+        <List>
+          <ComboboxListItems kit={kit} />
+        </List>
+      </Content>
+    </Root>
+  );
+}
+
+function ComboboxPopupDemo({ kit }: { kit: CaptureKit }) {
+  if (kit === "shadcn") {
+    return (
+      <OfficialCombobox
+        items={COMBOBOX_COUNTRIES}
+        defaultValue={COMBOBOX_COUNTRIES[0]}
+        open
+        onOpenChange={() => {}}
+      >
+        <OfficialComboboxTrigger
+          render={
+            <OfficialButton
+              variant="outline"
+              className="w-64 justify-between font-normal"
+            />
+          }
+        >
+          <OfficialComboboxValue />
+        </OfficialComboboxTrigger>
+        <OfficialComboboxContent>
+          <OfficialComboboxInput showTrigger={false} placeholder="Search" />
+          <OfficialComboboxEmpty>No items found.</OfficialComboboxEmpty>
+          <OfficialComboboxList>
+            {(item: (typeof COMBOBOX_COUNTRIES)[number]) => (
+              <OfficialComboboxItem key={item.code} value={item}>
+                {item.label}
+              </OfficialComboboxItem>
+            )}
+          </OfficialComboboxList>
+        </OfficialComboboxContent>
+      </OfficialCombobox>
+    );
+  }
+  return (
+    <Combobox
+      items={COMBOBOX_COUNTRIES}
+      defaultValue={COMBOBOX_COUNTRIES[0]}
+      open
+      onOpenChange={() => {}}
+    >
+      <ComboboxTrigger
+        render={
+          <ButtonPrimitive
+            data-slot="button"
+            data-variant="outline"
+            data-size="default"
+            {...stylex.props(
+              buttonBase.root,
+              buttonVariants.outline,
+              buttonSizes.default,
+              styles.comboboxPopupTrigger,
+            )}
+          />
+        }
+      >
+        <ComboboxValue />
+      </ComboboxTrigger>
+      <ComboboxContent>
+        <ComboboxInput showTrigger={false} placeholder="Search" />
+        <ComboboxEmpty>No items found.</ComboboxEmpty>
+        <ComboboxList>
+          {(item: (typeof COMBOBOX_COUNTRIES)[number]) => (
+            <ComboboxItem key={item.code} value={item}>
+              {item.label}
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
+  );
+}
+
+function ComboboxDemo({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: ComboboxCaptureParams["state"];
+}) {
+  if (state === "chips") {
+    return <ComboboxChipsDemo kit={kit} />;
+  }
+  if (state === "popup") {
+    return <ComboboxPopupDemo kit={kit} />;
+  }
+
+  const Root = kit === "shadcn" ? OfficialCombobox : Combobox;
+  const Input = kit === "shadcn" ? OfficialComboboxInput : ComboboxInput;
+  const Content = kit === "shadcn" ? OfficialComboboxContent : ComboboxContent;
+  const Empty = kit === "shadcn" ? OfficialComboboxEmpty : ComboboxEmpty;
+  const List = kit === "shadcn" ? OfficialComboboxList : ComboboxList;
+  const Group = kit === "shadcn" ? OfficialComboboxGroup : ComboboxGroup;
+  const Label = kit === "shadcn" ? OfficialComboboxLabel : ComboboxLabel;
+  const Collection =
+    kit === "shadcn" ? OfficialComboboxCollection : ComboboxCollection;
+  const Separator =
+    kit === "shadcn" ? OfficialComboboxSeparator : ComboboxSeparator;
+  const Addon = kit === "shadcn" ? OfficialInputGroupAddon : InputGroupAddon;
+  const Item = kit === "shadcn" ? OfficialComboboxItem : ComboboxItem;
+
+  const disabled = state === "disabled";
+  const invalid = state === "invalid";
+  const isOpen = state === "open" || state === "empty" || state === "group";
+  const selected = state === "selected" || state === "clear" || state === "open";
+  const showClear = state === "clear";
+  const autoFocus = state === "focus-visible";
+
+  if (state === "group") {
+    return (
+      <Root items={COMBOBOX_GROUPS} open onOpenChange={() => {}}>
+        <Input placeholder="Select a timezone" />
+        <Content>
+          <Empty>No timezones found.</Empty>
+          <List>
+            {(group: (typeof COMBOBOX_GROUPS)[number], index: number) => (
+              <Group key={group.value} items={group.items}>
+                <Label>{group.value}</Label>
+                <Collection>
+                  {(item: string) => (
+                    <Item key={item} value={item}>
+                      {item}
+                    </Item>
+                  )}
+                </Collection>
+                {index < COMBOBOX_GROUPS.length - 1 && <Separator />}
+              </Group>
+            )}
+          </List>
+        </Content>
+      </Root>
+    );
+  }
+
+  if (state === "addon") {
+    return (
+      <Root items={COMBOBOX_FRAMEWORKS}>
+        <Input placeholder="Select a framework">
+          <Addon>
+            <GlobeIcon />
+          </Addon>
+        </Input>
+        <Content>
+          <Empty>No items found.</Empty>
+          <List>
+            <ComboboxListItems kit={kit} />
+          </List>
+        </Content>
+      </Root>
+    );
+  }
+
+  return (
+    <Root
+      items={COMBOBOX_FRAMEWORKS}
+      defaultValue={selected ? COMBOBOX_FRAMEWORKS[0] : undefined}
+      open={isOpen ? true : undefined}
+      onOpenChange={() => {}}
+      inputValue={state === "empty" ? "no-match" : undefined}
+      onInputValueChange={() => {}}
+    >
+      <Input
+        placeholder="Select a framework"
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+        showClear={showClear}
+        autoFocus={autoFocus}
+      />
+      <Content>
+        <Empty>No items found.</Empty>
+        <List>
+          <ComboboxListItems kit={kit} />
+        </List>
+      </Content>
+    </Root>
+  );
+}
+
+function ComboboxHarness({ kit, state, theme }: ComboboxCaptureParams) {
+  const isDark = theme === "dark";
+  const isOpen =
+    state === "open" || state === "empty" || state === "group" || state === "popup";
+  usePortalDocumentTheme(isDark);
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="combobox"
+      data-state={state}
+      {...stylex.props(
+        isDark && darkTheme,
+        isOpen ? styles.selectOpenFrame : styles.frame,
+      )}
+    >
+      <ComboboxDemo kit={kit} state={state} />
+    </div>
+  );
+}
+
 function FieldHarness({ kit, state, theme }: FieldCaptureParams) {
   const isDark = theme === "dark";
   const well = state === "responsive" ? styles.fieldResponsiveWell : styles.fieldWell;
@@ -4611,6 +4971,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "field") {
     return <FieldHarness {...params} />;
+  }
+  if (params.component === "combobox") {
+    return <ComboboxHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -5077,11 +5440,31 @@ export function parseCaptureParams(search: string): CaptureParams | null {
     return { component: "field", kit, state, theme };
   }
 
+  if (component === "combobox") {
+    if (
+      state !== "default" &&
+      state !== "selected" &&
+      state !== "focus-visible" &&
+      state !== "disabled" &&
+      state !== "invalid" &&
+      state !== "clear" &&
+      state !== "chips" &&
+      state !== "addon" &&
+      state !== "open" &&
+      state !== "empty" &&
+      state !== "group" &&
+      state !== "popup"
+    ) {
+      return null;
+    }
+    return { component: "combobox", kit, state, theme };
+  }
+
   if (component !== "button") return null;
   const variant = q.get("variant");
   const size = q.get("size");
   if (!VARIANTS.includes(variant as ButtonVariant)) return null;
-  if (!SIZES.includes(size as ButtonSize)) return null;
+  if (!SIZES.includes(size as (typeof SIZES)[number])) return null;
   if (
     state !== "default" &&
     state !== "hover" &&
