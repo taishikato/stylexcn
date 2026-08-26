@@ -19,6 +19,7 @@ import {
   AvatarGroupCount,
 } from "../components/avatar";
 import { Badge, type BadgeVariant } from "../components/badge";
+import { Kbd, KbdGroup } from "../components/kbd";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -151,7 +152,7 @@ import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Command } from "lucide-react";
 import { AspectRatio } from "../components/aspect-ratio";
 import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import {
@@ -204,6 +205,7 @@ import {
   OfficialAvatarGroupCount,
 } from "./official-avatar";
 import { OfficialBadge } from "./official-badge";
+import { OfficialKbd, OfficialKbdGroup } from "./official-kbd";
 import {
   OfficialBreadcrumb,
   OfficialBreadcrumbEllipsis,
@@ -441,7 +443,8 @@ export type CaptureComponent =
   | "aspect-ratio"
   | "table"
   | "resizable"
-  | "button-group";
+  | "button-group"
+  | "kbd";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -479,7 +482,8 @@ export type CaptureState =
   | "with-footer"
   | "separator"
   | "text"
-  | "nested";
+  | "nested"
+  | "tooltip";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -772,6 +776,13 @@ export type ButtonGroupCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type KbdCaptureParams = {
+  component: "kbd";
+  kit: CaptureKit;
+  state: "default" | "with-icon" | "group" | "tooltip";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -811,7 +822,8 @@ export type CaptureParams =
   | AspectRatioCaptureParams
   | TableCaptureParams
   | ResizableCaptureParams
-  | ButtonGroupCaptureParams;
+  | ButtonGroupCaptureParams
+  | KbdCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -3369,6 +3381,78 @@ function ButtonGroupHarness({ kit, state, theme }: ButtonGroupCaptureParams) {
   );
 }
 
+const KBD_LABEL = "Ctrl";
+const KBD_GROUP_MOD = "Ctrl";
+const KBD_GROUP_KEY = "B";
+const KBD_TOOLTIP_LABEL = "⌘S";
+
+function KbdBody({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: KbdCaptureParams["state"];
+}) {
+  if (state === "with-icon") {
+    return kit === "shadcn" ? (
+      <OfficialKbd>
+        <Command />
+      </OfficialKbd>
+    ) : (
+      <Kbd>
+        <Command />
+      </Kbd>
+    );
+  }
+
+  if (state === "group") {
+    return kit === "shadcn" ? (
+      <OfficialKbdGroup>
+        <OfficialKbd>{KBD_GROUP_MOD}</OfficialKbd>
+        <OfficialKbd>{KBD_GROUP_KEY}</OfficialKbd>
+      </OfficialKbdGroup>
+    ) : (
+      <KbdGroup>
+        <Kbd>{KBD_GROUP_MOD}</Kbd>
+        <Kbd>{KBD_GROUP_KEY}</Kbd>
+      </KbdGroup>
+    );
+  }
+
+  if (state === "tooltip") {
+    const kbd =
+      kit === "shadcn" ? (
+        <OfficialKbd>{KBD_TOOLTIP_LABEL}</OfficialKbd>
+      ) : (
+        <Kbd>{KBD_TOOLTIP_LABEL}</Kbd>
+      );
+    return <div data-slot="tooltip-content">{kbd}</div>;
+  }
+
+  return kit === "shadcn" ? (
+    <OfficialKbd>{KBD_LABEL}</OfficialKbd>
+  ) : (
+    <Kbd>{KBD_LABEL}</Kbd>
+  );
+}
+
+function KbdHarness({ kit, state, theme }: KbdCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="kbd"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <KbdBody kit={kit} state={state} />
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -3513,6 +3597,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "button-group") {
     return <ButtonGroupHarness {...params} />;
+  }
+  if (params.component === "kbd") {
+    return <KbdHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -3883,6 +3970,18 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "button-group", kit, state, theme };
+  }
+
+  if (component === "kbd") {
+    if (
+      state !== "default" &&
+      state !== "with-icon" &&
+      state !== "group" &&
+      state !== "tooltip"
+    ) {
+      return null;
+    }
+    return { component: "kbd", kit, state, theme };
   }
 
   if (component !== "button") return null;

@@ -30,6 +30,7 @@ import {
   AlertDialogTrigger,
 } from "./components/alert-dialog";
 import { Badge, type BadgeVariant } from "./components/badge";
+import { Kbd, KbdGroup } from "./components/kbd";
 import {
   Breadcrumb,
   BreadcrumbEllipsis,
@@ -172,7 +173,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "./components/resizable";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Command } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -218,6 +219,7 @@ import {
   OfficialAlertDialogTrigger,
 } from "./visual/official-alert-dialog";
 import { OfficialBadge } from "./visual/official-badge";
+import { OfficialKbd, OfficialKbdGroup } from "./visual/official-kbd";
 import {
   OfficialBreadcrumb,
   OfficialBreadcrumbEllipsis,
@@ -536,8 +538,9 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, and Resizable vs official shadcn New York
-        baseline. Visual capture lives at query-param harness URLs (see README).
+        Menubar, Aspect Ratio, Table, Resizable, and Kbd vs official shadcn New
+        York baseline. Visual capture lives at query-param harness URLs (see
+        README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1591,6 +1594,40 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>vertical</span>
         <div {...stylex.props(styles.resizableVerticalWell)}>
           <PlaygroundResizable kit="shadcn" orientation="vertical" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Kbd
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <Kbd>Ctrl</Kbd>
+        <Kbd>
+          <Command />
+        </Kbd>
+        <KbdGroup>
+          <Kbd>Ctrl</Kbd>
+          <Kbd>B</Kbd>
+        </KbdGroup>
+        <div data-slot="tooltip-content">
+          <Kbd>⌘S</Kbd>
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Kbd
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <OfficialKbd>Ctrl</OfficialKbd>
+        <OfficialKbd>
+          <Command />
+        </OfficialKbd>
+        <OfficialKbdGroup>
+          <OfficialKbd>Ctrl</OfficialKbd>
+          <OfficialKbd>B</OfficialKbd>
+        </OfficialKbdGroup>
+        <div data-slot="tooltip-content">
+          <OfficialKbd>⌘S</OfficialKbd>
         </div>
       </div>
     </div>

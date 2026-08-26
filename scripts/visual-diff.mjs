@@ -108,6 +108,7 @@ const BUTTON_GROUP_STATES = [
   "text",
   "nested",
 ];
+const KBD_STATES = ["default", "with-icon", "group", "tooltip"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -715,6 +716,20 @@ function buttonGroupCases() {
   return list;
 }
 
+function kbdCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of KBD_STATES) {
+      list.push({
+        component: "kbd",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -756,6 +771,7 @@ function cases() {
     ...tableCases(),
     ...resizableCases(),
     ...buttonGroupCases(),
+    ...kbdCases(),
   ];
 }
 
@@ -875,6 +891,9 @@ function slug(c) {
   if (c.component === "button-group") {
     return `button-group__${c.theme}__${c.state}`;
   }
+  if (c.component === "kbd") {
+    return `kbd__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -925,7 +944,8 @@ function urlFor(kit, c) {
     c.component !== "aspect-ratio" &&
     c.component !== "table" &&
     c.component !== "resizable" &&
-    c.component !== "button-group"
+    c.component !== "button-group" &&
+    c.component !== "kbd"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1094,6 +1114,12 @@ function controlLocator(page, c) {
   }
   if (c.component === "button-group") {
     return page.locator('[data-slot="button-group"]').first();
+  }
+  if (c.component === "kbd") {
+    if (c.state === "group") {
+      return page.locator('[data-slot="kbd-group"]');
+    }
+    return page.locator('[data-slot="kbd"]');
   }
   return page.getByRole("button");
 }
@@ -1401,7 +1427,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1451,7 +1477,8 @@ async function main() {
           r.component !== "aspect-ratio" &&
           r.component !== "table" &&
           r.component !== "resizable" &&
-          r.component !== "button-group",
+          r.component !== "button-group" &&
+          r.component !== "kbd",
       )
       .map(
         (r) =>
@@ -1983,6 +2010,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "button-group")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Kbd",
+    "",
+    "- Crops `[data-slot=\"kbd\"]` (or `[data-slot=\"kbd-group\"]` for `group`) with 16px pad.",
+    "- Identical copy on both kits: `default` is `Ctrl`; `with-icon` is lucide `Command` with no `size-*` class so official `size-3` applies; `group` is KbdGroup of `Ctrl` + `B`.",
+    "- `tooltip` wraps a single `⌘S` Kbd in a `data-slot=\"tooltip-content\"` ancestor (no portaled Tooltip) so `bg-background/20` / dark `bg-background/10` and `text-background` apply stably.",
+    "- States: `default` / `with-icon` / `group` / `tooltip`, each × light/dark. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "kbd")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
