@@ -157,6 +157,24 @@ export const COMPONENTS: ComponentDoc[] = [
 </DropdownMenu>`,
   },
   {
+    slug: "empty",
+    name: "Empty",
+    description:
+      "Placeholder for a vacant list or page. Media, title, description, and optional action.",
+    usage: `<Empty>
+  <EmptyHeader>
+    <EmptyMedia variant="icon">
+      <Inbox />
+    </EmptyMedia>
+    <EmptyTitle>No messages</EmptyTitle>
+    <EmptyDescription>You don't have any messages yet.</EmptyDescription>
+  </EmptyHeader>
+  <EmptyContent>
+    <Button>Send a message</Button>
+  </EmptyContent>
+</Empty>`,
+  },
+  {
     slug: "hover-card",
     name: "Hover Card",
     description: "Preview card on hover or focus.",

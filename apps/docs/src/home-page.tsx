@@ -1,6 +1,7 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
+import { Inbox } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -25,6 +26,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@stylexcn/components/dialog";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@stylexcn/components/empty";
 import { Input } from "@stylexcn/components/input";
 import { Kbd, KbdGroup } from "@stylexcn/components/kbd";
 import { Label } from "@stylexcn/components/label";
@@ -110,6 +119,9 @@ function Showcase() {
         </div>
         <div {...stylex.props(landing.span6)}>
           <ClaimTile />
+        </div>
+        <div {...stylex.props(landing.span6)}>
+          <EmptyTile />
         </div>
       </div>
       <div {...stylex.props(landing.strip)}>
@@ -488,5 +500,27 @@ function ClaimTile() {
         <Button>View full report</Button>
       </CardFooter>
     </Card>
+  );
+}
+
+function EmptyTile() {
+  return (
+    <div {...stylex.props(landing.tile)}>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Inbox />
+          </EmptyMedia>
+          <EmptyTitle>No releases</EmptyTitle>
+          <EmptyDescription>
+            Upload your first master to start reaching listeners on Spotify,
+            Apple Music, and more.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button>Create release</Button>
+        </EmptyContent>
+      </Empty>
+    </div>
   );
 }

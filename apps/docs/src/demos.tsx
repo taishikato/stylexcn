@@ -1,7 +1,7 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Inbox } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import {
   Accordion,
@@ -90,6 +90,14 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@stylexcn/components/dropdown-menu";
+import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "@stylexcn/components/empty";
 import {
   HoverCard,
   HoverCardContent,
@@ -552,6 +560,38 @@ function DropdownMenuDemo() {
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function EmptyDemo() {
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia>
+            <Inbox />
+          </EmptyMedia>
+          <EmptyTitle>No messages</EmptyTitle>
+          <EmptyDescription>
+            You don&apos;t have any messages yet.
+          </EmptyDescription>
+        </EmptyHeader>
+      </Empty>
+      <Empty>
+        <EmptyHeader>
+          <EmptyMedia variant="icon">
+            <Inbox />
+          </EmptyMedia>
+          <EmptyTitle>No messages</EmptyTitle>
+          <EmptyDescription>
+            You don&apos;t have any messages yet.
+          </EmptyDescription>
+        </EmptyHeader>
+        <EmptyContent>
+          <Button>Send a message</Button>
+        </EmptyContent>
+      </Empty>
+    </div>
   );
 }
 
@@ -1095,6 +1135,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   "context-menu": ContextMenuDemo,
   dialog: DialogDemo,
   "dropdown-menu": DropdownMenuDemo,
+  empty: EmptyDemo,
   "hover-card": HoverCardDemo,
   input: InputDemo,
   kbd: KbdDemo,
