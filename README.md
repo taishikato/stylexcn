@@ -15,6 +15,17 @@ Copied from:
 
 Dark overrides: `src/theme.ts` via `stylex.createTheme`. Radius scale from current shadcn v4 `@theme inline` (`apps/v4/app/globals.css`).
 
+## Docs site
+
+A Next.js App Router site in `apps/docs` for browsing live StyleX components. The Vite playground at the repo root is still the visual-regression harness.
+
+```bash
+npm install
+npm run docs
+```
+
+http://localhost:3000 — English landing page, `/docs` index, and a live demo per component. Light / dark toggle in the header. Production build: `npm run docs:build`. See `apps/docs/README.md`.
+
 ## Playground
 
 ```bash

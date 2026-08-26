@@ -5,3 +5,5 @@ dist
 playwright-report
 test-results
 /visual/tmp
+apps/docs/.next
+apps/docs/out

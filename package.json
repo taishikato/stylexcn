@@ -3,11 +3,14 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": ["apps/docs"],
   "scripts": {
     "dev": "vite",
     "build": "tsc -p tsconfig.app.json && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4173",
-    "visual:diff": "node scripts/visual-diff.mjs"
+    "visual:diff": "node scripts/visual-diff.mjs",
+    "docs": "npm run dev -w stylexcn-docs",
+    "docs:build": "npm run build -w stylexcn-docs"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",

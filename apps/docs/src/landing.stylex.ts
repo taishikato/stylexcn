@@ -1,0 +1,296 @@
+import * as stylex from "@stylexjs/stylex";
+import { tokens } from "@stylexcn/tokens.stylex";
+
+const SM = "@media (min-width: 40rem)";
+const MD = "@media (min-width: 48rem)";
+const XL = "@media (min-width: 80rem)";
+
+export const landing = stylex.create({
+  page: {
+    display: "flex",
+    flexDirection: "column",
+    minHeight: "calc(100vh - 4rem)",
+  },
+  headerInner: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.25rem",
+    width: "100%",
+    maxWidth: "90rem",
+    marginInline: "auto",
+  },
+  headerNav: {
+    display: {
+      default: "none",
+      [SM]: "flex",
+    },
+    alignItems: "center",
+    marginLeft: "0.5rem",
+  },
+  headerRight: {
+    display: "flex",
+    alignItems: "center",
+    gap: "0.125rem",
+    marginLeft: "auto",
+  },
+  iconBtn: {
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "2.25rem",
+    height: "2.25rem",
+    color: tokens["--muted-foreground"],
+    textDecorationLine: "none",
+    borderRadius: tokens["--radius-md"],
+    ":hover": {
+      color: tokens["--foreground"],
+      backgroundColor: tokens["--accent"],
+    },
+  },
+  hero: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    textAlign: "center",
+    paddingInline: "1.25rem",
+    paddingTop: {
+      default: "5rem",
+      [SM]: "7.5rem",
+    },
+    paddingBottom: {
+      default: "3rem",
+      [SM]: "4.5rem",
+    },
+  },
+  heroInner: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    maxWidth: "46rem",
+  },
+  pill: {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.35rem",
+    marginBottom: "1.5rem",
+    paddingInline: "0.75rem",
+    paddingBlock: "0.25rem",
+    borderRadius: "9999px",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: tokens["--border"],
+    backgroundColor: tokens["--background"],
+    color: tokens["--muted-foreground"],
+    fontSize: "0.8125rem",
+    lineHeight: 1.4,
+    textDecorationLine: "none",
+    ":hover": {
+      color: tokens["--foreground"],
+      backgroundColor: tokens["--accent"],
+    },
+  },
+  title: {
+    fontSize: {
+      default: "2.5rem",
+      [SM]: "3.75rem",
+    },
+    lineHeight: 1.08,
+    letterSpacing: "-0.055em",
+    fontWeight: 700,
+    marginBottom: "1.25rem",
+    textWrap: "balance",
+    color: tokens["--foreground"],
+  },
+  copy: {
+    fontSize: {
+      default: "1rem",
+      [SM]: "1.125rem",
+    },
+    lineHeight: 1.7,
+    color: tokens["--muted-foreground"],
+    marginBottom: "2rem",
+    maxWidth: "38rem",
+    textWrap: "pretty",
+  },
+  galleryStage: {
+    position: "relative",
+    paddingInline: {
+      default: "1rem",
+      [SM]: "1.5rem",
+    },
+    maxWidth: "90rem",
+    width: "100%",
+    marginInline: "auto",
+    overflow: "hidden",
+    maxHeight: {
+      default: "36rem",
+      [SM]: "44rem",
+      [XL]: "52rem",
+    },
+  },
+  gallery: {
+    columnCount: {
+      default: 1,
+      [MD]: 2,
+      [XL]: 4,
+    },
+    columnGap: "1rem",
+  },
+  fade: {
+    position: "absolute",
+    left: 0,
+    right: 0,
+    bottom: 0,
+    height: {
+      default: "8rem",
+      [SM]: "12rem",
+    },
+    pointerEvents: "none",
+    backgroundImage: "linear-gradient(to bottom, transparent, var(--background))",
+  },
+  tile: {
+    breakInside: "avoid",
+    marginBottom: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    gap: "1.25rem",
+    boxSizing: "border-box",
+    padding: "1.5rem",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: tokens["--border"],
+    borderRadius: "1rem",
+    backgroundColor: tokens["--card"],
+    color: tokens["--card-foreground"],
+    boxShadow: "none",
+  },
+  tileHead: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.35rem",
+  },
+  tileHeadRow: {
+    display: "flex",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    gap: "0.75rem",
+  },
+  tileTitle: {
+    fontSize: "0.9375rem",
+    fontWeight: 600,
+    letterSpacing: "-0.02em",
+    lineHeight: 1.3,
+  },
+  tileDesc: {
+    fontSize: "0.8125rem",
+    lineHeight: 1.5,
+    color: tokens["--muted-foreground"],
+  },
+  tileBody: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.875rem",
+  },
+  wrap: {
+    display: "flex",
+    flexWrap: "wrap",
+    alignItems: "center",
+    gap: "0.5rem",
+  },
+  field: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.375rem",
+    width: "100%",
+  },
+  metric: {
+    fontSize: "1.75rem",
+    fontWeight: 650,
+    letterSpacing: "-0.04em",
+    lineHeight: 1.1,
+  },
+  navBlock: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.1rem",
+  },
+  navHeading: {
+    fontSize: "0.6875rem",
+    fontWeight: 600,
+    letterSpacing: "0.08em",
+    textTransform: "uppercase",
+    color: tokens["--muted-foreground"],
+    marginBottom: "0.25rem",
+    marginTop: "0.5rem",
+  },
+  chatLog: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.625rem",
+  },
+  bubble: {
+    maxWidth: "92%",
+    borderRadius: tokens["--radius-lg"],
+    padding: "0.55rem 0.75rem",
+    fontSize: "0.8125rem",
+    lineHeight: 1.5,
+  },
+  bubbleIn: {
+    alignSelf: "flex-start",
+    backgroundColor: tokens["--muted"],
+    color: tokens["--foreground"],
+  },
+  bubbleOut: {
+    alignSelf: "flex-end",
+    backgroundColor: tokens["--primary"],
+    color: tokens["--primary-foreground"],
+  },
+  chatComposer: {
+    display: "flex",
+    gap: "0.5rem",
+    alignItems: "center",
+  },
+  grow: {
+    flexGrow: 1,
+    minWidth: 0,
+  },
+  footer: {
+    marginTop: "auto",
+    paddingInline: "1.25rem",
+    paddingTop: "3rem",
+    paddingBottom: "2rem",
+    textAlign: "center",
+  },
+  footerLine: {
+    fontSize: "0.8125rem",
+    lineHeight: 1.6,
+    color: tokens["--muted-foreground"],
+  },
+  footerLink: {
+    color: tokens["--foreground"],
+    textUnderlineOffset: "3px",
+  },
+  goalMeta: {
+    display: "flex",
+    justifyContent: "space-between",
+    fontSize: "0.8125rem",
+    marginBottom: "0.4rem",
+  },
+  mutedSm: {
+    fontSize: "0.8125rem",
+    lineHeight: 1.45,
+    color: tokens["--muted-foreground"],
+  },
+  prefRow: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    gap: "1rem",
+  },
+  tableAmount: {
+    textAlign: "right",
+  },
+  tableStrong: {
+    fontWeight: 500,
+  },
+});
