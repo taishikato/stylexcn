@@ -63,6 +63,7 @@ const NATIVE_SELECT_STATES = [
 const DROPDOWN_MENU_STATES = ["closed", "open"];
 const CONTEXT_MENU_STATES = ["closed", "open"];
 const SHEET_STATES = ["default", "left", "top", "bottom"];
+const DRAWER_STATES = ["default", "left", "right", "top"];
 const TABS_STATES = ["default", "second", "disabled"];
 const POPOVER_STATES = ["default"];
 const HOVER_CARD_STATES = ["default"];
@@ -177,6 +178,8 @@ const THEMES = ["light", "dark"];
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
 /* Sheet overlay+panel: sm is 40rem. 800px keeps sm:max-w-sm on left/right. */
 const SHEET_VIEWPORT = { width: 800, height: 600 };
+/* Drawer overlay+panel: same 800×600 as Sheet so sm:max-w-sm and md:text-left apply. */
+const DRAWER_VIEWPORT = { width: 800, height: 600 };
 /* Select popper: trigger near top-left so content stays on-screen and does not flip. */
 const SELECT_OPEN_VIEWPORT = { width: 640, height: 560 };
 /* Dropdown Menu: trigger near top-left so portaled content stays on-screen. */
@@ -443,6 +446,20 @@ function sheetCases() {
     for (const state of SHEET_STATES) {
       list.push({
         component: "sheet",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
+function drawerCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of DRAWER_STATES) {
+      list.push({
+        component: "drawer",
         state,
         theme,
       });
@@ -885,6 +902,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "command") {
     return commandCases();
   }
+  if (process.env.VISUAL_ONLY === "drawer") {
+    return drawerCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -901,6 +921,7 @@ function cases() {
     ...dropdownMenuCases(),
     ...contextMenuCases(),
     ...sheetCases(),
+    ...drawerCases(),
     ...tabsCases(),
     ...popoverCases(),
     ...hoverCardCases(),
@@ -1006,6 +1027,9 @@ function slug(c) {
   }
   if (c.component === "sheet") {
     return `sheet__${c.theme}__${c.state}`;
+  }
+  if (c.component === "drawer") {
+    return `drawer__${c.theme}__${c.state}`;
   }
   if (c.component === "tabs") {
     return `tabs__${c.theme}__${c.state}`;
@@ -1131,6 +1155,7 @@ function urlFor(kit, c) {
     c.component !== "dropdown-menu" &&
     c.component !== "context-menu" &&
     c.component !== "sheet" &&
+    c.component !== "drawer" &&
     c.component !== "tabs" &&
     c.component !== "popover" &&
     c.component !== "hover-card" &&
@@ -1253,6 +1278,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "sheet") {
     return page.locator('[data-slot="sheet-content"][data-state="open"]');
+  }
+  if (c.component === "drawer") {
+    return page.locator('[data-slot="drawer-content"][data-state="open"]');
   }
   if (c.component === "tabs") {
     return page.locator('[data-slot="tabs"]');
@@ -1416,6 +1444,11 @@ async function prepareControl(page, c) {
     await page.locator('[data-slot="sheet-content"][data-state="open"]').waitFor();
     return;
   }
+  if (c.component === "drawer") {
+    await page.locator('[data-slot="drawer-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="drawer-content"][data-state="open"]').waitFor();
+    return;
+  }
   if (c.component === "popover") {
     await page.locator('[data-slot="popover-trigger"]').waitFor();
     await page.locator('[data-slot="popover-content"][data-state="open"]').waitFor();
@@ -1539,6 +1572,12 @@ async function screenshotControl(page, c, dest) {
     await page.screenshot({ path: dest, animations: "disabled" });
     return;
   }
+  if (c.component === "drawer") {
+    await page.locator('[data-slot="drawer-overlay"][data-state="open"]').waitFor();
+    await page.locator('[data-slot="drawer-content"][data-state="open"]').waitFor();
+    await page.screenshot({ path: dest, animations: "disabled" });
+    return;
+  }
   if (c.component === "popover") {
     await page.locator('[data-slot="popover-trigger"]').waitFor();
     await page.locator('[data-slot="popover-content"][data-state="open"]').waitFor();
@@ -1636,6 +1675,8 @@ async function main() {
         ? DIALOG_VIEWPORT
         : c.component === "sheet"
           ? SHEET_VIEWPORT
+          : c.component === "drawer"
+            ? DRAWER_VIEWPORT
           : c.component === "select" && c.state === "open"
             ? SELECT_OPEN_VIEWPORT
             : c.component === "dropdown-menu" && c.state === "open"
@@ -1735,7 +1776,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1762,6 +1803,7 @@ async function main() {
           r.component !== "dropdown-menu" &&
           r.component !== "context-menu" &&
           r.component !== "sheet" &&
+          r.component !== "drawer" &&
           r.component !== "tabs" &&
           r.component !== "popover" &&
           r.component !== "hover-card" &&
@@ -1972,6 +2014,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "sheet")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Drawer",
+    "",
+    "- Viewport: 800×600 (Tailwind `sm` / 40rem and `md` / 48rem). Overlay + content are portaled to `document.body`.",
+    "- Official baseline is the live new-york-v4 registry Drawer (vaul). StyleX is vaul + StyleX tables. Not Base UI.",
+    "- `default` is vaul `direction=\"bottom\"` (handle visible). `left` / `right` / `top` cover the other official sides.",
+    "- Screenshots are full-viewport (overlay + panel). `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "drawer")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

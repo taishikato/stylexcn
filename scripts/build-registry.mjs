@@ -47,6 +47,11 @@ const EXTRA_META = {
     description:
       "Command menu for search and quick actions. cmdk plus Dialog.",
   },
+  drawer: {
+    title: "Drawer",
+    description:
+      "A panel that slides in from an edge of the screen. Built on vaul.",
+  },
   field: {
     title: "Field",
     description:
