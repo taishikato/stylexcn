@@ -1,7 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
 import { Command as CommandPrimitive } from "cmdk";
 import { SearchIcon } from "lucide-react";
-import type { ComponentProps, CSSProperties } from "react";
+import {
+  createContext,
+  useContext,
+  type ComponentProps,
+  type CSSProperties,
+} from "react";
 import { tokens } from "@/lib/tokens.stylex";
 import {
   Dialog,
@@ -10,6 +15,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+
+const CommandDialogScope = createContext(false);
 
 /**
  * Command family as StyleX tables. Official New York v4 Command is cmdk plus
@@ -28,40 +35,10 @@ const command = stylex.create({
     color: tokens["--popover-foreground"],
     fontFamily: "inherit",
   },
-  /* Official CommandDialog extra classes on Command. */
+  /* Official CommandDialog: subsequent visible groups drop extra top padding. */
   inDialog: {
-    ":not(#\\0) [data-slot='command-input-wrapper']": {
-      height: "3rem",
-    },
-    ":not(#\\0) [cmdk-group-heading]": {
-      paddingInline: "0.5rem",
-      fontWeight: 500,
-      color: tokens["--muted-foreground"],
-    },
-    ":not(#\\0) [cmdk-group]": {
-      paddingInline: "0.5rem",
-    },
     ":not(#\\0) [cmdk-group]:not([hidden]) ~ [cmdk-group]": {
       paddingTop: 0,
-    },
-    ":not(#\\0) [cmdk-input-wrapper] svg": {
-      width: "1.25rem",
-      height: "1.25rem",
-    },
-    ":not(#\\0) [data-slot='command-input-wrapper'] svg": {
-      width: "1.25rem",
-      height: "1.25rem",
-    },
-    ":not(#\\0) [cmdk-input]": {
-      height: "3rem",
-    },
-    ":not(#\\0) [cmdk-item]": {
-      paddingInline: "0.5rem",
-      paddingBlock: "0.75rem",
-    },
-    ":not(#\\0) [cmdk-item] svg": {
-      width: "1.25rem",
-      height: "1.25rem",
     },
   },
 });
@@ -98,6 +75,9 @@ const input = stylex.create({
     borderBottomStyle: "solid",
     borderBottomColor: tokens["--border"],
     paddingInline: "0.75rem",
+  },
+  wrapperDialog: {
+    height: "3rem",
   },
   icon: {
     pointerEvents: "none",
@@ -137,6 +117,9 @@ const input = stylex.create({
       ":disabled": 0.5,
     },
   },
+  fieldDialog: {
+    height: "3rem",
+  },
 });
 
 const list = stylex.create({
@@ -172,6 +155,9 @@ const group = stylex.create({
       fontWeight: 500,
       color: tokens["--muted-foreground"],
     },
+  },
+  dialog: {
+    paddingInline: "0.5rem",
   },
 });
 
@@ -228,6 +214,10 @@ const item = stylex.create({
       color: tokens["--muted-foreground"],
     },
   },
+  dialog: {
+    paddingInline: "0.5rem",
+    paddingBlock: "0.75rem",
+  },
 });
 
 const shortcut = stylex.create({
@@ -270,7 +260,8 @@ export type CommandItemProps = ComponentProps<typeof CommandPrimitive.Item>;
 export type CommandShortcutProps = ComponentProps<"span">;
 
 export function Command({ className, style, ...props }: CommandProps) {
-  const sx = stylex.props(command.root);
+  const inDialog = useContext(CommandDialogScope);
+  const sx = stylex.props(command.root, inDialog && command.inDialog);
   const merged = mergeSx(sx, className, style);
   return (
     <CommandPrimitive
@@ -291,8 +282,6 @@ export function CommandDialog({
   ...props
 }: CommandDialogProps) {
   const hidden = stylex.props(srOnly.root);
-  const dialogCommand = stylex.props(command.inDialog);
-  const content = stylex.props(dialogContent.root);
   return (
     <Dialog {...props}>
       <DialogHeader className={hidden.className} style={hidden.style}>
@@ -300,21 +289,32 @@ export function CommandDialog({
         <DialogDescription>{description}</DialogDescription>
       </DialogHeader>
       <DialogContent
-        className={[content.className, className].filter(Boolean).join(" ")}
-        style={content.style}
+        className={[stylex.props(dialogContent.root).className, className]
+          .filter(Boolean)
+          .join(" ")}
+        style={{
+          ...stylex.props(dialogContent.root).style,
+          padding: 0,
+          overflow: "hidden",
+        }}
         showCloseButton={showCloseButton}
       >
-        <Command className={dialogCommand.className} style={dialogCommand.style}>
-          {children}
-        </Command>
+        <CommandDialogScope.Provider value={true}>
+          <Command>{children}</Command>
+        </CommandDialogScope.Provider>
       </DialogContent>
     </Dialog>
   );
 }
 
 export function CommandInput({ className, style, ...props }: CommandInputProps) {
-  const wrap = stylex.props(input.wrapper);
-  const field = mergeSx(stylex.props(input.field), className, style);
+  const inDialog = useContext(CommandDialogScope);
+  const wrap = stylex.props(input.wrapper, inDialog && input.wrapperDialog);
+  const field = mergeSx(
+    stylex.props(input.field, inDialog && input.fieldDialog),
+    className,
+    style,
+  );
   return (
     <div data-slot="command-input-wrapper" {...wrap}>
       <SearchIcon {...stylex.props(input.icon)} />
@@ -353,7 +353,12 @@ export function CommandEmpty({ className, style, ...props }: CommandEmptyProps) 
 }
 
 export function CommandGroup({ className, style, ...props }: CommandGroupProps) {
-  const merged = mergeSx(stylex.props(group.root), className, style);
+  const inDialog = useContext(CommandDialogScope);
+  const merged = mergeSx(
+    stylex.props(group.root, inDialog && group.dialog),
+    className,
+    style,
+  );
   return (
     <CommandPrimitive.Group
       data-slot="command-group"
@@ -381,7 +386,12 @@ export function CommandSeparator({
 }
 
 export function CommandItem({ className, style, ...props }: CommandItemProps) {
-  const merged = mergeSx(stylex.props(item.root), className, style);
+  const inDialog = useContext(CommandDialogScope);
+  const merged = mergeSx(
+    stylex.props(item.root, inDialog && item.dialog),
+    className,
+    style,
+  );
   return (
     <CommandPrimitive.Item
       data-slot="command-item"

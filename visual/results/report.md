@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command)
 
-- Passed: 420/420
+- Passed: 430/430
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -804,3 +804,23 @@
 | `combobox__dark__empty` | PASS | 0/358400 |
 | `combobox__dark__group` | PASS | 0/358400 |
 | `combobox__dark__popup` | PASS | 0/358400 |
+
+## Command
+
+- Inline states crop `[data-slot="command"]` with 16px pad inside an identical 24rem well. `dialog` is full-viewport (800×600, same as Dialog) so overlay + `p-0` content are captured together.
+- Official side is the live registry Command family (`cmdk` + Dialog). StyleX is cmdk + StyleX Dialog tables. Combobox is a separate Base UI leftover and is not used here.
+- States: `default` / `selected` / `empty` / `disabled` / `dialog`, each × light/dark.
+- Skipped: RTL, scrollable overflow, and a dedicated focus-visible input case (official Command input has `outline-hidden` and no ring; caret would dominate the crop). Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `command__light__default` | PASS | 0/138528 |
+| `command__light__selected` | PASS | 0/138528 |
+| `command__light__empty` | PASS | 0/56576 |
+| `command__light__disabled` | PASS | 0/138528 |
+| `command__light__dialog` | PASS | 0/480000 |
+| `command__dark__default` | PASS | 0/138528 |
+| `command__dark__selected` | PASS | 0/138528 |
+| `command__dark__empty` | PASS | 0/56576 |
+| `command__dark__disabled` | PASS | 0/138528 |
+| `command__dark__dialog` | PASS | 0/480000 |
