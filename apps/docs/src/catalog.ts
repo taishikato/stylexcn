@@ -323,6 +323,20 @@ export const COMPONENTS: ComponentDoc[] = [
 </NativeSelect>`,
   },
   {
+    slug: "navigation-menu",
+    name: "Navigation Menu",
+    description:
+      "A collection of links for site navigation. Open a trigger to show the viewport.",
+    usage: `<NavigationMenu>
+  <NavigationMenuList>
+    <NavigationMenuItem>
+      <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
+      <NavigationMenuContent>…</NavigationMenuContent>
+    </NavigationMenuItem>
+  </NavigationMenuList>
+</NavigationMenu>`,
+  },
+  {
     slug: "pagination",
     name: "Pagination",
     description: "Page navigation with an active page and ellipsis.",

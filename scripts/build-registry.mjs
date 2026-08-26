@@ -49,7 +49,8 @@ const EXTRA_META = {
   },
   "navigation-menu": {
     title: "Navigation Menu",
-    description: "A collection of links for site navigation. Built on Radix.",
+    description:
+      "A collection of links for site navigation. Open a trigger to show the viewport.",
   },
   drawer: {
     title: "Drawer",
