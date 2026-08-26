@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty)
 
-- Passed: 312/312
+- Passed: 318/318
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -632,3 +632,19 @@
 | `kbd__dark__with-icon` | PASS | 0/2704 |
 | `kbd__dark__group` | PASS | 0/4316 |
 | `kbd__dark__tooltip` | PASS | 0/3016 |
+
+## Empty
+
+- Crops `[data-slot="empty"]` with 16px pad inside an identical 24rem-wide parent on both kits so `w-full` / `max-w-sm` match.
+- Viewport: 800×600 so Tailwind `md:p-12` (768px) applies on both kits. Do not use a width near the md breakpoint.
+- Identical copy on both kits: title `No messages`, description `You don't have any messages yet.`, lucide `Inbox`. `default` is EmptyMedia default; `with-icon` is EmptyMedia `variant="icon"`; `with-content` adds EmptyContent with Button `Send a message`.
+- Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `empty__light__default` | PASS | 0/94016 |
+| `empty__light__with-icon` | PASS | 0/100672 |
+| `empty__light__with-content` | PASS | 0/125632 |
+| `empty__dark__default` | PASS | 0/94016 |
+| `empty__dark__with-icon` | PASS | 0/100672 |
+| `empty__dark__with-content` | PASS | 0/125632 |

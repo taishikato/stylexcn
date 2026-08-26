@@ -39,6 +39,6 @@ npm run visual:diff
 
 Writes `visual/results/{shadcn,stylex,diff}/*.png` plus `visual/results/report.md`. Nonzero pixelmatch is a fail.
 
-Latest local run: **312/312 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch + 10 Radio Group + 4 Card + 4 Dialog + 2 Alert Dialog + 14 Select + 10 Native Select + 4 Dropdown Menu + 4 Context Menu + 8 Sheet + 6 Tabs + 2 Popover + 2 Hover Card + 2 Tooltip + 14 Badge + 4 Separator + 4 Skeleton + 8 Spinner + 10 Avatar + 6 Progress + 6 Accordion + 8 Slider + 14 Toggle + 4 Breadcrumb + 4 Collapsible + 4 Scroll Area + 4 Pagination + 6 Alert + 8 Toggle Group + 4 Menubar + 2 Aspect Ratio + 4 Table + 4 Resizable + 10 Button Group + 8 Kbd, threshold 0).
+Latest local run: **318/318 PASS** (66 Button + 8 Input + 4 Label + 8 Textarea + 10 Checkbox + 8 Switch + 10 Radio Group + 4 Card + 4 Dialog + 2 Alert Dialog + 14 Select + 10 Native Select + 4 Dropdown Menu + 4 Context Menu + 8 Sheet + 6 Tabs + 2 Popover + 2 Hover Card + 2 Tooltip + 14 Badge + 4 Separator + 4 Skeleton + 8 Spinner + 10 Avatar + 6 Progress + 6 Accordion + 8 Slider + 14 Toggle + 4 Breadcrumb + 4 Collapsible + 4 Scroll Area + 4 Pagination + 6 Alert + 8 Toggle Group + 4 Menubar + 2 Aspect Ratio + 4 Table + 4 Resizable + 10 Button Group + 8 Kbd + 6 Empty, threshold 0).
 
 Do not edit the harness or official baseline to hide a delta.
