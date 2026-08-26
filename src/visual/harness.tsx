@@ -129,6 +129,12 @@ import {
   InputGroupTextarea,
 } from "../components/input-group";
 import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "../components/input-otp";
+import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
@@ -313,6 +319,12 @@ import {
   OfficialInputGroupText,
   OfficialInputGroupTextarea,
 } from "./official-input-group";
+import {
+  OfficialInputOTP,
+  OfficialInputOTPGroup,
+  OfficialInputOTPSeparator,
+  OfficialInputOTPSlot,
+} from "./official-input-otp";
 import {
   OfficialNativeSelect,
   OfficialNativeSelectOptGroup,
@@ -503,7 +515,8 @@ export type CaptureComponent =
   | "kbd"
   | "empty"
   | "input-group"
-  | "item";
+  | "item"
+  | "input-otp";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -894,6 +907,13 @@ export type ItemCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type InputOtpCaptureParams = {
+  component: "input-otp";
+  kit: CaptureKit;
+  state: "default" | "separator" | "disabled" | "invalid" | "focus-visible";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -937,7 +957,8 @@ export type CaptureParams =
   | KbdCaptureParams
   | EmptyCaptureParams
   | InputGroupCaptureParams
-  | ItemCaptureParams;
+  | ItemCaptureParams
+  | InputOtpCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1146,6 +1167,11 @@ const styles = stylex.create({
   /* Identical 20rem parent on both kits so wrapped header/footer and group width match. */
   itemWell: {
     width: "20rem",
+  },
+  /* Pause inherited `animate-caret-blink` for capture only. Product caret
+     still blinks; Playwright also uses animations: "disabled". */
+  inputOtpPaused: {
+    animationPlayState: "paused",
   },
 });
 
@@ -4017,6 +4043,102 @@ function ItemHarness({ kit, state, theme }: ItemCaptureParams) {
   );
 }
 
+const INPUT_OTP_VALUE = "123456";
+const INPUT_OTP_INVALID_VALUE = "000000";
+
+function InputOtpSlots({
+  Slot,
+  start,
+  count,
+  invalid,
+}: {
+  Slot: typeof InputOTPSlot | typeof OfficialInputOTPSlot;
+  start: number;
+  count: number;
+  invalid: boolean;
+}) {
+  return Array.from({ length: count }, (_, i) => (
+    <Slot
+      key={start + i}
+      index={start + i}
+      aria-invalid={invalid || undefined}
+    />
+  ));
+}
+
+function InputOtpDemo({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: InputOtpCaptureParams["state"];
+}) {
+  const Root = kit === "shadcn" ? OfficialInputOTP : InputOTP;
+  const Group = kit === "shadcn" ? OfficialInputOTPGroup : InputOTPGroup;
+  const Slot = kit === "shadcn" ? OfficialInputOTPSlot : InputOTPSlot;
+  const Sep = kit === "shadcn" ? OfficialInputOTPSeparator : InputOTPSeparator;
+  const disabled = state === "disabled";
+  const invalid = state === "invalid";
+  const focused = state === "focus-visible";
+  const value = focused
+    ? ""
+    : invalid
+      ? INPUT_OTP_INVALID_VALUE
+      : INPUT_OTP_VALUE;
+
+  const rootProps = {
+    maxLength: 6 as const,
+    value,
+    onChange: () => {},
+    disabled,
+    autoFocus: focused,
+    pushPasswordManagerStrategy: "none" as const,
+  };
+
+  if (state === "separator") {
+    return (
+      <Root {...rootProps}>
+        <Group>
+          <InputOtpSlots Slot={Slot} start={0} count={3} invalid={invalid} />
+        </Group>
+        <Sep />
+        <Group>
+          <InputOtpSlots Slot={Slot} start={3} count={3} invalid={invalid} />
+        </Group>
+      </Root>
+    );
+  }
+
+  return (
+    <Root {...rootProps}>
+      <Group>
+        <InputOtpSlots Slot={Slot} start={0} count={6} invalid={invalid} />
+      </Group>
+    </Root>
+  );
+}
+
+function InputOtpHarness({ kit, state, theme }: InputOtpCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="input-otp"
+      data-state={state}
+      {...stylex.props(
+        isDark && darkTheme,
+        styles.frame,
+        styles.inputOtpPaused,
+      )}
+    >
+      <InputOtpDemo kit={kit} state={state} />
+    </div>
+  );
+}
+
 export function Harness(params: CaptureParams) {
   if (params.component === "input") {
     return <InputHarness {...params} />;
@@ -4143,6 +4265,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "item") {
     return <ItemHarness {...params} />;
+  }
+  if (params.component === "input-otp") {
+    return <InputOtpHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -4571,6 +4696,19 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "item", kit, state, theme };
+  }
+
+  if (component === "input-otp") {
+    if (
+      state !== "default" &&
+      state !== "separator" &&
+      state !== "disabled" &&
+      state !== "invalid" &&
+      state !== "focus-visible"
+    ) {
+      return null;
+    }
+    return { component: "input-otp", kit, state, theme };
   }
 
   if (component !== "button") return null;
