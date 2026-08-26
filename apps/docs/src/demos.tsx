@@ -1,7 +1,17 @@
 "use client";
 
 import * as stylex from "@stylexjs/stylex";
-import { CircleAlert, Inbox, Search } from "lucide-react";
+import {
+  Calculator,
+  Calendar,
+  CircleAlert,
+  CreditCard,
+  Inbox,
+  Search,
+  Settings,
+  Smile,
+  User,
+} from "lucide-react";
 import { useState, type ReactNode } from "react";
 import {
   Accordion,
@@ -73,6 +83,17 @@ import {
   ComboboxValue,
   useComboboxAnchor,
 } from "@stylexcn/components/combobox";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+  CommandShortcut,
+} from "@stylexcn/components/command";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -588,6 +609,78 @@ function ComboboxDemo() {
             </ComboboxList>
           </ComboboxContent>
         </Combobox>
+      </div>
+    </div>
+  );
+}
+
+function CommandMenu({ onSelect }: { onSelect?: (value: string) => void }) {
+  return (
+    <>
+      <CommandInput placeholder="Type a command or search..." />
+      <CommandList>
+        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandGroup heading="Suggestions">
+          <CommandItem value="calendar" onSelect={onSelect}>
+            <Calendar />
+            Calendar
+          </CommandItem>
+          <CommandItem value="emoji" onSelect={onSelect}>
+            <Smile />
+            Search Emoji
+          </CommandItem>
+          <CommandItem value="calculator" onSelect={onSelect}>
+            <Calculator />
+            Calculator
+          </CommandItem>
+        </CommandGroup>
+        <CommandSeparator />
+        <CommandGroup heading="Settings">
+          <CommandItem value="profile" onSelect={onSelect}>
+            <User />
+            Profile
+            <CommandShortcut>⌘P</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="billing" onSelect={onSelect}>
+            <CreditCard />
+            Billing
+            <CommandShortcut>⌘B</CommandShortcut>
+          </CommandItem>
+          <CommandItem value="settings" onSelect={onSelect}>
+            <Settings />
+            Settings
+            <CommandShortcut>⌘S</CommandShortcut>
+          </CommandItem>
+        </CommandGroup>
+      </CommandList>
+    </>
+  );
+}
+
+function CommandDemo() {
+  const [selected, setSelected] = useState("calendar");
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <div {...stylex.props(chrome.commandWell)}>
+        <Command>
+          <CommandMenu onSelect={setSelected} />
+        </Command>
+      </div>
+      <p {...stylex.props(chrome.muted)}>Selected: {selected}</p>
+      <div>
+        <Button variant="outline" onClick={() => setOpen(true)}>
+          Open command
+        </Button>
+        <CommandDialog open={open} onOpenChange={setOpen}>
+          <CommandMenu
+            onSelect={(value) => {
+              setSelected(value);
+              setOpen(false);
+            }}
+          />
+        </CommandDialog>
       </div>
     </div>
   );
@@ -1464,6 +1557,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   checkbox: CheckboxDemo,
   collapsible: CollapsibleDemo,
   combobox: ComboboxDemo,
+  command: CommandDemo,
   "context-menu": ContextMenuDemo,
   dialog: DialogDemo,
   "dropdown-menu": DropdownMenuDemo,
