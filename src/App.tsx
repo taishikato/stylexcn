@@ -20,6 +20,14 @@ import {
   EmptyTitle,
 } from "./components/empty";
 import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemMedia,
+  ItemTitle,
+} from "./components/item";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -224,6 +232,14 @@ import {
   OfficialEmptyMedia,
   OfficialEmptyTitle,
 } from "./visual/official-empty";
+import {
+  OfficialItem,
+  OfficialItemActions,
+  OfficialItemContent,
+  OfficialItemDescription,
+  OfficialItemMedia,
+  OfficialItemTitle,
+} from "./visual/official-item";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -564,6 +580,9 @@ const styles = stylex.create({
   inputGroupWell: {
     width: "16rem",
   },
+  itemWell: {
+    width: "20rem",
+  },
 });
 
 function Playground() {
@@ -576,7 +595,7 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, and Input Group vs
+        Menubar, Aspect Ratio, Table, Resizable, Kbd, Empty, Input Group, and Item vs
         official shadcn/ui. Visual capture lives at query-param harness URLs
         (see README).
       </p>
@@ -1744,6 +1763,40 @@ function ThemeBlock({ dark }: { dark: boolean }) {
           <PlaygroundInputGroup kit="shadcn" state="textarea" />
         </div>
       </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Item
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.itemWell)}>
+          <PlaygroundItem kit="stylex" state="default" />
+        </div>
+        <span {...stylex.props(styles.label)}>outline</span>
+        <div {...stylex.props(styles.itemWell)}>
+          <PlaygroundItem kit="stylex" state="outline" />
+        </div>
+        <span {...stylex.props(styles.label)}>media</span>
+        <div {...stylex.props(styles.itemWell)}>
+          <PlaygroundItem kit="stylex" state="media" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Item
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.itemWell)}>
+          <PlaygroundItem kit="shadcn" state="default" />
+        </div>
+        <span {...stylex.props(styles.label)}>outline</span>
+        <div {...stylex.props(styles.itemWell)}>
+          <PlaygroundItem kit="shadcn" state="outline" />
+        </div>
+        <span {...stylex.props(styles.label)}>media</span>
+        <div {...stylex.props(styles.itemWell)}>
+          <PlaygroundItem kit="shadcn" state="media" />
+        </div>
+      </div>
     </div>
   );
 }
@@ -2468,6 +2521,75 @@ function PlaygroundInputGroup({
       </InputGroupAddon>
       <InputGroupInput defaultValue="Email" />
     </InputGroup>
+  );
+}
+
+function PlaygroundItem({
+  kit,
+  state,
+}: {
+  kit: "stylex" | "shadcn";
+  state: "default" | "outline" | "media";
+}) {
+  if (kit === "shadcn") {
+    if (state === "media") {
+      return (
+        <OfficialItem variant="outline">
+          <OfficialItemMedia variant="icon">
+            <Inbox />
+          </OfficialItemMedia>
+          <OfficialItemContent>
+            <OfficialItemTitle>Basic Item</OfficialItemTitle>
+            <OfficialItemDescription>
+              A simple item with title and description.
+            </OfficialItemDescription>
+          </OfficialItemContent>
+          <OfficialItemActions>
+            <OfficialButton size="sm">Action</OfficialButton>
+          </OfficialItemActions>
+        </OfficialItem>
+      );
+    }
+    return (
+      <OfficialItem variant={state === "outline" ? "outline" : "default"}>
+        <OfficialItemContent>
+          <OfficialItemTitle>Basic Item</OfficialItemTitle>
+          <OfficialItemDescription>
+            A simple item with title and description.
+          </OfficialItemDescription>
+        </OfficialItemContent>
+      </OfficialItem>
+    );
+  }
+
+  if (state === "media") {
+    return (
+      <Item variant="outline">
+        <ItemMedia variant="icon">
+          <Inbox />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>Basic Item</ItemTitle>
+          <ItemDescription>
+            A simple item with title and description.
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Button size="sm">Action</Button>
+        </ItemActions>
+      </Item>
+    );
+  }
+
+  return (
+    <Item variant={state === "outline" ? "outline" : "default"}>
+      <ItemContent>
+        <ItemTitle>Basic Item</ItemTitle>
+        <ItemDescription>
+          A simple item with title and description.
+        </ItemDescription>
+      </ItemContent>
+    </Item>
   );
 }
 
