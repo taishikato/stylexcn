@@ -112,26 +112,6 @@ export const landing = stylex.create({
     maxWidth: "38rem",
     textWrap: "pretty",
   },
-  cta: {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: "0.4rem",
-    height: "2.5rem",
-    paddingInline: "1.25rem",
-    borderRadius: "9999px",
-    borderWidth: 0,
-    backgroundColor: tokens["--primary"],
-    color: tokens["--primary-foreground"],
-    fontSize: "0.875rem",
-    fontWeight: 500,
-    fontFamily: "inherit",
-    textDecorationLine: "none",
-    cursor: "pointer",
-    ":hover": {
-      opacity: 0.9,
-    },
-  },
   galleryStage: {
     position: "relative",
     paddingInline: {

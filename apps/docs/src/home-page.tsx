@@ -3,6 +3,7 @@
 import * as stylex from "@stylexjs/stylex";
 import { ArrowRight, Inbox } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type ReactNode } from "react";
 import { Badge } from "@stylexcn/components/badge";
 import { Button } from "@stylexcn/components/button";
@@ -49,6 +50,8 @@ import { landing } from "./landing.stylex";
 import { SiteFooter } from "./site-header";
 
 export function HomePage() {
+  const router = useRouter();
+
   return (
     <div {...stylex.props(landing.page)}>
       <section {...stylex.props(landing.hero)}>
@@ -64,10 +67,10 @@ export function HomePage() {
             A port of shadcn/ui New York v4 — same look, StyleX instead of
             Tailwind. Open source. Open code.
           </p>
-          <Link href="/docs" {...stylex.props(landing.cta)}>
+          <Button type="button" onClick={() => router.push("/docs")}>
             Get Started
             <ArrowRight size={16} />
-          </Link>
+          </Button>
         </div>
       </section>
       <Showcase />
