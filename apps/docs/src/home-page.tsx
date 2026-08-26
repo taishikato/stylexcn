@@ -52,6 +52,8 @@ import {
 } from "@stylexcn/components/table";
 import { Tabs, TabsList, TabsTrigger } from "@stylexcn/components/tabs";
 import { Textarea } from "@stylexcn/components/textarea";
+import { InstallCommand } from "./install-command";
+import { addUrlCommand } from "./install";
 import { landing } from "./landing.stylex";
 import { SiteFooter } from "./site-header";
 
@@ -71,18 +73,18 @@ export function HomePage() {
           </h1>
           <p {...stylex.props(landing.copy)}>
             A port of shadcn/ui — same look, StyleX instead of Tailwind. Open
-            source. Open code. Install any merged component with the official
-            shadcn CLI.
+            source. Open code.
           </p>
-          <pre {...stylex.props(landing.heroCode)}>
-            <code>
-              pnpm dlx shadcn@latest add https://stylexcn.vercel.app/r/input.json
-            </code>
-          </pre>
           <Button type="button" onClick={() => router.push("/docs")}>
             Get Started
             <ArrowRight size={16} />
           </Button>
+          <div {...stylex.props(landing.heroInstall)}>
+            <InstallCommand
+              command={addUrlCommand("button")}
+              hint="Official shadcn CLI. StyleX must already be set up in your app."
+            />
+          </div>
         </div>
       </section>
       <Showcase />

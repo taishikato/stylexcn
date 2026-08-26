@@ -3,6 +3,13 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { COMPONENTS } from "../../src/catalog";
 import { chrome } from "../../src/chrome.stylex";
+import { InstallCommand } from "../../src/install-command";
+import {
+  addNamespaceCommand,
+  addUrlCommand,
+  listRegistryCommand,
+  registerNamespaceCommand,
+} from "../../src/install";
 
 export const metadata: Metadata = {
   title: "Components",
@@ -22,18 +29,14 @@ export default function DocsIndexPage() {
         already compile StyleX (<code>@stylexjs/stylex</code> plus a bundler
         plugin). Tailwind init is not enough.
       </p>
-      <pre {...stylex.props(chrome.code)}>
-        <code>{`pnpm dlx shadcn@latest add https://stylexcn.vercel.app/r/input.json`}</code>
-      </pre>
+      <InstallCommand command={addUrlCommand("button")} />
       <p {...stylex.props(chrome.note)}>Optional namespace:</p>
-      <pre {...stylex.props(chrome.code)}>
-        <code>{`pnpm dlx shadcn@latest registry add @stylexcn=https://stylexcn.vercel.app/r/{name}.json
-pnpm dlx shadcn@latest add @stylexcn/button`}</code>
-      </pre>
+      <InstallCommand
+        command={registerNamespaceCommand()}
+        secondary={addNamespaceCommand("button")}
+      />
       <p {...stylex.props(chrome.note)}>List the catalog:</p>
-      <pre {...stylex.props(chrome.code)}>
-        <code>{`pnpm dlx shadcn@latest list https://stylexcn.vercel.app/r/registry.json`}</code>
-      </pre>
+      <InstallCommand command={listRegistryCommand()} />
       <h2 {...stylex.props(chrome.sectionTitle)}>Catalog</h2>
       <div {...stylex.props(chrome.catalog)}>
         {COMPONENTS.map((item) => (

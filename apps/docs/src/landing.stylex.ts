@@ -112,25 +112,10 @@ export const landing = stylex.create({
     maxWidth: "38rem",
     textWrap: "pretty",
   },
-  heroCode: {
-    display: "block",
+  heroInstall: {
     width: "100%",
-    maxWidth: "38rem",
-    marginBottom: "1.5rem",
-    overflow: "auto",
-    textAlign: "left",
-    fontFamily:
-      "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    fontSize: "0.75rem",
-    lineHeight: 1.5,
-    padding: "0.85rem 1rem",
-    borderRadius: tokens["--radius-xl"],
-    borderWidth: "1px",
-    borderStyle: "solid",
-    borderColor: tokens["--border"],
-    backgroundColor: tokens["--muted"],
-    color: tokens["--foreground"],
-    whiteSpace: "pre",
+    maxWidth: "40rem",
+    marginTop: "1.25rem",
   },
   galleryStage: {
     position: "relative",

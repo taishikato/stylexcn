@@ -4,6 +4,8 @@ import { notFound } from "next/navigation";
 import { COMPONENTS, getComponent } from "../../../src/catalog";
 import { chrome } from "../../../src/chrome.stylex";
 import { ComponentDemo } from "../../../src/demos";
+import { InstallCommand } from "../../../src/install-command";
+import { addNamespaceCommand, addUrlCommand } from "../../../src/install";
 
 type PageProps = {
   params: Promise<{ component: string }>;
@@ -31,6 +33,11 @@ export default async function ComponentPage({ params }: PageProps) {
       <p {...stylex.props(chrome.lead)}>{doc.description}</p>
       <h2 {...stylex.props(chrome.sectionTitle)}>Preview</h2>
       <ComponentDemo slug={doc.slug} />
+      <h2 {...stylex.props(chrome.sectionTitle)}>Installation</h2>
+      <InstallCommand
+        command={addUrlCommand(doc.slug)}
+        secondary={addNamespaceCommand(doc.slug)}
+      />
       <h2 {...stylex.props(chrome.sectionTitle)}>Usage</h2>
       <pre {...stylex.props(chrome.code)}>
         <code>{doc.usage}</code>
