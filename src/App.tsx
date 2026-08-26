@@ -101,6 +101,11 @@ import {
   ContextMenuTrigger,
 } from "./components/context-menu";
 import { Input } from "./components/input";
+import {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "./components/native-select";
 import { Label } from "./components/label";
 import { Progress } from "./components/progress";
 import {
@@ -320,6 +325,11 @@ import {
   OfficialContextMenuTrigger,
 } from "./visual/official-context-menu";
 import { OfficialInput } from "./visual/official-input";
+import {
+  OfficialNativeSelect,
+  OfficialNativeSelectOptGroup,
+  OfficialNativeSelectOption,
+} from "./visual/official-native-select";
 import { OfficialLabel } from "./visual/official-label";
 import { OfficialProgress } from "./visual/official-progress";
 import {
@@ -522,7 +532,7 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        Card, Dialog, Alert Dialog, Select, Dropdown Menu, Context Menu,
+        Card, Dialog, Alert Dialog, Select, Native Select, Dropdown Menu, Context Menu,
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
@@ -950,6 +960,26 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>default</span>
         <PlaygroundSelect kit="shadcn" dark={dark} />
         <PlaygroundSelect kit="shadcn" dark={dark} size="sm" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Native Select
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundNativeSelect kit="stylex" />
+        <PlaygroundNativeSelect kit="stylex" size="sm" />
+        <PlaygroundNativeSelect kit="stylex" disabled />
+        <PlaygroundNativeSelect kit="stylex" invalid />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Native Select
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundNativeSelect kit="shadcn" />
+        <PlaygroundNativeSelect kit="shadcn" size="sm" />
+        <PlaygroundNativeSelect kit="shadcn" disabled />
+        <PlaygroundNativeSelect kit="shadcn" invalid />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Dropdown Menu
@@ -1826,6 +1856,71 @@ function PlaygroundSelect({
       </SelectTrigger>
       <SelectContent position="popper">{fruits}</SelectContent>
     </Select>
+  );
+}
+
+function PlaygroundNativeSelect({
+  kit,
+  size = "default",
+  disabled = false,
+  invalid = false,
+}: {
+  kit: "stylex" | "shadcn";
+  size?: "sm" | "default";
+  disabled?: boolean;
+  invalid?: boolean;
+}) {
+  const options =
+    kit === "shadcn" ? (
+      <>
+        <OfficialNativeSelectOptGroup label="Fruits">
+          <OfficialNativeSelectOption value="apple">
+            Apple
+          </OfficialNativeSelectOption>
+          <OfficialNativeSelectOption value="banana">
+            Banana
+          </OfficialNativeSelectOption>
+        </OfficialNativeSelectOptGroup>
+        <OfficialNativeSelectOptGroup label="Vegetables">
+          <OfficialNativeSelectOption value="carrot">
+            Carrot
+          </OfficialNativeSelectOption>
+        </OfficialNativeSelectOptGroup>
+      </>
+    ) : (
+      <>
+        <NativeSelectOptGroup label="Fruits">
+          <NativeSelectOption value="apple">Apple</NativeSelectOption>
+          <NativeSelectOption value="banana">Banana</NativeSelectOption>
+        </NativeSelectOptGroup>
+        <NativeSelectOptGroup label="Vegetables">
+          <NativeSelectOption value="carrot">Carrot</NativeSelectOption>
+        </NativeSelectOptGroup>
+      </>
+    );
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialNativeSelect
+        defaultValue="apple"
+        size={size}
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+      >
+        {options}
+      </OfficialNativeSelect>
+    );
+  }
+
+  return (
+    <NativeSelect
+      defaultValue="apple"
+      size={size}
+      disabled={disabled}
+      aria-invalid={invalid || undefined}
+    >
+      {options}
+    </NativeSelect>
   );
 }
 

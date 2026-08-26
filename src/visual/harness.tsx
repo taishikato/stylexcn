@@ -99,6 +99,11 @@ import {
   ContextMenuTrigger,
 } from "../components/context-menu";
 import { Input } from "../components/input";
+import {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "../components/native-select";
 import { Label } from "../components/label";
 import { Progress } from "../components/progress";
 import { RadioGroup, RadioGroupItem } from "../components/radio-group";
@@ -250,6 +255,11 @@ import {
 } from "./official-alert-dialog";
 import { OfficialCheckbox } from "./official-checkbox";
 import { OfficialInput } from "./official-input";
+import {
+  OfficialNativeSelect,
+  OfficialNativeSelectOptGroup,
+  OfficialNativeSelectOption,
+} from "./official-native-select";
 import { OfficialLabel } from "./official-label";
 import { OfficialProgress } from "./official-progress";
 import {
@@ -403,6 +413,7 @@ export type CaptureComponent =
   | "card"
   | "dialog"
   | "select"
+  | "native-select"
   | "alert-dialog"
   | "dropdown-menu"
   | "context-menu"
@@ -547,6 +558,13 @@ export type SelectCaptureParams = {
     | "invalid"
     | "sm"
     | "open";
+  theme: CaptureTheme;
+};
+
+export type NativeSelectCaptureParams = {
+  component: "native-select";
+  kit: CaptureKit;
+  state: "default" | "focus-visible" | "disabled" | "invalid" | "sm";
   theme: CaptureTheme;
 };
 
@@ -765,6 +783,7 @@ export type CaptureParams =
   | CardCaptureParams
   | DialogCaptureParams
   | SelectCaptureParams
+  | NativeSelectCaptureParams
   | AlertDialogCaptureParams
   | DropdownMenuCaptureParams
   | ContextMenuCaptureParams
@@ -1508,6 +1527,82 @@ function SheetHarness({ kit, state, theme }: SheetCaptureParams) {
       {...stylex.props(isDark && darkTheme, styles.frame)}
     >
       {sheet}
+    </div>
+  );
+}
+
+const NATIVE_SELECT_APPLE = "apple";
+
+function NativeSelectOptions({ kit }: { kit: CaptureKit }) {
+  if (kit === "shadcn") {
+    return (
+      <>
+        <OfficialNativeSelectOptGroup label="Fruits">
+          <OfficialNativeSelectOption value="apple">
+            Apple
+          </OfficialNativeSelectOption>
+          <OfficialNativeSelectOption value="banana">
+            Banana
+          </OfficialNativeSelectOption>
+        </OfficialNativeSelectOptGroup>
+        <OfficialNativeSelectOptGroup label="Vegetables">
+          <OfficialNativeSelectOption value="carrot">
+            Carrot
+          </OfficialNativeSelectOption>
+        </OfficialNativeSelectOptGroup>
+      </>
+    );
+  }
+  return (
+    <>
+      <NativeSelectOptGroup label="Fruits">
+        <NativeSelectOption value="apple">Apple</NativeSelectOption>
+        <NativeSelectOption value="banana">Banana</NativeSelectOption>
+      </NativeSelectOptGroup>
+      <NativeSelectOptGroup label="Vegetables">
+        <NativeSelectOption value="carrot">Carrot</NativeSelectOption>
+      </NativeSelectOptGroup>
+    </>
+  );
+}
+
+function NativeSelectHarness({ kit, state, theme }: NativeSelectCaptureParams) {
+  const isDark = theme === "dark";
+  const disabled = state === "disabled";
+  const invalid = state === "invalid";
+  const size = state === "sm" ? "sm" : "default";
+
+  const control =
+    kit === "shadcn" ? (
+      <OfficialNativeSelect
+        defaultValue={NATIVE_SELECT_APPLE}
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+        size={size}
+      >
+        <NativeSelectOptions kit={kit} />
+      </OfficialNativeSelect>
+    ) : (
+      <NativeSelect
+        defaultValue={NATIVE_SELECT_APPLE}
+        disabled={disabled}
+        aria-invalid={invalid || undefined}
+        size={size}
+      >
+        <NativeSelectOptions kit={kit} />
+      </NativeSelect>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="native-select"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {control}
     </div>
   );
 }
@@ -3335,6 +3430,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "select") {
     return <SelectHarness {...params} />;
   }
+  if (params.component === "native-select") {
+    return <NativeSelectHarness {...params} />;
+  }
   if (params.component === "dropdown-menu") {
     return <DropdownMenuHarness {...params} />;
   }
@@ -3531,6 +3629,19 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "select", kit, state, theme };
+  }
+
+  if (component === "native-select") {
+    if (
+      state !== "default" &&
+      state !== "focus-visible" &&
+      state !== "disabled" &&
+      state !== "invalid" &&
+      state !== "sm"
+    ) {
+      return null;
+    }
+    return { component: "native-select", kit, state, theme };
   }
 
   if (component === "dropdown-menu") {

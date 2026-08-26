@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)
 
-- Passed: 294/294
+- Passed: 304/304
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -205,6 +205,25 @@
 | `select__dark__invalid` | PASS | 0/11084 |
 | `select__dark__sm` | PASS | 0/10432 |
 | `select__dark__open` | PASS | 0/358400 |
+
+## Native Select
+
+- Crops `[data-slot="native-select-wrapper"]` with 16px pad (covers the 3px focus ring and custom chevron). Do not open the native picker; it is not screenshot-stable.
+- Identical copy on both kits: optgroups Fruits (Apple, Banana) and Vegetables (Carrot), selected `apple`. `sm` is `size="sm"` (h-8).
+- States: `default` / `focus-visible` (Tab onto the native `<select>`) / `disabled` / `invalid` / `sm`, each × light/dark. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `native-select__light__default` | PASS | 0/9996 |
+| `native-select__light__focus-visible` | PASS | 0/9996 |
+| `native-select__light__disabled` | PASS | 0/9996 |
+| `native-select__light__invalid` | PASS | 0/9996 |
+| `native-select__light__sm` | PASS | 0/9408 |
+| `native-select__dark__default` | PASS | 0/9996 |
+| `native-select__dark__focus-visible` | PASS | 0/9996 |
+| `native-select__dark__disabled` | PASS | 0/9996 |
+| `native-select__dark__invalid` | PASS | 0/9996 |
+| `native-select__dark__sm` | PASS | 0/9408 |
 
 ## Dropdown Menu
 
