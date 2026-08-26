@@ -135,6 +135,18 @@ import {
   InputOTPSlot,
 } from "../components/input-otp";
 import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSeparator,
+  FieldSet,
+  FieldTitle,
+} from "../components/field";
+import {
   NativeSelect,
   NativeSelectOptGroup,
   NativeSelectOption,
@@ -325,6 +337,18 @@ import {
   OfficialInputOTPSeparator,
   OfficialInputOTPSlot,
 } from "./official-input-otp";
+import {
+  OfficialField,
+  OfficialFieldContent,
+  OfficialFieldDescription,
+  OfficialFieldError,
+  OfficialFieldGroup,
+  OfficialFieldLabel,
+  OfficialFieldLegend,
+  OfficialFieldSeparator,
+  OfficialFieldSet,
+  OfficialFieldTitle,
+} from "./official-field";
 import {
   OfficialNativeSelect,
   OfficialNativeSelectOptGroup,
@@ -914,6 +938,28 @@ export type InputOtpCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type FieldCaptureParams = {
+  component: "field";
+  kit: CaptureKit;
+  state:
+    | "vertical"
+    | "horizontal"
+    | "responsive"
+    | "description"
+    | "error"
+    | "error-list"
+    | "separator"
+    | "separator-text"
+    | "legend"
+    | "legend-label"
+    | "checkbox-group"
+    | "radio-group"
+    | "disabled"
+    | "invalid"
+    | "choice-card";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -958,7 +1004,8 @@ export type CaptureParams =
   | EmptyCaptureParams
   | InputGroupCaptureParams
   | ItemCaptureParams
-  | InputOtpCaptureParams;
+  | InputOtpCaptureParams
+  | FieldCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1172,6 +1219,14 @@ const styles = stylex.create({
      still blinks; Playwright also uses animations: "disabled". */
   inputOtpPaused: {
     animationPlayState: "paused",
+  },
+  /* Below @md/field-group (28rem) so responsive stays column unless pinned wide. */
+  fieldWell: {
+    width: "16rem",
+  },
+  /* Above @md/field-group (28rem) so official container query and StyleX agree. */
+  fieldResponsiveWell: {
+    width: "32rem",
   },
 });
 
@@ -4139,6 +4194,291 @@ function InputOtpHarness({ kit, state, theme }: InputOtpCaptureParams) {
   );
 }
 
+const FIELD_LABEL = "Email";
+const FIELD_VALUE = "evil@rabbit.com";
+const FIELD_DESCRIPTION = "This is used on invoices.";
+const FIELD_ERROR = "Enter a valid email.";
+const FIELD_ERROR_ALT = "Email is required.";
+const FIELD_LEGEND = "Profile";
+const FIELD_SEPARATOR = "Or continue";
+const FIELD_CHECKBOX = "Hard disks";
+const FIELD_RADIO = "Monthly";
+const FIELD_TITLE = "Kubernetes";
+const FIELD_CARD_DESC = "Run GPU workloads.";
+
+function FieldDemo({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: FieldCaptureParams["state"];
+}) {
+  const Group = kit === "shadcn" ? OfficialFieldGroup : FieldGroup;
+  const FieldRoot = kit === "shadcn" ? OfficialField : Field;
+  const Label = kit === "shadcn" ? OfficialFieldLabel : FieldLabel;
+  const Desc = kit === "shadcn" ? OfficialFieldDescription : FieldDescription;
+  const Err = kit === "shadcn" ? OfficialFieldError : FieldError;
+  const Set = kit === "shadcn" ? OfficialFieldSet : FieldSet;
+  const Legend = kit === "shadcn" ? OfficialFieldLegend : FieldLegend;
+  const Sep = kit === "shadcn" ? OfficialFieldSeparator : FieldSeparator;
+  const Content = kit === "shadcn" ? OfficialFieldContent : FieldContent;
+  const Title = kit === "shadcn" ? OfficialFieldTitle : FieldTitle;
+  const FieldInput = kit === "shadcn" ? OfficialInput : Input;
+  const Box = kit === "shadcn" ? OfficialCheckbox : Checkbox;
+  const Radios = kit === "shadcn" ? OfficialRadioGroup : RadioGroup;
+  const Radio = kit === "shadcn" ? OfficialRadioGroupItem : RadioGroupItem;
+
+  if (state === "horizontal") {
+    return (
+      <Group>
+        <FieldRoot orientation="horizontal">
+          <Box id="field-horizontal" />
+          <Label htmlFor="field-horizontal">{FIELD_CHECKBOX}</Label>
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "responsive") {
+    return (
+      <Group>
+        <FieldRoot orientation="responsive">
+          <Content>
+            <Label htmlFor="field-responsive">{FIELD_LABEL}</Label>
+            <Desc>{FIELD_DESCRIPTION}</Desc>
+          </Content>
+          <FieldInput id="field-responsive" defaultValue={FIELD_VALUE} />
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "description") {
+    return (
+      <Group>
+        <FieldRoot>
+          <Label htmlFor="field-description">{FIELD_LABEL}</Label>
+          <FieldInput id="field-description" defaultValue={FIELD_VALUE} />
+          <Desc>{FIELD_DESCRIPTION}</Desc>
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "error") {
+    return (
+      <Group>
+        <FieldRoot data-invalid="true">
+          <Label htmlFor="field-error">{FIELD_LABEL}</Label>
+          <FieldInput
+            id="field-error"
+            defaultValue={FIELD_VALUE}
+            aria-invalid
+          />
+          <Err errors={[{ message: FIELD_ERROR }]} />
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "error-list") {
+    return (
+      <Group>
+        <FieldRoot data-invalid="true">
+          <Label htmlFor="field-error-list">{FIELD_LABEL}</Label>
+          <FieldInput
+            id="field-error-list"
+            defaultValue={FIELD_VALUE}
+            aria-invalid
+          />
+          <Err
+            errors={[{ message: FIELD_ERROR }, { message: FIELD_ERROR_ALT }]}
+          />
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "separator") {
+    return (
+      <Group>
+        <FieldRoot>
+          <Label htmlFor="field-sep-a">{FIELD_LABEL}</Label>
+          <FieldInput id="field-sep-a" defaultValue={FIELD_VALUE} />
+        </FieldRoot>
+        <Sep />
+        <FieldRoot>
+          <Label htmlFor="field-sep-b">{FIELD_LABEL}</Label>
+          <FieldInput id="field-sep-b" defaultValue={FIELD_VALUE} />
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "separator-text") {
+    return (
+      <Group>
+        <FieldRoot>
+          <Label htmlFor="field-sep-text-a">{FIELD_LABEL}</Label>
+          <FieldInput id="field-sep-text-a" defaultValue={FIELD_VALUE} />
+        </FieldRoot>
+        <Sep>{FIELD_SEPARATOR}</Sep>
+        <FieldRoot>
+          <Label htmlFor="field-sep-text-b">{FIELD_LABEL}</Label>
+          <FieldInput id="field-sep-text-b" defaultValue={FIELD_VALUE} />
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "legend") {
+    return (
+      <Group>
+        <Set>
+          <Legend>{FIELD_LEGEND}</Legend>
+          <Desc>{FIELD_DESCRIPTION}</Desc>
+          <FieldRoot>
+            <Label htmlFor="field-legend">{FIELD_LABEL}</Label>
+            <FieldInput id="field-legend" defaultValue={FIELD_VALUE} />
+          </FieldRoot>
+        </Set>
+      </Group>
+    );
+  }
+
+  if (state === "legend-label") {
+    return (
+      <Group>
+        <Set>
+          <Legend variant="label">{FIELD_LEGEND}</Legend>
+          <Desc>{FIELD_DESCRIPTION}</Desc>
+          <FieldRoot>
+            <Label htmlFor="field-legend-label">{FIELD_LABEL}</Label>
+            <FieldInput id="field-legend-label" defaultValue={FIELD_VALUE} />
+          </FieldRoot>
+        </Set>
+      </Group>
+    );
+  }
+
+  if (state === "checkbox-group") {
+    return (
+      <Group>
+        <Set>
+          <Legend variant="label">{FIELD_LEGEND}</Legend>
+          <div data-slot="checkbox-group">
+            <FieldRoot orientation="horizontal">
+              <Box id="field-check-a" />
+              <Label htmlFor="field-check-a">{FIELD_CHECKBOX}</Label>
+            </FieldRoot>
+            <FieldRoot orientation="horizontal">
+              <Box id="field-check-b" />
+              <Label htmlFor="field-check-b">{FIELD_RADIO}</Label>
+            </FieldRoot>
+          </div>
+        </Set>
+      </Group>
+    );
+  }
+
+  if (state === "radio-group") {
+    return (
+      <Group>
+        <Set>
+          <Legend variant="label">{FIELD_LEGEND}</Legend>
+          <Radios defaultValue="monthly">
+            <FieldRoot orientation="horizontal">
+              <Radio value="monthly" id="field-radio-a" />
+              <Label htmlFor="field-radio-a">{FIELD_RADIO}</Label>
+            </FieldRoot>
+            <FieldRoot orientation="horizontal">
+              <Radio value="yearly" id="field-radio-b" />
+              <Label htmlFor="field-radio-b">{FIELD_CHECKBOX}</Label>
+            </FieldRoot>
+          </Radios>
+        </Set>
+      </Group>
+    );
+  }
+
+  if (state === "disabled") {
+    return (
+      <Group>
+        <FieldRoot data-disabled="true">
+          <Label htmlFor="field-disabled">{FIELD_LABEL}</Label>
+          <FieldInput
+            id="field-disabled"
+            defaultValue={FIELD_VALUE}
+            disabled
+          />
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "invalid") {
+    return (
+      <Group>
+        <FieldRoot data-invalid="true">
+          <Label htmlFor="field-invalid">{FIELD_LABEL}</Label>
+          <FieldInput
+            id="field-invalid"
+            defaultValue={FIELD_VALUE}
+            aria-invalid
+          />
+        </FieldRoot>
+      </Group>
+    );
+  }
+
+  if (state === "choice-card") {
+    return (
+      <Group>
+        <Radios defaultValue="kubernetes">
+          <Label htmlFor="field-card">
+            <FieldRoot orientation="horizontal">
+              <Content>
+                <Title>{FIELD_TITLE}</Title>
+                <Desc>{FIELD_CARD_DESC}</Desc>
+              </Content>
+              <Radio value="kubernetes" id="field-card" />
+            </FieldRoot>
+          </Label>
+        </Radios>
+      </Group>
+    );
+  }
+
+  return (
+    <Group>
+      <FieldRoot>
+        <Label htmlFor="field-vertical">{FIELD_LABEL}</Label>
+        <FieldInput id="field-vertical" defaultValue={FIELD_VALUE} />
+      </FieldRoot>
+    </Group>
+  );
+}
+
+function FieldHarness({ kit, state, theme }: FieldCaptureParams) {
+  const isDark = theme === "dark";
+  const well = state === "responsive" ? styles.fieldResponsiveWell : styles.fieldWell;
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="field"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(well)}>
+        <FieldDemo kit={kit} state={state} />
+      </div>
+    </div>
+  );
+}
+
 export function Harness(params: CaptureParams) {
   if (params.component === "input") {
     return <InputHarness {...params} />;
@@ -4268,6 +4608,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "input-otp") {
     return <InputOtpHarness {...params} />;
+  }
+  if (params.component === "field") {
+    return <FieldHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -4709,6 +5052,29 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "input-otp", kit, state, theme };
+  }
+
+  if (component === "field") {
+    if (
+      state !== "vertical" &&
+      state !== "horizontal" &&
+      state !== "responsive" &&
+      state !== "description" &&
+      state !== "error" &&
+      state !== "error-list" &&
+      state !== "separator" &&
+      state !== "separator-text" &&
+      state !== "legend" &&
+      state !== "legend-label" &&
+      state !== "checkbox-group" &&
+      state !== "radio-group" &&
+      state !== "disabled" &&
+      state !== "invalid" &&
+      state !== "choice-card"
+    ) {
+      return null;
+    }
+    return { component: "field", kit, state, theme };
   }
 
   if (component !== "button") return null;
