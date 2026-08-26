@@ -32,15 +32,6 @@ export const chrome = stylex.create({
   brandMark: {
     fontSize: "0.9375rem",
   },
-  brandHint: {
-    fontSize: "0.75rem",
-    fontWeight: 400,
-    color: tokens["--muted-foreground"],
-    display: {
-      default: "none",
-      [SM]: "inline",
-    },
-  },
   headerActions: {
     display: "flex",
     alignItems: "center",

@@ -1,12 +1,12 @@
 # stylexcn docs
 
-Next.js App Router のドキュメントサイト。既存の `src/components` を import して、ライブの StyleX コンポーネントをブラウザで触ります。
+Next.js App Router site that imports the existing `src/components` kit so you can click live StyleX components in the browser.
 
-ルートの Vite playground と `npm run visual:diff` は別物です。このアプリはそれらを置き換えません。
+The Vite playground and `npm run visual:diff` at the repo root are unchanged. This app does not replace them.
 
-## 起動
+## Run
 
-リポジトリのルートから:
+From the repository root:
 
 ```bash
 npm install
@@ -15,13 +15,13 @@ npm run docs
 
 http://localhost:3000
 
-本番ビルド:
+Production build:
 
 ```bash
 npm run docs:build
 ```
 
-`apps/docs` から直接:
+From `apps/docs` via the workspace:
 
 ```bash
 npm run dev -w stylexcn-docs

@@ -9,7 +9,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "accordion",
     name: "Accordion",
-    description: "折りたたみ可能なセクション。質問と回答を重ねて置けます。",
+    description: "A vertically stacked set of headings that reveal related content.",
     usage: `<Accordion type="single" collapsible>
   <AccordionItem value="item-1">
     <AccordionTrigger>Is it accessible?</AccordionTrigger>
@@ -20,7 +20,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "alert",
     name: "Alert",
-    description: "ページ内の注意書き。default と destructive があります。",
+    description: "Inline callout for default or destructive messages.",
     usage: `<Alert>
   <AlertTitle>Heads up</AlertTitle>
   <AlertDescription>You can add components to your app.</AlertDescription>
@@ -29,7 +29,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "alert-dialog",
     name: "Alert Dialog",
-    description: "破壊的な操作の確認ダイアログ。開いて Cancel / Continue を押せます。",
+    description: "A modal for confirming destructive actions.",
     usage: `<AlertDialog>
   <AlertDialogTrigger asChild>
     <Button variant="outline">Open</Button>
@@ -40,7 +40,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "aspect-ratio",
     name: "Aspect Ratio",
-    description: "指定比率の枠。中身の塗りは呼び出し側で足します。",
+    description: "Constrains content to a ratio. Fill is up to the caller.",
     usage: `<AspectRatio ratio={16 / 9}>
   <div />
 </AspectRatio>`,
@@ -48,7 +48,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "avatar",
     name: "Avatar",
-    description: "ユーザーの顔写真またはイニシャル。サイズ・バッジ・グループに対応。",
+    description: "User image or initials, with sizes, badge, and group.",
     usage: `<Avatar>
   <AvatarFallback>CN</AvatarFallback>
 </Avatar>`,
@@ -56,14 +56,14 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "badge",
     name: "Badge",
-    description: "短いラベル。default / secondary / destructive / outline / ghost / link。",
+    description: "Small status labels: default, secondary, destructive, outline, ghost, link.",
     usage: `<Badge>Badge</Badge>
 <Badge variant="secondary">Secondary</Badge>`,
   },
   {
     slug: "breadcrumb",
     name: "Breadcrumb",
-    description: "現在地までのパンくず。ellipsis で途中を省略できます。",
+    description: "Trail of links to the current page, with an optional ellipsis.",
     usage: `<Breadcrumb>
   <BreadcrumbList>
     <BreadcrumbItem>
@@ -79,14 +79,23 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "button",
     name: "Button",
-    description: "操作の起点。variant と size の組み合わせをそのままクリックできます。",
+    description: "Primary actions across variant and size.",
     usage: `<Button>Button</Button>
 <Button variant="outline" size="sm">Outline</Button>`,
   },
   {
+    slug: "button-group",
+    name: "Button Group",
+    description: "Joins related buttons, inputs, or selects into one control.",
+    usage: `<ButtonGroup>
+  <Button variant="outline">Copy</Button>
+  <Button variant="outline">Paste</Button>
+</ButtonGroup>`,
+  },
+  {
     slug: "card",
     name: "Card",
-    description: "見出し・本文・フッターをまとめるコンテナ。",
+    description: "Container for header, body, and footer.",
     usage: `<Card>
   <CardHeader>
     <CardTitle>Login to your account</CardTitle>
@@ -99,14 +108,14 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "checkbox",
     name: "Checkbox",
-    description: "オンオフのチェック。無効・不正値の見た目もあります。",
+    description: "Boolean control with checked, disabled, and invalid states.",
     usage: `<Checkbox id="terms" />
 <Label htmlFor="terms">Accept terms</Label>`,
   },
   {
     slug: "collapsible",
     name: "Collapsible",
-    description: "トリガーで開閉するパネル。見た目の枠は呼び出し側です。",
+    description: "Show and hide a panel from a trigger. Chrome is up to you.",
     usage: `<Collapsible>
   <CollapsibleTrigger asChild>
     <Button variant="outline">Toggle</Button>
@@ -117,7 +126,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "context-menu",
     name: "Context Menu",
-    description: "右クリックで出すメニュー。破線の箱を右クリックしてください。",
+    description: "Right-click menu. Use the dashed box on the demo page.",
     usage: `<ContextMenu>
   <ContextMenuTrigger>Right click here</ContextMenuTrigger>
   <ContextMenuContent>
@@ -128,7 +137,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "dialog",
     name: "Dialog",
-    description: "中央モーダル。開いて閉じるまで操作できます。",
+    description: "Centered modal you can open, edit, and close.",
     usage: `<Dialog>
   <DialogTrigger asChild>
     <Button variant="outline">Open dialog</Button>
@@ -139,7 +148,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "dropdown-menu",
     name: "Dropdown Menu",
-    description: "ボタンから開くメニュー。項目・チェック・ラジオが入ります。",
+    description: "Menu from a button, including items, checkboxes, and radios.",
     usage: `<DropdownMenu>
   <DropdownMenuTrigger asChild>
     <Button variant="outline">Open</Button>
@@ -150,7 +159,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "hover-card",
     name: "Hover Card",
-    description: "ホバー（またはフォーカス）で出す小さなカード。",
+    description: "Preview card on hover or focus.",
     usage: `<HoverCard>
   <HoverCardTrigger asChild>
     <Button variant="outline">@ada</Button>
@@ -161,21 +170,30 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "input",
     name: "Input",
-    description: "1行テキスト。入力・無効・不正値を試せます。",
+    description: "Single-line field. Try typing, disabled, and invalid.",
     usage: `<Input placeholder="Email" />
 <Input aria-invalid defaultValue="bad" />`,
   },
   {
+    slug: "kbd",
+    name: "Kbd",
+    description: "Keyboard shortcut glyphs, alone or grouped.",
+    usage: `<KbdGroup>
+  <Kbd>⌘</Kbd>
+  <Kbd>K</Kbd>
+</KbdGroup>`,
+  },
+  {
     slug: "label",
     name: "Label",
-    description: "フォーム項目のキャプション。Input と組み合わせます。",
+    description: "Caption for a form control. Pair it with Input.",
     usage: `<Label htmlFor="email">Email</Label>
 <Input id="email" />`,
   },
   {
     slug: "menubar",
     name: "Menubar",
-    description: "アプリ風のメニューバー。File を開いて項目を選べます。",
+    description: "Application menu bar. Open File to pick an item.",
     usage: `<Menubar>
   <MenubarMenu>
     <MenubarTrigger>File</MenubarTrigger>
@@ -186,9 +204,17 @@ export const COMPONENTS: ComponentDoc[] = [
 </Menubar>`,
   },
   {
+    slug: "native-select",
+    name: "Native Select",
+    description: "Native HTML select with New York styling. Default and sm.",
+    usage: `<NativeSelect>
+  <NativeSelectOption value="apple">Apple</NativeSelectOption>
+</NativeSelect>`,
+  },
+  {
     slug: "pagination",
     name: "Pagination",
-    description: "ページ送り。アクティブなページ番号と省略記号があります。",
+    description: "Page navigation with an active page and ellipsis.",
     usage: `<Pagination>
   <PaginationContent>
     <PaginationItem>
@@ -203,7 +229,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "popover",
     name: "Popover",
-    description: "クリックで出す浮きパネル。中に短い説明を置けます。",
+    description: "Floating panel opened from a click.",
     usage: `<Popover>
   <PopoverTrigger asChild>
     <Button variant="outline">Open popover</Button>
@@ -214,13 +240,13 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "progress",
     name: "Progress",
-    description: "進捗バー。空・途中・完了を並べています。",
+    description: "Progress bar at empty, in-progress, and complete.",
     usage: `<Progress value={60} />`,
   },
   {
     slug: "radio-group",
     name: "Radio Group",
-    description: "択一のラジオ。無効・不正値も確認できます。",
+    description: "Single-choice radios, including disabled.",
     usage: `<RadioGroup defaultValue="one">
   <RadioGroupItem value="one" id="one" />
   <Label htmlFor="one">One</Label>
@@ -229,7 +255,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "resizable",
     name: "Resizable",
-    description: "パネル分割。ハンドルをドラッグして比率を変えられます。",
+    description: "Split panes. Drag the handle to change the ratio.",
     usage: `<ResizablePanelGroup orientation="horizontal">
   <ResizablePanel defaultSize={50}>One</ResizablePanel>
   <ResizableHandle withHandle />
@@ -239,7 +265,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "scroll-area",
     name: "Scroll Area",
-    description: "枠内スクロール。縦リストと横スクロールがあります。",
+    description: "Scrollable region. Vertical list and horizontal strip.",
     usage: `<ScrollArea type="always">
   {children}
 </ScrollArea>`,
@@ -247,7 +273,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "select",
     name: "Select",
-    description: "選択肢のドロップダウン。default と sm サイズを開けます。",
+    description: "Custom dropdown. Open default and sm sizes.",
     usage: `<Select>
   <SelectTrigger>
     <SelectValue placeholder="Select a fruit" />
@@ -260,14 +286,14 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "separator",
     name: "Separator",
-    description: "区切り線。横方向と縦方向。",
+    description: "Horizontal or vertical divider.",
     usage: `<Separator />
 <Separator orientation="vertical" />`,
   },
   {
     slug: "sheet",
     name: "Sheet",
-    description: "端から滑り込むパネル。right / left / top / bottom。",
+    description: "Edge panel from right, left, top, or bottom.",
     usage: `<Sheet>
   <SheetTrigger asChild>
     <Button variant="outline">Open sheet</Button>
@@ -278,28 +304,35 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "skeleton",
     name: "Skeleton",
-    description: "読み込み中のプレースホルダー。角丸と円形。",
+    description: "Loading placeholder. Rounded bar and circle.",
     usage: `<Skeleton />
 <Skeleton radius="full" />`,
   },
   {
     slug: "slider",
     name: "Slider",
-    description: "数値スライダー。単一サムと範囲、無効状態。",
+    description: "Numeric slider. Single thumb, range, and disabled.",
     usage: `<Slider defaultValue={[50]} />
 <Slider defaultValue={[25, 75]} />`,
   },
   {
+    slug: "spinner",
+    name: "Spinner",
+    description: "Loading indicator at size 3, 4, 6, and 8.",
+    usage: `<Spinner />
+<Spinner size="8" />`,
+  },
+  {
     slug: "switch",
     name: "Switch",
-    description: "トグルスイッチ。オンオフを指で切り替えられます。",
+    description: "On/off toggle you can click.",
     usage: `<Switch id="airplane" />
 <Label htmlFor="airplane">Airplane mode</Label>`,
   },
   {
     slug: "table",
     name: "Table",
-    description: "データ表。ヘッダー・行・フッター・キャプション。",
+    description: "Data table with header, rows, footer, and caption.",
     usage: `<Table>
   <TableHeader>
     <TableRow>
@@ -312,7 +345,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "tabs",
     name: "Tabs",
-    description: "タブで内容を切り替えます。",
+    description: "Switch between panels.",
     usage: `<Tabs defaultValue="account">
   <TabsList>
     <TabsTrigger value="account">Account</TabsTrigger>
@@ -323,20 +356,20 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "textarea",
     name: "Textarea",
-    description: "複数行テキスト。入力・無効・不正値。",
+    description: "Multiline field. Try typing, disabled, and invalid.",
     usage: `<Textarea placeholder="Message" />`,
   },
   {
     slug: "toggle",
     name: "Toggle",
-    description: "押したままになるボタン。variant と size があります。",
+    description: "Latching button with variant and size.",
     usage: `<Toggle>Italic</Toggle>
 <Toggle variant="outline" pressed>Italic</Toggle>`,
   },
   {
     slug: "toggle-group",
     name: "Toggle Group",
-    description: "グループ化されたトグル。単一選択の太字・斜体・下線。",
+    description: "Grouped toggles. Single-select Bold / Italic / Underline.",
     usage: `<ToggleGroup type="single" defaultValue="bold">
   <ToggleGroupItem value="bold">Bold</ToggleGroupItem>
 </ToggleGroup>`,
@@ -344,7 +377,7 @@ export const COMPONENTS: ComponentDoc[] = [
   {
     slug: "tooltip",
     name: "Tooltip",
-    description: "ホバーで短いヒントを出します。",
+    description: "Short hint on hover.",
     usage: `<TooltipProvider>
   <Tooltip>
     <TooltipTrigger asChild>

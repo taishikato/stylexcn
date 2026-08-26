@@ -17,14 +17,14 @@ Dark overrides: `src/theme.ts` via `stylex.createTheme`. Radius scale from curre
 
 ## Docs site
 
-Next.js App Router のサイト（`apps/docs`）で、StyleX コンポーネントをブラウザからクリックできます。ルートの Vite playground は視覚回帰用のまま残しています。
+A Next.js App Router site in `apps/docs` for browsing live StyleX components. The Vite playground at the repo root is still the visual-regression harness.
 
 ```bash
 npm install
 npm run docs
 ```
 
-http://localhost:3000 — マーケティングホーム、`/docs` の一覧、各コンポーネントのライブデモ。ライト / ダーク切替あり。ビルドは `npm run docs:build`。詳細は `apps/docs/README.md`。
+http://localhost:3000 — English landing page, `/docs` index, and a live demo per component. Light / dark toggle in the header. Production build: `npm run docs:build`. See `apps/docs/README.md`.
 
 ## Playground
 

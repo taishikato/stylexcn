@@ -44,6 +44,7 @@ import {
   BreadcrumbSeparator,
 } from "@stylexcn/components/breadcrumb";
 import { Button, type ButtonSize, type ButtonVariant } from "@stylexcn/components/button";
+import { ButtonGroup } from "@stylexcn/components/button-group";
 import {
   Card,
   CardAction,
@@ -95,6 +96,7 @@ import {
   HoverCardTrigger,
 } from "@stylexcn/components/hover-card";
 import { Input } from "@stylexcn/components/input";
+import { Kbd, KbdGroup } from "@stylexcn/components/kbd";
 import { Label } from "@stylexcn/components/label";
 import {
   Menubar,
@@ -104,6 +106,10 @@ import {
   MenubarSeparator,
   MenubarTrigger,
 } from "@stylexcn/components/menubar";
+import {
+  NativeSelect,
+  NativeSelectOption,
+} from "@stylexcn/components/native-select";
 import {
   Pagination,
   PaginationContent,
@@ -152,6 +158,7 @@ import {
 } from "@stylexcn/components/sheet";
 import { Skeleton } from "@stylexcn/components/skeleton";
 import { Slider } from "@stylexcn/components/slider";
+import { Spinner } from "@stylexcn/components/spinner";
 import { Switch } from "@stylexcn/components/switch";
 import {
   Table,
@@ -378,6 +385,23 @@ function ButtonDemo() {
   );
 }
 
+function ButtonGroupDemo() {
+  return (
+    <div {...stylex.props(chrome.stack)}>
+      <ButtonGroup>
+        <Button variant="outline">Copy</Button>
+        <Button variant="outline">Paste</Button>
+        <Button variant="outline">Cut</Button>
+      </ButtonGroup>
+      <ButtonGroup orientation="vertical">
+        <Button variant="outline">Top</Button>
+        <Button variant="outline">Middle</Button>
+        <Button variant="outline">Bottom</Button>
+      </ButtonGroup>
+    </div>
+  );
+}
+
 function CardDemo() {
   return (
     <div {...stylex.props(chrome.row)}>
@@ -564,6 +588,20 @@ function InputDemo() {
   );
 }
 
+function KbdDemo() {
+  return (
+    <div {...stylex.props(chrome.row)}>
+      <Kbd>⌘</Kbd>
+      <Kbd>K</Kbd>
+      <KbdGroup>
+        <Kbd>⌘</Kbd>
+        <Kbd>⇧</Kbd>
+        <Kbd>P</Kbd>
+      </KbdGroup>
+    </div>
+  );
+}
+
 function LabelDemo() {
   return (
     <div {...stylex.props(chrome.field)}>
@@ -601,6 +639,25 @@ function MenubarDemo() {
         </MenubarContent>
       </MenubarMenu>
     </Menubar>
+  );
+}
+
+function NativeSelectDemo() {
+  return (
+    <div {...stylex.props(chrome.row)}>
+      <NativeSelect defaultValue="apple">
+        <NativeSelectOption value="apple">Apple</NativeSelectOption>
+        <NativeSelectOption value="banana">Banana</NativeSelectOption>
+        <NativeSelectOption value="blueberry">Blueberry</NativeSelectOption>
+      </NativeSelect>
+      <NativeSelect size="sm" defaultValue="apple">
+        <NativeSelectOption value="apple">Apple</NativeSelectOption>
+        <NativeSelectOption value="banana">Banana</NativeSelectOption>
+      </NativeSelect>
+      <NativeSelect disabled defaultValue="apple">
+        <NativeSelectOption value="apple">Apple</NativeSelectOption>
+      </NativeSelect>
+    </div>
   );
 }
 
@@ -869,6 +926,21 @@ function SliderDemo() {
   );
 }
 
+function SpinnerDemo() {
+  return (
+    <div {...stylex.props(chrome.row)}>
+      <Spinner size="3" />
+      <Spinner size="4" />
+      <Spinner size="6" />
+      <Spinner size="8" />
+      <Button>
+        <Spinner size="4" />
+        Please wait
+      </Button>
+    </div>
+  );
+}
+
 function SwitchDemo() {
   return (
     <div {...stylex.props(chrome.stack)}>
@@ -1016,6 +1088,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   badge: BadgeDemo,
   breadcrumb: BreadcrumbDemo,
   button: ButtonDemo,
+  "button-group": ButtonGroupDemo,
   card: CardDemo,
   checkbox: CheckboxDemo,
   collapsible: CollapsibleDemo,
@@ -1024,8 +1097,10 @@ const DEMOS: Record<string, () => ReactNode> = {
   "dropdown-menu": DropdownMenuDemo,
   "hover-card": HoverCardDemo,
   input: InputDemo,
+  kbd: KbdDemo,
   label: LabelDemo,
   menubar: MenubarDemo,
+  "native-select": NativeSelectDemo,
   pagination: PaginationDemo,
   popover: PopoverDemo,
   progress: ProgressDemo,
@@ -1037,6 +1112,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   sheet: SheetDemo,
   skeleton: SkeletonDemo,
   slider: SliderDemo,
+  spinner: SpinnerDemo,
   switch: SwitchDemo,
   table: TableDemo,
   tabs: TabsDemo,
@@ -1053,38 +1129,5 @@ export function ComponentDemo({ slug }: { slug: string }) {
     <DemoFrame>
       <Demo />
     </DemoFrame>
-  );
-}
-
-export function HeroLive() {
-  const [enabled, setEnabled] = useState(true);
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Live StyleX</CardTitle>
-        <CardDescription>
-          shadcn New York の見た目を、クリックできるコンポーネントで。
-        </CardDescription>
-        <CardAction>
-          <Badge variant={enabled ? "default" : "secondary"}>
-            {enabled ? "On" : "Off"}
-          </Badge>
-        </CardAction>
-      </CardHeader>
-      <CardContent>
-        <div {...stylex.props(chrome.stack)}>
-          <div {...stylex.props(chrome.row)}>
-            <Button>Default</Button>
-            <Button variant="secondary">Secondary</Button>
-            <Button variant="outline">Outline</Button>
-            <Button variant="ghost">Ghost</Button>
-          </div>
-          <div {...stylex.props(chrome.checkRow)}>
-            <Switch checked={enabled} onCheckedChange={setEnabled} id="hero-sw" />
-            <Label htmlFor="hero-sw">Notifications</Label>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
   );
 }

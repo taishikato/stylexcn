@@ -5,7 +5,7 @@ export default function NotFound() {
   return (
     <main {...stylex.props(chrome.hero)}>
       <h1 {...stylex.props(chrome.pageTitle)}>Not found</h1>
-      <p {...stylex.props(chrome.lead)}>このページはありません。</p>
+      <p {...stylex.props(chrome.lead)}>This page does not exist.</p>
     </main>
   );
 }

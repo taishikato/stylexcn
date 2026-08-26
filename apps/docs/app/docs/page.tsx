@@ -13,7 +13,8 @@ export default function DocsIndexPage() {
     <>
       <h1 {...stylex.props(chrome.pageTitle)}>Components</h1>
       <p {...stylex.props(chrome.lead)}>
-        実装済みの StyleX コンポーネントです。各ページで実際にクリック、入力、開閉できます。見た目の基準は shadcn/ui New York v4 です。
+        Implemented StyleX components. Each page is a live demo — click, type,
+        and open overlays. Visual target is official shadcn/ui New York v4.
       </p>
       <div {...stylex.props(chrome.catalog)}>
         {COMPONENTS.map((item) => (
