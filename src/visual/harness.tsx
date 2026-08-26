@@ -1137,6 +1137,10 @@ const styles = stylex.create({
     backgroundColor: "var(--background)",
     color: "var(--foreground)",
   },
+  /* Capture only: hide the popup input caret so dark open cases do not flake. */
+  hideCaret: {
+    caretColor: "transparent",
+  },
   /* Trigger near the top, horizontally centered so w-72 / w-64 content
      (align=center) stays on-screen and the popper does not flip. */
   popoverOpenFrame: {
@@ -4862,6 +4866,7 @@ function ComboboxHarness({ kit, state, theme }: ComboboxCaptureParams) {
       {...stylex.props(
         isDark && darkTheme,
         isOpen ? styles.selectOpenFrame : styles.frame,
+        isOpen && styles.hideCaret,
       )}
     >
       <ComboboxDemo kit={kit} state={state} />
