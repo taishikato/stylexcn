@@ -372,6 +372,14 @@ export const chrome = stylex.create({
     lineHeight: "2.5rem",
     fontWeight: 600,
   },
+  chartWell: {
+    width: "100%",
+    maxWidth: "20rem",
+  },
+  chartSize: {
+    minHeight: "12.5rem",
+    width: "100%",
+  },
   commandWell: {
     width: "100%",
     maxWidth: "24rem",

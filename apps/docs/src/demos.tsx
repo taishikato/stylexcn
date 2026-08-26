@@ -15,6 +15,7 @@ import {
 import { useState, type ReactNode } from "react";
 import { type DateRange } from "react-day-picker";
 import { enUS } from "react-day-picker/locale";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import {
   Accordion,
   AccordionContent,
@@ -74,6 +75,12 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@stylexcn/components/carousel";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@stylexcn/components/chart";
 import { Checkbox } from "@stylexcn/components/checkbox";
 import {
   Collapsible,
@@ -561,6 +568,53 @@ function CarouselDemo() {
         <CarouselPrevious />
         <CarouselNext />
       </Carousel>
+    </div>
+  );
+}
+
+/* Pin series values and disable animation so the preview does not drift. */
+const CHART_DATA = [
+  { month: "January", desktop: 186 },
+  { month: "February", desktop: 305 },
+  { month: "March", desktop: 237 },
+  { month: "April", desktop: 73 },
+  { month: "May", desktop: 209 },
+  { month: "June", desktop: 214 },
+];
+
+const CHART_CONFIG = {
+  desktop: {
+    label: "Desktop",
+    color: "var(--chart-1)",
+  },
+} satisfies ChartConfig;
+
+function ChartDemo() {
+  return (
+    <div {...stylex.props(chrome.chartWell)}>
+      <ChartContainer config={CHART_CONFIG} {...stylex.props(chrome.chartSize)}>
+        <BarChart accessibilityLayer data={CHART_DATA}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+            tickFormatter={(value) => value.slice(0, 3)}
+          />
+          <ChartTooltip
+            cursor={false}
+            isAnimationActive={false}
+            content={<ChartTooltipContent hideLabel />}
+          />
+          <Bar
+            dataKey="desktop"
+            fill="var(--color-desktop)"
+            radius={8}
+            isAnimationActive={false}
+          />
+        </BarChart>
+      </ChartContainer>
     </div>
   );
 }
@@ -1708,6 +1762,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   calendar: CalendarDemo,
   card: CardDemo,
   carousel: CarouselDemo,
+  chart: ChartDemo,
   checkbox: CheckboxDemo,
   collapsible: CollapsibleDemo,
   combobox: ComboboxDemo,

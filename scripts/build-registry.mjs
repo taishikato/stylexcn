@@ -93,7 +93,8 @@ const EXTRA_META = {
   },
   chart: {
     title: "Chart",
-    description: "Themed Recharts charts with tooltip and legend.",
+    description:
+      "Themed Recharts charts with tooltip and legend. Data is pinned and animation is off so the preview does not drift.",
   },
 };
 
