@@ -226,6 +226,8 @@ const COMBOBOX_VIEWPORT = { width: 480, height: 240 };
 const COMMAND_STATES = ["default", "selected", "empty", "disabled", "dialog"];
 const COMMAND_VIEWPORT = { width: 480, height: 480 };
 const NAVIGATION_MENU_VIEWPORT = { width: 800, height: 600 };
+const CALENDAR_STATES = ["default", "selected", "range"];
+const CALENDAR_VIEWPORT = { width: 400, height: 480 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -771,6 +773,20 @@ function navigationMenuCases() {
   return list;
 }
 
+function calendarCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of CALENDAR_STATES) {
+      list.push({
+        component: "calendar",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function aspectRatioCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -924,6 +940,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "navigation-menu") {
     return navigationMenuCases();
   }
+  if (process.env.VISUAL_ONLY === "calendar") {
+    return calendarCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -974,6 +993,7 @@ function cases() {
     ...comboboxCases(),
     ...commandCases(),
     ...navigationMenuCases(),
+    ...calendarCases(),
   ];
 }
 
@@ -1151,6 +1171,9 @@ function slug(c) {
   if (c.component === "navigation-menu") {
     return `navigation-menu__${c.theme}__${c.state}`;
   }
+  if (c.component === "calendar") {
+    return `calendar__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1211,7 +1234,8 @@ function urlFor(kit, c) {
     c.component !== "field" &&
     c.component !== "combobox" &&
     c.component !== "command" &&
-    c.component !== "navigation-menu"
+    c.component !== "navigation-menu" &&
+    c.component !== "calendar"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1425,6 +1449,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "navigation-menu") {
     return page.locator('[data-slot="navigation-menu"]');
+  }
+  if (c.component === "calendar") {
+    return page.locator('[data-slot="calendar"]');
   }
   return page.getByRole("button");
 }
@@ -1787,6 +1814,8 @@ async function main() {
                   : c.component === "navigation-menu" &&
                       (c.state === "open" || c.state === "viewport")
                     ? NAVIGATION_MENU_VIEWPORT
+                  : c.component === "calendar"
+                    ? CALENDAR_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1836,7 +1865,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1896,7 +1925,8 @@ async function main() {
           r.component !== "field" &&
           r.component !== "combobox" &&
           r.component !== "command" &&
-          r.component !== "navigation-menu",
+          r.component !== "navigation-menu" &&
+          r.component !== "calendar",
       )
       .map(
         (r) =>
@@ -2591,6 +2621,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "navigation-menu")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Calendar",
+    "",
+    "- Crops `[data-slot=\"calendar\"]` with 16px pad. Viewport: 400×480 so the month grid plus pad stays on-screen (below Tailwind `md` / 768px so `md:flex-row` does not apply).",
+    "- Official side is the live registry Calendar (`react-day-picker` DayPicker + Button). StyleX is the same primitive with StyleX tables. Date Picker is not a leftover component here.",
+    "- Pinned `today` / `month` to 15 June 2024 so the grid does not drift. `default` has no selected date, `selected` is 10 June 2024, `range` is 10–18 June 2024. Each × light/dark.",
+    "- Skipped: dropdown caption, week numbers, disabled dates, RTL, and a Date Picker popover demo (not in official calendar.json). Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "calendar")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

@@ -236,7 +236,7 @@ import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
 import {
   Calculator,
-  Calendar,
+  Calendar as CalendarIcon,
   CircleAlert,
   Command as CommandGlyph,
   CreditCard,
@@ -266,6 +266,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "../components/navigation-menu";
+import { Calendar } from "../components/calendar";
 import {
   Table,
   TableBody,
@@ -522,6 +523,7 @@ import {
   OfficialNavigationMenuList,
   OfficialNavigationMenuTrigger,
 } from "./official-navigation-menu";
+import { OfficialCalendar } from "./official-calendar";
 import {
   OfficialTable,
   OfficialTableBody,
@@ -646,7 +648,8 @@ export type CaptureComponent =
   | "field"
   | "combobox"
   | "command"
-  | "navigation-menu";
+  | "navigation-menu"
+  | "calendar";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -1112,6 +1115,13 @@ export type NavigationMenuCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type CalendarCaptureParams = {
+  component: "calendar";
+  kit: CaptureKit;
+  state: "default" | "selected" | "range";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1161,7 +1171,8 @@ export type CaptureParams =
   | FieldCaptureParams
   | ComboboxCaptureParams
   | CommandCaptureParams
-  | NavigationMenuCaptureParams;
+  | NavigationMenuCaptureParams
+  | CalendarCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -3736,6 +3747,70 @@ function NavigationMenuHarness({
   );
 }
 
+/* Pin month/today so screenshots do not drift with the current date. */
+const CALENDAR_TODAY = new Date(2024, 5, 15);
+const CALENDAR_MONTH = new Date(2024, 5, 1);
+const CALENDAR_SELECTED = new Date(2024, 5, 10);
+const CALENDAR_RANGE = {
+  from: new Date(2024, 5, 10),
+  to: new Date(2024, 5, 18),
+};
+
+function CalendarHarness({ kit, state, theme }: CalendarCaptureParams) {
+  const isDark = theme === "dark";
+  const shared = {
+    today: CALENDAR_TODAY,
+    month: CALENDAR_MONTH,
+    onMonthChange: () => {},
+  };
+
+  const calendar =
+    kit === "shadcn" ? (
+      state === "range" ? (
+        <OfficialCalendar
+          {...shared}
+          mode="range"
+          selected={CALENDAR_RANGE}
+          onSelect={() => {}}
+        />
+      ) : (
+        <OfficialCalendar
+          {...shared}
+          mode="single"
+          selected={state === "selected" ? CALENDAR_SELECTED : undefined}
+          onSelect={() => {}}
+        />
+      )
+    ) : state === "range" ? (
+      <Calendar
+        {...shared}
+        mode="range"
+        selected={CALENDAR_RANGE}
+        onSelect={() => {}}
+      />
+    ) : (
+      <Calendar
+        {...shared}
+        mode="single"
+        selected={state === "selected" ? CALENDAR_SELECTED : undefined}
+        onSelect={() => {}}
+      />
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="calendar"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      {calendar}
+    </div>
+  );
+}
+
 function AspectRatioFill() {
   return <div {...stylex.props(styles.aspectRatioFill)} />;
 }
@@ -5167,7 +5242,7 @@ function CommandMenuBody({
         <Empty>{COMMAND_EMPTY}</Empty>
         <Group heading={COMMAND_SUGGESTIONS}>
           <Item value="calendar">
-            <Calendar />
+            <CalendarIcon />
             {COMMAND_CALENDAR}
           </Item>
           <Item value="emoji">
@@ -5416,6 +5491,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "navigation-menu") {
     return <NavigationMenuHarness {...params} />;
+  }
+  if (params.component === "calendar") {
+    return <CalendarHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -5932,6 +6010,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "navigation-menu", kit, state, theme };
+  }
+
+  if (component === "calendar") {
+    if (state !== "default" && state !== "selected" && state !== "range") {
+      return null;
+    }
+    return { component: "calendar", kit, state, theme };
   }
 
   if (component !== "button") return null;
