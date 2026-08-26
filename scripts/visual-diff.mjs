@@ -109,6 +109,7 @@ const BUTTON_GROUP_STATES = [
   "nested",
 ];
 const KBD_STATES = ["default", "with-icon", "group", "tooltip"];
+const EMPTY_STATES = ["default", "with-icon", "with-content"];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -143,6 +144,9 @@ const ASPECT_RATIO_VIEWPORT = { width: 400, height: 280 };
 const TABLE_VIEWPORT = { width: 640, height: 400 };
 /* Horizontal 24rem×8rem + pad; vertical 16rem×12rem + pad. */
 const RESIZABLE_VIEWPORT = { width: 480, height: 280 };
+/* 24rem well + 16px crop pad. 800px is above Tailwind md (768px) so md:p-12
+   applies on both kits; 480 would land on p-6 instead. */
+const EMPTY_VIEWPORT = { width: 800, height: 600 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -730,6 +734,20 @@ function kbdCases() {
   return list;
 }
 
+function emptyCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of EMPTY_STATES) {
+      list.push({
+        component: "empty",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -772,6 +790,7 @@ function cases() {
     ...resizableCases(),
     ...buttonGroupCases(),
     ...kbdCases(),
+    ...emptyCases(),
   ];
 }
 
@@ -894,6 +913,9 @@ function slug(c) {
   if (c.component === "kbd") {
     return `kbd__${c.theme}__${c.state}`;
   }
+  if (c.component === "empty") {
+    return `empty__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -945,7 +967,8 @@ function urlFor(kit, c) {
     c.component !== "table" &&
     c.component !== "resizable" &&
     c.component !== "button-group" &&
-    c.component !== "kbd"
+    c.component !== "kbd" &&
+    c.component !== "empty"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1120,6 +1143,9 @@ function controlLocator(page, c) {
       return page.locator('[data-slot="kbd-group"]');
     }
     return page.locator('[data-slot="kbd"]');
+  }
+  if (c.component === "empty") {
+    return page.locator('[data-slot="empty"]');
   }
   return page.getByRole("button");
 }
@@ -1378,6 +1404,8 @@ async function main() {
                     ? TABLE_VIEWPORT
                   : c.component === "resizable"
                     ? RESIZABLE_VIEWPORT
+                  : c.component === "empty"
+                    ? EMPTY_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1427,7 +1455,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1478,7 +1506,8 @@ async function main() {
           r.component !== "table" &&
           r.component !== "resizable" &&
           r.component !== "button-group" &&
-          r.component !== "kbd",
+          r.component !== "kbd" &&
+          r.component !== "empty",
       )
       .map(
         (r) =>
@@ -2026,6 +2055,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "kbd")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Empty",
+    "",
+    "- Crops `[data-slot=\"empty\"]` with 16px pad inside an identical 24rem-wide parent on both kits so `w-full` / `max-w-sm` match.",
+    "- Viewport: 800×600 so Tailwind `md:p-12` (768px) applies on both kits. Do not use a width near the md breakpoint.",
+    "- Identical copy on both kits: title `No messages`, description `You don't have any messages yet.`, lucide `Inbox`. `default` is EmptyMedia default; `with-icon` is EmptyMedia `variant=\"icon\"`; `with-content` adds EmptyContent with Button `Send a message`.",
+    "- Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "empty")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

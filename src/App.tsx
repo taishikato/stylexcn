@@ -12,6 +12,14 @@ import {
   AlertTitle,
 } from "./components/alert";
 import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "./components/empty";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -173,7 +181,7 @@ import {
   ResizablePanel,
   ResizablePanelGroup,
 } from "./components/resizable";
-import { CircleAlert, Command } from "lucide-react";
+import { CircleAlert, Command, Inbox } from "lucide-react";
 import {
   Tabs,
   TabsContent,
@@ -200,6 +208,14 @@ import {
   OfficialAlertDescription,
   OfficialAlertTitle,
 } from "./visual/official-alert";
+import {
+  OfficialEmpty,
+  OfficialEmptyContent,
+  OfficialEmptyDescription,
+  OfficialEmptyHeader,
+  OfficialEmptyMedia,
+  OfficialEmptyTitle,
+} from "./visual/official-empty";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -526,6 +542,9 @@ const styles = stylex.create({
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
   },
+  emptyWell: {
+    width: "24rem",
+  },
 });
 
 function Playground() {
@@ -538,9 +557,9 @@ function Playground() {
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
         Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
-        Menubar, Aspect Ratio, Table, Resizable, and Kbd vs official shadcn New
-        York baseline. Visual capture lives at query-param harness URLs (see
-        README).
+        Menubar, Aspect Ratio, Table, Resizable, Kbd, and Empty vs official
+        shadcn New York baseline. Visual capture lives at query-param harness
+        URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1568,6 +1587,40 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <span {...stylex.props(styles.label)}>with-footer</span>
         <div {...stylex.props(styles.tableWell)}>
           <PlaygroundTable kit="shadcn" withFooter />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Empty
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.emptyWell)}>
+          <PlaygroundEmpty kit="stylex" state="default" />
+        </div>
+        <span {...stylex.props(styles.label)}>with-icon</span>
+        <div {...stylex.props(styles.emptyWell)}>
+          <PlaygroundEmpty kit="stylex" state="with-icon" />
+        </div>
+        <span {...stylex.props(styles.label)}>with-content</span>
+        <div {...stylex.props(styles.emptyWell)}>
+          <PlaygroundEmpty kit="stylex" state="with-content" />
+        </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Empty
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <div {...stylex.props(styles.emptyWell)}>
+          <PlaygroundEmpty kit="shadcn" state="default" />
+        </div>
+        <span {...stylex.props(styles.label)}>with-icon</span>
+        <div {...stylex.props(styles.emptyWell)}>
+          <PlaygroundEmpty kit="shadcn" state="with-icon" />
+        </div>
+        <span {...stylex.props(styles.label)}>with-content</span>
+        <div {...stylex.props(styles.emptyWell)}>
+          <PlaygroundEmpty kit="shadcn" state="with-content" />
         </div>
       </div>
       <h2 {...stylex.props(styles.heading)}>
@@ -2688,6 +2741,57 @@ function PlaygroundScrollArea({
         <ScrollBar orientation="horizontal" />
       ) : null}
     </ScrollArea>
+  );
+}
+
+function PlaygroundEmpty({
+  kit,
+  state,
+}: {
+  kit: "stylex" | "shadcn";
+  state: "default" | "with-icon" | "with-content";
+}) {
+  const mediaVariant = state === "default" ? "default" : "icon";
+  const showContent = state === "with-content";
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialEmpty>
+        <OfficialEmptyHeader>
+          <OfficialEmptyMedia variant={mediaVariant}>
+            <Inbox />
+          </OfficialEmptyMedia>
+          <OfficialEmptyTitle>No messages</OfficialEmptyTitle>
+          <OfficialEmptyDescription>
+            You don&apos;t have any messages yet.
+          </OfficialEmptyDescription>
+        </OfficialEmptyHeader>
+        {showContent ? (
+          <OfficialEmptyContent>
+            <OfficialButton>Send a message</OfficialButton>
+          </OfficialEmptyContent>
+        ) : null}
+      </OfficialEmpty>
+    );
+  }
+
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant={mediaVariant}>
+          <Inbox />
+        </EmptyMedia>
+        <EmptyTitle>No messages</EmptyTitle>
+        <EmptyDescription>
+          You don&apos;t have any messages yet.
+        </EmptyDescription>
+      </EmptyHeader>
+      {showContent ? (
+        <EmptyContent>
+          <Button>Send a message</Button>
+        </EmptyContent>
+      ) : null}
+    </Empty>
   );
 }
 

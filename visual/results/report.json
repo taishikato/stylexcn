@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T02:02:06.227Z",
-  "total": 312,
+  "generatedAt": "2026-08-26T02:15:51.384Z",
+  "total": 318,
   "failed": 0,
-  "passed": 312,
+  "passed": 318,
   "threshold": 0,
   "cases": [
     {
@@ -4518,6 +4518,90 @@
       "shadcn": "visual/results/shadcn/kbd__dark__tooltip.png",
       "stylex": "visual/results/stylex/kbd__dark__tooltip.png",
       "diff": "visual/results/diff/kbd__dark__tooltip.png"
+    },
+    {
+      "name": "empty__light__default",
+      "component": "empty",
+      "state": "default",
+      "theme": "light",
+      "width": 416,
+      "height": 226,
+      "mismatched": 0,
+      "pixels": 94016,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/empty__light__default.png",
+      "stylex": "visual/results/stylex/empty__light__default.png",
+      "diff": "visual/results/diff/empty__light__default.png"
+    },
+    {
+      "name": "empty__light__with-icon",
+      "component": "empty",
+      "state": "with-icon",
+      "theme": "light",
+      "width": 416,
+      "height": 242,
+      "mismatched": 0,
+      "pixels": 100672,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/empty__light__with-icon.png",
+      "stylex": "visual/results/stylex/empty__light__with-icon.png",
+      "diff": "visual/results/diff/empty__light__with-icon.png"
+    },
+    {
+      "name": "empty__light__with-content",
+      "component": "empty",
+      "state": "with-content",
+      "theme": "light",
+      "width": 416,
+      "height": 302,
+      "mismatched": 0,
+      "pixels": 125632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/empty__light__with-content.png",
+      "stylex": "visual/results/stylex/empty__light__with-content.png",
+      "diff": "visual/results/diff/empty__light__with-content.png"
+    },
+    {
+      "name": "empty__dark__default",
+      "component": "empty",
+      "state": "default",
+      "theme": "dark",
+      "width": 416,
+      "height": 226,
+      "mismatched": 0,
+      "pixels": 94016,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/empty__dark__default.png",
+      "stylex": "visual/results/stylex/empty__dark__default.png",
+      "diff": "visual/results/diff/empty__dark__default.png"
+    },
+    {
+      "name": "empty__dark__with-icon",
+      "component": "empty",
+      "state": "with-icon",
+      "theme": "dark",
+      "width": 416,
+      "height": 242,
+      "mismatched": 0,
+      "pixels": 100672,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/empty__dark__with-icon.png",
+      "stylex": "visual/results/stylex/empty__dark__with-icon.png",
+      "diff": "visual/results/diff/empty__dark__with-icon.png"
+    },
+    {
+      "name": "empty__dark__with-content",
+      "component": "empty",
+      "state": "with-content",
+      "theme": "dark",
+      "width": 416,
+      "height": 302,
+      "mismatched": 0,
+      "pixels": 125632,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/empty__dark__with-content.png",
+      "stylex": "visual/results/stylex/empty__dark__with-content.png",
+      "diff": "visual/results/diff/empty__dark__with-content.png"
     }
   ]
 }

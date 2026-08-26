@@ -12,6 +12,14 @@ import {
   AlertTitle,
 } from "../components/alert";
 import {
+  Empty,
+  EmptyContent,
+  EmptyDescription,
+  EmptyHeader,
+  EmptyMedia,
+  EmptyTitle,
+} from "../components/empty";
+import {
   Avatar,
   AvatarBadge,
   AvatarFallback,
@@ -152,7 +160,7 @@ import { ScrollArea, ScrollBar } from "../components/scroll-area";
 import { Slider } from "../components/slider";
 import { Textarea } from "../components/textarea";
 import { Toggle, type ToggleSize, type ToggleVariant } from "../components/toggle";
-import { CircleAlert, Command } from "lucide-react";
+import { CircleAlert, Command, Inbox } from "lucide-react";
 import { AspectRatio } from "../components/aspect-ratio";
 import { ToggleGroup, ToggleGroupItem } from "../components/toggle-group";
 import {
@@ -197,6 +205,14 @@ import {
   OfficialAlertDescription,
   OfficialAlertTitle,
 } from "./official-alert";
+import {
+  OfficialEmpty,
+  OfficialEmptyContent,
+  OfficialEmptyDescription,
+  OfficialEmptyHeader,
+  OfficialEmptyMedia,
+  OfficialEmptyTitle,
+} from "./official-empty";
 import {
   OfficialAvatar,
   OfficialAvatarBadge,
@@ -444,7 +460,8 @@ export type CaptureComponent =
   | "table"
   | "resizable"
   | "button-group"
-  | "kbd";
+  | "kbd"
+  | "empty";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -483,7 +500,8 @@ export type CaptureState =
   | "separator"
   | "text"
   | "nested"
-  | "tooltip";
+  | "tooltip"
+  | "with-content";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -783,6 +801,13 @@ export type KbdCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type EmptyCaptureParams = {
+  component: "empty";
+  kit: CaptureKit;
+  state: "default" | "with-icon" | "with-content";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -823,7 +848,8 @@ export type CaptureParams =
   | TableCaptureParams
   | ResizableCaptureParams
   | ButtonGroupCaptureParams
-  | KbdCaptureParams;
+  | KbdCaptureParams
+  | EmptyCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1020,6 +1046,10 @@ const styles = stylex.create({
     borderColor: "var(--border)",
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
+  },
+  /* Identical 24rem parent on both kits so w-full / max-w-sm match. */
+  emptyWell: {
+    width: "24rem",
   },
 });
 
@@ -3230,6 +3260,76 @@ function ResizableDemo({
   );
 }
 
+const EMPTY_TITLE = "No messages";
+const EMPTY_DESCRIPTION = "You don't have any messages yet.";
+const EMPTY_ACTION = "Send a message";
+
+function EmptyBody({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: EmptyCaptureParams["state"];
+}) {
+  const mediaVariant = state === "default" ? "default" : "icon";
+  const showContent = state === "with-content";
+
+  if (kit === "shadcn") {
+    return (
+      <OfficialEmpty>
+        <OfficialEmptyHeader>
+          <OfficialEmptyMedia variant={mediaVariant}>
+            <Inbox />
+          </OfficialEmptyMedia>
+          <OfficialEmptyTitle>{EMPTY_TITLE}</OfficialEmptyTitle>
+          <OfficialEmptyDescription>{EMPTY_DESCRIPTION}</OfficialEmptyDescription>
+        </OfficialEmptyHeader>
+        {showContent ? (
+          <OfficialEmptyContent>
+            <OfficialButton>{EMPTY_ACTION}</OfficialButton>
+          </OfficialEmptyContent>
+        ) : null}
+      </OfficialEmpty>
+    );
+  }
+
+  return (
+    <Empty>
+      <EmptyHeader>
+        <EmptyMedia variant={mediaVariant}>
+          <Inbox />
+        </EmptyMedia>
+        <EmptyTitle>{EMPTY_TITLE}</EmptyTitle>
+        <EmptyDescription>{EMPTY_DESCRIPTION}</EmptyDescription>
+      </EmptyHeader>
+      {showContent ? (
+        <EmptyContent>
+          <Button>{EMPTY_ACTION}</Button>
+        </EmptyContent>
+      ) : null}
+    </Empty>
+  );
+}
+
+function EmptyHarness({ kit, state, theme }: EmptyCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="empty"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div {...stylex.props(styles.emptyWell)}>
+        <EmptyBody kit={kit} state={state} />
+      </div>
+    </div>
+  );
+}
+
 function ResizableHarness({ kit, state, theme }: ResizableCaptureParams) {
   const isDark = theme === "dark";
   const well =
@@ -3600,6 +3700,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "kbd") {
     return <KbdHarness {...params} />;
+  }
+  if (params.component === "empty") {
+    return <EmptyHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -3982,6 +4085,17 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "kbd", kit, state, theme };
+  }
+
+  if (component === "empty") {
+    if (
+      state !== "default" &&
+      state !== "with-icon" &&
+      state !== "with-content"
+    ) {
+      return null;
+    }
+    return { component: "empty", kit, state, theme };
   }
 
   if (component !== "button") return null;
