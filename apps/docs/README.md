@@ -1,6 +1,6 @@
 # stylexcn docs
 
-Next.js App Router site that imports the existing `src/components` kit so you can click live StyleX components in the browser.
+Next.js App Router site for the StyleX port of shadcn/ui. It imports the existing `src/components` kit so you can click live StyleX components in the browser.
 
 The Vite playground and `npm run visual:diff` at the repo root are unchanged. This app does not replace them.
 

@@ -1,6 +1,6 @@
 # stylexcn
 
-shadcn/ui-compatible components styled with [StyleX](https://stylexjs.com), not Tailwind. Visual target: official shadcn/ui **New York**. Primitives: [Base UI](https://base-ui.com).
+A [StyleX](https://stylexjs.com) port of [shadcn/ui](https://ui.shadcn.com) — same look, StyleX instead of Tailwind. Pixel-perfect with official shadcn/ui. Primitives: [Base UI](https://base-ui.com).
 
 This repo is a foundation plus **Button**, **Input**, **Label**, **Textarea**, **Checkbox**, **Switch**, **Radio Group**, **Card**, **Dialog**, **Alert Dialog**, **Select**, **Native Select**, **Dropdown Menu**, **Context Menu**, **Sheet**, **Tabs**, **Popover**, **Hover Card**, **Tooltip**, **Badge**, **Separator**, **Skeleton**, **Spinner**, **Avatar**, **Progress**, **Accordion**, **Slider**, **Toggle**, **Breadcrumb**, **Collapsible**, **Scroll Area**, **Pagination**, **Alert**, **Toggle Group**, **Button Group**, **Menubar**, **Aspect Ratio**, **Table**, **Resizable**, **Kbd**, and **Empty**. Distribution (copy-into-repo / registry) comes later.
 

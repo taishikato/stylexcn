@@ -9,7 +9,7 @@ export const metadata: Metadata = {
     template: "%s · stylexcn",
   },
   description:
-    "shadcn/ui-compatible components styled with StyleX. Visual target: New York v4.",
+    "A StyleX port of shadcn/ui — same look, StyleX instead of Tailwind.",
 };
 
 export default function RootLayout({
