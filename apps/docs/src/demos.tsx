@@ -6,6 +6,7 @@ import {
   Calendar as CalendarIcon,
   CircleAlert,
   CreditCard,
+  Home,
   Inbox,
   Search,
   Settings,
@@ -260,6 +261,20 @@ import {
   SheetTrigger,
   type SheetSide,
 } from "@stylexcn/components/sheet";
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarInset,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@stylexcn/components/sidebar";
 import { Skeleton } from "@stylexcn/components/skeleton";
 import { Slider } from "@stylexcn/components/slider";
 import { Spinner } from "@stylexcn/components/spinner";
@@ -1571,6 +1586,54 @@ function SheetDemo() {
   );
 }
 
+/* Pin expanded so the preview does not read cookies or hop to a sheet. */
+const SIDEBAR_ITEMS = [
+  { title: "Home", icon: Home, isActive: true },
+  { title: "Inbox", icon: Inbox, isActive: false },
+  { title: "Calendar", icon: CalendarIcon, isActive: false },
+] as const;
+
+function SidebarDemo() {
+  return (
+    <div {...stylex.props(chrome.sidebarStage)}>
+      <SidebarProvider
+        open
+        onOpenChange={() => {}}
+        style={{ minHeight: "100%", height: "100%" }}
+      >
+        <Sidebar collapsible="none">
+          <SidebarHeader>
+            <div {...stylex.props(chrome.sidebarBrand)}>Acme Inc</div>
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarGroup>
+              <SidebarGroupLabel>Application</SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {SIDEBAR_ITEMS.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton isActive={item.isActive}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </SidebarContent>
+        </Sidebar>
+        <SidebarInset>
+          <header {...stylex.props(chrome.sidebarInsetBar)}>
+            <SidebarTrigger />
+            Inbox
+          </header>
+        </SidebarInset>
+      </SidebarProvider>
+    </div>
+  );
+}
+
 function SkeletonDemo() {
   return (
     <div {...stylex.props(chrome.row)}>
@@ -1791,6 +1854,7 @@ const DEMOS: Record<string, () => ReactNode> = {
   select: SelectDemo,
   separator: SeparatorDemo,
   sheet: SheetDemo,
+  sidebar: SidebarDemo,
   skeleton: SkeletonDemo,
   slider: SliderDemo,
   spinner: SpinnerDemo,

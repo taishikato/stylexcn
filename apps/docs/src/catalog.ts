@@ -468,6 +468,28 @@ export const COMPONENTS: ComponentDoc[] = [
 </Sheet>`,
   },
   {
+    slug: "sidebar",
+    name: "Sidebar",
+    description:
+      "A collapsible sidebar with menu groups. Open and collapsed states are pinned so the preview does not drift.",
+    usage: `<SidebarProvider open>
+  <Sidebar collapsible="none">
+    <SidebarHeader>Acme Inc</SidebarHeader>
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupLabel>Application</SidebarGroupLabel>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton isActive>Home</SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarGroup>
+    </SidebarContent>
+  </Sidebar>
+  <SidebarInset>Inbox</SidebarInset>
+</SidebarProvider>`,
+  },
+  {
     slug: "skeleton",
     name: "Skeleton",
     description: "Loading placeholder. Rounded bar and circle.",

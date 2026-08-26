@@ -380,6 +380,37 @@ export const chrome = stylex.create({
     minHeight: "12.5rem",
     width: "100%",
   },
+  /* Contain the primitive: override provider minHeight 100svh and skip
+     fixed desktop/mobile sheet layout via collapsible="none". */
+  sidebarStage: {
+    overflow: "hidden",
+    width: "100%",
+    height: "18rem",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: tokens["--border"],
+    borderRadius: tokens["--radius-lg"],
+  },
+  sidebarBrand: {
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
+    fontWeight: 500,
+    paddingInline: "0.5rem",
+    paddingBlock: "0.25rem",
+  },
+  sidebarInsetBar: {
+    display: "flex",
+    height: "3rem",
+    alignItems: "center",
+    gap: "0.5rem",
+    borderBottomWidth: "1px",
+    borderBottomStyle: "solid",
+    borderBottomColor: tokens["--border"],
+    paddingInline: "1rem",
+    boxSizing: "border-box",
+    fontSize: "0.875rem",
+    fontWeight: 500,
+  },
   commandWell: {
     width: "100%",
     maxWidth: "24rem",
