@@ -275,6 +275,12 @@ import {
   CarouselPrevious,
 } from "../components/carousel";
 import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "../components/chart";
+import {
   Table,
   TableBody,
   TableCaption,
@@ -539,6 +545,19 @@ import {
   OfficialCarouselPrevious,
 } from "./official-carousel";
 import {
+  OfficialChartContainer,
+  OfficialChartTooltip,
+  OfficialChartTooltipContent,
+} from "./official-chart";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Line,
+  LineChart,
+  XAxis,
+} from "recharts";
+import {
   OfficialTable,
   OfficialTableBody,
   OfficialTableCaption,
@@ -664,7 +683,8 @@ export type CaptureComponent =
   | "command"
   | "navigation-menu"
   | "calendar"
-  | "carousel";
+  | "carousel"
+  | "chart";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -722,7 +742,8 @@ export type CaptureState =
   | "addon"
   | "popup"
   | "viewport"
-  | "next";
+  | "next"
+  | "line";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -1145,6 +1166,13 @@ export type CarouselCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ChartCaptureParams = {
+  component: "chart";
+  kit: CaptureKit;
+  state: "bar" | "line" | "tooltip";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -1196,7 +1224,8 @@ export type CaptureParams =
   | CommandCaptureParams
   | NavigationMenuCaptureParams
   | CalendarCaptureParams
-  | CarouselCaptureParams;
+  | CarouselCaptureParams
+  | ChartCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -1423,6 +1452,17 @@ const styles = stylex.create({
     fontSize: "1.875rem",
     lineHeight: "2.25rem",
     fontWeight: 600,
+  },
+  /* Identical 20rem parent so min-h-[200px] w-full matches. Extra pad so a
+     pinned tooltip stays inside the crop. */
+  chartWell: {
+    width: "20rem",
+    padding: "2.5rem",
+    boxSizing: "border-box",
+  },
+  chartSize: {
+    minHeight: 200,
+    width: "100%",
   },
   /* Identical 32rem parent on both kits so w-full matches. */
   tableWell: {
@@ -3989,6 +4029,110 @@ function CarouselHarness({ kit, state, theme }: CarouselCaptureParams) {
   );
 }
 
+const CHART_DATA = [
+  { month: "January", desktop: 186 },
+  { month: "February", desktop: 305 },
+  { month: "March", desktop: 237 },
+  { month: "April", desktop: 73 },
+  { month: "May", desktop: 209 },
+  { month: "June", desktop: 214 },
+];
+
+const CHART_CONFIG = {
+  desktop: {
+    label: "Desktop",
+    color: "var(--chart-1)",
+  },
+} satisfies ChartConfig;
+
+function ChartHarness({ kit, state, theme }: ChartCaptureParams) {
+  const isDark = theme === "dark";
+  const showTooltip = state === "tooltip";
+  const Container =
+    kit === "shadcn" ? OfficialChartContainer : ChartContainer;
+  const Tooltip = kit === "shadcn" ? OfficialChartTooltip : ChartTooltip;
+  const TooltipContent =
+    kit === "shadcn" ? OfficialChartTooltipContent : ChartTooltipContent;
+  const containerProps =
+    kit === "shadcn"
+      ? { className: "min-h-[200px] w-full" }
+      : stylex.props(styles.chartSize);
+
+  const chart =
+    state === "line" ? (
+      <Container config={CHART_CONFIG} {...containerProps}>
+        <LineChart
+          accessibilityLayer
+          data={CHART_DATA}
+          margin={{ left: 12, right: 12 }}
+        >
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            tickFormatter={(value) => value.slice(0, 3)}
+          />
+          <Tooltip
+            cursor={false}
+            isAnimationActive={false}
+            content={<TooltipContent hideLabel />}
+          />
+          <Line
+            dataKey="desktop"
+            type="natural"
+            stroke="var(--color-desktop)"
+            strokeWidth={2}
+            dot={false}
+            isAnimationActive={false}
+          />
+        </LineChart>
+      </Container>
+    ) : (
+      <Container config={CHART_CONFIG} {...containerProps}>
+        <BarChart accessibilityLayer data={CHART_DATA}>
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="month"
+            tickLine={false}
+            tickMargin={10}
+            axisLine={false}
+            tickFormatter={(value) => value.slice(0, 3)}
+          />
+          <Tooltip
+            cursor={false}
+            isAnimationActive={false}
+            defaultIndex={showTooltip ? 1 : undefined}
+            active={showTooltip ? true : undefined}
+            content={<TooltipContent hideLabel />}
+          />
+          <Bar
+            dataKey="desktop"
+            fill="var(--color-desktop)"
+            radius={8}
+            isAnimationActive={false}
+          />
+        </BarChart>
+      </Container>
+    );
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="chart"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <div data-chart-well {...stylex.props(styles.chartWell)}>
+        {chart}
+      </div>
+    </div>
+  );
+}
+
 function AspectRatioFill() {
   return <div {...stylex.props(styles.aspectRatioFill)} />;
 }
@@ -5676,6 +5820,9 @@ export function Harness(params: CaptureParams) {
   if (params.component === "carousel") {
     return <CarouselHarness {...params} />;
   }
+  if (params.component === "chart") {
+    return <ChartHarness {...params} />;
+  }
   return <ButtonHarness {...params} />;
 }
 
@@ -6205,6 +6352,13 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "carousel", kit, state, theme };
+  }
+
+  if (component === "chart") {
+    if (state !== "bar" && state !== "line" && state !== "tooltip") {
+      return null;
+    }
+    return { component: "chart", kit, state, theme };
   }
 
   if (component !== "button") return null;

@@ -231,6 +231,9 @@ const CALENDAR_VIEWPORT = { width: 400, height: 480 };
 const CAROUSEL_STATES = ["default", "next", "vertical"];
 /* 20rem well + prev/next at ±3rem + 64px crop pad. Stay below Tailwind md. */
 const CAROUSEL_VIEWPORT = { width: 640, height: 560 };
+const CHART_STATES = ["bar", "line", "tooltip"];
+/* 20rem well + 2.5rem pad + tooltip overflow. Stay below Tailwind md. */
+const CHART_VIEWPORT = { width: 480, height: 400 };
 const DEFAULT_VIEWPORT = { width: 400, height: 200 };
 
 function buttonCases() {
@@ -804,6 +807,20 @@ function carouselCases() {
   return list;
 }
 
+function chartCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of CHART_STATES) {
+      list.push({
+        component: "chart",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function aspectRatioCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -963,6 +980,9 @@ function cases() {
   if (process.env.VISUAL_ONLY === "carousel") {
     return carouselCases();
   }
+  if (process.env.VISUAL_ONLY === "chart") {
+    return chartCases();
+  }
   return [
     ...buttonCases(),
     ...inputCases(),
@@ -1015,6 +1035,7 @@ function cases() {
     ...navigationMenuCases(),
     ...calendarCases(),
     ...carouselCases(),
+    ...chartCases(),
   ];
 }
 
@@ -1198,6 +1219,9 @@ function slug(c) {
   if (c.component === "carousel") {
     return `carousel__${c.theme}__${c.state}`;
   }
+  if (c.component === "chart") {
+    return `chart__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -1260,7 +1284,8 @@ function urlFor(kit, c) {
     c.component !== "command" &&
     c.component !== "navigation-menu" &&
     c.component !== "calendar" &&
-    c.component !== "carousel"
+    c.component !== "carousel" &&
+    c.component !== "chart"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1481,6 +1506,9 @@ function controlLocator(page, c) {
   if (c.component === "carousel") {
     return page.locator('[data-slot="carousel"]');
   }
+  if (c.component === "chart") {
+    return page.locator("[data-chart-well]");
+  }
   return page.getByRole("button");
 }
 
@@ -1619,6 +1647,14 @@ async function prepareControl(page, c) {
       await page.locator('[data-slot="carousel-previous"][disabled]').waitFor();
     }
     await page.waitForTimeout(50);
+    return;
+  }
+  if (c.component === "chart") {
+    await page.locator('[data-slot="chart"] svg.recharts-surface').waitFor();
+    if (c.state === "tooltip") {
+      await page.locator(".recharts-tooltip-wrapper").waitFor();
+    }
+    await page.waitForTimeout(100);
     return;
   }
   const locator = controlLocator(page, c);
@@ -1858,6 +1894,8 @@ async function main() {
                     ? CALENDAR_VIEWPORT
                   : c.component === "carousel"
                     ? CAROUSEL_VIEWPORT
+                  : c.component === "chart"
+                    ? CHART_VIEWPORT
                   : DEFAULT_VIEWPORT,
     );
 
@@ -1907,7 +1945,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel + Chart)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1969,7 +2007,8 @@ async function main() {
           r.component !== "command" &&
           r.component !== "navigation-menu" &&
           r.component !== "calendar" &&
-          r.component !== "carousel",
+          r.component !== "carousel" &&
+          r.component !== "chart",
       )
       .map(
         (r) =>
@@ -2696,6 +2735,22 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "carousel")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Chart",
+    "",
+    "- Crops `[data-chart-well]` with 16px pad (20rem well + 2.5rem inner pad so a pinned tooltip stays in frame). Viewport: 480×400 (below Tailwind `md`).",
+    "- Official side is the live registry Chart (Recharts v3 wrapper). StyleX uses the same primitive with StyleX tables. Not Base UI.",
+    "- Pinned data (Jan–Jun 2024) and `isAnimationActive={false}` on Bar / Line / Tooltip. `bar` matches official chart-bar-default (no hover). `line` matches official chart-line-default. `tooltip` is the bar chart with `defaultIndex={1}` so February is shown. Each × light/dark.",
+    "- Skipped: the rest of the official charts gallery (area, pie, radar, radial, interactive), Card chrome, and legend-only variants. Playwright `animations: \"disabled\"`.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "chart")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

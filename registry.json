@@ -265,6 +265,26 @@
       ]
     },
     {
+      "name": "chart",
+      "type": "registry:ui",
+      "title": "Chart",
+      "description": "Themed Recharts charts with tooltip and legend.",
+      "files": [
+        {
+          "path": "registry/ui/chart.tsx",
+          "type": "registry:ui",
+          "target": "@ui/chart.tsx"
+        }
+      ],
+      "dependencies": [
+        "@stylexjs/stylex",
+        "recharts"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ]
+    },
+    {
       "name": "checkbox",
       "type": "registry:ui",
       "title": "Checkbox",

@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-26T17:50:01.699Z",
-  "total": 456,
+  "generatedAt": "2026-08-26T18:35:43.814Z",
+  "total": 462,
   "failed": 0,
-  "passed": 456,
+  "passed": 462,
   "threshold": 0,
   "cases": [
     {
@@ -6534,6 +6534,90 @@
       "shadcn": "visual/results/shadcn/carousel__dark__vertical.png",
       "stylex": "visual/results/stylex/carousel__dark__vertical.png",
       "diff": "visual/results/diff/carousel__dark__vertical.png"
+    },
+    {
+      "name": "chart__light__bar",
+      "component": "chart",
+      "state": "bar",
+      "theme": "light",
+      "width": 352,
+      "height": 312,
+      "mismatched": 0,
+      "pixels": 109824,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/chart__light__bar.png",
+      "stylex": "visual/results/stylex/chart__light__bar.png",
+      "diff": "visual/results/diff/chart__light__bar.png"
+    },
+    {
+      "name": "chart__light__line",
+      "component": "chart",
+      "state": "line",
+      "theme": "light",
+      "width": 352,
+      "height": 312,
+      "mismatched": 0,
+      "pixels": 109824,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/chart__light__line.png",
+      "stylex": "visual/results/stylex/chart__light__line.png",
+      "diff": "visual/results/diff/chart__light__line.png"
+    },
+    {
+      "name": "chart__light__tooltip",
+      "component": "chart",
+      "state": "tooltip",
+      "theme": "light",
+      "width": 352,
+      "height": 312,
+      "mismatched": 0,
+      "pixels": 109824,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/chart__light__tooltip.png",
+      "stylex": "visual/results/stylex/chart__light__tooltip.png",
+      "diff": "visual/results/diff/chart__light__tooltip.png"
+    },
+    {
+      "name": "chart__dark__bar",
+      "component": "chart",
+      "state": "bar",
+      "theme": "dark",
+      "width": 352,
+      "height": 312,
+      "mismatched": 0,
+      "pixels": 109824,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/chart__dark__bar.png",
+      "stylex": "visual/results/stylex/chart__dark__bar.png",
+      "diff": "visual/results/diff/chart__dark__bar.png"
+    },
+    {
+      "name": "chart__dark__line",
+      "component": "chart",
+      "state": "line",
+      "theme": "dark",
+      "width": 352,
+      "height": 312,
+      "mismatched": 0,
+      "pixels": 109824,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/chart__dark__line.png",
+      "stylex": "visual/results/stylex/chart__dark__line.png",
+      "diff": "visual/results/diff/chart__dark__line.png"
+    },
+    {
+      "name": "chart__dark__tooltip",
+      "component": "chart",
+      "state": "tooltip",
+      "theme": "dark",
+      "width": 352,
+      "height": 312,
+      "mismatched": 0,
+      "pixels": 109824,
+      "pass": true,
+      "shadcn": "visual/results/shadcn/chart__dark__tooltip.png",
+      "stylex": "visual/results/stylex/chart__dark__tooltip.png",
+      "diff": "visual/results/diff/chart__dark__tooltip.png"
     }
   ]
 }
