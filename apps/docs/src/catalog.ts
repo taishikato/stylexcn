@@ -504,6 +504,15 @@ export const COMPONENTS: ComponentDoc[] = [
 <Slider defaultValue={[25, 75]} />`,
   },
   {
+    slug: "sonner",
+    name: "Sonner",
+    description: "A toast. Built on sonner.",
+    usage: `<Toaster />
+<Button variant="outline" onClick={() => toast("Event has been created")}>
+  Show Toast
+</Button>`,
+  },
+  {
     slug: "spinner",
     name: "Spinner",
     description: "Loading indicator at size 3, 4, 6, and 8.",
