@@ -1399,7 +1399,7 @@ const styles = stylex.create({
     maxWidth: "20rem",
   },
   carouselPad: {
-    padding: "1rem",
+    padding: "0.25rem",
   },
   carouselSlideFace: {
     display: "flex",
@@ -1412,13 +1412,6 @@ const styles = stylex.create({
     fontSize: "2.25rem",
     lineHeight: "2.5rem",
     fontWeight: 600,
-  },
-  carouselVerticalContent: {
-    marginTop: "-0.25rem",
-    height: "200px",
-  },
-  carouselVerticalItem: {
-    paddingTop: "0.25rem",
   },
   carouselVerticalFace: {
     display: "flex",
@@ -3940,12 +3933,16 @@ function CarouselHarness({ kit, state, theme }: CarouselCaptureParams) {
         {...stylex.props(styles.carouselShell)}
       >
         <CarouselContent
-          {...(isVertical ? stylex.props(styles.carouselVerticalContent) : {})}
+          style={
+            isVertical
+              ? { marginTop: "-0.25rem", height: 200 }
+              : undefined
+          }
         >
           {slides.map((n) => (
             <CarouselItem
               key={n}
-              {...(isVertical ? stylex.props(styles.carouselVerticalItem) : {})}
+              style={isVertical ? { paddingTop: "0.25rem" } : undefined}
             >
               <div {...stylex.props(styles.carouselPad)}>
                 <Card>

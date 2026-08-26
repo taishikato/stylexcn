@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Drawer + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd + Empty + Input Group + Item + Input OTP + Field + Combobox + Command + Navigation Menu + Calendar + Carousel)
 
-- Passed: 450/450
+- Passed: 456/456
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -873,3 +873,19 @@
 | `calendar__dark__default` | PASS | 0/101640 |
 | `calendar__dark__selected` | PASS | 0/101640 |
 | `calendar__dark__range` | PASS | 0/101640 |
+
+## Carousel
+
+- Crops `[data-slot="carousel"]` with 64px pad so Previous/Next at `-left-12` / `-right-12` stay in frame. Viewport: 640×560 (below Tailwind `md`).
+- Official side is the live registry Carousel (`embla-carousel-react` + Button). StyleX uses the same primitive with StyleX tables.
+- Pinned `watchDrag: false` and `duration: 0` on both kits. `default` is index 0 (Previous disabled). `next` is `startIndex: 1` (both controls enabled). `vertical` matches the official orientation demo (`align: start`, content `h-[200px]`, item `pt-1`). Each × light/dark.
+- Skipped: Autoplay plugins, RTL, loop, custom `basis-*` sizes, spacing variants, and the API slide-count demo. Playwright `animations: "disabled"`.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `carousel__light__default` | PASS | 0/222208 |
+| `carousel__light__next` | PASS | 0/222208 |
+| `carousel__light__vertical` | PASS | 0/145152 |
+| `carousel__dark__default` | PASS | 0/222208 |
+| `carousel__dark__next` | PASS | 0/222208 |
+| `carousel__dark__vertical` | PASS | 0/145152 |
