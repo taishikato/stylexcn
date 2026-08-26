@@ -93,6 +93,13 @@ const MENUBAR_STATES = ["closed", "open"];
 const ASPECT_RATIO_STATES = ["default"];
 const TABLE_STATES = ["default", "with-footer"];
 const RESIZABLE_STATES = ["horizontal", "vertical"];
+const BUTTON_GROUP_STATES = [
+  "horizontal",
+  "vertical",
+  "separator",
+  "text",
+  "nested",
+];
 const THEMES = ["light", "dark"];
 /* Dialog / Alert Dialog overlay+content: sm is 40rem. 800px keeps sm:max-w-lg. */
 const DIALOG_VIEWPORT = { width: 800, height: 600 };
@@ -658,6 +665,20 @@ function resizableCases() {
   return list;
 }
 
+function buttonGroupCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of BUTTON_GROUP_STATES) {
+      list.push({
+        component: "button-group",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function cases() {
   return [
     ...buttonCases(),
@@ -696,6 +717,7 @@ function cases() {
     ...aspectRatioCases(),
     ...tableCases(),
     ...resizableCases(),
+    ...buttonGroupCases(),
   ];
 }
 
@@ -806,6 +828,9 @@ function slug(c) {
   if (c.component === "resizable") {
     return `resizable__${c.theme}__${c.state}`;
   }
+  if (c.component === "button-group") {
+    return `button-group__${c.theme}__${c.state}`;
+  }
   return `${c.theme}__${c.variant}__${c.size}__${c.state}`;
 }
 
@@ -853,7 +878,8 @@ function urlFor(kit, c) {
     c.component !== "menubar" &&
     c.component !== "aspect-ratio" &&
     c.component !== "table" &&
-    c.component !== "resizable"
+    c.component !== "resizable" &&
+    c.component !== "button-group"
   ) {
     q.set("variant", c.variant);
     q.set("size", c.size);
@@ -1013,6 +1039,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "resizable") {
     return page.locator('[data-slot="resizable-panel-group"]');
+  }
+  if (c.component === "button-group") {
+    return page.locator('[data-slot="button-group"]').first();
   }
   return page.getByRole("button");
 }
@@ -1320,7 +1349,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1367,7 +1396,8 @@ async function main() {
           r.component !== "menubar" &&
           r.component !== "aspect-ratio" &&
           r.component !== "table" &&
-          r.component !== "resizable",
+          r.component !== "resizable" &&
+          r.component !== "button-group",
       )
       .map(
         (r) =>
@@ -1855,6 +1885,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "resizable")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Button Group",
+    "",
+    "- Crops the outermost `[data-slot=\"button-group\"]` with 16px pad (`.first()` so nested groups do not steal the crop).",
+    "- Identical copy on both kits. `horizontal` / `vertical`: outline Archive / Report / Snooze. `separator`: default Copy + ButtonGroupSeparator + Paste. `text`: ButtonGroupText `https://` + outline Copy. `nested`: outer group with Archive+Report and Snooze inner groups (gap-2).",
+    "- Official side uses official Button / Separator. StyleX side uses StyleX Button / Separator styles. Closed, no Input/Select. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "button-group")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,

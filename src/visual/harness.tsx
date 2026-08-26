@@ -45,6 +45,11 @@ import {
 import { Separator } from "../components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "../components/button";
 import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+} from "../components/button-group";
+import {
   Card,
   CardAction,
   CardContent,
@@ -218,6 +223,11 @@ import {
 } from "./official-pagination";
 import { OfficialSeparator } from "./official-separator";
 import { OfficialButton } from "./official-button";
+import {
+  OfficialButtonGroup,
+  OfficialButtonGroupSeparator,
+  OfficialButtonGroupText,
+} from "./official-button-group";
 import {
   OfficialCard,
   OfficialCardAction,
@@ -416,7 +426,8 @@ export type CaptureComponent =
   | "menubar"
   | "aspect-ratio"
   | "table"
-  | "resizable";
+  | "resizable"
+  | "button-group";
 export type CaptureKit = "shadcn" | "stylex";
 export type CaptureState =
   | "default"
@@ -450,7 +461,10 @@ export type CaptureState =
   | "lg"
   | "ellipsis"
   | "with-icon"
-  | "with-footer";
+  | "with-footer"
+  | "separator"
+  | "text"
+  | "nested";
 export type CaptureTheme = "light" | "dark";
 
 export type ButtonCaptureParams = {
@@ -722,6 +736,13 @@ export type ResizableCaptureParams = {
   theme: CaptureTheme;
 };
 
+export type ButtonGroupCaptureParams = {
+  component: "button-group";
+  kit: CaptureKit;
+  state: "horizontal" | "vertical" | "separator" | "text" | "nested";
+  theme: CaptureTheme;
+};
+
 export type CaptureParams =
   | ButtonCaptureParams
   | InputCaptureParams
@@ -758,7 +779,8 @@ export type CaptureParams =
   | MenubarCaptureParams
   | AspectRatioCaptureParams
   | TableCaptureParams
-  | ResizableCaptureParams;
+  | ResizableCaptureParams
+  | ButtonGroupCaptureParams;
 
 const styles = stylex.create({
   frame: {
@@ -3030,6 +3052,134 @@ function ResizableHarness({ kit, state, theme }: ResizableCaptureParams) {
   );
 }
 
+const BUTTON_GROUP_ARCHIVE = "Archive";
+const BUTTON_GROUP_REPORT = "Report";
+const BUTTON_GROUP_SNOOZE = "Snooze";
+const BUTTON_GROUP_COPY = "Copy";
+const BUTTON_GROUP_PASTE = "Paste";
+const BUTTON_GROUP_TEXT = "https://";
+
+function ButtonGroupDemo({
+  kit,
+  state,
+}: {
+  kit: CaptureKit;
+  state: ButtonGroupCaptureParams["state"];
+}) {
+  if (kit === "shadcn") {
+    if (state === "vertical") {
+      return (
+        <OfficialButtonGroup orientation="vertical" aria-label="Button group">
+          <OfficialButton variant="outline">{BUTTON_GROUP_ARCHIVE}</OfficialButton>
+          <OfficialButton variant="outline">{BUTTON_GROUP_REPORT}</OfficialButton>
+          <OfficialButton variant="outline">{BUTTON_GROUP_SNOOZE}</OfficialButton>
+        </OfficialButtonGroup>
+      );
+    }
+    if (state === "separator") {
+      return (
+        <OfficialButtonGroup aria-label="Button group">
+          <OfficialButton>{BUTTON_GROUP_COPY}</OfficialButton>
+          <OfficialButtonGroupSeparator />
+          <OfficialButton>{BUTTON_GROUP_PASTE}</OfficialButton>
+        </OfficialButtonGroup>
+      );
+    }
+    if (state === "text") {
+      return (
+        <OfficialButtonGroup aria-label="Button group">
+          <OfficialButtonGroupText>{BUTTON_GROUP_TEXT}</OfficialButtonGroupText>
+          <OfficialButton variant="outline">{BUTTON_GROUP_COPY}</OfficialButton>
+        </OfficialButtonGroup>
+      );
+    }
+    if (state === "nested") {
+      return (
+        <OfficialButtonGroup aria-label="Button group">
+          <OfficialButtonGroup>
+            <OfficialButton variant="outline">{BUTTON_GROUP_ARCHIVE}</OfficialButton>
+            <OfficialButton variant="outline">{BUTTON_GROUP_REPORT}</OfficialButton>
+          </OfficialButtonGroup>
+          <OfficialButtonGroup>
+            <OfficialButton variant="outline">{BUTTON_GROUP_SNOOZE}</OfficialButton>
+          </OfficialButtonGroup>
+        </OfficialButtonGroup>
+      );
+    }
+    return (
+      <OfficialButtonGroup aria-label="Button group">
+        <OfficialButton variant="outline">{BUTTON_GROUP_ARCHIVE}</OfficialButton>
+        <OfficialButton variant="outline">{BUTTON_GROUP_REPORT}</OfficialButton>
+        <OfficialButton variant="outline">{BUTTON_GROUP_SNOOZE}</OfficialButton>
+      </OfficialButtonGroup>
+    );
+  }
+
+  if (state === "vertical") {
+    return (
+      <ButtonGroup orientation="vertical" aria-label="Button group">
+        <Button variant="outline">{BUTTON_GROUP_ARCHIVE}</Button>
+        <Button variant="outline">{BUTTON_GROUP_REPORT}</Button>
+        <Button variant="outline">{BUTTON_GROUP_SNOOZE}</Button>
+      </ButtonGroup>
+    );
+  }
+  if (state === "separator") {
+    return (
+      <ButtonGroup aria-label="Button group">
+        <Button>{BUTTON_GROUP_COPY}</Button>
+        <ButtonGroupSeparator />
+        <Button>{BUTTON_GROUP_PASTE}</Button>
+      </ButtonGroup>
+    );
+  }
+  if (state === "text") {
+    return (
+      <ButtonGroup aria-label="Button group">
+        <ButtonGroupText>{BUTTON_GROUP_TEXT}</ButtonGroupText>
+        <Button variant="outline">{BUTTON_GROUP_COPY}</Button>
+      </ButtonGroup>
+    );
+  }
+  if (state === "nested") {
+    return (
+      <ButtonGroup aria-label="Button group">
+        <ButtonGroup>
+          <Button variant="outline">{BUTTON_GROUP_ARCHIVE}</Button>
+          <Button variant="outline">{BUTTON_GROUP_REPORT}</Button>
+        </ButtonGroup>
+        <ButtonGroup>
+          <Button variant="outline">{BUTTON_GROUP_SNOOZE}</Button>
+        </ButtonGroup>
+      </ButtonGroup>
+    );
+  }
+  return (
+    <ButtonGroup aria-label="Button group">
+      <Button variant="outline">{BUTTON_GROUP_ARCHIVE}</Button>
+      <Button variant="outline">{BUTTON_GROUP_REPORT}</Button>
+      <Button variant="outline">{BUTTON_GROUP_SNOOZE}</Button>
+    </ButtonGroup>
+  );
+}
+
+function ButtonGroupHarness({ kit, state, theme }: ButtonGroupCaptureParams) {
+  const isDark = theme === "dark";
+
+  return (
+    <div
+      className={isDark ? "dark" : undefined}
+      data-theme={theme}
+      data-kit={kit}
+      data-component="button-group"
+      data-state={state}
+      {...stylex.props(isDark && darkTheme, styles.frame)}
+    >
+      <ButtonGroupDemo kit={kit} state={state} />
+    </div>
+  );
+}
+
 function LabelHarness({ kit, state, theme }: LabelCaptureParams) {
   const isDark = theme === "dark";
   const groupDisabled = state === "disabled";
@@ -3165,6 +3315,9 @@ export function Harness(params: CaptureParams) {
   }
   if (params.component === "resizable") {
     return <ResizableHarness {...params} />;
+  }
+  if (params.component === "button-group") {
+    return <ButtonGroupHarness {...params} />;
   }
   return <ButtonHarness {...params} />;
 }
@@ -3497,6 +3650,19 @@ export function parseCaptureParams(search: string): CaptureParams | null {
       return null;
     }
     return { component: "resizable", kit, state, theme };
+  }
+
+  if (component === "button-group") {
+    if (
+      state !== "horizontal" &&
+      state !== "vertical" &&
+      state !== "separator" &&
+      state !== "text" &&
+      state !== "nested"
+    ) {
+      return null;
+    }
+    return { component: "button-group", kit, state, theme };
   }
 
   if (component !== "button") return null;

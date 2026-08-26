@@ -56,6 +56,11 @@ import {
 import { Separator } from "./components/separator";
 import { Button, type ButtonSize, type ButtonVariant } from "./components/button";
 import {
+  ButtonGroup,
+  ButtonGroupSeparator,
+  ButtonGroupText,
+} from "./components/button-group";
+import {
   Card,
   CardAction,
   CardContent,
@@ -267,6 +272,11 @@ import {
   OfficialResizablePanelGroup,
 } from "./visual/official-resizable";
 import { OfficialButton } from "./visual/official-button";
+import {
+  OfficialButtonGroup,
+  OfficialButtonGroupSeparator,
+  OfficialButtonGroupText,
+} from "./visual/official-button-group";
 import {
   OfficialCard,
   OfficialCardAction,
@@ -510,13 +520,13 @@ function Playground() {
       <h1 {...stylex.props(styles.heading)}>stylexcn playground</h1>
       <p {...stylex.props(styles.sub)}>
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
-        StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Context Menu,
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
         Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
-        Scroll Area, Pagination, Alert, Toggle Group, Menubar, Aspect Ratio,
-        Table, and Resizable vs official shadcn New York baseline. Visual
-        capture lives at query-param harness URLs (see README).
+        Scroll Area, Pagination, Alert, Toggle Group, Button Group, Menubar,
+        Aspect Ratio, Table, and Resizable vs official shadcn New York
+        baseline. Visual capture lives at query-param harness URLs (see
+        README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1435,6 +1445,20 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <PlaygroundToggleGroup kit="shadcn" variant="default" size="lg" />
       </div>
       <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Button Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundButtonGroup kit="stylex" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Button Group
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <PlaygroundButtonGroup kit="shadcn" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Menubar
       </h2>
       <div {...stylex.props(styles.row)}>
@@ -2083,6 +2107,56 @@ function PlaygroundToggleGroup({
       <ToggleGroupItem value="italic">Italic</ToggleGroupItem>
       <ToggleGroupItem value="underline">Underline</ToggleGroupItem>
     </ToggleGroup>
+  );
+}
+
+function PlaygroundButtonGroup({ kit }: { kit: "stylex" | "shadcn" }) {
+  if (kit === "shadcn") {
+    return (
+      <>
+        <OfficialButtonGroup aria-label="Button group">
+          <OfficialButton variant="outline">Archive</OfficialButton>
+          <OfficialButton variant="outline">Report</OfficialButton>
+          <OfficialButton variant="outline">Snooze</OfficialButton>
+        </OfficialButtonGroup>
+        <OfficialButtonGroup orientation="vertical" aria-label="Button group">
+          <OfficialButton variant="outline">Archive</OfficialButton>
+          <OfficialButton variant="outline">Report</OfficialButton>
+        </OfficialButtonGroup>
+        <OfficialButtonGroup aria-label="Button group">
+          <OfficialButton>Copy</OfficialButton>
+          <OfficialButtonGroupSeparator />
+          <OfficialButton>Paste</OfficialButton>
+        </OfficialButtonGroup>
+        <OfficialButtonGroup aria-label="Button group">
+          <OfficialButtonGroupText>https://</OfficialButtonGroupText>
+          <OfficialButton variant="outline">Copy</OfficialButton>
+        </OfficialButtonGroup>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <ButtonGroup aria-label="Button group">
+        <Button variant="outline">Archive</Button>
+        <Button variant="outline">Report</Button>
+        <Button variant="outline">Snooze</Button>
+      </ButtonGroup>
+      <ButtonGroup orientation="vertical" aria-label="Button group">
+        <Button variant="outline">Archive</Button>
+        <Button variant="outline">Report</Button>
+      </ButtonGroup>
+      <ButtonGroup aria-label="Button group">
+        <Button>Copy</Button>
+        <ButtonGroupSeparator />
+        <Button>Paste</Button>
+      </ButtonGroup>
+      <ButtonGroup aria-label="Button group">
+        <ButtonGroupText>https://</ButtonGroupText>
+        <Button variant="outline">Copy</Button>
+      </ButtonGroup>
+    </>
   );
 }
 
