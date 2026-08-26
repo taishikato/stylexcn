@@ -137,6 +137,7 @@ import {
   SheetTrigger,
 } from "./components/sheet";
 import { Skeleton } from "./components/skeleton";
+import { Spinner } from "./components/spinner";
 import { ScrollArea, ScrollBar } from "./components/scroll-area";
 import { Slider } from "./components/slider";
 import { Switch } from "./components/switch";
@@ -237,6 +238,7 @@ import {
 } from "./visual/official-pagination";
 import { OfficialSeparator } from "./visual/official-separator";
 import { OfficialSkeleton } from "./visual/official-skeleton";
+import { OfficialSpinner } from "./visual/official-spinner";
 import {
   OfficialScrollArea,
   OfficialScrollBar,
@@ -522,11 +524,10 @@ function Playground() {
         StyleX Button, Input, Label, Textarea, Checkbox, Switch, Radio Group,
         Card, Dialog, Alert Dialog, Select, Dropdown Menu, Context Menu,
         Sheet, Tabs, Popover, Hover Card, Tooltip, Badge, Separator, Skeleton,
-        Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb, Collapsible,
-        Scroll Area, Pagination, Alert, Toggle Group, Button Group, Menubar,
-        Aspect Ratio, Table, and Resizable vs official shadcn New York
-        baseline. Visual capture lives at query-param harness URLs (see
-        README).
+        Spinner, Avatar, Progress, Accordion, Slider, Toggle, Breadcrumb,
+        Collapsible, Scroll Area, Pagination, Alert, Toggle Group, Button Group,
+        Menubar, Aspect Ratio, Table, and Resizable vs official shadcn New York
+        baseline. Visual capture lives at query-param harness URLs (see README).
       </p>
       {([false, true] as const).map((isDark) => (
         <ThemeBlock key={String(isDark)} dark={isDark} />
@@ -1119,6 +1120,26 @@ function ThemeBlock({ dark }: { dark: boolean }) {
         <div {...stylex.props(styles.skeletonCircle)}>
           <OfficialSkeleton className="size-full rounded-full" />
         </div>
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · StyleX Spinner
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <Spinner size="3" />
+        <Spinner />
+        <Spinner size="6" />
+        <Spinner size="8" />
+      </div>
+      <h2 {...stylex.props(styles.heading)}>
+        {dark ? "Dark" : "Light"} · shadcn Spinner
+      </h2>
+      <div {...stylex.props(styles.row)}>
+        <span {...stylex.props(styles.label)}>default</span>
+        <OfficialSpinner className="size-3" />
+        <OfficialSpinner />
+        <OfficialSpinner className="size-6" />
+        <OfficialSpinner className="size-8" />
       </div>
       <h2 {...stylex.props(styles.heading)}>
         {dark ? "Dark" : "Light"} · StyleX Avatar

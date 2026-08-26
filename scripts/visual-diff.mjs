@@ -70,6 +70,7 @@ const BADGE_VARIANTS = [
 ];
 const SEPARATOR_STATES = ["horizontal", "vertical"];
 const SKELETON_STATES = ["bar", "circle"];
+const SPINNER_STATES = ["default", "sm", "lg", "xl"];
 const AVATAR_STATES = ["default", "sm", "lg", "badge", "group"];
 const PROGRESS_STATES = ["empty", "halfway", "full"];
 const ACCORDION_STATES = ["open", "second", "closed"];
@@ -455,6 +456,20 @@ function skeletonCases() {
   return list;
 }
 
+function spinnerCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of SPINNER_STATES) {
+      list.push({
+        component: "spinner",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
 function avatarCases() {
   const list = [];
   for (const theme of THEMES) {
@@ -702,6 +717,7 @@ function cases() {
     ...badgeCases(),
     ...separatorCases(),
     ...skeletonCases(),
+    ...spinnerCases(),
     ...avatarCases(),
     ...progressCases(),
     ...accordionCases(),
@@ -782,6 +798,9 @@ function slug(c) {
   }
   if (c.component === "skeleton") {
     return `skeleton__${c.theme}__${c.state}`;
+  }
+  if (c.component === "spinner") {
+    return `spinner__${c.theme}__${c.state}`;
   }
   if (c.component === "avatar") {
     return `avatar__${c.theme}__${c.state}`;
@@ -864,6 +883,7 @@ function urlFor(kit, c) {
     c.component !== "badge" &&
     c.component !== "separator" &&
     c.component !== "skeleton" &&
+    c.component !== "spinner" &&
     c.component !== "avatar" &&
     c.component !== "progress" &&
     c.component !== "accordion" &&
@@ -991,6 +1011,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "skeleton") {
     return page.locator('[data-slot="skeleton"]');
+  }
+  if (c.component === "spinner") {
+    return page.locator("[data-spinner-well]");
   }
   if (c.component === "avatar") {
     if (c.state === "group") {
@@ -1349,7 +1372,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1382,6 +1405,7 @@ async function main() {
           r.component !== "badge" &&
           r.component !== "separator" &&
           r.component !== "skeleton" &&
+          r.component !== "spinner" &&
           r.component !== "avatar" &&
           r.component !== "progress" &&
           r.component !== "accordion" &&
@@ -1659,6 +1683,20 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "skeleton")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Spinner",
+    "",
+    "- Official is `Loader2Icon` with `size-4 animate-spin`, `role=\"status\"`, `aria-label=\"Loading\"`. Size example uses `size-3` / `size-4` / `size-6` / `size-8`.",
+    "- StyleX `size` keys `3` / `4` / `6` / `8` map to those utilities. Both kits keep `animate-spin`. Capture frame sets inherited `animation-play-state: paused` and crops a same-sized well (not the SVG AABB). Playwright `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "spinner")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
