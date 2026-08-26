@@ -1,5 +1,5 @@
 import * as stylex from "@stylexjs/stylex";
-import { Combobox as ComboboxPrimitive } from "@base-ui/react";
+import { Combobox as ComboboxPrimitive } from "@base-ui/react/combobox";
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { CheckIcon, ChevronDownIcon, XIcon } from "lucide-react";
 import { useRef, type ComponentProps, type CSSProperties } from "react";
