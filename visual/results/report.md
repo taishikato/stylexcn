@@ -1,6 +1,6 @@
-# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)
+# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group + Kbd)
 
-- Passed: 304/304
+- Passed: 312/312
 - Failed: 0
 - pixelmatch threshold: 0 (any nonzero pixel is a fail)
 
@@ -614,3 +614,21 @@
 | `button-group__dark__separator` | PASS | 0/11220 |
 | `button-group__dark__text` | PASS | 0/12240 |
 | `button-group__dark__nested` | PASS | 0/19108 |
+
+## Kbd
+
+- Crops `[data-slot="kbd"]` (or `[data-slot="kbd-group"]` for `group`) with 16px pad.
+- Identical copy on both kits: `default` is `Ctrl`; `with-icon` is lucide `Command` with no `size-*` class so official `size-3` applies; `group` is KbdGroup of `Ctrl` + `B`.
+- `tooltip` wraps a single `⌘S` Kbd in a `data-slot="tooltip-content"` ancestor (no portaled Tooltip) so `bg-background/20` / dark `bg-background/10` and `text-background` apply stably.
+- States: `default` / `with-icon` / `group` / `tooltip`, each × light/dark. `animations: "disabled"` for both kits.
+
+| Case | Result | Mismatched pixels |
+| --- | --- | ---: |
+| `kbd__light__default` | PASS | 0/3068 |
+| `kbd__light__with-icon` | PASS | 0/2704 |
+| `kbd__light__group` | PASS | 0/4316 |
+| `kbd__light__tooltip` | PASS | 0/3016 |
+| `kbd__dark__default` | PASS | 0/3068 |
+| `kbd__dark__with-icon` | PASS | 0/2704 |
+| `kbd__dark__group` | PASS | 0/4316 |
+| `kbd__dark__tooltip` | PASS | 0/3016 |
