@@ -149,7 +149,7 @@ export const chrome = stylex.create({
     lineHeight: 1.15,
     letterSpacing: "-0.04em",
     fontWeight: 650,
-    marginBottom: "1.25rem",
+    marginBottom: "1.5rem",
     overflowWrap: "break-word",
   },
   lead: {
@@ -194,8 +194,7 @@ export const chrome = stylex.create({
     borderColor: tokens["--border"],
     backgroundColor: tokens["--muted"],
   },
-  installPre: {
-    display: "block",
+  installScroll: {
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: 0,
@@ -203,6 +202,10 @@ export const chrome = stylex.create({
     overflowX: "auto",
     overflowY: "hidden",
     overscrollBehaviorX: "contain",
+  },
+  installPre: {
+    display: "block",
+    width: "max-content",
     margin: 0,
     paddingBlock: "0.45rem",
     paddingInline: "0.45rem",
