@@ -53,6 +53,13 @@ const SELECT_STATES = [
   "sm",
   "open",
 ];
+const NATIVE_SELECT_STATES = [
+  "default",
+  "focus-visible",
+  "disabled",
+  "invalid",
+  "sm",
+];
 const DROPDOWN_MENU_STATES = ["closed", "open"];
 const CONTEXT_MENU_STATES = ["closed", "open"];
 const SHEET_STATES = ["default", "left", "top", "bottom"];
@@ -301,6 +308,20 @@ function selectCases() {
     for (const state of SELECT_STATES) {
       list.push({
         component: "select",
+        state,
+        theme,
+      });
+    }
+  }
+  return list;
+}
+
+function nativeSelectCases() {
+  const list = [];
+  for (const theme of THEMES) {
+    for (const state of NATIVE_SELECT_STATES) {
+      list.push({
+        component: "native-select",
         state,
         theme,
       });
@@ -707,6 +728,7 @@ function cases() {
     ...dialogCases(),
     ...alertDialogCases(),
     ...selectCases(),
+    ...nativeSelectCases(),
     ...dropdownMenuCases(),
     ...contextMenuCases(),
     ...sheetCases(),
@@ -767,6 +789,9 @@ function slug(c) {
   }
   if (c.component === "select") {
     return `select__${c.theme}__${c.state}`;
+  }
+  if (c.component === "native-select") {
+    return `native-select__${c.theme}__${c.state}`;
   }
   if (c.component === "dropdown-menu") {
     return `dropdown-menu__${c.theme}__${c.state}`;
@@ -873,6 +898,7 @@ function urlFor(kit, c) {
     c.component !== "dialog" &&
     c.component !== "alert-dialog" &&
     c.component !== "select" &&
+    c.component !== "native-select" &&
     c.component !== "dropdown-menu" &&
     c.component !== "context-menu" &&
     c.component !== "sheet" &&
@@ -978,6 +1004,9 @@ function controlLocator(page, c) {
   }
   if (c.component === "select") {
     return page.locator('[data-slot="select-trigger"]');
+  }
+  if (c.component === "native-select") {
+    return page.locator('[data-slot="native-select-wrapper"]');
   }
   if (c.component === "dropdown-menu") {
     return page.locator('[data-slot="dropdown-menu-trigger"]');
@@ -1372,7 +1401,7 @@ async function main() {
     JSON.stringify(report, null, 2),
   );
   const md = [
-    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)",
+    "# Visual diff (Button + Input + Label + Textarea + Checkbox + Switch + Radio Group + Card + Dialog + Alert Dialog + Select + Native Select + Dropdown Menu + Context Menu + Sheet + Tabs + Popover + Hover Card + Tooltip + Badge + Separator + Skeleton + Spinner + Avatar + Progress + Accordion + Slider + Toggle + Breadcrumb + Collapsible + Scroll Area + Pagination + Alert + Toggle Group + Menubar + Aspect Ratio + Table + Resizable + Button Group)",
     "",
     `- Passed: ${report.passed}/${report.total}`,
     `- Failed: ${report.failed}`,
@@ -1395,6 +1424,7 @@ async function main() {
           r.component !== "dialog" &&
           r.component !== "alert-dialog" &&
           r.component !== "select" &&
+          r.component !== "native-select" &&
           r.component !== "dropdown-menu" &&
           r.component !== "context-menu" &&
           r.component !== "sheet" &&
@@ -1542,6 +1572,21 @@ async function main() {
     "| --- | --- | ---: |",
     ...rows
       .filter((r) => r.component === "select")
+      .map(
+        (r) =>
+          `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
+      ),
+    "",
+    "## Native Select",
+    "",
+    "- Crops `[data-slot=\"native-select-wrapper\"]` with 16px pad (covers the 3px focus ring and custom chevron). Do not open the native picker; it is not screenshot-stable.",
+    "- Identical copy on both kits: optgroups Fruits (Apple, Banana) and Vegetables (Carrot), selected `apple`. `sm` is `size=\"sm\"` (h-8).",
+    "- States: `default` / `focus-visible` (Tab onto the native `<select>`) / `disabled` / `invalid` / `sm`, each × light/dark. `animations: \"disabled\"` for both kits.",
+    "",
+    "| Case | Result | Mismatched pixels |",
+    "| --- | --- | ---: |",
+    ...rows
+      .filter((r) => r.component === "native-select")
       .map(
         (r) =>
           `| \`${r.name}\` | ${r.pass ? "PASS" : "FAIL"} | ${r.mismatched}/${r.pixels} |`,
