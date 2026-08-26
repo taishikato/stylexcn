@@ -20,7 +20,7 @@ export default function DocsIndexPage() {
     <>
       <h1 {...stylex.props(chrome.pageTitle)}>Components</h1>
       <p {...stylex.props(chrome.lead)}>
-        Implemented StyleX components. Each page is a live demo — click, type,
+        Implemented StyleX components. Each page is a live demo - click, type,
         and open overlays. Pixel-perfect with official shadcn/ui.
       </p>
       <h2 {...stylex.props(chrome.sectionTitle)}>Install</h2>

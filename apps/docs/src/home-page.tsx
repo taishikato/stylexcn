@@ -72,7 +72,7 @@ export function HomePage() {
             StyleX components. shadcn look.
           </h1>
           <p {...stylex.props(landing.copy)}>
-            A port of shadcn/ui — same look, StyleX instead of Tailwind. Open
+            A port of shadcn/ui - same look, StyleX instead of Tailwind. Open
             source. Open code.
           </p>
           <Button type="button" onClick={() => router.push("/docs")}>
@@ -494,9 +494,9 @@ function PayoutTile() {
           <Label htmlFor="currency">Preferred currency</Label>
           <NativeSelect id="currency" defaultValue="usd">
             <NativeSelectOption value="usd">
-              USD — United States Dollar
+              USD - United States Dollar
             </NativeSelectOption>
-            <NativeSelectOption value="eur">EUR — Euro</NativeSelectOption>
+            <NativeSelectOption value="eur">EUR - Euro</NativeSelectOption>
           </NativeSelect>
         </div>
         <div {...stylex.props(landing.field)}>
