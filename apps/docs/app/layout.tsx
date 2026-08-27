@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { DataFastInit } from "../src/datafast-init";
 import { SiteHeader } from "../src/site-header";
 import {
   OGP_IMAGE,
@@ -76,6 +77,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body>
         <ThemeProvider>
+          <DataFastInit />
           <SiteHeader />
           {children}
         </ThemeProvider>
