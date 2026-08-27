@@ -3760,7 +3760,7 @@ function PlaygroundScrollArea({
 
   if (kit === "shadcn") {
     return (
-      <OfficialScrollArea type="always" className="size-full">
+      <OfficialScrollArea className="size-full">
         {content}
         {orientation === "horizontal" ? (
           <OfficialScrollBar orientation="horizontal" />
@@ -3770,7 +3770,7 @@ function PlaygroundScrollArea({
   }
 
   return (
-    <ScrollArea type="always">
+    <ScrollArea>
       {content}
       {orientation === "horizontal" ? (
         <ScrollBar orientation="horizontal" />

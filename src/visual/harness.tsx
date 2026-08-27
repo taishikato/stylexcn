@@ -3279,7 +3279,7 @@ function ScrollAreaDemo({
 
   if (kit === "shadcn") {
     return (
-      <OfficialScrollArea type="always" className="size-full">
+      <OfficialScrollArea className="size-full">
         {content}
         {orientation === "horizontal" ? (
           <OfficialScrollBar orientation="horizontal" />
@@ -3289,7 +3289,7 @@ function ScrollAreaDemo({
   }
 
   return (
-    <ScrollArea type="always">
+    <ScrollArea>
       {content}
       {orientation === "horizontal" ? (
         <ScrollBar orientation="horizontal" />

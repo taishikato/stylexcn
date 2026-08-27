@@ -1671,7 +1671,7 @@ function ScrollAreaDemo() {
   return (
     <div {...stylex.props(chrome.row)}>
       <div {...stylex.props(chrome.scrollV)}>
-        <ScrollArea type="always">
+        <ScrollArea>
           <div {...stylex.props(chrome.scrollList)}>
             {SCROLL_TAGS.map((tag) => (
               <div key={tag} {...stylex.props(chrome.scrollItem)}>
@@ -1682,7 +1682,7 @@ function ScrollAreaDemo() {
         </ScrollArea>
       </div>
       <div {...stylex.props(chrome.scrollH)}>
-        <ScrollArea type="always">
+        <ScrollArea>
           <div {...stylex.props(chrome.scrollStrip)}>
             {SCROLL_TAGS.map((tag) => (
               <div key={tag} {...stylex.props(chrome.scrollBlock)} />

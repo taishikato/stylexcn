@@ -460,7 +460,7 @@ export const COMPONENTS: ComponentDoc[] = [
     slug: "scroll-area",
     name: "Scroll Area",
     description: "Scrollable region. Vertical list and horizontal strip.",
-    usage: `<ScrollArea type="always">
+    usage: `<ScrollArea>
   {children}
 </ScrollArea>`,
   },

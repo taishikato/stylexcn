@@ -830,8 +830,8 @@
         }
       ],
       "dependencies": [
-        "@stylexjs/stylex",
-        "radix-ui"
+        "@base-ui/react",
+        "@stylexjs/stylex"
       ],
       "registryDependencies": [
         "https://stylexcn.vercel.app/r/tokens.json"

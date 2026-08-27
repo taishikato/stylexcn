@@ -1,14 +1,12 @@
 "use client"
 
-import * as React from "react"
-import { ScrollArea as ScrollAreaPrimitive } from "radix-ui"
+import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area"
 
 import { cn } from "@/lib/utils"
 
 /**
- * Official shadcn/ui New York v4 Scroll Area, copied from
- * https://ui.shadcn.com/r/styles/new-york-v4/scroll-area.json
- * (same source as apps/v4/registry/new-york-v4/ui/scroll-area.tsx).
+ * Official shadcn/ui Base UI Scroll Area, copied from
+ * https://ui.shadcn.com/docs/components/base/scroll-area.
  *
  * Used only as the visual-regression baseline. Do not restyle this file to
  * make diffs pass.
@@ -17,7 +15,7 @@ function ScrollArea({
   className,
   children,
   ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.Root>) {
+}: ScrollAreaPrimitive.Root.Props) {
   return (
     <ScrollAreaPrimitive.Root
       data-slot="scroll-area"
@@ -40,10 +38,11 @@ function ScrollBar({
   className,
   orientation = "vertical",
   ...props
-}: React.ComponentProps<typeof ScrollAreaPrimitive.ScrollAreaScrollbar>) {
+}: ScrollAreaPrimitive.Scrollbar.Props) {
   return (
-    <ScrollAreaPrimitive.ScrollAreaScrollbar
+    <ScrollAreaPrimitive.Scrollbar
       data-slot="scroll-area-scrollbar"
+      data-orientation={orientation}
       orientation={orientation}
       className={cn(
         "flex touch-none p-px transition-colors select-none",
@@ -55,11 +54,11 @@ function ScrollBar({
       )}
       {...props}
     >
-      <ScrollAreaPrimitive.ScrollAreaThumb
+      <ScrollAreaPrimitive.Thumb
         data-slot="scroll-area-thumb"
         className="relative flex-1 rounded-full bg-border"
       />
-    </ScrollAreaPrimitive.ScrollAreaScrollbar>
+    </ScrollAreaPrimitive.Scrollbar>
   )
 }
 

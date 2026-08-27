@@ -1,13 +1,12 @@
 import * as stylex from "@stylexjs/stylex";
-import { ScrollArea as ScrollAreaPrimitive } from "radix-ui";
-import type { ComponentProps } from "react";
+import { ScrollArea as ScrollAreaPrimitive } from "@base-ui/react/scroll-area";
 import { tokens } from "../tokens.stylex";
 
 const MIX_RING_50 = "color-mix(in oklab, var(--ring) 50%, transparent)";
 const RING = `0 0 0 3px ${MIX_RING_50}`;
 
 /**
- * Scroll Area family as StyleX tables. Official New York: radix-ui ScrollArea.
+ * Scroll Area family as StyleX tables. Official Base UI Scroll Area.
  * Root is `relative`; StyleX also fills a same-sized parent (official size
  * comes from caller className). Viewport is size-full + inherited radius.
  */
@@ -78,10 +77,8 @@ const thumb = stylex.create({
   },
 });
 
-export type ScrollAreaProps = ComponentProps<typeof ScrollAreaPrimitive.Root>;
-export type ScrollBarProps = ComponentProps<
-  typeof ScrollAreaPrimitive.ScrollAreaScrollbar
->;
+export type ScrollAreaProps = ScrollAreaPrimitive.Root.Props;
+export type ScrollBarProps = ScrollAreaPrimitive.Scrollbar.Props;
 
 export function ScrollArea({ children, ...props }: ScrollAreaProps) {
   return (
@@ -107,8 +104,9 @@ export function ScrollBar({
   ...props
 }: ScrollBarProps) {
   return (
-    <ScrollAreaPrimitive.ScrollAreaScrollbar
+    <ScrollAreaPrimitive.Scrollbar
       data-slot="scroll-area-scrollbar"
+      data-orientation={orientation}
       orientation={orientation}
       {...props}
       {...stylex.props(
@@ -116,11 +114,11 @@ export function ScrollBar({
         orientation === "horizontal" ? scrollbar.horizontal : scrollbar.vertical,
       )}
     >
-      <ScrollAreaPrimitive.ScrollAreaThumb
+      <ScrollAreaPrimitive.Thumb
         data-slot="scroll-area-thumb"
         {...stylex.props(thumb.base)}
       />
-    </ScrollAreaPrimitive.ScrollAreaScrollbar>
+    </ScrollAreaPrimitive.Scrollbar>
   );
 }
 
