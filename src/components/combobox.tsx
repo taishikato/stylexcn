@@ -336,6 +336,11 @@ const chip = stylex.create({
       ":hover": 1,
     },
   },
+  removeIcon: {
+    width: "0.75rem",
+    height: "0.75rem",
+    pointerEvents: "none",
+  },
 });
 
 const chipsInput = stylex.create({
@@ -347,6 +352,9 @@ const chipsInput = stylex.create({
     outline: "none",
     borderWidth: 0,
     backgroundColor: "transparent",
+    margin: 0,
+    padding: 0,
+    color: "inherit",
     fontFamily: "inherit",
     fontSize: "inherit",
     lineHeight: "inherit",
@@ -674,7 +682,7 @@ function ComboboxChip({
           }
           data-slot="combobox-chip-remove"
         >
-          <XIcon className="size-3" style={{ pointerEvents: "none" }} />
+          <XIcon {...stylex.props(chip.removeIcon)} />
         </ComboboxPrimitive.ChipRemove>
       )}
     </ComboboxPrimitive.Chip>
