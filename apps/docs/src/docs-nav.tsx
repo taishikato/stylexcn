@@ -14,7 +14,7 @@ function NavList({ hideLabel = false }: { hideLabel?: boolean }) {
       {hideLabel ? null : (
         <div {...stylex.props(chrome.navLabel)}>Components</div>
       )}
-      <ul {...stylex.props(chrome.navList)}>
+      <ul {...stylex.props(chrome.navList, hideLabel && chrome.mobileNavList)}>
         {COMPONENTS.map((item) => {
           const href = `/docs/${item.slug}`;
           const active = pathname === href;
@@ -43,6 +43,9 @@ export function DocsSidebar() {
 }
 
 export function DocsMobileNav() {
+  const pathname = usePathname();
+  if (pathname === "/docs") return null;
+
   return (
     <div {...stylex.props(chrome.mobileNav)}>
       <details {...stylex.props(chrome.mobileDetails)}>
