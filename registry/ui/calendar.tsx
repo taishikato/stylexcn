@@ -326,6 +326,7 @@ const dayButton = stylex.create({
     width: "100%",
     height: "auto",
     minWidth: "var(--cell-size)",
+    padding: 0,
     gap: "0.25rem",
     lineHeight: 1,
     fontWeight: 400,
@@ -349,7 +350,7 @@ const dayButton = stylex.create({
       [FOCUSED_DAY]: RING,
     },
     backgroundColor: {
-      default: null,
+      default: "transparent",
       '[data-selected-single="true"]': tokens["--primary"],
       '[data-range-start="true"]': tokens["--primary"],
       '[data-range-end="true"]': tokens["--primary"],
