@@ -4,6 +4,7 @@ import Link from "next/link";
 import { COMPONENTS } from "../../src/catalog";
 import { chrome } from "../../src/chrome.stylex";
 import { InstallCommand } from "../../src/install-command";
+import { createPageMetadata } from "../../src/site-metadata";
 import {
   addNamespaceCommand,
   addUrlCommand,
@@ -11,9 +12,12 @@ import {
   registerNamespaceCommand,
 } from "../../src/install";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
   title: "Components",
-};
+  description:
+    "Explore live, interactive StyleX implementations of shadcn/ui components and install them with the shadcn CLI.",
+  path: "/docs",
+});
 
 export default function DocsIndexPage() {
   return (

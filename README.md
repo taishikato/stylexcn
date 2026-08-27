@@ -2,7 +2,7 @@
 
 Shadcn UI, but with StyleX instead of Tailwind CSS.
 
-![hero](apps/docs/public/opengraph-image.png)
+![stylexcn - StyleX components with the shadcn look](apps/docs/public/opengraph-image-v2.png)
 
 ## Documentation
 

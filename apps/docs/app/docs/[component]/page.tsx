@@ -6,6 +6,7 @@ import { chrome } from "../../../src/chrome.stylex";
 import { ComponentDemo } from "../../../src/demos";
 import { InstallCommand } from "../../../src/install-command";
 import { addNamespaceCommand, addUrlCommand } from "../../../src/install";
+import { createPageMetadata } from "../../../src/site-metadata";
 
 type PageProps = {
   params: Promise<{ component: string }>;
@@ -19,7 +20,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { component } = await params;
   const doc = getComponent(component);
   if (!doc) return { title: "Not found" };
-  return { title: doc.name };
+  return createPageMetadata({
+    title: doc.name,
+    description: `${doc.description} Preview and install the StyleX implementation for stylexcn.`,
+    path: `/docs/${doc.slug}`,
+  });
 }
 
 export default async function ComponentPage({ params }: PageProps) {
