@@ -7,7 +7,9 @@ import { tokens } from "@/lib/tokens.stylex";
 const MD = "@media (min-width: 48rem)";
 const VIEWPORT_FALSE =
   ':is([data-slot="navigation-menu"][data-viewport="false"] *)';
-const MIX_ACCENT_50 = "color-mix(in oklab, var(--accent) 50%, transparent)";
+const CONTENT_DESCENDANT =
+  ':is([data-slot="navigation-menu-content"] *)';
+const MIX_MUTED_50 = "color-mix(in oklab, var(--muted) 50%, transparent)";
 const MIX_RING_50 = "color-mix(in oklab, var(--ring) 50%, transparent)";
 const RING = `0 0 0 3px ${MIX_RING_50}`;
 /* Tailwind v4 --shadow (theme.css). Official Viewport / viewport=false Content use `shadow`. */
@@ -19,7 +21,7 @@ const SHADOW_MD =
 
 /**
  * Navigation Menu family as StyleX tables.
- * Official New York v4 is still radix-ui NavigationMenu (not Base UI).
+ * Uses the Radix primitive with the current shadcn/ui Base visual treatment.
  * Root `data-viewport` gates the shared Viewport vs per-item dropdown Content.
  */
 const root = stylex.create({
@@ -45,7 +47,7 @@ const list = stylex.create({
     listStyleType: "none",
     alignItems: "center",
     justifyContent: "center",
-    gap: "0.25rem",
+    gap: 0,
     margin: 0,
     padding: 0,
     fontFamily: "inherit",
@@ -70,22 +72,28 @@ const trigger = stylex.create({
     alignItems: "center",
     justifyContent: "center",
     boxSizing: "border-box",
-    borderRadius: tokens["--radius-md"],
+    appearance: "none",
+    margin: 0,
+    borderWidth: 0,
+    borderStyle: "solid",
+    borderRadius: tokens["--radius-lg"],
     backgroundColor: {
-      default: tokens["--background"],
-      ":hover": tokens["--accent"],
-      ":focus": tokens["--accent"],
-      '[data-state="open"]': MIX_ACCENT_50,
-      '[data-state="open"]:hover': tokens["--accent"],
-      '[data-state="open"]:focus': tokens["--accent"],
+      default: "transparent",
+      ":hover": tokens["--muted"],
+      ":focus": tokens["--muted"],
+      '[data-state="open"]': MIX_MUTED_50,
+      '[data-state="open"]:hover': tokens["--muted"],
+      '[data-state="open"]:focus': tokens["--muted"],
     },
-    paddingInline: "1rem",
-    paddingBlock: "0.5rem",
+    paddingInline: "0.625rem",
+    paddingBlock: "0.375rem",
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
     fontWeight: 500,
     fontFamily: "inherit",
-    transitionProperty: "color, box-shadow",
+    transitionProperty: "all",
+    transitionDuration: "150ms",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     outlineStyle: "none",
     outlineWidth: {
       default: null,
@@ -93,9 +101,9 @@ const trigger = stylex.create({
     },
     color: {
       default: "inherit",
-      ":hover": tokens["--accent-foreground"],
-      ":focus": tokens["--accent-foreground"],
-      '[data-state="open"]': tokens["--accent-foreground"],
+      ":hover": "inherit",
+      ":focus": "inherit",
+      '[data-state="open"]': "inherit",
     },
     boxShadow: {
       default: "none",
@@ -121,6 +129,9 @@ const trigger = stylex.create({
     height: "0.75rem",
     flexShrink: 0,
     pointerEvents: "none",
+    transitionProperty: "transform",
+    transitionDuration: "300ms",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
   },
 });
 
@@ -213,15 +224,45 @@ const viewport = stylex.create({
 
 const link = stylex.create({
   root: {
-    display: "flex",
-    flexDirection: "column",
-    gap: "0.25rem",
+    display: "inline-flex",
+    height: {
+      default: "2.25rem",
+      [CONTENT_DESCENDANT]: "auto",
+    },
+    width: "max-content",
+    flexDirection: {
+      default: "row",
+      [CONTENT_DESCENDANT]: "column",
+    },
+    alignItems: {
+      default: "center",
+      [CONTENT_DESCENDANT]: "stretch",
+    },
+    justifyContent: "center",
+    gap: {
+      default: "0.5rem",
+      [CONTENT_DESCENDANT]: "0.25rem",
+    },
     boxSizing: "border-box",
-    borderRadius: tokens["--radius-sm"],
-    padding: "0.5rem",
+    borderRadius: {
+      default: tokens["--radius-lg"],
+      [CONTENT_DESCENDANT]: tokens["--radius-md"],
+    },
+    paddingInline: {
+      default: "0.625rem",
+      [CONTENT_DESCENDANT]: "0.5rem",
+    },
+    paddingBlock: {
+      default: "0.375rem",
+      [CONTENT_DESCENDANT]: "0.5rem",
+    },
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
+    fontWeight: 500,
     fontFamily: "inherit",
+    transitionProperty: "all",
+    transitionDuration: "150ms",
+    transitionTimingFunction: "cubic-bezier(0.4, 0, 0.2, 1)",
     outlineStyle: "none",
     outlineWidth: {
       default: null,
@@ -230,17 +271,17 @@ const link = stylex.create({
     textDecorationLine: "none",
     backgroundColor: {
       default: "transparent",
-      ":hover": tokens["--accent"],
-      ":focus": tokens["--accent"],
-      '[data-active="true"]': MIX_ACCENT_50,
-      '[data-active="true"]:hover': tokens["--accent"],
-      '[data-active="true"]:focus': tokens["--accent"],
+      ":hover": tokens["--muted"],
+      ":focus": tokens["--muted"],
+      '[data-active="true"]': MIX_MUTED_50,
+      '[data-active="true"]:hover': tokens["--muted"],
+      '[data-active="true"]:focus': tokens["--muted"],
     },
     color: {
       default: "inherit",
-      ":hover": tokens["--accent-foreground"],
-      ":focus": tokens["--accent-foreground"],
-      '[data-active="true"]': tokens["--accent-foreground"],
+      ":hover": "inherit",
+      ":focus": "inherit",
+      '[data-active="true"]': "inherit",
     },
     boxShadow: {
       default: "none",
