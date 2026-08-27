@@ -8,8 +8,6 @@ const MIX_DESTRUCTIVE_10 =
   "color-mix(in oklab, var(--destructive) 10%, transparent)";
 const MIX_DESTRUCTIVE_20 =
   "color-mix(in oklab, var(--destructive) 20%, transparent)";
-/* Tailwind v4 --shadow-xs (theme.css). Official Menubar Root uses shadow-xs. */
-const SHADOW_XS = "0 1px 2px 0 rgb(0 0 0 / 0.05)";
 /* Tailwind v4 --shadow-md. Official MenubarContent uses shadow-md. */
 const SHADOW_MD =
   "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)";
@@ -27,17 +25,17 @@ const RADIUS_XS = "0.125rem";
 const root = stylex.create({
   root: {
     display: "flex",
-    height: "2.25rem",
+    width: "18rem",
+    height: "2rem",
     alignItems: "center",
-    gap: "0.25rem",
+    gap: "0.125rem",
     boxSizing: "border-box",
-    borderRadius: tokens["--radius-md"],
+    borderRadius: tokens["--radius-lg"],
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: tokens["--border"],
     backgroundColor: tokens["--background"],
-    padding: "0.25rem",
-    boxShadow: SHADOW_XS,
+    padding: "3px",
     fontFamily: "inherit",
   },
 });
@@ -47,9 +45,11 @@ const trigger = stylex.create({
     display: "flex",
     alignItems: "center",
     boxSizing: "border-box",
+    appearance: "none",
+    borderWidth: 0,
     borderRadius: tokens["--radius-sm"],
-    paddingInline: "0.5rem",
-    paddingBlock: "0.25rem",
+    paddingInline: "0.375rem",
+    paddingBlock: "0.125rem",
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
     fontWeight: 500,
@@ -58,13 +58,14 @@ const trigger = stylex.create({
     fontFamily: "inherit",
     backgroundColor: {
       default: "transparent",
-      ":focus": tokens["--accent"],
-      '[data-state="open"]': tokens["--accent"],
+      ":hover": tokens["--muted"],
+      ":focus": tokens["--muted"],
+      '[data-state="open"]': tokens["--muted"],
     },
     color: {
       default: "inherit",
-      ":focus": tokens["--accent-foreground"],
-      '[data-state="open"]': tokens["--accent-foreground"],
+      ":focus": "inherit",
+      '[data-state="open"]': "inherit",
     },
   },
 });
