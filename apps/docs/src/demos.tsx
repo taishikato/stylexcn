@@ -1245,6 +1245,7 @@ function InputGroupDemo() {
 
 function InputOTPDemo() {
   const [code, setCode] = useState("");
+  const [invalidCode, setInvalidCode] = useState("000000");
   return (
     <div {...stylex.props(chrome.stack)}>
       <div {...stylex.props(chrome.field)}>
@@ -1297,7 +1298,11 @@ function InputOTPDemo() {
         </div>
         <div {...stylex.props(chrome.field)}>
           <Label>Invalid</Label>
-          <InputOTP maxLength={6} defaultValue="000000">
+          <InputOTP
+            maxLength={6}
+            value={invalidCode}
+            onChange={setInvalidCode}
+          >
             <InputOTPGroup>
               <InputOTPSlot index={0} aria-invalid />
               <InputOTPSlot index={1} aria-invalid />
