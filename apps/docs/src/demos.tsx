@@ -48,6 +48,7 @@ import {
   AvatarFallback,
   AvatarGroup,
   AvatarGroupCount,
+  AvatarImage,
 } from "@stylexcn/components/avatar";
 import { Badge, type BadgeVariant } from "@stylexcn/components/badge";
 import {
@@ -417,29 +418,47 @@ function AspectRatioDemo() {
 }
 
 function AvatarDemo() {
+  const { dark } = useTheme();
+
   return (
     <div {...stylex.props(chrome.row)}>
       <Avatar>
-        <AvatarFallback>CN</AvatarFallback>
+        <AvatarImage src="/avatars/avatar-akari.png" alt="Akari" />
+        <AvatarFallback>AK</AvatarFallback>
       </Avatar>
       <Avatar size="sm">
-        <AvatarFallback>CN</AvatarFallback>
+        <AvatarImage src="/avatars/avatar-malik.png" alt="Malik" />
+        <AvatarFallback>MK</AvatarFallback>
       </Avatar>
       <Avatar size="lg">
-        <AvatarFallback>CN</AvatarFallback>
+        <AvatarImage src="/avatars/avatar-riya.png" alt="Riya" />
+        <AvatarFallback>RY</AvatarFallback>
       </Avatar>
       <Avatar>
-        <AvatarFallback>CN</AvatarFallback>
-        <AvatarBadge />
+        <AvatarImage src="/avatars/avatar-taishi.png" alt="Taishi" />
+        <AvatarFallback>TK</AvatarFallback>
+        <AvatarBadge
+          style={{ backgroundColor: dark ? "#166534" : "#16a34a" }}
+        />
       </Avatar>
       <AvatarGroup>
         <Avatar>
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src="/avatars/avatar-akari.png" alt="Akari" />
+          <AvatarFallback>AK</AvatarFallback>
         </Avatar>
         <Avatar>
-          <AvatarFallback>LR</AvatarFallback>
+          <AvatarImage src="/avatars/avatar-malik.png" alt="Malik" />
+          <AvatarFallback>MK</AvatarFallback>
         </Avatar>
-        <AvatarGroupCount>2</AvatarGroupCount>
+        <Avatar>
+          <AvatarImage src="/avatars/avatar-riya.png" alt="Riya" />
+          <AvatarFallback>RY</AvatarFallback>
+        </Avatar>
+        <Avatar>
+          <AvatarImage src="/avatars/avatar-taishi.png" alt="Taishi" />
+          <AvatarFallback>TK</AvatarFallback>
+        </Avatar>
+        <AvatarGroupCount>+2</AvatarGroupCount>
       </AvatarGroup>
     </div>
   );

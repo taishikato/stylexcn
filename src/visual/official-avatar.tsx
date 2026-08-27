@@ -6,9 +6,8 @@ import { Avatar as AvatarPrimitive } from "radix-ui"
 import { cn } from "@/lib/utils"
 
 /**
- * Official shadcn/ui New York v4 Avatar family, copied from
- * https://ui.shadcn.com/r/styles/new-york-v4/avatar.json
- * (same source as apps/v4/registry/new-york-v4/ui/avatar.tsx).
+ * Official shadcn/ui Radix Avatar family, copied from
+ * apps/v4/registry/bases/radix/ui/avatar.tsx and its current theme styles.
  *
  * Used only as the visual-regression baseline. Do not restyle this file to
  * make diffs pass.
@@ -25,7 +24,7 @@ function Avatar({
       data-slot="avatar"
       data-size={size}
       className={cn(
-        "group/avatar relative flex size-8 shrink-0 overflow-hidden rounded-full select-none data-[size=lg]:size-10 data-[size=sm]:size-6",
+        "group/avatar relative flex size-8 shrink-0 rounded-full select-none after:absolute after:inset-0 after:rounded-full after:border after:border-border after:mix-blend-darken data-[size=lg]:size-10 data-[size=sm]:size-6 dark:after:mix-blend-lighten",
         className
       )}
       {...props}
@@ -40,7 +39,7 @@ function AvatarImage({
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
-      className={cn("aspect-square size-full", className)}
+      className={cn("aspect-square size-full rounded-full object-cover", className)}
       {...props}
     />
   )

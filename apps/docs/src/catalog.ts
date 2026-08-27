@@ -50,6 +50,7 @@ export const COMPONENTS: ComponentDoc[] = [
     name: "Avatar",
     description: "User image or initials, with sizes, badge, and group.",
     usage: `<Avatar>
+  <AvatarImage src="/avatars/user.png" alt="User profile" />
   <AvatarFallback>CN</AvatarFallback>
 </Avatar>`,
   },

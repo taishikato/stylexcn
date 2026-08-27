@@ -6,7 +6,7 @@ import { tokens } from "../tokens.stylex";
 const RING_BACKGROUND = `0 0 0 2px ${tokens["--background"]}`;
 
 /**
- * Avatar family as StyleX tables. Official New York: radix-ui Avatar;
+ * Avatar family as StyleX tables. Official shadcn Radix UI Avatar;
  * size keys default | sm | lg; illegal keys fail at compile time.
  */
 const sizes = stylex.create({
@@ -29,11 +29,24 @@ const root = stylex.create({
     position: "relative",
     display: "flex",
     flexShrink: 0,
-    overflow: "hidden",
     borderRadius: "9999px",
     userSelect: "none",
     boxSizing: "border-box",
     fontFamily: "inherit",
+    "::after": {
+      content: '""',
+      position: "absolute",
+      inset: 0,
+      borderWidth: "1px",
+      borderStyle: "solid",
+      borderColor: tokens["--border"],
+      borderRadius: "9999px",
+      mixBlendMode: {
+        default: "darken",
+        ":is(.dark *)": "lighten",
+      },
+      pointerEvents: "none",
+    },
     boxShadow: {
       default: "none",
       ':is([data-slot="avatar-group"] > *)': RING_BACKGROUND,
@@ -50,6 +63,8 @@ const image = stylex.create({
     aspectRatio: "1 / 1",
     width: "100%",
     height: "100%",
+    borderRadius: "9999px",
+    objectFit: "cover",
   },
 });
 
