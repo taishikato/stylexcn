@@ -4,7 +4,6 @@ StyleX components.
 shadcn look.
 A port of [shadcn/ui](https://ui.shadcn.com) using [StyleX](https://stylexjs.com) and Neutral tokens instead of Tailwind.
 Open Source.
-Open Code.
 Copy the code into your app.
 
 ![hero](apps/docs/public/opengraph-image.png)
