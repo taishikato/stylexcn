@@ -12,6 +12,7 @@
     "preview": "vite preview --host 127.0.0.1 --port 4173",
     "test:input-otp": "node --test scripts/input-otp-console.test.mjs",
     "test:scroll-area": "node --test scripts/scroll-area.test.mjs",
+    "test:install-command-mobile": "node --test scripts/install-command-mobile.test.mjs",
     "visual:diff": "node scripts/visual-diff.mjs",
     "registry:build": "node scripts/build-registry.mjs",
     "docs": "npm run dev -w stylexcn-docs",

@@ -229,6 +229,7 @@ export const chrome = stylex.create({
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
     fontSize: "0.75rem",
     lineHeight: 1.5,
+    textSizeAdjust: "100%",
     color: tokens["--foreground"],
     whiteSpace: "pre",
   },
