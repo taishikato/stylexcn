@@ -82,7 +82,7 @@ export function HomePage() {
           <div {...stylex.props(landing.heroInstall)}>
             <InstallCommand
               command={addUrlCommand("button")}
-              hint="Official shadcn CLI. StyleX must already be set up in your app."
+              hint="StyleX must already be set up in your app."
             />
           </div>
         </div>

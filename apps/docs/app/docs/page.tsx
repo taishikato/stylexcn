@@ -37,19 +37,25 @@ export default function DocsIndexPage() {
       />
       <p {...stylex.props(chrome.note)}>List the catalog:</p>
       <InstallCommand command={listRegistryCommand()} />
-      <h2 {...stylex.props(chrome.sectionTitle)}>Catalog</h2>
-      <div {...stylex.props(chrome.catalog)}>
-        {COMPONENTS.map((item) => (
-          <Link
-            key={item.slug}
-            href={`/docs/${item.slug}`}
-            {...stylex.props(chrome.catalogCard)}
-          >
-            <span {...stylex.props(chrome.catalogName)}>{item.name}</span>
-            <span {...stylex.props(chrome.catalogDesc)}>{item.description}</span>
-          </Link>
-        ))}
-      </div>
+      <section {...stylex.props(chrome.catalogBlock)}>
+        <h2 {...stylex.props(chrome.sectionTitle, chrome.catalogHeading)}>
+          Catalog
+        </h2>
+        <div {...stylex.props(chrome.catalog)}>
+          {COMPONENTS.map((item) => (
+            <Link
+              key={item.slug}
+              href={`/docs/${item.slug}`}
+              {...stylex.props(chrome.catalogCard)}
+            >
+              <span {...stylex.props(chrome.catalogName)}>{item.name}</span>
+              <span {...stylex.props(chrome.catalogDesc)}>
+                {item.description}
+              </span>
+            </Link>
+          ))}
+        </div>
+      </section>
     </>
   );
 }

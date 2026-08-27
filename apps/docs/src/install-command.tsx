@@ -26,12 +26,14 @@ function CommandRow({ command }: { command: string }) {
 
   return (
     <div {...stylex.props(chrome.installRow)}>
-      <pre {...stylex.props(chrome.installPre)}>
-        <span {...stylex.props(chrome.installPrompt)} aria-hidden="true">
-          ${" "}
-        </span>
-        <code>{command}</code>
-      </pre>
+      <div {...stylex.props(chrome.installScroll)}>
+        <pre {...stylex.props(chrome.installPre)}>
+          <span {...stylex.props(chrome.installPrompt)} aria-hidden="true">
+            ${" "}
+          </span>
+          <code>{command}</code>
+        </pre>
+      </div>
       <div {...stylex.props(chrome.installCopy)}>
         <Button
           type="button"

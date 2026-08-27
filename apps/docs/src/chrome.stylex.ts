@@ -75,7 +75,10 @@ export const chrome = stylex.create({
     padding: "1.25rem 1rem 3rem",
     position: "sticky",
     top: "4rem",
-    height: "calc(100vh - 4rem)",
+    height: {
+      default: "auto",
+      [LG]: "calc(100vh - 4rem)",
+    },
     overflow: "auto",
   },
   mobileNav: {
@@ -87,6 +90,14 @@ export const chrome = stylex.create({
     borderBottomStyle: "solid",
     borderBottomColor: tokens["--border"],
     padding: "0.75rem 1rem",
+    overflow: "hidden",
+  },
+  /* display:flex on the list inside closed <details> still generates
+     boxes (WebKit/Chromium). Hide the panel unless open. */
+  mobileDetails: {
+    ":not([open]) > :not(summary)": {
+      display: "none",
+    },
   },
   navLabel: {
     fontSize: "0.75rem",
@@ -102,12 +113,12 @@ export const chrome = stylex.create({
     letterSpacing: "0.06em",
     textTransform: "uppercase",
     color: tokens["--muted-foreground"],
-    marginBottom: "0.75rem",
     cursor: "pointer",
   },
   navList: {
     listStyleType: "none",
     padding: 0,
+    marginTop: "0.75rem",
     display: "flex",
     flexDirection: "column",
     gap: "0.125rem",
@@ -136,7 +147,7 @@ export const chrome = stylex.create({
     width: "100%",
     boxSizing: "border-box",
     padding: {
-      default: "1.5rem 1rem 4rem",
+      default: "2rem 1rem 4rem",
       [SM]: "2.5rem 2rem 5rem",
     },
     maxWidth: "52rem",
@@ -157,7 +168,7 @@ export const chrome = stylex.create({
     lineHeight: 1.7,
     color: tokens["--muted-foreground"],
     maxWidth: "40rem",
-    marginBottom: "2rem",
+    marginBottom: 0,
     overflowWrap: "break-word",
   },
   note: {
@@ -166,23 +177,26 @@ export const chrome = stylex.create({
     color: tokens["--muted-foreground"],
     maxWidth: "40rem",
     marginTop: "0.75rem",
-    marginBottom: "0.5rem",
+    marginBottom: "0.75rem",
   },
   installStack: {
     display: "flex",
     flexDirection: "column",
     gap: "0.5rem",
     width: "100%",
+    maxWidth: "100%",
     minWidth: 0,
     textAlign: "left",
   },
   installRow: {
     display: "flex",
-    alignItems: "flex-start",
+    alignItems: "center",
     gap: "0.25rem",
     width: "100%",
+    maxWidth: "100%",
     minWidth: 0,
     boxSizing: "border-box",
+    overflow: "hidden",
     paddingBlock: "0.35rem",
     paddingInline: "0.55rem 0.35rem",
     borderRadius: tokens["--radius-xl"],
@@ -191,27 +205,27 @@ export const chrome = stylex.create({
     borderColor: tokens["--border"],
     backgroundColor: tokens["--muted"],
   },
-  installPre: {
-    display: "block",
+  installScroll: {
     flexGrow: 1,
+    flexShrink: 1,
+    flexBasis: 0,
     minWidth: 0,
-    maxWidth: "100%",
     overflowX: "auto",
     overflowY: "hidden",
+    overscrollBehaviorX: "contain",
+  },
+  installPre: {
+    display: "block",
+    width: "max-content",
     margin: 0,
     paddingBlock: "0.45rem",
     paddingInline: "0.45rem",
     fontFamily:
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    fontSize: {
-      default: "0.6875rem",
-      [SM]: "0.75rem",
-    },
+    fontSize: "0.75rem",
     lineHeight: 1.5,
     color: tokens["--foreground"],
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
-    wordBreak: "break-word",
+    whiteSpace: "pre",
   },
   installPrompt: {
     color: tokens["--muted-foreground"],
@@ -231,8 +245,18 @@ export const chrome = stylex.create({
     fontSize: "1.125rem",
     fontWeight: 600,
     letterSpacing: "-0.02em",
-    marginBottom: "0.75rem",
     marginTop: "2rem",
+    marginBottom: "0.75rem",
+  },
+  catalogBlock: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "0.75rem",
+    marginTop: "2rem",
+  },
+  catalogHeading: {
+    marginTop: 0,
+    marginBottom: 0,
   },
   demo: {
     minWidth: 0,
