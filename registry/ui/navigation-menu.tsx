@@ -229,7 +229,14 @@ const link = stylex.create({
       default: "2.25rem",
       [CONTENT_DESCENDANT]: "auto",
     },
-    width: "max-content",
+    width: {
+      default: "max-content",
+      [CONTENT_DESCENDANT]: "100%",
+    },
+    minWidth: {
+      default: null,
+      [CONTENT_DESCENDANT]: 0,
+    },
     flexDirection: {
       default: "row",
       [CONTENT_DESCENDANT]: "column",

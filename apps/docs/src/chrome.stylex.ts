@@ -495,15 +495,56 @@ export const chrome = stylex.create({
     borderRadius: tokens["--radius-lg"],
   },
   navMenuStage: {
-    minHeight: "12rem",
+    minHeight: "22rem",
   },
-  navMenuPanel: {
+  navMenuGettingStartedPanel: {
     display: "grid",
-    width: "12.5rem",
+    width: "24rem",
+    maxWidth: "calc(100vw - 4rem)",
     gap: "0.25rem",
     margin: 0,
     padding: 0,
     listStyleType: "none",
+  },
+  navMenuComponentsPanel: {
+    display: "grid",
+    gridTemplateColumns: {
+      default: "1fr",
+      [SM]: "repeat(2, minmax(0, 1fr))",
+    },
+    width: {
+      default: "18rem",
+      [SM]: "31.25rem",
+      [LG]: "37.5rem",
+    },
+    maxWidth: "calc(100vw - 4rem)",
+    gap: "0.5rem",
+    margin: 0,
+    padding: 0,
+    listStyleType: "none",
+  },
+  navMenuIconPanel: {
+    display: "grid",
+    width: "12.5rem",
+    margin: 0,
+    padding: 0,
+    listStyleType: "none",
+  },
+  navMenuDemoLink: {
+    width: "100%",
+  },
+  navMenuDemoTitle: {
+    fontWeight: 500,
+    lineHeight: 1,
+  },
+  navMenuDemoDescription: {
+    display: "-webkit-box",
+    overflow: "hidden",
+    WebkitBoxOrient: "vertical",
+    WebkitLineClamp: 2,
+    color: tokens["--muted-foreground"],
+    fontSize: "0.875rem",
+    lineHeight: "1.25rem",
   },
   wideWell: {
     width: "100%",

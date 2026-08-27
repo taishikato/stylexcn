@@ -4,10 +4,12 @@ import * as stylex from "@stylexjs/stylex";
 import {
   Calculator,
   Calendar as CalendarIcon,
+  CircleCheck,
   CircleAlert,
   CreditCard,
   Home,
   Inbox,
+  ListTodo,
   Search,
   Settings,
   Smile,
@@ -1399,22 +1401,133 @@ function NavigationMenuDemo() {
           <NavigationMenuItem>
             <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
             <NavigationMenuContent>
-              <ul {...stylex.props(chrome.navMenuPanel)}>
-                <li>
-                  <NavigationMenuLink href="#">Introduction</NavigationMenuLink>
-                </li>
-                <li>
-                  <NavigationMenuLink href="#">Installation</NavigationMenuLink>
-                </li>
+              <ul {...stylex.props(chrome.navMenuGettingStartedPanel)}>
+                {[
+                  {
+                    title: "Introduction",
+                    href: "/docs",
+                    description: "Re-usable components built with StyleX.",
+                  },
+                  {
+                    title: "Installation",
+                    href: "/docs",
+                    description: "How to install dependencies and structure your app.",
+                  },
+                  {
+                    title: "Typography",
+                    href: "/docs",
+                    description: "Styles for headings, paragraphs, lists...etc",
+                  },
+                ].map((item) => (
+                  <NavigationMenuDemoItem key={item.title} {...item} />
+                ))}
               </ul>
             </NavigationMenuContent>
           </NavigationMenuItem>
           <NavigationMenuItem>
-            <NavigationMenuLink href="#">Documentation</NavigationMenuLink>
+            <NavigationMenuTrigger>Components</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul {...stylex.props(chrome.navMenuComponentsPanel)}>
+                {[
+                  {
+                    title: "Alert Dialog",
+                    href: "/docs/alert-dialog",
+                    description:
+                      "A modal dialog that interrupts the user with important content and expects a response.",
+                  },
+                  {
+                    title: "Hover Card",
+                    href: "/docs/hover-card",
+                    description:
+                      "For sighted users to preview content available behind a link.",
+                  },
+                  {
+                    title: "Progress",
+                    href: "/docs/progress",
+                    description:
+                      "Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.",
+                  },
+                  {
+                    title: "Scroll-area",
+                    href: "/docs/scroll-area",
+                    description: "Visually or semantically separates content.",
+                  },
+                  {
+                    title: "Tabs",
+                    href: "/docs/tabs",
+                    description:
+                      "A set of layered sections of content that are displayed one at a time.",
+                  },
+                  {
+                    title: "Tooltip",
+                    href: "/docs/tooltip",
+                    description:
+                      "A popup that displays information when an element receives focus or is hovered.",
+                  },
+                ].map((item) => (
+                  <NavigationMenuDemoItem key={item.title} {...item} />
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuTrigger>With Icon</NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul {...stylex.props(chrome.navMenuIconPanel)}>
+                {[
+                  { title: "Backlog", icon: CircleAlert },
+                  { title: "To Do", icon: ListTodo },
+                  { title: "Done", icon: CircleCheck },
+                ].map((item) => (
+                  <li key={item.title}>
+                    <NavigationMenuLink
+                      href="#"
+                      style={{
+                        width: "100%",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        gap: "0.5rem",
+                      }}
+                    >
+                      <item.icon aria-hidden="true" />
+                      {item.title}
+                    </NavigationMenuLink>
+                  </li>
+                ))}
+              </ul>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink href="/docs">Docs</NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </div>
+  );
+}
+
+function NavigationMenuDemoItem({
+  title,
+  href,
+  description,
+}: {
+  title: string;
+  href: string;
+  description: string;
+}) {
+  return (
+    <li>
+      <NavigationMenuLink
+        href={href}
+        {...stylex.props(chrome.navMenuDemoLink)}
+      >
+        <span {...stylex.props(chrome.navMenuDemoTitle)}>{title}</span>
+        <span {...stylex.props(chrome.navMenuDemoDescription)}>
+          {description}
+        </span>
+      </NavigationMenuLink>
+    </li>
   );
 }
 
