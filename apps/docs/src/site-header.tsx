@@ -53,7 +53,16 @@ export function SiteFooter() {
   return (
     <footer {...stylex.props(landing.footer)}>
       <p {...stylex.props(landing.footerLine)}>
-        Built for browsing the StyleX kit. Source is on{" "}
+        Built by{" "}
+        <a
+          href="https://x.com/taishik_"
+          target="_blank"
+          rel="noreferrer"
+          {...stylex.props(landing.footerLink)}
+        >
+          @taishik_
+        </a>
+        . The source code is available on{" "}
         <a
           href={GITHUB}
           target="_blank"
