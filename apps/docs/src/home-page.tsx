@@ -69,7 +69,7 @@ export function HomePage() {
             <ArrowRight size={14} />
           </Link>
           <h1 {...stylex.props(landing.title)}>
-            Shadcn UI, but with StyleX instead of Tailwind CSS.
+            Shadcn UI, but with StyleX
           </h1>
           <Button type="button" onClick={() => router.push("/docs")}>
             Get Started
