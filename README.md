@@ -1,6 +1,11 @@
 # stylexcn
 
-StyleX components. shadcn look. A port of [shadcn/ui](https://ui.shadcn.com) using [StyleX](https://stylexjs.com) and Neutral tokens instead of Tailwind. Open Source. Open Code. Copy the code into your app.
+StyleX components.
+shadcn look.
+A port of [shadcn/ui](https://ui.shadcn.com) using [StyleX](https://stylexjs.com) and Neutral tokens instead of Tailwind.
+Open Source.
+Open Code.
+Copy the code into your app.
 
 ![hero](apps/docs/public/opengraph-image.png)
 
@@ -14,8 +19,11 @@ Visit https://stylexcn.vercel.app/docs to view the documentation.
 pnpm dlx shadcn@latest add https://stylexcn.vercel.app/r/button.json
 ```
 
+After [registering the optional namespace](https://stylexcn.vercel.app/docs):
+
 ```bash
 pnpm dlx shadcn@latest add @stylexcn/button
 ```
 
-StyleX must already be set up. See the [documentation](https://stylexcn.vercel.app/docs) for the rest.
+StyleX must already be set up.
+See the [documentation](https://stylexcn.vercel.app/docs) for the rest.
