@@ -1396,7 +1396,7 @@ function NativeSelectDemo() {
 function NavigationMenuDemo() {
   return (
     <div {...stylex.props(chrome.navMenuStage)}>
-      <NavigationMenu>
+      <NavigationMenu viewport={false}>
         <NavigationMenuList>
           <NavigationMenuItem>
             <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>
