@@ -19,7 +19,7 @@ export function SiteHeader() {
         <Link href="/" {...stylex.props(chrome.brand)}>
           <span {...stylex.props(chrome.brandMark)}>stylexcn</span>
         </Link>
-        <nav {...stylex.props(landing.headerNav)}>
+        <nav {...stylex.props(landing.headerNav)} aria-label="Site">
           <Link href="/docs" {...stylex.props(chrome.ghostLink)}>
             Docs
           </Link>

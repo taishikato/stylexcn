@@ -72,7 +72,7 @@ export const chrome = stylex.create({
     borderRightWidth: "1px",
     borderRightStyle: "solid",
     borderRightColor: tokens["--border"],
-    padding: "1.25rem 1rem 3rem",
+    padding: "2.5rem 1rem 2.5rem",
     position: "sticky",
     top: "4rem",
     height: {
@@ -118,18 +118,24 @@ export const chrome = stylex.create({
   navList: {
     listStyleType: "none",
     padding: 0,
-    marginTop: "0.75rem",
+    margin: 0,
     display: "flex",
     flexDirection: "column",
     gap: "0.125rem",
+  },
+  mobileNavList: {
+    marginTop: "0.75rem",
   },
   navLink: {
     display: "block",
     textDecorationLine: "none",
     fontSize: "0.875rem",
     lineHeight: "1.25rem",
-    paddingBlock: "0.375rem",
-    paddingInline: "0.5rem",
+    paddingBlock: {
+      default: "0.625rem",
+      [LG]: "0.375rem",
+    },
+    paddingInline: "0.75rem",
     borderRadius: tokens["--radius-md"],
     color: tokens["--muted-foreground"],
     ":hover": {
@@ -147,8 +153,8 @@ export const chrome = stylex.create({
     width: "100%",
     boxSizing: "border-box",
     padding: {
-      default: "2rem 1rem 4rem",
-      [SM]: "2.5rem 2rem 5rem",
+      default: "2rem 1rem",
+      [SM]: "2.5rem 2rem",
     },
     maxWidth: "52rem",
   },
@@ -186,7 +192,6 @@ export const chrome = stylex.create({
     width: "100%",
     maxWidth: "100%",
     minWidth: 0,
-    textAlign: "left",
   },
   installRow: {
     display: "flex",
@@ -303,7 +308,9 @@ export const chrome = stylex.create({
     display: "block",
     minWidth: 0,
     maxWidth: "100%",
+    boxSizing: "border-box",
     overflowX: "auto",
+    overflowY: "hidden",
     fontFamily:
       "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
     fontSize: {
@@ -389,7 +396,7 @@ export const chrome = stylex.create({
     borderStyle: "solid",
     borderColor: tokens["--border"],
     borderRadius: tokens["--radius-xl"],
-    padding: "1rem 1.1rem",
+    padding: "1rem",
     backgroundColor: tokens["--card"],
     ":hover": {
       backgroundColor: tokens["--accent"],

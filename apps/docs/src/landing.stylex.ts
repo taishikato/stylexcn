@@ -23,10 +23,7 @@ export const landing = stylex.create({
     marginInline: "auto",
   },
   headerNav: {
-    display: {
-      default: "none",
-      [SM]: "flex",
-    },
+    display: "flex",
     alignItems: "center",
     marginLeft: "0.5rem",
   },
@@ -136,8 +133,12 @@ export const landing = stylex.create({
     width: "100%",
     minWidth: 0,
     maxWidth: "40rem",
-    marginTop: "1.25rem",
+    marginTop: {
+      default: "1.5rem",
+      [SM]: "2rem",
+    },
     overflow: "hidden",
+    textAlign: "center",
   },
   galleryStage: {
     position: "relative",
@@ -290,8 +291,8 @@ export const landing = stylex.create({
   footer: {
     marginTop: "auto",
     paddingInline: "1.25rem",
-    paddingTop: "3rem",
-    paddingBottom: "2rem",
+    paddingTop: "2.5rem",
+    paddingBottom: "2.5rem",
     textAlign: "center",
   },
   footerLine: {

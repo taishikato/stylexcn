@@ -73,7 +73,7 @@ export function HomePage() {
           </h1>
           <p {...stylex.props(landing.copy)}>
             A port of shadcn/ui - same look, StyleX instead of Tailwind. Open
-            source. Open code.
+            source.
           </p>
           <Button type="button" onClick={() => router.push("/docs")}>
             Get Started
