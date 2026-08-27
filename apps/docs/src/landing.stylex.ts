@@ -113,22 +113,6 @@ export const landing = stylex.create({
     overflowWrap: "break-word",
     color: tokens["--foreground"],
   },
-  copy: {
-    fontSize: {
-      default: "1rem",
-      [SM]: "1.125rem",
-    },
-    lineHeight: 1.7,
-    color: tokens["--muted-foreground"],
-    marginBottom: {
-      default: "1.5rem",
-      [SM]: "2rem",
-    },
-    width: "100%",
-    maxWidth: "38rem",
-    textWrap: "pretty",
-    overflowWrap: "break-word",
-  },
   heroInstall: {
     width: "100%",
     minWidth: 0,
