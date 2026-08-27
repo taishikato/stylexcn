@@ -62,14 +62,8 @@ export const landing = stylex.create({
       default: "1rem",
       [SM]: "1.25rem",
     },
-    paddingTop: {
-      default: "3.5rem",
-      [SM]: "7.5rem",
-    },
-    paddingBottom: {
-      default: "2.5rem",
-      [SM]: "4.5rem",
-    },
+    paddingTop: "4rem",
+    paddingBottom: "4rem",
   },
   heroInner: {
     display: "flex",
