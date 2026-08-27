@@ -23,6 +23,9 @@ const list = stylex.create({
     color: tokens["--muted-foreground"],
     fontFamily: "inherit",
     boxSizing: "border-box",
+    margin: 0,
+    padding: 0,
+    listStyleType: "none",
   },
 });
 
