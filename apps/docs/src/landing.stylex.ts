@@ -138,6 +138,7 @@ export const landing = stylex.create({
       [SM]: "2rem",
     },
     overflow: "hidden",
+    textAlign: "center",
   },
   galleryStage: {
     position: "relative",

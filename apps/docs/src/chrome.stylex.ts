@@ -72,7 +72,7 @@ export const chrome = stylex.create({
     borderRightWidth: "1px",
     borderRightStyle: "solid",
     borderRightColor: tokens["--border"],
-    padding: "1.25rem 1rem 3rem",
+    padding: "2.5rem 1rem 2.5rem",
     position: "sticky",
     top: "4rem",
     height: {
@@ -192,7 +192,6 @@ export const chrome = stylex.create({
     width: "100%",
     maxWidth: "100%",
     minWidth: 0,
-    textAlign: "left",
   },
   installRow: {
     display: "flex",
