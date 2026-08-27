@@ -75,7 +75,10 @@ export const chrome = stylex.create({
     padding: "1.25rem 1rem 3rem",
     position: "sticky",
     top: "4rem",
-    height: "calc(100vh - 4rem)",
+    height: {
+      default: "auto",
+      [LG]: "calc(100vh - 4rem)",
+    },
     overflow: "auto",
   },
   mobileNav: {
@@ -87,6 +90,14 @@ export const chrome = stylex.create({
     borderBottomStyle: "solid",
     borderBottomColor: tokens["--border"],
     padding: "0.75rem 1rem",
+    overflow: "hidden",
+  },
+  /* display:flex on the list inside closed <details> still generates
+     boxes (WebKit/Chromium). Hide the panel unless open. */
+  mobileDetails: {
+    ":not([open]) > :not(summary)": {
+      display: "none",
+    },
   },
   navLabel: {
     fontSize: "0.75rem",

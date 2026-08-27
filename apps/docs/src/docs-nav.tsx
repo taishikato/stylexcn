@@ -45,7 +45,7 @@ export function DocsSidebar() {
 export function DocsMobileNav() {
   return (
     <div {...stylex.props(chrome.mobileNav)}>
-      <details>
+      <details {...stylex.props(chrome.mobileDetails)}>
         <summary {...stylex.props(chrome.navSummary)}>Components</summary>
         <NavList hideLabel />
       </details>
