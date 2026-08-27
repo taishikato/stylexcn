@@ -3,8 +3,9 @@ import type { ComponentProps } from "react";
 import { tokens } from "../tokens.stylex";
 
 /**
- * Empty family as StyleX tables. Official New York: dashed well, header,
- * media (default / icon), title, description, content. No new primitive.
+ * Empty family as StyleX tables. Official New York: dashed border style,
+ * header, media (default / icon), title, description, content. Tailwind
+ * Preflight keeps the default border width at zero, so mirror that reset here.
  * `md:p-12` is Tailwind md (768px); visual capture pins above that.
  */
 const root = stylex.create({
@@ -20,6 +21,7 @@ const root = stylex.create({
     gap: "1.5rem",
     boxSizing: "border-box",
     borderRadius: tokens["--radius-lg"],
+    borderWidth: 0,
     borderStyle: "dashed",
     padding: {
       default: "1.5rem",
