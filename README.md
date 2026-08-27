@@ -22,3 +22,31 @@ pnpm dlx shadcn@latest add @stylexcn/button
 
 StyleX must already be set up.
 See the [documentation](https://stylexcn.vercel.app/docs) for the rest.
+
+## Dark mode
+
+Install the optional dark theme:
+
+```bash
+pnpm dlx shadcn@latest add @stylexcn/theme
+```
+
+Apply the StyleX theme class and the `dark` class to the same ancestor:
+
+```tsx
+import * as stylex from '@stylexjs/stylex';
+import { darkTheme } from '@/lib/theme.stylex';
+
+const themeProps = stylex.props(darkTheme);
+
+export function DarkSurface({ children }: { children: React.ReactNode }) {
+  return (
+    <div
+      {...themeProps}
+      className={`dark ${themeProps.className ?? ''}`}
+    >
+      {children}
+    </div>
+  );
+}
+```

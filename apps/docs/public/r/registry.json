@@ -21,6 +21,26 @@
       ]
     },
     {
+      "name": "theme",
+      "type": "registry:lib",
+      "title": "Theme",
+      "description": "Optional dark theme for the StyleX component set.",
+      "dependencies": [
+        "@stylexjs/stylex"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/tokens.json"
+      ],
+      "docs": "Optional dark theme for the StyleX component set. Apply `stylex.props(darkTheme)` to an ancestor and add the `dark` class to the same ancestor. The StyleX theme class changes the design tokens; the `dark` class enables component-specific dark selectors.",
+      "files": [
+        {
+          "path": "registry/lib/theme.stylex.ts",
+          "type": "registry:lib",
+          "target": "@lib/theme.stylex.ts"
+        }
+      ]
+    },
+    {
       "name": "accordion",
       "type": "registry:ui",
       "title": "Accordion",

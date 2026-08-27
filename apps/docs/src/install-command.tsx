@@ -27,7 +27,7 @@ function CommandRow({ command }: { command: string }) {
   return (
     <div {...stylex.props(chrome.installRow)}>
       <div {...stylex.props(chrome.installScroll)}>
-        <pre {...stylex.props(chrome.installPre)}>
+        <pre data-slot='install-command' {...stylex.props(chrome.installPre)}>
           <span {...stylex.props(chrome.installPrompt)} aria-hidden="true">
             ${" "}
           </span>

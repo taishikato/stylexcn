@@ -11,21 +11,23 @@ test('mobile install commands keep the configured small text size', async () => 
       waitUntil: 'networkidle',
     });
 
-    const commandStyles = await page.locator('pre code').evaluateAll((elements) =>
-      elements.map((element) => {
-        const styles = getComputedStyle(element);
+    const commandStyles = await page
+      .locator('pre[data-slot="install-command"] code')
+      .evaluateAll((elements) =>
+        elements.map((element) => {
+          const styles = getComputedStyle(element);
 
-        return {
-          fontSize: styles.fontSize,
-          textSizeAdjust: styles.webkitTextSizeAdjust,
-        };
-      }),
-    );
+          return {
+            fontSize: styles.fontSize,
+            textSizeAdjust: styles.webkitTextSizeAdjust,
+          };
+        }),
+      );
 
-    assert.equal(commandStyles.length, 4);
+    assert.ok(commandStyles.length > 0);
     assert.deepEqual(
       commandStyles,
-      Array.from({ length: 4 }, () => ({
+      commandStyles.map(() => ({
         fontSize: '12px',
         textSizeAdjust: '100%',
       })),

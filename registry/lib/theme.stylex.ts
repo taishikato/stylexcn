@@ -1,5 +1,5 @@
 import * as stylex from '@stylexjs/stylex';
-import { tokens } from './tokens.stylex';
+import { tokens } from '@/lib/tokens.stylex';
 
 /**
  * Dark values from the same Neutral registry payload as `tokens.stylex.ts`.

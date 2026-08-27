@@ -19,6 +19,7 @@ import { fileURLToPath } from "node:url";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const COMPONENTS_DIR = path.join(ROOT, "src/components");
 const TOKENS_SRC = path.join(ROOT, "src/tokens.stylex.ts");
+const THEME_SRC = path.join(ROOT, 'src/theme.ts');
 const CATALOG_SRC = path.join(ROOT, "apps/docs/src/catalog.ts");
 const REGISTRY_DIR = path.join(ROOT, "registry");
 const REGISTRY_LIB = path.join(REGISTRY_DIR, "lib");
@@ -120,6 +121,12 @@ const TOKENS_DOCS = [
   "Initializing Tailwind is not enough.",
 ].join(" ");
 
+const THEME_DOCS = [
+  'Optional dark theme for the StyleX component set.',
+  'Apply `stylex.props(darkTheme)` to an ancestor and add the `dark` class to the same ancestor.',
+  'The StyleX theme class changes the design tokens; the `dark` class enables component-specific dark selectors.',
+].join(' ');
+
 function titleFromName(name) {
   return name
     .split("-")
@@ -142,6 +149,10 @@ function parseCatalogDescriptions(source) {
 
 function rewriteConsumerImports(source) {
   return source
+    .replaceAll(
+      /from ["']\.\/tokens\.stylex["']/g,
+      `from '@/lib/tokens.stylex'`,
+    )
     .replaceAll(
       /from ["']\.\.\/tokens\.stylex["']/g,
       'from "@/lib/tokens.stylex"',
@@ -237,13 +248,18 @@ function build() {
   const tokensSource = rewriteConsumerImports(
     fs.readFileSync(TOKENS_SRC, "utf8"),
   );
+  const themeSource = rewriteConsumerImports(
+    fs.readFileSync(THEME_SRC, "utf8"),
+  );
   assertNoKitAlias(tokensSource, "tokens");
+  assertNoKitAlias(themeSource, "theme");
 
   emptyDir(REGISTRY_LIB);
   emptyDir(REGISTRY_UI);
   emptyDir(PUBLIC_R);
 
   fs.writeFileSync(path.join(REGISTRY_LIB, "tokens.stylex.ts"), tokensSource);
+  fs.writeFileSync(path.join(REGISTRY_LIB, "theme.stylex.ts"), themeSource);
 
   const tokensItem = {
     name: "tokens",
@@ -258,6 +274,23 @@ function build() {
         path: "registry/lib/tokens.stylex.ts",
         type: "registry:lib",
         target: "@lib/tokens.stylex.ts",
+      },
+    ],
+  };
+
+  const themeItem = {
+    name: 'theme',
+    type: 'registry:lib',
+    title: 'Theme',
+    description: 'Optional dark theme for the StyleX component set.',
+    dependencies: ['@stylexjs/stylex'],
+    registryDependencies: [`${REGISTRY_ORIGIN}/r/tokens.json`],
+    docs: THEME_DOCS,
+    files: [
+      {
+        path: 'registry/lib/theme.stylex.ts',
+        type: 'registry:lib',
+        target: '@lib/theme.stylex.ts',
       },
     ],
   };
@@ -295,7 +328,7 @@ function build() {
     uiItems.push(item);
   }
 
-  const items = [tokensItem, ...uiItems];
+  const items = [tokensItem, themeItem, ...uiItems];
   const catalog = {
     $schema: SCHEMA_REGISTRY,
     name: "stylexcn",
@@ -324,7 +357,7 @@ function build() {
   }
 
   console.log(
-    `Wrote ${items.length} registry items (${uiItems.length} ui + tokens) to registry.json and apps/docs/public/r`,
+    `Wrote ${items.length} registry items (${uiItems.length} ui + tokens + theme) to registry.json and apps/docs/public/r`,
   );
 }
 

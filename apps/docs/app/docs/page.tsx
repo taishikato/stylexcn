@@ -39,6 +39,27 @@ export default function DocsIndexPage() {
         command={registerNamespaceCommand()}
         secondary={addNamespaceCommand("button")}
       />
+      <h2 {...stylex.props(chrome.sectionTitle)}>Dark mode</h2>
+      <p {...stylex.props(chrome.note)}>
+        Add the optional theme item to install the dark StyleX token values.
+        Apply its theme class and the <code>dark</code> class to the same
+        ancestor.
+      </p>
+      <InstallCommand
+        command={addUrlCommand('theme')}
+        secondary={addNamespaceCommand('theme')}
+      />
+      <pre {...stylex.props(chrome.code)}>
+        <code>{`import * as stylex from '@stylexjs/stylex';
+import { darkTheme } from '@/lib/theme.stylex';
+
+const themeProps = stylex.props(darkTheme);
+
+<div
+  {...themeProps}
+  className={['dark', themeProps.className].filter(Boolean).join(' ')}
+/>`}</code>
+      </pre>
       <p {...stylex.props(chrome.note)}>List the catalog:</p>
       <InstallCommand command={listRegistryCommand()} />
       <section {...stylex.props(chrome.catalogBlock)}>
