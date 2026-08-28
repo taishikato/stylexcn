@@ -2,6 +2,7 @@
   "name": "stylexcn",
   "private": true,
   "version": "0.0.0",
+  "packageManager": "pnpm@11.10.0",
   "type": "module",
   "workspaces": [
     "apps/docs"
@@ -18,8 +19,8 @@
     "test:theme-registry": "node --test scripts/theme-registry.test.mjs",
     "visual:diff": "node scripts/visual-diff.mjs",
     "registry:build": "node scripts/build-registry.mjs",
-    "docs": "npm run dev -w stylexcn-docs",
-    "docs:build": "npm run build -w stylexcn-docs"
+    "docs": "pnpm --filter stylexcn-docs dev",
+    "docs:build": "pnpm --filter stylexcn-docs build"
   },
   "dependencies": {
     "@base-ui/react": "^1.0.0",

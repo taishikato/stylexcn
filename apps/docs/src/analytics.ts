@@ -1,6 +1,6 @@
 import { initDataFast } from "datafast";
 
-const WEBSITE_ID = "dfid_0Kz0oU6kfWJvIhEshzqoJ";
+const WEBSITE_ID = "dfid_0KzOoU6kfWJvIhEshzqoJ";
 
 let datafast: Awaited<ReturnType<typeof initDataFast>> | null = null;
 
