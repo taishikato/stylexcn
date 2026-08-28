@@ -4,6 +4,7 @@ import Link from "next/link";
 import { COMPONENTS } from "../../src/catalog";
 import { chrome } from "../../src/chrome.stylex";
 import { InstallCommand } from "../../src/install-command";
+import { CodeBlock } from "../../src/code-block";
 import { createPageMetadata } from "../../src/site-metadata";
 import {
   addNamespaceCommand,
@@ -49,8 +50,7 @@ export default function DocsIndexPage() {
         command={addUrlCommand('theme')}
         secondary={addNamespaceCommand('theme')}
       />
-      <pre {...stylex.props(chrome.code)}>
-        <code>{`import * as stylex from '@stylexjs/stylex';
+      <CodeBlock code={`import * as stylex from '@stylexjs/stylex';
 import { darkTheme } from '@/lib/theme.stylex';
 
 const themeProps = stylex.props(darkTheme);
@@ -58,8 +58,7 @@ const themeProps = stylex.props(darkTheme);
 <div
   {...themeProps}
   className={['dark', themeProps.className].filter(Boolean).join(' ')}
-/>`}</code>
-      </pre>
+/>`} />
       <p {...stylex.props(chrome.note)}>List the catalog:</p>
       <InstallCommand command={listRegistryCommand()} />
       <section {...stylex.props(chrome.catalogBlock)}>

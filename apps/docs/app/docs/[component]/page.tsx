@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { COMPONENTS, getComponent } from "../../../src/catalog";
 import { chrome } from "../../../src/chrome.stylex";
 import { ComponentDemo } from "../../../src/demos";
+import { CodeBlock } from "../../../src/code-block";
 import { InstallCommand } from "../../../src/install-command";
 import { addNamespaceCommand, addUrlCommand } from "../../../src/install";
 import { createPageMetadata } from "../../../src/site-metadata";
@@ -44,9 +45,7 @@ export default async function ComponentPage({ params }: PageProps) {
         secondary={addNamespaceCommand(doc.slug)}
       />
       <h2 {...stylex.props(chrome.sectionTitle)}>Usage</h2>
-      <pre {...stylex.props(chrome.code)}>
-        <code>{doc.usage}</code>
-      </pre>
+      <CodeBlock code={doc.usage} />
     </>
   );
 }

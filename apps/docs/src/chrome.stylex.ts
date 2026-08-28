@@ -312,25 +312,11 @@ export const chrome = stylex.create({
     boxSizing: "border-box",
     overflowX: "auto",
     overflowY: "hidden",
-    fontFamily:
-      "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-    fontSize: {
-      default: "0.75rem",
-      [SM]: "0.8125rem",
-    },
-    lineHeight: 1.6,
-    padding: {
-      default: "0.875rem 1rem",
-      [SM]: "1rem 1.125rem",
-    },
     borderRadius: tokens["--radius-xl"],
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: tokens["--border"],
     backgroundColor: tokens["--muted"],
-    color: tokens["--foreground"],
-    whiteSpace: "pre-wrap",
-    overflowWrap: "anywhere",
   },
   hero: {
     padding: {

@@ -33,3 +33,37 @@ body {
 a {
   color: inherit;
 }
+
+[data-slot='highlighted-code'] {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  padding: 0.875rem 1rem;
+  background-color: transparent !important;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  tab-size: 2;
+  white-space: pre;
+}
+
+[data-slot='highlighted-code'] code {
+  display: block;
+  font: inherit;
+}
+
+[data-slot='highlighted-code'] span {
+  background-color: transparent !important;
+}
+
+html.dark [data-slot='highlighted-code'],
+html.dark [data-slot='highlighted-code'] span {
+  color: var(--shiki-dark) !important;
+}
+
+@media (min-width: 40rem) {
+  [data-slot='highlighted-code'] {
+    padding: 1rem 1.125rem;
+    font-size: 0.8125rem;
+  }
+}

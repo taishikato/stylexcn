@@ -14,6 +14,7 @@
     "test:empty": "node --test scripts/empty-border.test.mjs",
     "test:scroll-area": "node --test scripts/scroll-area.test.mjs",
     "test:install-command-mobile": "node --test scripts/install-command-mobile.test.mjs",
+    "test:code-examples": "node --test scripts/code-examples.test.mjs",
     "test:theme-registry": "node --test scripts/theme-registry.test.mjs",
     "visual:diff": "node scripts/visual-diff.mjs",
     "registry:build": "node scripts/build-registry.mjs",
