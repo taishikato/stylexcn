@@ -41,6 +41,27 @@
       ]
     },
     {
+      "name": "theme-provider",
+      "type": "registry:component",
+      "title": "Theme Provider",
+      "description": "Light, dark, and system theme management for the StyleX component set.",
+      "dependencies": [
+        "@stylexjs/stylex",
+        "next-themes"
+      ],
+      "registryDependencies": [
+        "https://stylexcn.vercel.app/r/theme.json"
+      ],
+      "docs": "Provides light, dark, and system themes through next-themes. Wrap the application root with `ThemeProvider` and use `useTheme` to read or update the active theme. The provider keeps the `dark` selector and the StyleX token theme synchronized.",
+      "files": [
+        {
+          "path": "registry/components/theme-provider.tsx",
+          "type": "registry:component",
+          "target": "@components/theme-provider.tsx"
+        }
+      ]
+    },
+    {
       "name": "accordion",
       "type": "registry:ui",
       "title": "Accordion",

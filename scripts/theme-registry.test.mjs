@@ -22,3 +22,23 @@ test('theme can be installed as a self-contained registry item', () => {
   assert.match(item.files[0].content, /from ['"]@\/lib\/tokens\.stylex['"]/);
   assert.match(item.files[0].content, /stylex\.createTheme\(tokens/);
 });
+
+test('theme provider installs with its StyleX theme dependency', () => {
+  const item = JSON.parse(
+    readFileSync(
+      new URL('apps/docs/public/r/theme-provider.json', root),
+      'utf8',
+    ),
+  );
+
+  assert.equal(item.name, 'theme-provider');
+  assert.equal(item.type, 'registry:component');
+  assert.deepEqual(item.registryDependencies, [
+    'https://stylexcn.vercel.app/r/theme.json',
+  ]);
+  assert.deepEqual(item.dependencies, ['@stylexjs/stylex', 'next-themes']);
+  assert.deepEqual(
+    item.files.map(({ target }) => target),
+    ['@components/theme-provider.tsx'],
+  );
+});

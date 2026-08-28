@@ -25,7 +25,24 @@ See the [documentation](https://stylexcn.vercel.app/docs) for the rest.
 
 ## Dark mode
 
-Install the optional dark theme:
+Install the ThemeProvider for persistent light, dark, and system modes.
+The dark StyleX theme is included automatically:
+
+```bash
+pnpm dlx shadcn@latest add @stylexcn/theme-provider
+```
+
+Wrap the application root:
+
+```tsx
+import { ThemeProvider } from '@/components/theme-provider';
+
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider>{children}</ThemeProvider>;
+}
+```
+
+To manage dark mode yourself instead, install only the theme:
 
 ```bash
 pnpm dlx shadcn@latest add @stylexcn/theme

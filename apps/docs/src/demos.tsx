@@ -320,7 +320,7 @@ import {
   TooltipTrigger,
 } from "@stylexcn/components/tooltip";
 import { chrome } from "./chrome.stylex";
-import { useTheme } from "./theme-provider";
+import { useTheme } from '@stylexcn/theme-provider';
 
 const BUTTON_VARIANTS: ButtonVariant[] = [
   "default",
@@ -420,7 +420,8 @@ function AspectRatioDemo() {
 }
 
 function AvatarDemo() {
-  const { dark } = useTheme();
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === 'dark';
 
   return (
     <div {...stylex.props(chrome.row)}>
@@ -1845,7 +1846,8 @@ function SliderDemo() {
 }
 
 function SonnerDemo() {
-  const { dark } = useTheme();
+  const { resolvedTheme } = useTheme();
+  const dark = resolvedTheme === 'dark';
 
   return (
     <>

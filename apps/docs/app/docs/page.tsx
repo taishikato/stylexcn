@@ -42,23 +42,19 @@ export default function DocsIndexPage() {
       />
       <h2 {...stylex.props(chrome.sectionTitle)}>Dark mode</h2>
       <p {...stylex.props(chrome.note)}>
-        Add the optional theme item to install the dark StyleX token values.
-        Apply its theme class and the <code>dark</code> class to the same
-        ancestor.
+        Install the ThemeProvider for persistent light, dark, and system modes.
+        It installs the dark StyleX theme automatically and keeps both theme
+        classes synchronized.
       </p>
       <InstallCommand
-        command={addUrlCommand('theme')}
-        secondary={addNamespaceCommand('theme')}
+        command={addUrlCommand('theme-provider')}
+        secondary={addNamespaceCommand('theme-provider')}
       />
-      <CodeBlock code={`import * as stylex from '@stylexjs/stylex';
-import { darkTheme } from '@/lib/theme.stylex';
+      <CodeBlock code={`import { ThemeProvider } from '@/components/theme-provider';
 
-const themeProps = stylex.props(darkTheme);
-
-<div
-  {...themeProps}
-  className={['dark', themeProps.className].filter(Boolean).join(' ')}
-/>`} />
+export function Providers({ children }: { children: React.ReactNode }) {
+  return <ThemeProvider>{children}</ThemeProvider>;
+}`} />
       <p {...stylex.props(chrome.note)}>List the catalog:</p>
       <InstallCommand command={listRegistryCommand()} />
       <section {...stylex.props(chrome.catalogBlock)}>

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "theme-provider",
+  "type": "registry:component",
+  "title": "Theme Provider",
+  "description": "Light, dark, and system theme management for the StyleX component set.",
+  "dependencies": [
+    "@stylexjs/stylex",
+    "next-themes"
+  ],
+  "registryDependencies": [
+    "https://stylexcn.vercel.app/r/theme.json"
+  ],
+  "docs": "Provides light, dark, and system themes through next-themes. Wrap the application root with `ThemeProvider` and use `useTheme` to read or update the active theme. The provider keeps the `dark` selector and the StyleX token theme synchronized.",
+  "files": [
+    {
+      "path": "registry/components/theme-provider.tsx",
+      "type": "registry:component",
+      "target": "@components/theme-provider.tsx",
+      "content": "'use client';\n\nimport * as stylex from '@stylexjs/stylex';\nimport {\n  ThemeProvider as NextThemesProvider,\n  useTheme,\n  type ThemeProviderProps as NextThemesProviderProps,\n} from 'next-themes';\nimport { useEffect, type ReactNode } from 'react';\nimport { darkTheme } from '@/lib/theme.stylex';\n\nconst darkThemeClassNames =\n  stylex.props(darkTheme).className?.split(/\\s+/).filter(Boolean) ?? [];\n\nfunction applyStyleXTheme(dark: boolean) {\n  for (const className of darkThemeClassNames) {\n    document.documentElement.classList.toggle(className, dark);\n  }\n}\n\nfunction StyleXThemeSync({ forcedTheme }: { forcedTheme?: string }) {\n  const { resolvedTheme } = useTheme();\n  const activeTheme = forcedTheme ?? resolvedTheme;\n\n  useEffect(() => {\n    applyStyleXTheme(activeTheme === 'dark');\n  }, [activeTheme]);\n\n  return null;\n}\n\nfunction initialThemeScript(\n  storageKey: string,\n  defaultTheme: string,\n  enableSystem: boolean,\n  forcedTheme: string | undefined,\n) {\n  return `(() => { try { const stored = localStorage.getItem(${JSON.stringify(storageKey)}); const theme = ${JSON.stringify(forcedTheme)} ?? stored ?? ${JSON.stringify(defaultTheme)}; const dark = theme === 'dark' || (${JSON.stringify(enableSystem)} && theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches); for (const className of ${JSON.stringify(darkThemeClassNames)}) document.documentElement.classList.toggle(className, dark); } catch {} })()`;\n}\n\nexport type ThemeProviderProps = Omit<\n  NextThemesProviderProps,\n  'attribute' | 'value'\n> & {\n  children: ReactNode;\n};\n\nexport function ThemeProvider({\n  children,\n  defaultTheme,\n  enableSystem = true,\n  forcedTheme,\n  nonce,\n  storageKey = 'stylexcn-theme',\n  ...props\n}: ThemeProviderProps) {\n  const resolvedDefaultTheme = defaultTheme ?? (enableSystem ? 'system' : 'light');\n\n  return (\n    <NextThemesProvider\n      {...props}\n      attribute='class'\n      defaultTheme={resolvedDefaultTheme}\n      enableSystem={enableSystem}\n      forcedTheme={forcedTheme}\n      nonce={nonce}\n      storageKey={storageKey}\n    >\n      <script\n        dangerouslySetInnerHTML={{\n          __html: initialThemeScript(\n            storageKey,\n            resolvedDefaultTheme,\n            enableSystem,\n            forcedTheme,\n          ),\n        }}\n        nonce={nonce}\n        suppressHydrationWarning\n      />\n      <StyleXThemeSync forcedTheme={forcedTheme} />\n      {children}\n    </NextThemesProvider>\n  );\n}\n\nexport { useTheme };\n"
+    }
+  ]
+}

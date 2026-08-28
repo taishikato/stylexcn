@@ -9,7 +9,7 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "../src/site-metadata";
-import { ThemeProvider } from "../src/theme-provider";
+import { ThemeProvider } from '@stylexcn/theme-provider';
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),

@@ -17,6 +17,7 @@
     "test:install-command-mobile": "node --test scripts/install-command-mobile.test.mjs",
     "test:code-examples": "node --test scripts/code-examples.test.mjs",
     "test:theme-registry": "node --test scripts/theme-registry.test.mjs",
+    "test:theme-provider": "node --test scripts/theme-provider.test.mjs",
     "visual:diff": "node scripts/visual-diff.mjs",
     "registry:build": "node scripts/build-registry.mjs",
     "docs": "pnpm --filter stylexcn-docs dev",
