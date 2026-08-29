@@ -44,7 +44,9 @@ export default function DocsIndexPage() {
       <p {...stylex.props(chrome.note)}>
         Install the ThemeProvider for persistent light, dark, and system modes.
         It installs the dark StyleX theme automatically and keeps both theme
-        classes synchronized.
+        classes synchronized. In Next.js, add{' '}
+        <code>suppressHydrationWarning</code> to the root HTML element because
+        the provider updates its classes.
       </p>
       <InstallCommand
         command={addUrlCommand('theme-provider')}
@@ -52,8 +54,14 @@ export default function DocsIndexPage() {
       />
       <CodeBlock code={`import { ThemeProvider } from '@/components/theme-provider';
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang='en' suppressHydrationWarning>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  );
 }`} />
       <p {...stylex.props(chrome.note)}>List the catalog:</p>
       <InstallCommand command={listRegistryCommand()} />

@@ -32,13 +32,20 @@ The dark StyleX theme is included automatically:
 pnpm dlx shadcn@latest add @stylexcn/theme-provider
 ```
 
-Wrap the application root:
+Wrap the application root.
+In Next.js, add `suppressHydrationWarning` because the provider updates the root element's classes:
 
 ```tsx
 import { ThemeProvider } from '@/components/theme-provider';
 
-export function Providers({ children }: { children: React.ReactNode }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang='en' suppressHydrationWarning>
+      <body>
+        <ThemeProvider>{children}</ThemeProvider>
+      </body>
+    </html>
+  );
 }
 ```
 
