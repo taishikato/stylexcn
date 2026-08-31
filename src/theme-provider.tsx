@@ -18,24 +18,18 @@ function applyStyleXTheme(dark: boolean) {
   }
 }
 
-function StyleXThemeSync({ forcedTheme }: { forcedTheme?: string }) {
+function StyleXThemeSync() {
   const { resolvedTheme } = useTheme();
-  const activeTheme = forcedTheme ?? resolvedTheme;
 
   useEffect(() => {
-    applyStyleXTheme(activeTheme === 'dark');
-  }, [activeTheme]);
+    applyStyleXTheme(resolvedTheme === 'dark');
+  }, [resolvedTheme]);
 
   return null;
 }
 
-function initialThemeScript(
-  storageKey: string,
-  defaultTheme: string,
-  enableSystem: boolean,
-  forcedTheme: string | undefined,
-) {
-  return `(() => { try { const stored = localStorage.getItem(${JSON.stringify(storageKey)}); const theme = ${JSON.stringify(forcedTheme)} ?? stored ?? ${JSON.stringify(defaultTheme)}; const dark = theme === 'dark' || (${JSON.stringify(enableSystem)} && theme === 'system' && matchMedia('(prefers-color-scheme: dark)').matches); for (const className of ${JSON.stringify(darkThemeClassNames)}) document.documentElement.classList.toggle(className, dark); } catch {} })()`;
+function initialThemeScript() {
+  return `(() => { try { const root = document.documentElement; const dark = root.classList.contains('dark'); for (const className of ${JSON.stringify(darkThemeClassNames)}) root.classList.toggle(className, dark); } catch {} })()`;
 }
 
 export type ThemeProviderProps = Omit<
@@ -68,17 +62,12 @@ export function ThemeProvider({
     >
       <script
         dangerouslySetInnerHTML={{
-          __html: initialThemeScript(
-            storageKey,
-            resolvedDefaultTheme,
-            enableSystem,
-            forcedTheme,
-          ),
+          __html: initialThemeScript(),
         }}
         nonce={nonce}
         suppressHydrationWarning
       />
-      <StyleXThemeSync forcedTheme={forcedTheme} />
+      <StyleXThemeSync />
       {children}
     </NextThemesProvider>
   );
