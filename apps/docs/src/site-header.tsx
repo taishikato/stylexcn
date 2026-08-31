@@ -6,12 +6,13 @@ import Link from "next/link";
 import { Button } from "@stylexcn/components/button";
 import { chrome } from "./chrome.stylex";
 import { landing } from "./landing.stylex";
-import { useTheme } from "./theme-provider";
+import { useTheme } from '@stylexcn/theme-provider';
 
 const GITHUB = "https://github.com/taishikato/stylexcn";
 
 export function SiteHeader() {
-  const { dark, toggle } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const dark = resolvedTheme === 'dark';
 
   return (
     <header {...stylex.props(chrome.header)}>
@@ -37,7 +38,7 @@ export function SiteHeader() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={toggle}
+            onClick={() => setTheme(dark ? 'light' : 'dark')}
             type="button"
             aria-label={dark ? "Switch to light theme" : "Switch to dark theme"}
           >

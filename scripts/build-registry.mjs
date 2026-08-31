@@ -20,9 +20,11 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const COMPONENTS_DIR = path.join(ROOT, "src/components");
 const TOKENS_SRC = path.join(ROOT, "src/tokens.stylex.ts");
 const THEME_SRC = path.join(ROOT, 'src/theme.ts');
+const THEME_PROVIDER_SRC = path.join(ROOT, 'src/theme-provider.tsx');
 const CATALOG_SRC = path.join(ROOT, "apps/docs/src/catalog.ts");
 const REGISTRY_DIR = path.join(ROOT, "registry");
 const REGISTRY_LIB = path.join(REGISTRY_DIR, "lib");
+const REGISTRY_COMPONENTS = path.join(REGISTRY_DIR, 'components');
 const REGISTRY_UI = path.join(REGISTRY_DIR, "ui");
 const CATALOG_OUT = path.join(ROOT, "registry.json");
 const PUBLIC_R = path.join(ROOT, "apps/docs/public/r");
@@ -127,6 +129,12 @@ const THEME_DOCS = [
   'The StyleX theme class changes the design tokens; the `dark` class enables component-specific dark selectors.',
 ].join(' ');
 
+const THEME_PROVIDER_DOCS = [
+  'Provides light, dark, and system themes through next-themes.',
+  'Wrap the application root with `ThemeProvider` and use `useTheme` to read or update the active theme.',
+  'The provider keeps the `dark` selector and the StyleX token theme synchronized.',
+].join(' ');
+
 function titleFromName(name) {
   return name
     .split("-")
@@ -149,6 +157,10 @@ function parseCatalogDescriptions(source) {
 
 function rewriteConsumerImports(source) {
   return source
+    .replaceAll(
+      /from ["']\.\/theme["']/g,
+      `from '@/lib/theme.stylex'`,
+    )
     .replaceAll(
       /from ["']\.\/tokens\.stylex["']/g,
       `from '@/lib/tokens.stylex'`,
@@ -251,15 +263,24 @@ function build() {
   const themeSource = rewriteConsumerImports(
     fs.readFileSync(THEME_SRC, "utf8"),
   );
+  const themeProviderSource = rewriteConsumerImports(
+    fs.readFileSync(THEME_PROVIDER_SRC, 'utf8'),
+  );
   assertNoKitAlias(tokensSource, "tokens");
   assertNoKitAlias(themeSource, "theme");
+  assertNoKitAlias(themeProviderSource, 'theme-provider');
 
   emptyDir(REGISTRY_LIB);
+  emptyDir(REGISTRY_COMPONENTS);
   emptyDir(REGISTRY_UI);
   emptyDir(PUBLIC_R);
 
   fs.writeFileSync(path.join(REGISTRY_LIB, "tokens.stylex.ts"), tokensSource);
   fs.writeFileSync(path.join(REGISTRY_LIB, "theme.stylex.ts"), themeSource);
+  fs.writeFileSync(
+    path.join(REGISTRY_COMPONENTS, 'theme-provider.tsx'),
+    themeProviderSource,
+  );
 
   const tokensItem = {
     name: "tokens",
@@ -291,6 +312,24 @@ function build() {
         path: 'registry/lib/theme.stylex.ts',
         type: 'registry:lib',
         target: '@lib/theme.stylex.ts',
+      },
+    ],
+  };
+
+  const themeProviderItem = {
+    name: 'theme-provider',
+    type: 'registry:component',
+    title: 'Theme Provider',
+    description:
+      'Light, dark, and system theme management for the StyleX component set.',
+    dependencies: npmDependencies(themeProviderSource),
+    registryDependencies: [`${REGISTRY_ORIGIN}/r/theme.json`],
+    docs: THEME_PROVIDER_DOCS,
+    files: [
+      {
+        path: 'registry/components/theme-provider.tsx',
+        type: 'registry:component',
+        target: '@components/theme-provider.tsx',
       },
     ],
   };
@@ -328,7 +367,7 @@ function build() {
     uiItems.push(item);
   }
 
-  const items = [tokensItem, themeItem, ...uiItems];
+  const items = [tokensItem, themeItem, themeProviderItem, ...uiItems];
   const catalog = {
     $schema: SCHEMA_REGISTRY,
     name: "stylexcn",
@@ -357,7 +396,7 @@ function build() {
   }
 
   console.log(
-    `Wrote ${items.length} registry items (${uiItems.length} ui + tokens + theme) to registry.json and apps/docs/public/r`,
+    `Wrote ${items.length} registry items (${uiItems.length} ui + tokens + theme + theme-provider) to registry.json and apps/docs/public/r`,
   );
 }
 
